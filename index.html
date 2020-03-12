@@ -28,7 +28,7 @@
 
 
 
-  <link  rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css" />
+  <link  rel="stylesheet" href="/lib/prettify/github-v2.min.css" />
 
 <link  rel="stylesheet" href="/css/main.css" />
 
@@ -150,7 +150,7 @@
     
     <div class="col-12 col-md-12 mx-auto index-info">
       <a href="/2020/03/12/Test/">
-        <p class="h4 index-header">文章名称</p>
+        <p class="h4 index-header">A Test article</p>
       </a>
 
       <a href="/2020/03/12/Test/">
@@ -160,7 +160,7 @@
           
         
         <div class="index-excerpt" style="max-height: none;">
-          <div class="index-text mb-1">这里是摘要...</div>
+          <div class="index-text mb-1">Here is a test blog, but also my first blog...</div>
         </div>
       </a>
 
@@ -171,15 +171,15 @@
         
           <i class="iconfont icon-inbox"></i>
           
-            <a href="/categories/%E6%96%87%E7%AB%A0%E5%88%86%E7%B1%BB/">文章分类</a>&nbsp;
+            <a href="/categories/test/">test</a>&nbsp;
           &nbsp;
         
         
           <i class="iconfont icon-tag"></i>
           
-            <a href="/tags/%E6%96%87%E7%AB%A0%E6%A0%87%E7%AD%BE%E4%B8%80/">文章标签一</a>&nbsp;
+            <a href="/tags/the-first-tag/">the first tag</a>&nbsp;
           
-            <a href="/tags/%E6%96%87%E7%AB%A0%E6%A0%87%E7%AD%BE%E4%BA%8C/">文章标签二</a>&nbsp;
+            <a href="/tags/the-second-tag/">the second tag</a>&nbsp;
           
         
       </div>
@@ -294,10 +294,23 @@ Run server$ hexo server</div>
 
 
 
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
 
 
 
 <!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  
 
 
 
@@ -316,7 +329,7 @@ Run server$ hexo server</div>
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "副标题测试&nbsp;",
+        "Welcome to my Blog&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
@@ -335,7 +348,7 @@ Run server$ hexo server</div>
   <script>
     anchors.options = {
       placement: "right",
-      visible: "hover",
+      visible: "always",
       
     };
     var el = "h1,h2,h3,h4,h5,h6".split(",");
@@ -374,7 +387,83 @@ Run server$ hexo server</div>
 
 
 
+  
 
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
 
 
 
