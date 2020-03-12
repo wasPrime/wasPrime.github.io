@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>文章名称 - Hexo</title>
+  <title>关于 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -43,7 +43,7 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 80vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -121,33 +121,6 @@
             </span>
 
             
-              
-                <p class="mt-3 post-meta">
-                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期四, 三月 12日 2020, 6:00 晚上
-                </p>
-              
-
-              <p class="mt-1">
-                
-                  
-                  <span class="post-meta">
-                    <i class="far fa-chart-bar"></i>
-                    289 字
-                  </span>
-                
-
-                
-                  
-                  <span class="post-meta">
-                      <i class="far fa-clock"></i>
-                      1 分钟
-                  </span>
-                
-
-                
-              </p>
-            
           </div>
 
           
@@ -158,123 +131,54 @@
 
   <main>
     
+      <div class="container nopadding-md">
+        <div class="py-5 z-depth-3" id="board"
+          >
+          
+            <div class="about-avatar">
+              <img src="/img/avatar.png" srcset="/img/loading.gif"
+                   class="img-fluid z-depth-1 rounded-circle"
+                   alt="avatar">
+            </div>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<div class="text-center">
+  <p class="h3">myname</p>
+  <p>info / info / info</p>
+  
+    
+    
+    
+    <a href="https://github.com" target="_blank" rel="noopener" class="h4 px-1 false">
+      <i class="fab fa-github" aria-hidden="true"></i>
       
+    </a>
+  
+    
+    
+    
+    <a href="https://twitter.com" target="_blank" rel="noopener" class="h4 px-1 false">
+      <i class="fab fa-twitter" aria-hidden="true"></i>
+      
+    </a>
+  
+    
+    
+</div>
+<div class="mt-5 markdown-body">
+  <p>这里写正文, 支持Markdown, HTML</p>
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-md">
-      <div class="container nopadding-md" id="board-ctn">
-        <div class="py-5 z-depth-3" id="board">
-          <div class="post-content mx-auto" id="post">
-            
-            <div class="markdown-body">
-              <p>这里是摘要</p>
-<a id="more"></a>
+</div>
 
-<p>这里是正文</p>
-<p>注意：description 和 <!-- more --> 方式显示摘要二选一即可，部分主题不支持description，每个配置英文冒号后面要空一格，不同主题配置有所差异，具体要参考主题文档</p>
-<p>Test</p>
-<p>description: 文章描述，即要在首页显示的摘要（仅部分主题支持）</p>
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><p><strong>粗体:</strong></p>
-<p><em>斜体:</em></p>
-<ul>
-<li>无序列表1<ul>
-<li>无序列表1.1<ul>
-<li>无序列表1.1.1</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>无序列表2</li>
-<li>无序列表3</li>
-</ul>
-<ol>
-<li>有序列表1<ol>
-<li>有序列表1.1<ol>
-<li>有序列表1.1.1</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>有序列表2</li>
-<li>有序列表3</li>
-</ol>
-<p>来一张表格:<br>| 表头  | 条目一 | 条目二 |<br>| :—: | :—-: | :—-: |<br>| 项目  | 项目一 | 项目二 |<br>| 谢谢  | 哈哈哈 |   呵   |</p>
-<pre><code class="mermaid">graph TD;
-A--&gt;B;
-A--&gt;C;
-B--&gt;D;
-C--&gt;D;</code></pre>
-<p>中划线:<del>I LOVE YOU</del></p>
-<p>LaTex:<br>质能守恒方程可以用一个很简洁的方程式 $E=mc^2$ 来表达。</p>
-<p>代码显示测试:</p>
-<pre><code class="C++">#include &lt;cstdio&gt;
-#include &lt;cstdlib&gt;
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-using namespace std;
-
-int main()
-{
-    vector&lt;int&gt; v;
-    v.push_back(1);
-    v.push_back(1);
-    v.push_back(1);
-    cout &lt;&lt; v.size();
-    return 0;
-}</code></pre>
-
+              </div>
             </div>
-            <hr>
-            <div>
-              <p>
-                
-                  <span>
-                <i class="iconfont icon-inbox"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E6%96%87%E7%AB%A0%E5%88%86%E7%B1%BB/">文章分类</a>
-                      &nbsp;
-                    
-                  </span>&nbsp;&nbsp;
-                
-                
-                  <span>
-                <i class="iconfont icon-tag"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%96%87%E7%AB%A0%E6%A0%87%E7%AD%BE%E4%B8%80/">文章标签一</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%96%87%E7%AB%A0%E6%A0%87%E7%AD%BE%E4%BA%8C/">文章标签二</a>
-                    
-                  </span>
-                
-              </p>
-              
-                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
-              
-            </div>
-
-            
           </div>
         </div>
       </div>
-    </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc-start"></div>
-<div id="toc">
-  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
-  <div id="tocbot"></div>
-</div>
-
-      </div>
-    
-  </div>
-</div>
-
-<!-- Custom -->
-
-
     
   </main>
 
@@ -339,57 +243,6 @@ int main()
 
 
 
-  
-  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
-  <script>
-    $(document).ready(function () {
-      var navHeight = $('#navbar').height();
-      var post = $('#post');
-      var toc = $('#toc');
-      var tocLimMax = post.offset().top + post.height() - navHeight;
-
-      $(window).scroll(function () {
-        var tocLimMin = $('#toc-start').offset().top - navHeight;
-        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
-
-        if (tocLimMin <= scroH && scroH <= tocLimMax) {
-          toc.css({
-            'display': 'block',
-            'position': 'fixed',
-            'top': navHeight,
-          });
-        } else if (scroH <= tocLimMin) {
-          toc.css({
-            'position': '',
-            'top': '',
-          });
-        } else if (scroH > tocLimMax) {
-          toc.css('display', 'none');
-        }
-      });
-      tocbot.init({
-        tocSelector: '#tocbot',
-        contentSelector: '.post-content',
-        headingSelector: 'h1,h2,h3,h4,h5,h6',
-        linkClass: 'tocbot-link',
-        activeLinkClass: 'tocbot-active-link',
-        listClass: 'tocbot-list',
-        isCollapsedClass: 'tocbot-is-collapsed',
-        collapsibleClass: 'tocbot-is-collapsible',
-        scrollSmooth: true,
-      });
-      if ($('.toc-list-item').length > 0) {
-        $('#toc > p').css('visibility', 'visible');
-      }
-      var offset = $('#board-ctn').css('margin-right')
-      $('#toc-ctn').css({
-        'right': offset
-      })
-    });
-  </script>
-
-
-
 
 
 
@@ -416,7 +269,7 @@ int main()
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "文章名称&nbsp;",
+        "关于&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

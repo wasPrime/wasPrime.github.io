@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>文章名称</title>
+    <link href="/2020/03/12/Test/"/>
+    <url>/2020/03/12/Test/</url>
+    
+    <content type="html"><![CDATA[<p>这里是摘要</p><a id="more"></a><p>这里是正文</p><p>注意：description 和 <!-- more --> 方式显示摘要二选一即可，部分主题不支持description，每个配置英文冒号后面要空一格，不同主题配置有所差异，具体要参考主题文档</p><p>Test</p><p>description: 文章描述，即要在首页显示的摘要（仅部分主题支持）</p><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><p><strong>粗体:</strong></p><p><em>斜体:</em></p><ul><li>无序列表1<ul><li>无序列表1.1<ul><li>无序列表1.1.1</li></ul></li></ul></li><li>无序列表2</li><li>无序列表3</li></ul><ol><li>有序列表1<ol><li>有序列表1.1<ol><li>有序列表1.1.1</li></ol></li></ol></li><li>有序列表2</li><li>有序列表3</li></ol><p>来一张表格:<br>| 表头  | 条目一 | 条目二 |<br>| :—: | :—-: | :—-: |<br>| 项目  | 项目一 | 项目二 |<br>| 谢谢  | 哈哈哈 |   呵   |</p><pre><code class="mermaid">graph TD;A--&gt;B;A--&gt;C;B--&gt;D;C--&gt;D;</code></pre><p>中划线:<del>I LOVE YOU</del></p><p>LaTex:<br>质能守恒方程可以用一个很简洁的方程式 $E=mc^2$ 来表达。</p><p>代码显示测试:</p><pre><code class="C++">#include &lt;cstdio&gt;#include &lt;cstdlib&gt;#include &lt;iostream&gt;#include &lt;vector&gt;using namespace std;int main(){    vector&lt;int&gt; v;    v.push_back(1);    v.push_back(1);    v.push_back(1);    cout &lt;&lt; v.size();    return 0;}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>文章分类</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>文章标签一</tag>
+      
+      <tag>文章标签二</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="/2020/03/12/hello-world/"/>
+    <url>/2020/03/12/hello-world/</url>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  
+</search>
