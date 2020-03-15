@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="wasPrime&#39;s Blog">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="wasPrime, keywords, kkk">
+  <title>蓝桥杯校内模拟赛复盘 - wasPrime</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/github-v2.min.css" />
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>wasPrime</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  2020 年 03 月 15 日 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    1.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      4 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：2020 年 03 月 15 日 晚上</p>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>2020年3月15日蓝桥杯校内模拟赛，难度较为简单。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="填空题"><a href="#填空题" class="headerlink" title="填空题"></a>填空题</h2><p>本人报的是 <code>C/C++</code> 类型的比赛，在填空题时为了快速得出结果采用的是 <code>Python</code>。</p>
+<h3 id="1-1200000-有多少个约数？（只计算正约数）"><a href="#1-1200000-有多少个约数？（只计算正约数）" class="headerlink" title="1. 1200000 有多少个约数？（只计算正约数）"></a>1. <code>1200000</code> 有多少个约数？（只计算正约数）</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>本题从 $[1, 1200000]$ 遍历即可，结果为 <code>96</code>。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><ul>
+<li><p>Python</p>
+<ul>
+<li>法1（常规做法）</li>
+</ul>
+<pre><code class="Python">res = 0
+for i in range(1, 1200001):
+    if 1200000 % i == 0:
+        res += 1
+print(res)</code></pre>
+<ul>
+<li>法2（列表生成式）</li>
+</ul>
+<pre><code class="Python">print(sum([1200000 % i == 0 for i in range(1, 1200001)]))</code></pre>
+</li>
+<li><p>C++</p>
+<pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+    int res = 0;
+    for (int i = 1; i &lt;= 1200000; i++)
+    {
+        if (1200000 % i == 0)
+        {
+            res++;
+        }
+    }
+    cout &lt;&lt; res &lt;&lt; endl;
+    return 0;
+}</code></pre>
+</li>
+</ul>
+<h3 id="2-在计算机存储中，15-125GB是多少MB"><a href="#2-在计算机存储中，15-125GB是多少MB" class="headerlink" title="2. 在计算机存储中，15.125GB是多少MB"></a>2. 在计算机存储中，15.125GB是多少MB</h3><h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><p>根据进制换算 $1GB = 2 ^ {10} MB = 1024MB$，进行简单乘法 $15.125 * 1024 = 15488$。</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+    cout &lt;&lt; (15.125 * 1024) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+<h3 id="3-一棵包含有-2019-个结点的树，最多包含多少个叶结点"><a href="#3-一棵包含有-2019-个结点的树，最多包含多少个叶结点" class="headerlink" title="3. 一棵包含有 2019 个结点的树，最多包含多少个叶结点"></a>3. 一棵包含有 <code>2019</code> 个结点的树，最多包含多少个叶结点</h3><h4 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h4><p>在总结点数一定时，完全二叉树中有最多的叶子结点。<br>我在做题时忘了具体的计算公式，是在纸上画图算的，思路是算出每一层的二叉树结点数：</p>
+<table>
+<thead>
+<tr>
+<th align="center">第几层</th>
+<th align="center">结点数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">512</td>
+</tr>
+</tbody></table>
+<p>可看出当层数为 $n$ 时每一层的结点数为 $2 ^ {n -1}$，那么前 $n$ 层的结点总数为 $1 + 2 + 3 + … + 2 ^ {n - 1} = 2 ^ n - 1$，采取快速逼近的思想，要使结点总数最接近 <code>2019</code>，当 $n = 10$ 时结点总数为 <code>1023</code>，与 <code>2019</code> 相差 <code>996</code>，故最后一层有 <code>996</code> 个结点，占用了倒数第2层 <code>498</code> 个结点的子结点位置，使得倒数第2层减少了 <code>498</code> 个叶子结点（倒数第2层总共有 <code>512</code> 个结点）而剩下 <code>14</code> 个叶子结点。所以叶子结点总共有 最后一层 <code>996</code> + 倒数第2层 <code>14</code> = <code>1010</code> 个结点。</p>
+<hr>
+<p>后来看到有<a href="https://blog.csdn.net/weixin_42449444/article/details/104823371" target="_blank" rel="noopener">大佬的博客</a>提到由结点总数推出叶子结点数的公式。</p>
+<blockquote>
+<p>太长不看版<br>叶子结点最多的个数与结点总数的奇偶有关，奇数个则有 $\frac{n + 1}{2}$个，偶数个则有 $\frac{n}{2}$ 个。</p>
+</blockquote>
+<p><strong>具体分析：</strong></p>
+<p>叶子结点就是出度为 <code>0</code> 的结点，即没有子结点的结点。</p>
+<ol>
+<li><p>假设 $n$ 为完全二叉树的结点总数，$n_0$ 是度为0的结点总数（即叶子结点数），$n_1$ 是度为1的结点总数，$n_2$ 是度为2的结点总数，边数为b。</p>
+</li>
+<li><p>由<a href="https://blog.csdn.net/TinnCHEN/article/details/84023083" target="_blank" rel="noopener">二叉树的性质</a>可知：$$n = n_0 + n_1 + n_2\tag{1}$$ $$b = n - 1(二叉树是最小连通图)\tag{2}$$<br>联立两式得$$b = n_0 + n_1 + n_2 - 1$$<br>另有 $$b = n_1 + 2n_2$$<br>则有 $$n_0 + n_1 + n_2 - 1 = n_1 + 2n_2$$<br>即 $$n_2 = n_0 - 1\tag{3}$$</p>
+</li>
+<li><p>将上述 <code>(1)</code> <code>(3)</code> 把 $n_2$ 消去可得：$$n = 2n_0 + n_1 - 1$$</p>
+</li>
+<li><p>由于完全二叉树中度为1的结点数 $n_1$ 只有两种可能 <code>0</code> 或 <code>1</code>：<br>当 $n_1 = 0$ 时 $$n_0 = \frac{n + 1}{2}\tag{4}$$<br>当 $n_1 = 1$ 时 $$n_0 = \frac{n}{2}\tag{5}$$</p>
+</li>
+<li><p>完全二叉树中除去最后一层的结点总数有 $(2 ^ n - 1)$ 个，为奇数，根据完全二叉树的结点总数 $n = 2019$ 可以知道最后一层结点数为偶数（奇数 - 奇数 = 偶数），故度为1的结点数 $n_1 = 0$，利用公式 <code>(4)</code> 求出叶子结点数 $n_0 = \frac{n + 1}{2} = \frac{2019 + 1}{2}= 1010$。</p>
+</li>
+</ol>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><pre><code class="C++">#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+    int n = 2019;
+    if (n % 2 == 1) //若结点总数为奇数，则n1 = 0
+    {
+        cout &lt;&lt; (n + 1) / 2 &lt;&lt; endl;
+    }
+    else //若结点总数为偶数，则n1 = 1
+    {
+        cout &lt;&lt; n / 2 &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+<h3 id="4-在-1-至-2019-中，有多少个数的数位中包含数字-9"><a href="#4-在-1-至-2019-中，有多少个数的数位中包含数字-9" class="headerlink" title="4. 在 1 至 2019 中，有多少个数的数位中包含数字 9"></a>4. 在 <code>1</code> 至 <code>2019</code> 中，有多少个数的数位中包含数字 <code>9</code></h3><h4 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h4><p>本题从 $[1, 2019]$ 遍历即可，结果为 <code>544</code>。</p>
+<h4 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h4><ul>
+<li><p>Python</p>
+<ul>
+<li>法1（常规做法）</li>
+</ul>
+<pre><code class="Python">res = 0
+for num in range(1, 2020):
+    # 在循环体内修改循环变量不会影响循环条件中的循环变量
+    while num != 0:
+        if num % 10 == 9:
+            res += 1
+            break
+        else:
+            num //= 10
+print(res)</code></pre>
+<ul>
+<li>法2（列表生成式）</li>
+</ul>
+<pre><code class="Python">print(sum([&#39;9&#39; in str(num) for num in range(1, 2020)]))</code></pre>
+</li>
+<li><p>C++</p>
+</li>
+</ul>
+<pre><code class="C++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+int main()
+{
+    int res = 0;
+    for (int num = 1; num &lt;= 2019; num++)
+    {
+        string s = to_string(num);
+        if (s.find(&#39;9&#39;) != -1)
+        {
+            res++;
+        }
+    }
+    cout &lt;&lt; res &lt;&lt; endl;
+    return 0;
+}</code></pre>
+<h2 id="编程题"><a href="#编程题" class="headerlink" title="编程题"></a>编程题</h2><p>未完待续</p>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/">蓝桥杯</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-md">
+    <div class="container custom post-content mx-auto">
+      <img src="https://octodex.github.com/images/jetpacktocat.png" srcset="/img/loading.gif" class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">
+    </div>
+  </div>
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "蓝桥杯校内模拟赛复盘&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "left",
+      visible: "hover",
+      
+      icon: "#"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+              processEscapes: true,
+              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+          }
+      });
+
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+
+    </script>
+
+    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
+
+  
+
+
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
+</html>
