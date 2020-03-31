@@ -17,7 +17,7 @@
   <meta name="description" content="wasPrime&#39;s Blog">
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="wasPrime, keywords, kkk">
-  <title>操作系统 - wasPrime</title>
+  <title>操作系统整理 - wasPrime</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    2.8k 字
+                    3.6k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      9 分钟
+                      12 分钟
                   </span>
                 
 
@@ -323,6 +323,18 @@
 </ol>
 </li>
 </ul>
+<h2 id="说一说操作系统中的程序的内存结构"><a href="#说一说操作系统中的程序的内存结构" class="headerlink" title="说一说操作系统中的程序的内存结构"></a>说一说操作系统中的程序的内存结构</h2><p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/内存结构.png" srcset="/img/loading.gif" alt="内存结构"></p>
+<p>一个程序本质上都是由 <code>BSS段</code>、<code>data段</code>、<code>text段</code> 三个组成的。可以看到一个可执行程序在存储（没有调入内存）时分为代码段、数据区和未初始化数据区三部分。</p>
+<p><strong>BSS段（未初始化数据区）：</strong> 通常用来存放程序中未初始化的全局变量和静态变量的一块内存区域。BSS段属于静态分配，程序结束后静态变量资源由系统自动释放。</p>
+<p><strong>数据段：</strong> 存放程序中已初始化的全局变量的一块内存区域。数据段也属于静态内存分配</p>
+<p><strong>代码段：</strong> 存放程序执行代码的一块内存区域。这部分区域的大小在程序运行前就已经确定，并且内存区域属于只读。在代码段中，也有可能包含一些只读的常数变量</p>
+<p>text段和data段在编译时已经分配了空间，而BSS段并不占用可执行文件的大小，它是由链接器来获取内存的。</p>
+<p>BSS段（未进行初始化的数据）的内容并不存放在磁盘上的程序文件中。其原因是内核在程序开始运行前将它们设置为0。需要存放在程序文件中的只有正文段和初始化数据段。</p>
+<p>data段（已经初始化的数据）则为数据分配空间，数据保存到目标文件中。</p>
+<p>数据段包含经过初始化的全局变量以及它们的值。BSS段的大小从可执行文件中得到，然后链接器得到这个大小的内存块，紧跟在数据段的后面。当这个内存进入程序的地址空间后全部清零。包含数据段和BSS段的整个区段此时通常称为数据区。</p>
+<p>可执行程序在运行时又多出两个区域：栈区和堆区。</p>
+<p><strong>栈区：</strong> 由编译器自动释放，存放函数的参数值、局部变量等。每当一个函数被调用时，该函数的返回类型和一些调用的信息被存放到栈中。然后这个被调用的函数再为他的自动变量和临时变量在栈上分配空间。每调用一个函数一个新的栈就会被使用。栈区是从高地址位向低地址位增长的，是一块连续的内存区域，最大容量是由系统预先定义好的，申请的栈空间超过这个界限时会提示溢出，用户能从栈中获取的空间较小。</p>
+<p><strong>堆区：</strong> 用于动态分配内存，位于BSS和栈中间的地址区域。由程序员申请分配和释放。堆是从低地址位向高地址位增长，采用链式存储结构。频繁的malloc/free造成内存空间的不连续，产生碎片。当申请堆空间时库函数是按照一定的算法搜索可用的足够大的空间。因此堆的效率比栈要低的多。</p>
 
             </div>
             <hr>
@@ -549,7 +561,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "操作系统&nbsp;",
+        "操作系统整理&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
