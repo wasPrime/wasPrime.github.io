@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="wasPrime&#39;s Blog">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="wasPrime, keywords">
+  <title>计算机网络整理 - wasPrime</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/mdbootstrap/4.13.0/css/mdb.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+
+  <link  rel="stylesheet" href="/lib/prettify/github-v2.min.css" />
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link defer rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>wasPrime</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <p class="mt-3 post-meta">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                  2020 年 04 月 03 日 晚上
+                </p>
+              
+
+              <p class="mt-1">
+                
+                  
+                  <span class="post-meta">
+                    <i class="far fa-chart-bar"></i>
+                    8.8k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta">
+                      <i class="far fa-clock"></i>
+                      30 分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5 z-depth-3" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p
+                class="note note-warning">本文最后更新于：2020 年 04 月 03 日 晚上</p>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>面试常见的计算机网络考点</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><h3 id="OSI七层模型和TCP-IP四层模型，每层列举2个协议"><a href="#OSI七层模型和TCP-IP四层模型，每层列举2个协议" class="headerlink" title="OSI七层模型和TCP/IP四层模型，每层列举2个协议"></a>OSI七层模型和TCP/IP四层模型，每层列举2个协议</h3><p>OSI七层模型及其包含的协议如下：<br>物理层：通过媒介传输比特，确定机械及电气规范，传输单位为 <code>bit</code>，主要包括的协议为：IEE802.3、CLOCK、RJ45<br>数据链路层：将比特组装成帧和点到点的传递，传输单位为 <code>帧</code>，主要包括的协议为MAC、VLAN、PPP<br>网络层：负责数据包从源到宿的传递和网际互连，传输单位为 <code>包</code>，主要包括的协议为IP、ARP、ICMP<br>传输层：提供端到端的可靠报文传递和错误恢复，传输单位为 <code>报文</code>，主要包括的协议为TCP、UDP<br>会话层：建立、管理和终止会话，传输单位为 <code>SPDU</code>，主要包括的协议为RPC、NFS<br>表示层：对数据进行翻译、加密和压缩，传输单位为 <code>PPDU</code>，主要包括的协议为JPEG、ASCII<br>应用层：允许访问OSI环境的手段，传输单位为 <code>APDU</code>，主要包括的协议为FTP、HTTP、DNS</p>
+<p>TCP/IP4层模型包括：<br>网络接口层：MAC、VLAN<br>网络层:IP、ARP、ICMP<br>传输层:TCP、UDP<br>应用层:HTTP、DNS、SMTP</p>
+<h3 id="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"><a href="#搜索baidu，会用到计算机网络中的什么层？每层是干什么的" class="headerlink" title="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"></a>搜索baidu，会用到计算机网络中的什么层？每层是干什么的</h3><p>浏览器中输入URL，浏览器要将URL解析为IP地址，解析域名就要用到DNS协议，首先主机会查询DNS的缓存，如果没有就给本地DNS发送查询请求。DNS查询分为两种方式，一种是 <code>递归查询</code>，一种是 <code>迭代查询</code>。如果是迭代查询，本地的DNS服务器，向根域名服务器发送查询请求，根域名服务器告知该域名的一级域名服务器，然后本地服务器给该一级域名服务器发送查询请求，然后依次类推直到查询到该域名的IP地址。DNS服务器是基于UDP的，因此会用到UDP协议。</p>
+<blockquote>
+<ul>
+<li><strong>递归查询：</strong> 也就是DNS客户端送出查询要求后，如果DNS服务器内没有需要的数据，则DNS服务器会代替客户端向其他的DNS服务顺查询。（我帮你查）</li>
+<li><strong>循环查询：</strong> 一般DNS服务器与DNS服务器之间的查询属于这种查询方式。当第一台DNS服务器在向第2台DNS服务器提出查询要求后，如果第2台DNS服务器内没有所需要的数据，则它会提供第3台DNS服务器的IP地址给第1台。（我把下个的地址给你你自己去查）</li>
+</ul>
+</blockquote>
+<p>得到IP地址后，浏览器就要与服务器建立一个http连接。因此要用到 <code>http协议</code>，http协议报文格式上面已经提到。http生成一个get请求报文，将该报文传给TCP层处理，所以还会用到 <code>TCP协议</code>。如果采用https还会使用https协议先对http数据进行加密。<br>TCP层如果有需要先将HTTP数据包分片，分片依据路径MTU和MSS。TCP的数据包然后会发送给IP层，用到 <code>IP协议</code>。IP层通过路由选路，一跳一跳发送到目的地址。当然在一个网段内的寻址是通过以太网协议实现（也可以是其他物理层协议，比如PPP、SLIP），以太网协议需要直到目的IP地址的物理地址，有需要 <code>ARP协议</code>。</p>
+<p>其中：</p>
+<ol>
+<li><p>DNS协议、http协议、https协议属于应用层</p>
+<p> 应用层是体系结构中的最高层。应用层确定进程之间通信的性质以满足用户的需要。这里的进程就是指正在运行的程序。应用层不仅要提供应用进程所需要的信息交换和远地操作，而且还要作为互相作用的应用进程的用户代理，来完成一些为进行语义上有意义的信息交换所必须的功能。应用层直接为用户的应用进程提供服务。</p>
+</li>
+<li><p>TCP/UDP属于传输层</p>
+<p> 传输层的任务就是负责主机中两个进程之间的通信。因特网的传输层可使用两种不同协议：即面向连接的传输控制协议TCP，和无连接的用户数据报协议UDP。面向连接的服务能够提供可靠的交付，但无连接服务则不保证提供可靠的交付，它只是“尽最大努力交付”。这两种服务方式都很有用，备有其优缺点。在分组交换网内的各个交换结点机都没有传输层。</p>
+</li>
+<li><p>IP协议、ARP协议属于网络层</p>
+<p> 网络层负责为分组交换网上的不同主机提供通信。在发送数据时，网络层将运输层产生的报文段或用户数据报封装成分组或包进行传送。在TCP/IP体系中，分组也叫作IP数据报，或简称为数据报。网络层的另一个任务就是要选择合适的路由，使源主机运输层所传下来的分组能够交付到目的主机。</p>
+</li>
+<li><p>数据链路层</p>
+<p> 当发送数据时，数据链路层的任务是将在网络层交下来的IP数据报组装成帧，在两个相邻结点间的链路上传送以帧为单位的数据。每一帧包括数据和必要的控制信息（如同步信息、地址信息、差错控制、以及流量控制信息等）。控制信息使接收端能够知道—个帧从哪个比特开始和到哪个比特结束。控制信息还使接收端能够检测到所收到的帧中有无差错。</p>
+</li>
+<li><p>物理层</p>
+<p> 物理层的任务就是透明地传送比特流。在物理层上所传数据的单位是比特。传递信息所利用的一些物理媒体，如双绞线、同轴电缆、光缆等，并不在物理层之内而是在物理层的下面。因此也有人把物理媒体当做第0层。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>过程</strong><br>在浏览器地址栏键入URL，按下回车之后会经历以下流程：<br>1、浏览器向 DNS 服务器请求解析该 URL 中的域名所对应的 IP 地址；<br>2、解析出 IP 地址后，根据该 IP 地址和默认端口80，和服务器建立TCP连接；<br>3、浏览器发出读取文件（URL中域名后面部分对应的文件）的HTTP 请求，该请求报文作为 TCP 三次握手的第三个报文的数据发送给服务器；<br>4、服务器对浏览器请求作出响应，并把对应的 html 文本发送给浏览器；<br>5、释放 TCP 连接；<br>6、浏览器将该 html 文本并显示内容。</p>
+</blockquote>
+<h2 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h2><h3 id="TCP的三次握手与四次挥手"><a href="#TCP的三次握手与四次挥手" class="headerlink" title="TCP的三次握手与四次挥手"></a>TCP的三次握手与四次挥手</h3><p><code>序列号seq</code>：占4个字节，用来标记数据段的顺序，TCP把连接中发送的所有数据字节都编上一个序号，第一个字节的编号由本地随机产生；给字节编上序号后，就给每一个报文段指派一个序号；序列号seq就是这个报文段中的第一个字节的数据编号。</p>
+<p><code>确认号ack</code>：占4个字节，期待收到对方下一个报文段的第一个数据字节的序号；序列号表示报文段携带数据的第一个字节的编号；而确认号指的是期望接收到下一个字节的编号；因此当前报文段最后一个字节的编号+1即为确认号。</p>
+<p><code>确认ACK</code>：占1位，仅当ACK = 1时，确认号字段才有效。ACK = 0时，确认号无效</p>
+<p><code>同步SYN</code>：连接建立时用于同步序号。当SYN=1，ACK=0时表示：这是一个连接请求报文段。若同意连接，则在响应报文段中使得SYN=1，ACK=1。因此，SYN=1表示这是一个连接请求，或连接接受报文。SYN这个标志位只有在TCP建产连接时才会被置1，握手完成后SYN标志位被置0。</p>
+<p><code>终止FIN</code>：用来释放一个连接。FIN = 1表示：此报文段的发送方的数据已经发送完毕，并要求释放运输连接</p>
+<p>PS：ACK、SYN和FIN这些大写的单词表示标志位，其值要么是1，要么是0；ack、seq小写的单词表示序号。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">URG</td>
+<td style="text-align:center">紧急指针是否有效。为1，表示某一位需要被优先处理</td>
+</tr>
+<tr>
+<td style="text-align:center">ACK</td>
+<td style="text-align:center">确认号是否有效，一般置为1。</td>
+</tr>
+<tr>
+<td style="text-align:center">PSH</td>
+<td style="text-align:center">提示接收端应用程序立即从TCP缓冲区把数据读走。</td>
+</tr>
+<tr>
+<td style="text-align:center">RST</td>
+<td style="text-align:center">对方要求重新建立连接，复位。</td>
+</tr>
+<tr>
+<td style="text-align:center">SYN</td>
+<td style="text-align:center">请求建立连接，并在其序列号的字段进行序列号的初始值设定。建立连接，设置为1</td>
+</tr>
+<tr>
+<td style="text-align:center">FIN</td>
+<td style="text-align:center">希望断开连接。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="三次握手理解"><a href="#三次握手理解" class="headerlink" title="三次握手理解"></a>三次握手理解</h4><p><img src="/2020/04/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%95%B4%E7%90%86/三次握手.png" srcset="/img/loading.gif" alt="三次握手理解"></p>
+<ul>
+<li><p><strong>第一次握手</strong>：建立连接时，客户端发送syn包（syn=x）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。</p>
+</li>
+<li><p><strong>第二次握手</strong>：服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；</p>
+</li>
+<li><p><strong>第三次握手</strong>：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。</p>
+</li>
+</ul>
+<h4 id="四次挥手过程理解"><a href="#四次挥手过程理解" class="headerlink" title="四次挥手过程理解"></a>四次挥手过程理解</h4><p><img src="/2020/04/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%95%B4%E7%90%86/四次挥手.png" srcset="/img/loading.gif" alt="四次挥手理解"></p>
+<ol>
+<li>客户端进程发出连接释放报文，并且停止发送数据。释放数据报文首部，FIN=1，其序列号为seq=u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，FIN报文段即使不携带数据，也要消耗一个序号。</li>
+<li>服务器收到连接释放报文，发出确认报文，ACK=1，ack=u+1，并且带上自己的序列号seq=v，此时，服务端就进入了CLOSE-WAIT（关闭等待）状态。TCP服务器通知高层的应用进程，客户端向服务器的方向就释放了，这时候处于半关闭状态，即客户端已经没有数据要发送了，但是服务器若发送数据，客户端依然要接受。这个状态还要持续一段时间，也就是整个CLOSE-WAIT状态持续的时间。</li>
+<li>客户端收到服务器的确认请求后，此时，客户端就进入FIN-WAIT-2（终止等待2）状态，等待服务器发送连接释放报文（在这之前还需要接受服务器发送的最后的数据）。</li>
+<li>服务器将最后的数据发送完毕后，就向客户端发送连接释放报文，FIN=1，ack=u+1，由于在半关闭状态，服务器很可能又发送了一些数据，假定此时的序列号为seq=w，此时，服务器就进入了LAST-ACK（最后确认）状态，等待客户端的确认。</li>
+<li>客户端收到服务器的连接释放报文后，必须发出确认，ACK=1，ack=w+1，而自己的序列号是seq=u+1，此时，客户端就进入了TIME-WAIT（时间等待）状态。注意此时TCP连接还没有释放，必须经过2∗∗MSL（最长报文段寿命）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态。</li>
+<li>服务器只要收到了客户端发出的确认，立即进入CLOSED状态。同样，撤销TCB后，就结束了这次的TCP连接。可以看到，服务器结束TCP连接的时间要比客户端早一些。</li>
+</ol>
+<h4 id="常见考点"><a href="#常见考点" class="headerlink" title="常见考点"></a>常见考点</h4><h5 id="为什么连接的时候是三次握手，关闭的时候却是四次握手"><a href="#为什么连接的时候是三次握手，关闭的时候却是四次握手" class="headerlink" title="为什么连接的时候是三次握手，关闭的时候却是四次握手"></a>为什么连接的时候是三次握手，关闭的时候却是四次握手</h5><p><strong>答</strong>：因为当Server端收到Client端的SYN连接请求报文后，可以直接发送SYN+ACK报文。其中ACK报文是用来应答的，SYN报文是用来同步的。但是关闭连接时，当Server端收到FIN报文时，很可能并不会立即关闭SOCKET，所以只能先回复一个ACK报文，告诉Client端，”你发的FIN报文我收到了”。只有等到我Server端所有的报文都发送完了，我才能发送FIN报文，因此不能一起发送。故需要四步握手。</p>
+<h5 id="为什么TIME-WAIT状态需要经过2MSL-最大报文段生存时间-才能返回到CLOSE状态"><a href="#为什么TIME-WAIT状态需要经过2MSL-最大报文段生存时间-才能返回到CLOSE状态" class="headerlink" title="为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态"></a>为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态</h5><p><strong>答</strong>：虽然按道理，四个报文都发送完毕，我们可以直接进入CLOSE状态了，但是我们必须假设网络是不可靠的，有可以最后一个ACK丢失。所以TIME_WAIT状态就是用来重发可能丢失的ACK报文。在Client发送出最后的ACK回复，但该ACK可能丢失。Server如果没有收到ACK，将不断重复发送FIN片段。所以Client不能立即关闭，它必须确认Server接收到了该ACK。Client会在发送出ACK之后进入到TIME_WAIT状态。Client会设置一个计时器，等待2MSL的时间。如果在该时间内再次收到FIN，那么Client会重发ACK并再次等待2MSL。所谓的2MSL是两倍的MSL(Maximum Segment Lifetime)。MSL指一个片段在网络中最大的存活时间，2MSL就是一个发送和一个回复所需的最大时间。如果直到2MSL，Client都没有再次收到FIN，那么Client推断ACK已经被成功接收，则结束TCP连接。</p>
+<h5 id="为什么不能用两次握手进行连接"><a href="#为什么不能用两次握手进行连接" class="headerlink" title="为什么不能用两次握手进行连接"></a>为什么不能用两次握手进行连接</h5><p><strong>答</strong>：3次握手完成两个重要的功能，既要双方做好发送数据的准备工作（双方都知道彼此已准备好），也要允许双方就初始序列号进行协商，这个序列号在握手过程中被发送和确认。</p>
+<p>现在把三次握手改成仅需要两次握手，有两种解释：</p>
+<ul>
+<li><p><strong>死锁</strong> 是可能发生的。作为例子，考虑计算机S和C之间的通信，假定C给S发送一个连接请求分组，S收到了这个分组，并发 送了确认应答分组。按照两次握手的协定，S认为连接已经成功地建立了，可以开始发送数据分组。可是，C在S的应答分组在传输中被丢失的情况下，将不知道S 是否已准备好，不知道S建立什么样的序列号，C甚至怀疑S是否收到自己的连接请求分组。在这种情况下，C认为连接还未建立成功，将忽略S发来的任何数据分组，只等待连接确认应答分组。而S在发出的分组超时后，重复发送同样的分组。这样就形成了死锁。</p>
+</li>
+<li><p>客户端发起了一个连接请求在网络中滞留了很长时间，以至于在连接建立好并断开连接后，它才到达服务端，那么服务端就会认为这是新的连接请求，于是建立连接，但是实际上客户端根本就没有发送建立请求，也不会理睬服务端，因此导致服务端空等而浪费资源。</p>
+</li>
+</ul>
+<h5 id="如果已经建立了连接，但是客户端突然出现故障了怎么办"><a href="#如果已经建立了连接，但是客户端突然出现故障了怎么办" class="headerlink" title="如果已经建立了连接，但是客户端突然出现故障了怎么办"></a>如果已经建立了连接，但是客户端突然出现故障了怎么办</h5><p><strong>答</strong>：TCP还设有一个保活计时器，显然，客户端如果出现故障，服务器不能一直等下去，白白浪费资源。服务器每收到一次客户端的请求后都会重新复位这个计时器，时间通常是设置为2小时，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔75秒钟发送一次。若一连发送10个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
+<h3 id="UDP-和-TCP-的特点"><a href="#UDP-和-TCP-的特点" class="headerlink" title="UDP 和 TCP 的特点"></a>UDP 和 TCP 的特点</h3><ul>
+<li><p><strong>用户数据报协议 UDP（User Datagram Protocol）</strong> 是 <strong>无连接</strong> 的，<strong>尽最大可能交付</strong>，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。</p>
+</li>
+<li><p><strong>传输控制协议 TCP（Transmission Control Protocol）</strong> 是 <strong>面向连接</strong> 的，<strong>提供可靠交付</strong>，有流量控制，拥塞控制，提供全双工通信，面向字节流（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是点对点的（一对一）。</p>
+</li>
+</ul>
+<h3 id="TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度"><a href="#TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度" class="headerlink" title="TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度"></a>TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度</h3><p>拥塞控制是防止过多的数据注入网络，使得网络中的路由器或者链路过载。流量控制是点对点的通信量控制，而拥塞控制是全局的网络流量整体性的控制。发送双方都有一个拥塞窗口——cwnd。</p>
+<ol>
+<li><p>慢开始<br>最开始发送方的拥塞窗口为1，由小到大逐渐增大发送窗口和拥塞窗口。每经过一个传输轮次，拥塞窗口cwnd加倍。当cwnd超过慢开始门限，则使用拥塞避免算法，避免cwnd增长过大。</p>
+</li>
+<li><p>拥塞避免<br>每经过一个往返时间RTT，cwnd就增长1。<br>在慢开始和拥塞避免的过程中，一旦发现网络拥塞，就把慢开始门限设为当前值的一半，并且重新设置cwnd为1，重新慢启动。（乘法减小，加法增大）</p>
+</li>
+<li><p>快重传<br>接收方每次收到一个失序的报文段后就立即发出重复确认，发送方只要连续收到三个重复确认就立即重传（尽早重传未被确认的报文段）。</p>
+</li>
+<li><p>快恢复<br>当发送方连续收到了三个重复确认，就乘法减半（慢开始门限减半），将当前的cwnd设置为慢开始门限，并且采用拥塞避免算法（连续收到了三个重复请求，说明当前网络可能没有拥塞）。<br>采用快恢复算法时，慢开始只在建立连接和网络超时才使用。</p>
+</li>
+</ol>
+<p>达到什么情况的时候开始减慢增长的速度？</p>
+<p><strong>答：</strong></p>
+<ul>
+<li><p>采用慢开始和拥塞避免算法的时候</p>
+<ol>
+<li>一旦cwnd &gt; 慢开始门限，就采用拥塞避免算法，减慢增长速度</li>
+<li>一旦出现丢包的情况，就重新进行慢开始，减慢增长速度</li>
+</ol>
+</li>
+<li><p>采用快恢复和快重传算法的时候</p>
+<ol>
+<li>一旦cwnd &gt; 慢开始门限，就采用拥塞避免算法，减慢增长速度</li>
+<li>一旦发送方连续收到了三个重复确认，就采用拥塞避免算法，减慢增长速度</li>
+</ol>
+</li>
+</ul>
+<h3 id="TCP用了哪些措施保证其可靠性"><a href="#TCP用了哪些措施保证其可靠性" class="headerlink" title="TCP用了哪些措施保证其可靠性"></a>TCP用了哪些措施保证其可靠性</h3><ol>
+<li><p>序列号、确认应答、超时重传<br>数据到达接收方，接收方需要发出一个确认应答，表示已经收到该数据段，并且确认序号会说明了它下一次需要接收的数据序列号。如果发送发迟迟未收到确认应答，那么可能是发送的数据丢失，也可能是确认应答丢失，这时发送方在等待一定时间后会进行重传。这个时间一般是2*RTT(报文段往返时间）+一个偏差值。</p>
+</li>
+<li><p>窗口控制与高速重发控制/快速重传（重复确认应答）<br>TCP会利用窗口控制来提高传输速度，意思是在一个窗口大小内，不用一定要等到应答才能发送下一段数据，窗口大小就是无需等待确认而可以继续发送数据的最大值。如果不使用窗口控制，每一个没收到确认应答的数据都要重发。<br>使用窗口控制，如果数据段1001-2000丢失，后面数据每次传输，确认应答都会不停地发送序号为1001的应答，表示我要接收1001开始的数据，发送端如果收到3次相同应答，就会立刻进行重发；但还有种情况有可能是数据都收到了，但是有的应答丢失了，这种情况不会进行重发，因为发送端知道，如果是数据段丢失，接收端不会放过它的，会疯狂向它提醒……</p>
+</li>
+<li><p>拥塞控制<br>如果把窗口定的很大，发送端连续发送大量的数据，可能会造成网络的拥堵（大家都在用网，你在这狂发，吞吐量就那么大，当然会堵），甚至造成网络的瘫痪。所以TCP在为了防止这种情况而进行了拥塞控制。<br>慢启动：定义拥塞窗口，一开始将该窗口大小设为1，之后每次收到确认应答（经过一个RTT），将拥塞窗口大小*2。<br>拥塞避免：设置慢启动阈值，一般开始都设为65536。拥塞避免是指当拥塞窗口大小达到这个阈值，拥塞窗口的值不再指数上升，而是加法增加（每次确认应答/每个RTT，拥塞窗口大小+1），以此来避免拥塞。<br>将报文段的超时重传看做拥塞，则一旦发生超时重传，我们需要先将阈值设为当前窗口大小的一半，并且将窗口大小设为初值1，然后重新进入慢启动过程。<br>快速重传：在遇到3次重复确认应答（高速重发控制）时，代表收到了3个报文段，但是这之前的1个段丢失了，便对它进行立即重传。<br>然后，先将阈值设为当前窗口大小的一半，然后将拥塞窗口大小设为慢启动阈值+3的大小。<br>这样可以达到：在TCP通信时，网络吞吐量呈现逐渐的上升，并且随着拥堵来降低吞吐量，再进入慢慢上升的过程，网络不会轻易的发生瘫痪。</p>
+</li>
+</ol>
+<h3 id="IP地址作用，以及MAC地址作用"><a href="#IP地址作用，以及MAC地址作用" class="headerlink" title="IP地址作用，以及MAC地址作用"></a>IP地址作用，以及MAC地址作用</h3><p>MAC地址是一个硬件地址，用来定义网络设备的位置，主要由 <code>数据链路层</code> 负责。而IP地址是IP协议提供的一种 <code>统一的地址格式</code>，为互联网上的每一个网络和每一台主机分配一个逻辑地址，以此来屏蔽物理地址的差异。</p>
+<h3 id="TCP-IP数据链路层的交互过程"><a href="#TCP-IP数据链路层的交互过程" class="headerlink" title="TCP/IP数据链路层的交互过程"></a>TCP/IP数据链路层的交互过程</h3><p>网络层等到数据链路层用MAC地址作为通信目标，数据包到达网络等准备往数据链层发送的时候，首先会去自己的ARP缓存表(存着IP-MAC对应关系)去查找改目标IP的MAC地址，如果查到了，就讲目标IP的MAC地址封装到链路层数据包的包头。如果缓存中没有找到，会发起一个广播：who is ip XXX tell ip XXX，所有收到的广播的机器看这个IP是不是自己的，如果是自己的，则以单拨的形式将自己的MAC地址回复给请求的机器。</p>
+<h3 id="传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文"><a href="#传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文" class="headerlink" title="传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文"></a>传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文</h3><p>根据端口区分：看ip头中的协议标识字段，17是UDP，6是TCP。</p>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><h4 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h4><ol>
+<li><p>在浏览器中输入一个域名，例如www.tmall.com，操作系统会先检查自己本地的hosts文件是否有这个网址映射关系，如果有，就先调用这个IP地址映射，完成域名解析， windows下hosts文件在C:/Windows/System32/drivers/etc/hosts下，linux一般都在/etc/hosts下。</p>
+</li>
+<li><p>如果hosts里没有这个ip到域名的映射，那么就要查找本地DNS解析器缓存，是否有这个域名到ip地址的映射关系，如果有，直接返回，完成域名解析。</p>
+</li>
+<li><p>如果本机的hosts与本地DNS解析器缓存都没有相应的网址映射关系，那么就要找到你的TCP/ip参数中设置的首选DNS服务器，我们叫它本地DNS服务器，此服务器收到查询时，如果要查询的域名，包含在本地配置区域资源中，则返回解析结果给客户机，完成域名解析，此解析具有权威性。</p>
+</li>
+<li><p>如果要查询的域名，不由本地DNS服务器区域解析，但该服务器已缓存了此网址映射关系，则调用这个域名到ip地址的映射，完成域名解析，但是此解析不具有权威性。</p>
+</li>
+<li><p>如果本地DNS服务器本地区域文件与缓存解析都失效，则根据本地DNS服务器的设置（是否设置转发器）进行查询，如果未用转发模式，本地DNS就把请求发至13台根DNS，根DNS服务器收到请求后会判断这个域名(.com)是谁来授权管理，并会返回一个负责该顶级域名服务器的一个IP。本地DNS服务器收到IP信息后，将会联系负责.com域的这台服务器。这台负责(.com)域名的服务器收到请求后，如果自己无法解析，它就会找一个管理(.com)域的下一级DNS服务器地址 (tmall.com)给本地DNS服务器。当本地DNS服务器收到这个地址后，就会找(tmall.com)域服务器，重复上面的动作，进行查询，直至找到 (www.tmall.com)主机。</p>
+</li>
+<li><p>如果用的是转发模式，此DNS服 务器就会把请求转发至上一级DNS服务器，由上一级服务器进行解析，上一级服务器如果不能解析，或找根DNS或把转请求转至上上级，以此循环。不管是本地 DNS服务器用是是转发，还是根提示，最后都是把结果返回给本地DNS服务器，由此DNS服务器再返回给客户机。</p>
+</li>
+</ol>
+<p>这里我们把从客户端到本地DNS服务器的查找称为递归查询，而DNS服务器之间的交互查询称为迭代查询。</p>
+<h4 id="DNS劫持"><a href="#DNS劫持" class="headerlink" title="DNS劫持"></a>DNS劫持</h4><p>DNS劫持又称域名劫持，是指在劫持的网络范围内拦截域名解析的请求，分析请求的域名，把审查范围以外的请求放行，否则返回假的IP地址或者什么都不做使请求失去响应，其效果就是对特定的网络不能反应或访问的是假网址。举一个简单的例子，比如你输入的域名地址是www.google.cn然后弹出来百度的页面，很明显发生了DNS域名劫持。</p>
+<p>应对DNS劫持的方法</p>
+<ol>
+<li><p>我们都知道，访问一个网站用域名而不用ip地址的原因就是逻辑地址不好记，但是如果你知道这个网页的ip地址的话，你可以直接输入ip地址来访问从而绕开DNS解析。</p>
+</li>
+<li><p>将自己的电脑DNS解析地址手动设置为国内比较权威又稳定的服务器地址，例如114.114.114.114、8.8.8.8。</p>
+</li>
+<li><p>修改你的路由器密码，登录路由器192.168.1.1，更改你的用户密码，然后最好重新启动路由器。</p>
+</li>
+</ol>
+<p>作为运营商来处理DNS劫持，一般运营商都会有提供多台DNS解析服务器，负责一个区域的DNS解析至少会有两台，其中的一台发生了DNS劫持运营商就会停止该服务器的网络地址解析工作而启动备预案，这样就可以预防发生DNS劫持而导致用户主机受到攻击甚至发生某些不法的钓鱼网站窃取用户账户密码，造成财务损失的严重事故。</p>
+<h2 id="HTTP-HTTPS"><a href="#HTTP-HTTPS" class="headerlink" title="HTTP/HTTPS"></a>HTTP/HTTPS</h2><h3 id="HTTP和HTTPS的区别，以及HTTPS有什么缺点"><a href="#HTTP和HTTPS的区别，以及HTTPS有什么缺点" class="headerlink" title="HTTP和HTTPS的区别，以及HTTPS有什么缺点"></a>HTTP和HTTPS的区别，以及HTTPS有什么缺点</h3><p>HTTP协议和HTTPS协议区别如下：</p>
+<ul>
+<li><p>HTTP协议是以 <code>明文</code> 的方式在网络中传输数据，而HTTPS协议传输的数据则是经过 <code>TLS加密</code> 后的，HTTPS具有更高的安全性</p>
+</li>
+<li><p>HTTPS在TCP三次握手阶段之后，还需要进行SSL的handshake，协商加密使用的对称加密密钥</p>
+</li>
+<li><p>HTTPS协议需要服务端申请证书，浏览器端安装对应的根证书</p>
+</li>
+<li><p>HTTP协议端口是80，HTTPS协议端口是443</p>
+</li>
+</ul>
+<p><strong>HTTPS优点：</strong></p>
+<ul>
+<li><p>HTTPS传输数据过程中使用密钥进行加密，所以安全性更高</p>
+</li>
+<li><p>HTTPS协议可以认证用户和服务器，确保数据发送到正确的用户和服务器</p>
+</li>
+</ul>
+<p><strong>HTTPS缺点：</strong></p>
+<ul>
+<li><p>HTTPS握手阶段延时较高：由于在进行HTTP会话之前还需要进行SSL握手，因此HTTPS协议握手阶段延时增加</p>
+</li>
+<li><p>HTTPS部署成本高：一方面HTTPS协议需要使用证书来验证自身的安全性，所以需要购买CA证书；另一方面由于采用HTTPS协议需要进行加解密的计算，占用CPU资源较多，需要的服务器配置或数目高。</p>
+</li>
+</ul>
+<h3 id="HTTP返回码"><a href="#HTTP返回码" class="headerlink" title="HTTP返回码"></a>HTTP返回码</h3><p>HTTP协议的响应报文由状态行、响应头部和响应包体组成，其响应状态码总体描述如下：<br>1xx：指示信息——表示请求已接收，继续处理。<br>2xx：成功——表示请求已被成功接收、理解、接受。<br>3xx：重定向——要完成请求必须进行更进一步的操作。<br>4xx：客户端错误——请求有语法错误或请求无法实现。<br>5xx：服务器端错误——服务器未能实现合法的请求。</p>
+<p>常见状态代码、状态描述的详细说明如下：<br>200 OK：客户端请求成功。<br>206 partial content服务器已经正确处理部分GET请求，实现断点续传或同时分片下载，该请求必须包含Range请求头来指示客户端期望得到的范围。<br>300 multiple choices（可选重定向）:被请求的资源有一系列可供选择的反馈信息，由浏览器/用户自行选择其中一个。<br>301 moved permanently（永久重定向）：该资源已被永久移动到新位置，将来任何对该资源的访问都要使用本响应返回的若干个URI之一。<br>302 move temporarily(临时重定向)：请求的资源现在临时从不同的URI中获得，<br>304 not modified:如果客户端发送一个待条件的GET请求并且该请求以经被允许，而文档内容未被改变，则返回304,该响应不包含包体（即可直接使用缓存）。<br>403 Forbidden：服务器收到请求，但是拒绝提供服务。<br>404 not Found：请求资源不存在，举个例子：输入了错误的URL。</p>
+<h3 id="HTTP过程概述"><a href="#HTTP过程概述" class="headerlink" title="HTTP过程概述"></a>HTTP过程概述</h3><p>HTTP协议定义Web客户端如何从Web服务器请求Web页面，以及服务器如何把Web页面传送给客户端。HTTP协议采用了请求/响应模型。客户端向服务器发送一个请求报文，请求报文包含请求的方法、URL、协议版本、请求头部和请求数据。服务器以一个状态行作为响应，响应的内容包括协议的版本、成功或者错误代码、服务器信息、响应头部和响应数据。</p>
+<p>HTTP请求/响应的步骤如下：</p>
+<ol>
+<li><p>客户端连接到Web服务器<br>一个HTTP客户端，通常是浏览器，与Web服务器的HTTP端口（默认为80）建立一个TCP套接字连接。例如：<a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a></p>
+</li>
+<li><p>发送HTTP请求<br>通过TCP套接字，客户端向Web服务器发送一个文本的请求报文，一个请求报文由请求行、请求头部、空行和请求数据4部分组成。</p>
+</li>
+<li><p>服务器接受请求并返回HTTP响应<br>Web服务器解析请求，定位请求资源。服务器将资源复本写到TCP套接字，由客户端读取。一个响应由状态行、响应头部、空行和响应数据4部分组成。</p>
+</li>
+<li><p>释放连接TCP连接<br>若connection模式为close，则服务器主动关闭TCP连接，客户端被动关闭连接，释放TCP连接；若connection模式为keepalive，则该连接会保持一段时间，在该时间内可以继续接收请求。</p>
+</li>
+<li><p>客户端浏览器解析HTML内容<br>客户端浏览器首先解析状态行，查看表明请求是否成功的状态代码。然后解析每一个响应头，响应头告知以下为若干字节的HTML文档和文档的字符集。客户端浏览器读取响应数据HTML，根据HTML的语法对其进行格式化，并在浏览器窗口中显示。</p>
+</li>
+</ol>
+<h3 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a>GET和POST的区别</h3><ol>
+<li><p>概括<br>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；<br>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）</p>
+</li>
+<li><p>区别：</p>
+<ol>
+<li><p>get参数通过url传递，post放在request body中。</p>
+</li>
+<li><p>get请求在url中传递的参数是有长度限制的，而post没有。</p>
+</li>
+<li><p>get比post更不安全，因为参数直接暴露在url中，所以不能用来传递敏感信息。</p>
+</li>
+<li><p>get请求只能进行url编码，而post支持多种编码方式。</p>
+</li>
+<li><p>get请求会浏览器主动cache，而post支持多种编码方式。</p>
+</li>
+<li><p>get请求参数会被完整保留在浏览历史记录里，而post中的参数不会被保留。</p>
+</li>
+<li><p>GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。</p>
+</li>
+<li><p><strong>GET产生一个TCP数据包；POST产生两个TCP数据包。</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="session和cookie的区别"><a href="#session和cookie的区别" class="headerlink" title="session和cookie的区别"></a>session和cookie的区别</h2><ol>
+<li>cookie数据存放在客户的浏览器上，session数据放在服务器上。</li>
+<li>cookie不是很安全，别人可以分析存放在本地的cookie并进行cookie欺骗，考虑到安全应当使用session。</li>
+<li>session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能，考虑到减轻服务器性能方面，应当使用cookie。</li>
+<li>单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie。</li>
+<li>可以考虑将登陆信息等重要信息存放为session，其他信息如果需要保留，可以放在cookie中。</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <p>
+                
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F%E7%9F%A5%E8%AF%86%E6%B1%87%E6%80%BB/">面经知识汇总</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
+                
+                  <span>
+                <i class="iconfont icon-tag"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+                    
+                  </span>
+                
+              </p>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" target="_blank" rel="nofollow noopener noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc-start"></div>
+<div id="toc">
+  <p class="h5"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+  <div class="col-lg-7 mx-auto nopadding-md">
+    <div class="container custom post-content mx-auto">
+      <img src="https://octodex.github.com/images/jetpacktocat.png" srcset="/img/loading.gif" class="rounded mx-auto d-block mt-5" style="width:150px; height:150px;">
+    </div>
+  </div>
+
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="https://cdn.staticfile.org/mdbootstrap/4.13.0/js/mdb.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.10.0/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var navHeight = $('#navbar').height();
+      var post = $('#post');
+      var toc = $('#toc');
+      var tocLimMax = post.offset().top + post.height() - navHeight;
+
+      $(window).scroll(function () {
+        var tocLimMin = $('#toc-start').offset().top - navHeight;
+        var scroH = document.body.scrollTop + document.documentElement.scrollTop;
+
+        if (tocLimMin <= scroH && scroH <= tocLimMax) {
+          toc.css({
+            'display': 'block',
+            'position': 'fixed',
+            'top': navHeight,
+          });
+        } else if (scroH <= tocLimMin) {
+          toc.css({
+            'position': '',
+            'top': '',
+          });
+        } else if (scroH > tocLimMax) {
+          toc.css('display', 'none');
+        }
+      });
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        scrollSmooth: true,
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc > p').css('visibility', 'visible');
+      }
+      var offset = $('#board-ctn').css('margin-right')
+      $('#toc-ctn').css({
+        'right': offset
+      })
+    });
+  </script>
+
+
+
+
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/prettify/188.0.0/prettify.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "计算机网络整理&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "left",
+      visible: "hover",
+      
+      icon: "#"
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script defer src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+  
+    <script type="text/javascript">
+      //定义获取词语下标
+      var a_idx = 0;
+      jQuery(document).ready(function ($) {
+        //点击body时触发事件
+        $("body").click(function (e) {
+          //需要显示的词语
+          var a = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+          //设置词语给span标签
+          var $i = $("<span/>").text(a[a_idx]);
+          //下标等于原来下标+1  余 词语总数
+          a_idx = (a_idx + 1) % a.length;
+          //获取鼠标指针的位置，分别相对于文档的左和右边缘。
+          //获取x和y的指针坐标
+          var x = e.pageX, y = e.pageY;
+          //在鼠标的指针的位置给$i定义的span标签添加css样式
+          $i.css({
+            "z-index": 999,
+            "top": y - 20,
+            "left": x,
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": rand_color()
+          });
+          // 随机颜色
+          function rand_color() {
+            return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+          }
+          //在body添加这个标签
+          $("body").append($i);
+          //animate() 方法执行 CSS 属性集的自定义动画。
+          //该方法通过CSS样式将元素从一个状态改变为另一个状态。CSS属性值是逐渐改变的，这样就可以创建动画效果。
+          //详情请看http://www.w3school.com.cn/jquery/effect_animate.asp
+          $i.animate({
+            //将原来的位置向上移动180
+            "top": y - 180,
+            "opacity": 0
+            //1500动画的速度
+          }, 1500, function () {
+            //时间到了自动删除
+            $i.remove();
+          });
+        });
+      })
+      ;
+    </script>
+  
+
+
+
+
+
+
+
+
+</body>
+</html>

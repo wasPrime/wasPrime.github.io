@@ -17,7 +17,7 @@
   <meta name="description" content="wasPrime&#39;s Blog">
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="wasPrime, keywords">
-  <title>常见排序及时间复杂度 - wasPrime</title>
+  <title>设计模式 - wasPrime</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -124,7 +124,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  2020 年 03 月 31 日 下午
+                  2020 年 04 月 11 日 下午
                 </p>
               
 
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    584 字
+                    1.9k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      3 分钟
+                      6 分钟
                   </span>
                 
 
@@ -176,113 +176,142 @@
           <div class="post-content mx-auto" id="post">
             
               <p
-                class="note note-warning">本文最后更新于：2020 年 03 月 31 日 下午</p>
+                class="note note-warning">本文最后更新于：2020 年 04 月 11 日 下午</p>
             
             <div class="markdown-body">
               <blockquote>
-<p>必知必会排序方式</p>
+<p>设计模式一览</p>
 </blockquote>
 <a id="more"></a>
-<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><p>时间复杂度 $O(n ^ 2)$</p>
-<pre><code class="lang-Python">def BubbleSort(nums: List[int]) -&gt; None:
-    n = len(nums)
-    for i in range(n - 1):
-        for j in range(n - i - 1):
-            if nums[j] &gt; nums[j + 1]:
-                nums[j], nums[j + 1] = nums[j + 1], nums[j]
-</code></pre>
-<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><h3 id="顺序插入"><a href="#顺序插入" class="headerlink" title="顺序插入"></a>顺序插入</h3><p>时间复杂度 $O(n ^ 2)$</p>
-<pre><code class="lang-Python">def InsertSort(nums: List[int]) -&gt; None:
-    n = len(nums)
-    for i in range(n):
-        temp = nums[i]
-        j = i - 1
-        while j &gt;= 0 and nums[j] &gt; temp:
-            nums[j + 1] = nums[j]
-            j -= 1
-        nums[j + 1] = temp
-</code></pre>
-<h3 id="折半插入"><a href="#折半插入" class="headerlink" title="折半插入"></a>折半插入</h3><p>时间复杂度 $O(n ^ 2)$ （内循环查找复杂度为 $O(n\log_2n)$，移位复杂度为 $O(n)$，故内循环总复杂度为 $O(n ^ 2)$）</p>
-<pre><code class="lang-Python">def HInsertSort(nums: List[int]) -&gt; None:
-    n = len(nums)
-    for i in range(n):
-        temp = nums[i]
-        low, high = 0, i - 1
-        while low &lt;= high:
-            mid = low + (high - low) // 2
-            if nums[mid] &gt; temp:
-                high = mid - 1
-            else:
-                low = mid + 1
-        for j in range(i - 1, high, -1):
-            nums[j + 1] = nums[j]
-        nums[high + 1] = temp
-</code></pre>
-<h2 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h2><p>时间复杂度比 $O(n ^ 2)$ 要好</p>
-<pre><code class="lang-Python">def ShellSort(nums: List[int]) -&gt; None:
-    n = len(nums)
-    dk = n // 2
-    # 外层步长控制
-    while dk &gt;= 1:
-        # 开始插入排序
-        for i in range(dk, n):
-            # 满足条件则交换
-            while i &gt;= dk and nums[i]&lt;nums[i-dk]:
-                nums[i], nums[i-dk] = nums[i-dk], nums[i]
-                i-=dk
-        dk //= 2
-</code></pre>
-<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><p>时间复杂度 $O(n\log_2n)$</p>
-<pre><code class="lang-Python">def QuickSort(nums: List[int], low: int, high: int) -&gt; None:
-    def partition(nums: List[int], low: int, high: int) -&gt; int:
-        pivot = nums[low]
-        while low &lt; high:
-            while low &lt; high and nums[high] &gt;= pivot:
-                high -= 1
-            nums[low] = nums[high]
-            while low &lt; high and nums[low] &lt;= pivot:
-                low += 1
-            nums[high] = nums[low]
-        nums[low] = pivot
-        return low
+<h2 id="常见的设计模式"><a href="#常见的设计模式" class="headerlink" title="常见的设计模式"></a>常见的设计模式</h2><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>单例模式主要解决一个全局使用的类频繁的创建和销毁的问题。单例模式下可以确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例。</p>
+<p>单例模式有三个要素：</p>
+<ul>
+<li>一是某个类只能有一个实例；</li>
+<li>二是它必须自行创建这个实例；</li>
+<li><p>三是它必须自行向整个系统提供这个实例。</p>
+</li>
+<li><p>优点：</p>
+<ol>
+<li>在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）；</li>
+<li>避免对资源的多重占用（比如写文件操作）。</li>
+</ol>
+</li>
+<li><p>缺点：没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p>
+</li>
+</ul>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ol>
+<li>要求生产唯一序列号；</li>
+<li>WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来；</li>
+<li>创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</li>
+</ol>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>工厂模式主要解决接口选择的问题。该模式下定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，使其创建过程延迟到子类进行。</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。</p>
+<h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><p>对已经存在的某些类进行装饰，以此来扩展一些功能，从而动态的为一个对象增加新的功能。装饰器模式是一种用于代替继承的技术，无需通过继承增加子类就能扩展对象的新功能。使用对象的关联关系代替继承关系，更加灵活，同时避免类型体系的快速膨胀。</p>
+<ul>
+<li><p>优点：装饰类和被装饰类可以独立发展，不会相互耦合，装饰模式是继承的一个替代模式，装饰模式可以动态扩展一个实现类的功能。</p>
+</li>
+<li><p>缺点：多层装饰比较复杂。</p>
+</li>
+</ul>
+<h4 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h4><ol>
+<li>扩展一个类的功能；</li>
+<li>动态增加功能，动态撤销。</li>
+</ol>
+<h2 id="单例模式的多线程安全问题"><a href="#单例模式的多线程安全问题" class="headerlink" title="单例模式的多线程安全问题"></a>单例模式的多线程安全问题</h2><p>在单例模式的实现中，如果不采取任何措施，在多线程下是不安全的，可能会同时创建多个实例。因此，为了保证单例模式在多线程下的线程安全，一般采用下面几种方式实现单例模式</p>
+<h3 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h3><p>基于class loader机制避免多线程的同步问题，不过，instance在类装载时就实例化，可能会产生垃圾对象。</p>
+<p><img src="/2020/04/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/饿汉式.png" srcset="/img/loading.gif" alt="饿汉式"></p>
+<h3 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h3><p>通过双重锁机制实现线程安全。</p>
+<p><img src="/2020/04/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/懒汉式.png" srcset="/img/loading.gif" alt="懒汉式"></p>
+<h2 id="如何保证单例模式只有唯一实例？你知道的都有哪些方法"><a href="#如何保证单例模式只有唯一实例？你知道的都有哪些方法" class="headerlink" title="如何保证单例模式只有唯一实例？你知道的都有哪些方法"></a>如何保证单例模式只有唯一实例？你知道的都有哪些方法</h2><p>单例的实现主要是通过以下两个步骤：</p>
+<ol>
+<li><p>将该类的构造方法定义为私有方法，这样其他处的代码就无法通过调用该类的构造方法来实例化该类的对象，只有通过该类提供的静态方法来得到该类的唯一实例；</p>
+</li>
+<li><p>在该类内提供一个静态方法，当我们调用这个方法时，如果类持有的引用不为空就返回这个引用，如果类保持的引用为空就创建该类的实例并将实例的引用赋予该类保持的引用。</p>
+</li>
+</ol>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ul>
+<li>饿汉式</li>
+<li>懒汉式</li>
+</ul>
+<h2 id="OOP的设计模式的五项原则"><a href="#OOP的设计模式的五项原则" class="headerlink" title="OOP的设计模式的五项原则"></a>OOP的设计模式的五项原则</h2><h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>单一职责有2个含义，一个是避免相同的职责分散到不同的类中，另一个是避免一个类承担太多职责。减少类的耦合，提高类的复用性。</p>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>表明客户端不应该被强迫实现一些他们不会使用的接口，应该把接口中的方法分组，然后用多个接口代替它，每个接口服务于一个子模块。简单说，就是使用多个专门的接口比使用单个接口好很多。</p>
+<p>该原则观点如下：</p>
+<ol>
+<li><p>一个类对另外一个类的依赖性应当是建立在最小的接口上；</p>
+</li>
+<li><p>客户端程序不应该依赖它不需要的接口方法。</p>
+</li>
+</ol>
+<h3 id="开放-封闭原则"><a href="#开放-封闭原则" class="headerlink" title="开放-封闭原则"></a>开放-封闭原则</h3><p>open模块的行为必须是开放的、支持扩展的，而不是僵化的。</p>
+<p>closed在对模块的功能进行扩展时，不应该影响或大规模影响已有的程序模块。一句话概括：一个模块在扩展性方面应该是开放的而在更改性方面应该是封闭的。<br>核心思想就是对抽象编程，而不对具体编程。</p>
+<h3 id="替换原则"><a href="#替换原则" class="headerlink" title="替换原则"></a>替换原则</h3><p>子类型必须能够替换掉他们的父类型、并出现在父类能够出现的任何地方。</p>
+<p>主要针对继承的设计原则：</p>
+<ol>
+<li><p>父类的方法都要在子类中实现或者重写，并且派生类只实现其抽象类中生命的方法，而不应当给出多余的,方法定义或实现。</p>
+</li>
+<li><p>在客户端程序中只应该使用父类对象而不应当直接使用子类对象，这样可以实现运行期间绑定。</p>
+</li>
+</ol>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>上层模块不应该依赖于下层模块，他们共同依赖于一个抽象，即：父类不能依赖子类，他们都要依赖抽象类。</p>
+<p>抽象不能依赖于具体，具体应该要依赖于抽象。</p>
+<h2 id="说说工厂模式的优点"><a href="#说说工厂模式的优点" class="headerlink" title="说说工厂模式的优点"></a>说说工厂模式的优点</h2><p>解耦，代码复用，更改功能容易。</p>
+<h2 id="说一下观察者模式"><a href="#说一下观察者模式" class="headerlink" title="说一下观察者模式"></a>说一下观察者模式</h2><p>观察者模式中分为观察者和被观察者，当被观察者发生装填改变时，观察者会受到通知。主要为了解决对象状态改变给其他对象通知的问题，其实现类似于观察者在被观察者那注册了一个回调函数。</p>
+<h2 id="介绍一下单例模式"><a href="#介绍一下单例模式" class="headerlink" title="介绍一下单例模式"></a>介绍一下单例模式</h2><p>C++的实现有两种，一种通过局部静态变量，利用其只初始化一次的特点，返回对象。另外一种，则是定义全局的指针，getInstance判断该指针是否为空，为空时才实例化对象。</p>
+<h3 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h3><h4 id="Meyers-Singleton（最推荐的写法）"><a href="#Meyers-Singleton（最推荐的写法）" class="headerlink" title="Meyers Singleton（最推荐的写法）"></a>Meyers Singleton（最推荐的写法）</h4><pre><code class="lang-C++">class Singleton
+{
+public:
+    static Singleton &amp;getInstance()
+    {
+        static Singleton instance;
+        return instance;
+    }
 
-    if low &lt; high:
-        pos = partition(nums, low, high)
-        QuickSort(nums, low, pos - 1)
-        QuickSort(nums, pos + 1, high)
+private:
+    Singleton() { cout &lt;&lt; &quot;构造&quot; &lt;&lt; endl; }
+    Singleton(const Singleton &amp;) {}
+    Singleton operator=(const Singleton &amp;) {}
+    ~Singleton() { cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl; }
+};
 </code></pre>
-<h2 id="简单选择排序"><a href="#简单选择排序" class="headerlink" title="简单选择排序"></a>简单选择排序</h2><p>时间复杂度 $O(n ^ 2)$</p>
-<pre><code class="lang-Python">def SelectSort(nums: List[int]) -&gt; None:
-    n = len(nums)
-    for i in range(n - 1):
-        min = i
-        for j in range(i + 1, n):
-            if nums[j] &lt; nums[min]:
-                min = j
-        if min != i:
-            nums[i], nums[min] = nums[min], nums[i]
-</code></pre>
-<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>时间复杂度 $O(n\log_2n)$</p>
-<pre><code class="lang-Python">def HeapSort(nums: List[int]) -&gt; None:
-    # 调整为大根堆
-    def adjust(nums: List[int], length: int, index: int) -&gt; None:
-        left, right = 2 * index + 1, 2 * index + 2  # index的左右子节点
-        maxIdx = index
-        if left &lt; length and nums[left] &gt; nums[maxIdx]:
-            maxIdx = left
-        if right &lt; length and nums[right] &gt; nums[maxIdx]:
-            maxIdx = right
-        if maxIdx != index:
-            nums[maxIdx], nums[index] = nums[index], nums[maxIdx]
-            adjust(nums, length, maxIdx)
+<h4 id="饿汉式-1"><a href="#饿汉式-1" class="headerlink" title="饿汉式"></a>饿汉式</h4><pre><code class="lang-C++">class Singleton
+{
+public:
+    static Singleton &amp;getInstance()
+    {
+        return instance;
+    }
 
-    n = len(nums)
-    for i in range(n // 2 - 1, -1, -1):
-        adjust(nums, n, i)
-    for i in range(n - 1, 0, -1):
-        nums[0], nums[i] = nums[i], nums[0]
-        adjust(nums, i, 0)
+private:
+    static Singleton instance;
+    Singleton() { cout &lt;&lt; &quot;构造&quot; &lt;&lt; endl; }
+    Singleton(const Singleton &amp;) {}
+    Singleton operator=(const Singleton &amp;) {}
+    ~Singleton() { cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl; }
+};
+Singleton Singleton::instance;
 </code></pre>
+<h4 id="懒汉式-1"><a href="#懒汉式-1" class="headerlink" title="懒汉式"></a>懒汉式</h4><pre><code class="lang-C++">class Singleton
+{
+private:
+    static Singleton *instance;
+    Singleton() { cout &lt;&lt; &quot;构造&quot; &lt;&lt; endl; };
+    Singleton(const Singleton &amp;);
+    Singleton &amp;operator=(const Singleton &amp;);
+    ~Singleton() { cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl; };
+
+public:
+    static Singleton *getInstance()
+    {
+        if (instance == nullptr)
+            instance = new Singleton();
+        return instance;
+    }
+};
+Singleton *Singleton::instance = nullptr;
+</code></pre>
+<p>但是上述写法存在内存泄漏问题</p>
+<h2 id="单例模式中的懒汉加载，如果并发访问该怎么做"><a href="#单例模式中的懒汉加载，如果并发访问该怎么做" class="headerlink" title="单例模式中的懒汉加载，如果并发访问该怎么做"></a>单例模式中的懒汉加载，如果并发访问该怎么做</h2><p>使用锁机制，防止多次访问。</p>
+<p>第一次判断为空不加锁，若为空，再进行加锁判断是否为空，若为空则生成对象。</p>
 
             </div>
             <hr>
@@ -292,7 +321,7 @@
                   <span>
                 <i class="iconfont icon-inbox"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Algorithm/">Algorithm</a>
+                      <a class="hover-with-bg" href="/categories/%E9%9D%A2%E7%BB%8F%E7%9F%A5%E8%AF%86%E6%B1%87%E6%80%BB/">面经知识汇总</a>
                       &nbsp;
                     
                   </span>&nbsp;&nbsp;
@@ -301,7 +330,7 @@
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%8E%92%E5%BA%8F/">排序</a>
+                      <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
                     
                   </span>
                 
@@ -509,7 +538,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "常见排序及时间复杂度&nbsp;",
+        "设计模式&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
@@ -568,32 +597,6 @@
   </script>
 
 
-
-  
-
-  
-    <!-- MathJax -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-          tex2jax: {
-              inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-              processEscapes: true,
-              skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-          }
-      });
-
-      MathJax.Hub.Queue(function() {
-          var all = MathJax.Hub.getAllJax(), i;
-          for(i=0; i < all.length; i += 1) {
-              all[i].SourceElement().parentNode.className += ' has-jax';
-          }
-      });
-
-    </script>
-
-    <script  src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" ></script>
-
-  
 
 
 

@@ -1,6 +1,664 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>设计模式</title>
+    <url>/2020/04/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<blockquote>
+<p>设计模式一览</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="常见的设计模式"><a href="#常见的设计模式" class="headerlink" title="常见的设计模式"></a>常见的设计模式</h2><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>单例模式主要解决一个全局使用的类频繁的创建和销毁的问题。单例模式下可以确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例。</p>
+<p>单例模式有三个要素：</p>
+<ul>
+<li>一是某个类只能有一个实例；</li>
+<li>二是它必须自行创建这个实例；</li>
+<li><p>三是它必须自行向整个系统提供这个实例。</p>
+</li>
+<li><p>优点：</p>
+<ol>
+<li>在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）；</li>
+<li>避免对资源的多重占用（比如写文件操作）。</li>
+</ol>
+</li>
+<li><p>缺点：没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p>
+</li>
+</ul>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ol>
+<li>要求生产唯一序列号；</li>
+<li>WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来；</li>
+<li>创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</li>
+</ol>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>工厂模式主要解决接口选择的问题。该模式下定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，使其创建过程延迟到子类进行。</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。</p>
+<h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><p>对已经存在的某些类进行装饰，以此来扩展一些功能，从而动态的为一个对象增加新的功能。装饰器模式是一种用于代替继承的技术，无需通过继承增加子类就能扩展对象的新功能。使用对象的关联关系代替继承关系，更加灵活，同时避免类型体系的快速膨胀。</p>
+<ul>
+<li><p>优点：装饰类和被装饰类可以独立发展，不会相互耦合，装饰模式是继承的一个替代模式，装饰模式可以动态扩展一个实现类的功能。</p>
+</li>
+<li><p>缺点：多层装饰比较复杂。</p>
+</li>
+</ul>
+<h4 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h4><ol>
+<li>扩展一个类的功能；</li>
+<li>动态增加功能，动态撤销。</li>
+</ol>
+<h2 id="单例模式的多线程安全问题"><a href="#单例模式的多线程安全问题" class="headerlink" title="单例模式的多线程安全问题"></a>单例模式的多线程安全问题</h2><p>在单例模式的实现中，如果不采取任何措施，在多线程下是不安全的，可能会同时创建多个实例。因此，为了保证单例模式在多线程下的线程安全，一般采用下面几种方式实现单例模式</p>
+<h3 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h3><p>基于class loader机制避免多线程的同步问题，不过，instance在类装载时就实例化，可能会产生垃圾对象。</p>
+<p><img src="/2020/04/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/饿汉式.png" srcset="/img/loading.gif" alt="饿汉式"></p>
+<h3 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h3><p>通过双重锁机制实现线程安全。</p>
+<p><img src="/2020/04/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/懒汉式.png" srcset="/img/loading.gif" alt="懒汉式"></p>
+<h2 id="如何保证单例模式只有唯一实例？你知道的都有哪些方法"><a href="#如何保证单例模式只有唯一实例？你知道的都有哪些方法" class="headerlink" title="如何保证单例模式只有唯一实例？你知道的都有哪些方法"></a>如何保证单例模式只有唯一实例？你知道的都有哪些方法</h2><p>单例的实现主要是通过以下两个步骤：</p>
+<ol>
+<li><p>将该类的构造方法定义为私有方法，这样其他处的代码就无法通过调用该类的构造方法来实例化该类的对象，只有通过该类提供的静态方法来得到该类的唯一实例；</p>
+</li>
+<li><p>在该类内提供一个静态方法，当我们调用这个方法时，如果类持有的引用不为空就返回这个引用，如果类保持的引用为空就创建该类的实例并将实例的引用赋予该类保持的引用。</p>
+</li>
+</ol>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ul>
+<li>饿汉式</li>
+<li>懒汉式</li>
+</ul>
+<h2 id="OOP的设计模式的五项原则"><a href="#OOP的设计模式的五项原则" class="headerlink" title="OOP的设计模式的五项原则"></a>OOP的设计模式的五项原则</h2><h3 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h3><p>单一职责有2个含义，一个是避免相同的职责分散到不同的类中，另一个是避免一个类承担太多职责。减少类的耦合，提高类的复用性。</p>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>表明客户端不应该被强迫实现一些他们不会使用的接口，应该把接口中的方法分组，然后用多个接口代替它，每个接口服务于一个子模块。简单说，就是使用多个专门的接口比使用单个接口好很多。</p>
+<p>该原则观点如下：</p>
+<ol>
+<li><p>一个类对另外一个类的依赖性应当是建立在最小的接口上；</p>
+</li>
+<li><p>客户端程序不应该依赖它不需要的接口方法。</p>
+</li>
+</ol>
+<h3 id="开放-封闭原则"><a href="#开放-封闭原则" class="headerlink" title="开放-封闭原则"></a>开放-封闭原则</h3><p>open模块的行为必须是开放的、支持扩展的，而不是僵化的。</p>
+<p>closed在对模块的功能进行扩展时，不应该影响或大规模影响已有的程序模块。一句话概括：一个模块在扩展性方面应该是开放的而在更改性方面应该是封闭的。<br>核心思想就是对抽象编程，而不对具体编程。</p>
+<h3 id="替换原则"><a href="#替换原则" class="headerlink" title="替换原则"></a>替换原则</h3><p>子类型必须能够替换掉他们的父类型、并出现在父类能够出现的任何地方。</p>
+<p>主要针对继承的设计原则：</p>
+<ol>
+<li><p>父类的方法都要在子类中实现或者重写，并且派生类只实现其抽象类中生命的方法，而不应当给出多余的,方法定义或实现。</p>
+</li>
+<li><p>在客户端程序中只应该使用父类对象而不应当直接使用子类对象，这样可以实现运行期间绑定。</p>
+</li>
+</ol>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>上层模块不应该依赖于下层模块，他们共同依赖于一个抽象，即：父类不能依赖子类，他们都要依赖抽象类。</p>
+<p>抽象不能依赖于具体，具体应该要依赖于抽象。</p>
+<h2 id="说说工厂模式的优点"><a href="#说说工厂模式的优点" class="headerlink" title="说说工厂模式的优点"></a>说说工厂模式的优点</h2><p>解耦，代码复用，更改功能容易。</p>
+<h2 id="说一下观察者模式"><a href="#说一下观察者模式" class="headerlink" title="说一下观察者模式"></a>说一下观察者模式</h2><p>观察者模式中分为观察者和被观察者，当被观察者发生装填改变时，观察者会受到通知。主要为了解决对象状态改变给其他对象通知的问题，其实现类似于观察者在被观察者那注册了一个回调函数。</p>
+<h2 id="介绍一下单例模式"><a href="#介绍一下单例模式" class="headerlink" title="介绍一下单例模式"></a>介绍一下单例模式</h2><p>C++的实现有两种，一种通过局部静态变量，利用其只初始化一次的特点，返回对象。另外一种，则是定义全局的指针，getInstance判断该指针是否为空，为空时才实例化对象。</p>
+<h3 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h3><h4 id="Meyers-Singleton（最推荐的写法）"><a href="#Meyers-Singleton（最推荐的写法）" class="headerlink" title="Meyers Singleton（最推荐的写法）"></a>Meyers Singleton（最推荐的写法）</h4><pre><code class="lang-C++">class Singleton
+{
+public:
+    static Singleton &amp;getInstance()
+    {
+        static Singleton instance;
+        return instance;
+    }
+
+private:
+    Singleton() { cout &lt;&lt; &quot;构造&quot; &lt;&lt; endl; }
+    Singleton(const Singleton &amp;) {}
+    Singleton operator=(const Singleton &amp;) {}
+    ~Singleton() { cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl; }
+};
+</code></pre>
+<h4 id="饿汉式-1"><a href="#饿汉式-1" class="headerlink" title="饿汉式"></a>饿汉式</h4><pre><code class="lang-C++">class Singleton
+{
+public:
+    static Singleton &amp;getInstance()
+    {
+        return instance;
+    }
+
+private:
+    static Singleton instance;
+    Singleton() { cout &lt;&lt; &quot;构造&quot; &lt;&lt; endl; }
+    Singleton(const Singleton &amp;) {}
+    Singleton operator=(const Singleton &amp;) {}
+    ~Singleton() { cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl; }
+};
+Singleton Singleton::instance;
+</code></pre>
+<h4 id="懒汉式-1"><a href="#懒汉式-1" class="headerlink" title="懒汉式"></a>懒汉式</h4><pre><code class="lang-C++">class Singleton
+{
+private:
+    static Singleton *instance;
+    Singleton() { cout &lt;&lt; &quot;构造&quot; &lt;&lt; endl; };
+    Singleton(const Singleton &amp;);
+    Singleton &amp;operator=(const Singleton &amp;);
+    ~Singleton() { cout &lt;&lt; &quot;析构&quot; &lt;&lt; endl; };
+
+public:
+    static Singleton *getInstance()
+    {
+        if (instance == nullptr)
+            instance = new Singleton();
+        return instance;
+    }
+};
+Singleton *Singleton::instance = nullptr;
+</code></pre>
+<p>但是上述写法存在内存泄漏问题</p>
+<h2 id="单例模式中的懒汉加载，如果并发访问该怎么做"><a href="#单例模式中的懒汉加载，如果并发访问该怎么做" class="headerlink" title="单例模式中的懒汉加载，如果并发访问该怎么做"></a>单例模式中的懒汉加载，如果并发访问该怎么做</h2><p>使用锁机制，防止多次访问。</p>
+<p>第一次判断为空不加锁，若为空，再进行加锁判断是否为空，若为空则生成对象。</p>
+]]></content>
+      <categories>
+        <category>面经知识汇总</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据库整理</title>
+    <url>/2020/04/04/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<blockquote>
+<p>面试常见的数据库考点</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="增删改查"><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h2><h3 id="库"><a href="#库" class="headerlink" title="库"></a>库</h3><ul>
+<li>增<ul>
+<li>create database 库名称;</li>
+<li>create database 库名称 charset 编码方式;</li>
+</ul>
+</li>
+<li>删<ul>
+<li>drop database 库名称;</li>
+</ul>
+</li>
+<li>改<ul>
+<li>修改编码方式：alter database 库名称 charset 编码方式;</li>
+</ul>
+</li>
+<li>查<ul>
+<li>查看所有库：show databases;<!-- - 查看指定库：show database 库名称; -->
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="表"><a href="#表" class="headerlink" title="表"></a>表</h3><ul>
+<li>增<ul>
+<li>增加表单：create table 表名称(字段1 数据类型, 字段2 数据类型…限制条件);</li>
+</ul>
+</li>
+<li>删<ul>
+<li>删除表：drop table 表名称;</li>
+<li>清空表里面数据：truncate table 表名称;</li>
+</ul>
+</li>
+<li>改<ul>
+<li>字段<ul>
+<li>添加字段：alter table 表名称 add 字段 字段数据类型;</li>
+<li>删除字段：alter table 表名称 drop 字段;</li>
+<li>修改字段数据类型：alter table 表名称 modify 字段 新的数据类型;</li>
+<li>替换字段：alter table 表名称 change 旧字段名称 新字段 新字段数据类型;</li>
+</ul>
+</li>
+<li>表<ul>
+<li>改表名称：rename table 表名称 to 新名称;</li>
+<li>改表的编码：alter table 表名 charset 新编码;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查<ul>
+<li>查看所有表：show tables;</li>
+<li>查看指定表信息：desc table 表名称;</li>
+<li>查看指定表创建信息：show create table 表名称;</li>
+</ul>
+</li>
+</ul>
+<h3 id="表里数据"><a href="#表里数据" class="headerlink" title="表里数据"></a>表里数据</h3><ul>
+<li>增<ul>
+<li>插入一个值<ul>
+<li>insert into 表名 values(v1, v2,…); # 该方式必须保证插入的数据个数与表格字段一一对应</li>
+<li>insert into 表名(字段名称1, 字段名称2) values(v1,v2)</li>
+</ul>
+</li>
+<li>插入多个值<ul>
+<li>insert into 表名 values(v1), (v2);</li>
+<li>insert into 表名(字段名称1, 字段名称2) values(v1, v1), (v2, v2);</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>删<ul>
+<li>删除所有：delete from 表名;</li>
+<li>删除指定条件下：delete from 表名 where 条件;</li>
+</ul>
+</li>
+<li>改<ul>
+<li>修改所有数据：update 表名 set 字段名称 = 新的值, 字段名称2 = 值2;</li>
+<li>修改满足条件的数据：update 表名 set 字段名称 = 新的值, 字段名称2 = 值2 where 条件;</li>
+</ul>
+</li>
+<li>查<ul>
+<li>查看所有字段：select * from 表名;</li>
+<li>查看指定字段：select 字段 from 表名;</li>
+<li>查看某个条件所有的字段：select * from 表名 where 条件;</li>
+<li>查看某个条件下的某个字段：select 字段 from 表名 where 条件;</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据库基础"><a href="#数据库基础" class="headerlink" title="数据库基础"></a>数据库基础</h2><h3 id="说一说数据库索引"><a href="#说一说数据库索引" class="headerlink" title="说一说数据库索引"></a>说一说数据库索引</h3><p>索引是对数据库表中一列或多列的值进行排序的一种结构，使用索引可快速访问数据库表中的特定信息。如果想按特定职员的姓来查找他或她，则与在表中搜索所有的行相比，索引有助于更快地获取信息。<br>索引的一个主要目的就是加快检索表中数据的方法，亦即能协助信息搜索者尽快的找到符合限制条件的记录ID的辅助数据结构。</p>
+<h3 id="说一说数据库事务"><a href="#说一说数据库事务" class="headerlink" title="说一说数据库事务"></a>说一说数据库事务</h3><p>数据库事务(Database Transaction) ，是指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行。 事务处理可以确保除非事务性单元内的所有操作都成功完成，否则不会永久更新面向数据的资源。通过将一组相关操作组合为一个要么全部成功要么全部失败的单元，可以简化错误恢复并使应用程序更加可靠。一个逻辑工作单元要成为事务，必须满足所谓的ACID（原子性、一致性、隔离性和持久性）属性。事务是数据库运行中的逻辑工作单位，由DBMS中的事务管理子系统负责事务的处理。</p>
+<h3 id="数据库事务隔离"><a href="#数据库事务隔离" class="headerlink" title="数据库事务隔离"></a>数据库事务隔离</h3><p>同一时间，只允许一个事务请求同一数据，不同的事务之间彼此没有任何干扰。比如A正在从一张银行卡中取钱，在A取钱的过程结束前，B不能向这张卡转账。</p>
+<h3 id="说一说inner-join和left-join"><a href="#说一说inner-join和left-join" class="headerlink" title="说一说inner join和left join"></a>说一说inner join和left join</h3><ul>
+<li>left join（左联接）返回包括左表中的所有记录和右表中联结字段相等的记录</li>
+<li>right join（右联接）返回包括右表中的所有记录和左表中联结字段相等的记录</li>
+<li>inner join（等值连接）只返回两个表中联结字段相等的行</li>
+</ul>
+<h3 id="聊一聊数据库事物的一致性"><a href="#聊一聊数据库事物的一致性" class="headerlink" title="聊一聊数据库事物的一致性"></a>聊一聊数据库事物的一致性</h3><p>事务（Transaction）是由一系列对系统中数据进行访问与更新的操作所组成的一个程序执行逻辑单元。事务是DBMS中最基础的单位，事务不可分割。<br>事务具有4个基本特征，分别是：原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Duration），简称ACID。</p>
+<ol>
+<li><p>原子性（Atomicity）<br>原子性是指事务包含的所有操作要么全部成功，要么全部失败回滚，因此事务的操作如果成功就必须要完全应用到数据库，如果操作失败则不能对数据库有任何影响。</p>
+</li>
+<li><p>一致性（Consistency）<br>一致性是指事务必须使数据库从一个一致性状态变换到另一个一致性状态，也就是说一个事务执行之前和执行之后都必须处于一致性状态。<br>拿转账来说，假设用户A和用户B两者的钱加起来一共是5000，那么不管A和B之间如何转账，转几次账，事务结束后两个用户的钱相加起来应该还得是5000，这就是事务的一致性。</p>
+</li>
+<li><p>隔离性（Isolation）<br>隔离性是当多个用户并发访问数据库时，比如操作同一张表时，数据库为每一个用户开启的事务，不能被其他事务的操作所干扰，多个并发事务之间要相互隔离。<br>即要达到这么一种效果：对于任意两个并发的事务T1和T2，在事务T1看来，T2要么在T1开始之前就已经结束，要么在T1结束之后才开始，这样每个事务都感觉不到有其他事务在并发地执行。<br>多个事务并发访问时，事务之间是隔离的，一个事务不应该影响其它事务运行效果。这指的是在并发环境中，当不同的事务同时操纵相同的数据时，每个事务都有各自的完整数据空间。由并发事务所做的修改必须与任何其他并发事务所做的修改隔离。<br>不同的隔离级别：<br>Read Uncommitted（读取未提交内容）：最低的隔离级别，什么都不需要做，一个事务可以读到另一个事务未提交的结果。所有的并发事务问题都会发生。<br>Read Committed（读取提交内容）：只有在事务提交后，其更新结果才会被其他事务看见。可以解决脏读问题。<br>Repeated Read（可重复读）：在一个事务中，对于同一份数据的读取结果总是相同的，无论是否有其他事务对这份数据进行操作，以及这个事务是否提交。可以解决脏读、不可重复读。<br>Serialization（可串行化）：事务串行化执行，隔离级别最高，牺牲了系统的并发性。可以解决并发事务的所有问题。</p>
+<blockquote>
+<p><strong>另一种解读</strong><br>未提交读READ UNCOMMITTED：一个事务在提交之前，对其他事务是可见的，即事务可以读取未提交的数据。存在“脏读”（读到了脏数据）问题；<br>提交读READ COMMITTED：事务在提交之前，对其它事务是不可见的。存在“不可重复读”（两次查询的得到的结果可能不同，即可能在查询的间隙，有事务提交了修改）问题。解决了“脏读”问题。<br>可重复读REPEATABLE READ：在同一事务中多次读取的数据是一致的。解决了脏读和不可重复读问题，存在“幻读”（在事务两次查询间隙，有其他事务又插入或删除了新的记录）。—- MySQL默认隔离级别。<br>可串行化SERIALIZABLE：强制事务串行化执行。即一个事物一个事物挨个来执行，可以解决上述所有问题。</p>
+</blockquote>
+</li>
+<li><p>持久性（Durability）<br>持久性是指一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作。<br>例如我们在使用JDBC操作数据库时，在提交事务方法后，提示用户事务操作完成，当我们程序执行完成直到看到提示后，就可以认定事务以及正确提交，即使这时候数据库出现了问题，也必须要将我们的事务完全执行完成，否则就会造成我们看到提示事务处理完毕，但是数据库因为故障而没有执行事务的重大错误。</p>
+</li>
+</ol>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>数据库索引是为了增加查询速度而对表字段附加的一种标识，是对数据库表中一列或多列的值进行排序的一种结构。</p>
+<p>DB在执行一条SQL语句的时候，默认的方式是根据搜索条件进行全表扫描，遇到匹配条件的就加入搜索结果集合。如果我们对某一字段增加索引，查询时就会先去索引列表中一次定位到特定值的行数，大大减少遍历匹配的行数，所以能明显增加查询的速度。</p>
+<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><p>一般分为B+树索引和哈希索引。</p>
+<h5 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h5><p>在B-tree上改进得到，其非叶子节点均为key值，叶子节点是key-data键值对。叶子节点前后相连且有序。</p>
+<h5 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a>哈希索引</h5><p>通过对key进行hash(crc/MD5/sha1/sha256…)而将记录存储在不同的bucket种，可以做到常数时间的查找，但要注意哈希冲突的避免（链表法、线性探测、二次探测、公共溢出区的方法）。其中MD5 128位，和sha1/256码都较长不太适合作为hash函数。默认无序。</p>
+<h5 id="为什么有了B-树索引还要hash索引"><a href="#为什么有了B-树索引还要hash索引" class="headerlink" title="为什么有了B+树索引还要hash索引"></a>为什么有了B+树索引还要hash索引</h5><ul>
+<li>B+树默认有序，hash默认无序，所以哈希索引无法用于排序；</li>
+<li>哈希索引 $O(1)$ 在速度上毋庸置疑要快于B+树近似 $O(\log_2n)$；</li>
+<li>哈希索引只能进行等值查询（因为他要计算hash(key)再去匹配）而B+树索引可以进行等值、部分前缀、范围查询；</li>
+<li>底层实现结构不同：B+树是非线性结构，hash桶是线性结构。</li>
+<li>对于某些场景如热点页/活跃查询页，需要借助哈希索引来实现快速查询。</li>
+</ul>
+<h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><ul>
+<li><p>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性。</p>
+</li>
+<li><p>可以大大加快数据的检索速度，这也是创建索引的最主要的原因。</p>
+</li>
+<li><p>可以加速表和表之间的连接，特别是在实现数据的参考完整性方面特别有意义。</p>
+</li>
+<li><p>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间。</p>
+</li>
+<li><p>通过使用索引，可以在查询的过程中，使用优化隐藏器，提高系统的性能。</p>
+</li>
+</ul>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><ul>
+<li><p>创建索引和维护索引要耗费时间，这种时间随着数据量的增加而增加。</p>
+</li>
+<li><p>索引需要占物理空间，除了数据表占数据空间之外，每一个索引还要占一定的物理空间，如果要建立聚簇索引，那么需要的空间就会更大。</p>
+</li>
+<li><p>当对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度。</p>
+</li>
+</ul>
+<h4 id="添加索引原则"><a href="#添加索引原则" class="headerlink" title="添加索引原则"></a>添加索引原则</h4><ul>
+<li><p><strong>在查询中很少使用或者参考的列不应该创建索引。</strong> 这是因为，既然这些列很少使用到，因此有索引或者无索引，并不能提高查询速度。相反，由于增加了索引，反而降低了系统的维护速度和增大了空间需求。</p>
+</li>
+<li><p><strong>只有很少数据值的列也不应该增加索引。</strong> 这是因为，由于这些列的取值很少，例如人事表的性别列，在查询的结果中，结果集的数据行占了表中数据行的很大比例，即需要在表中搜索的数据行的比例很大。增加索引，并不能明显加快检索速度。</p>
+</li>
+<li><p><strong>定义为text、image和bit数据类型的列不应该增加索引。</strong> 这是因为，这些列的数据量要么相当大，要么取值很少。</p>
+</li>
+<li><p><strong>当修改性能远远大于检索性能时，不应该创建索引。</strong> 这是因为，修改性能和检索性能是互相矛盾的。当增加索引时，会提高检索性能，但是会降低修改性能。当减少索引时，会提高修改性能，降低检索性能。因此，当修改性能远远大于检索性能时，不应该创建索引。</p>
+</li>
+</ul>
+<h4 id="索引不是越多越快"><a href="#索引不是越多越快" class="headerlink" title="索引不是越多越快"></a>索引不是越多越快</h4><p>此言差矣，索引并非是虚无缥缈的，是实实在在的一种数据结构（B+树/hash桶）要占内存、维护它要系统开销，一般的插入删除都要进行结构的调整，这要消耗时间，所以索引太多反而拖慢查找时间。有时候，见数据量不多时，建立索引还不如全表查询。索引加快了检索的速度，但是插入删除修改都需要DBMS动态更新内部索引结构，要耗费开销。</p>
+<h3 id="说一说数据库的三大范式"><a href="#说一说数据库的三大范式" class="headerlink" title="说一说数据库的三大范式"></a>说一说数据库的三大范式</h3><ul>
+<li><p>第一范式：当关系模式R的所有属性都不能再分解为更基本的数据单位时，称R是满足第一范式，即属性不可分。</p>
+</li>
+<li><p>第二范式：如果关系模式R满足第一范式，并且R得所有非主属性都完全依赖于R的每一个候选关键属性，称R满足第二范式</p>
+</li>
+<li><p>第三范式：设R是一个满足第一范式条件的关系模式，X是R的任意属性集，如果X非传递依赖于R的任意一个候选关键字，称R满足第三范式，即非主属性不传递依赖于键码。</p>
+</li>
+</ul>
+<h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><h3 id="MySQL的四种隔离状态"><a href="#MySQL的四种隔离状态" class="headerlink" title="MySQL的四种隔离状态"></a>MySQL的四种隔离状态</h3><p>MySQL主要包含四种隔离状态：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">事务隔离级别</th>
+<th style="text-align:center">脏读</th>
+<th style="text-align:center">不可重复读</th>
+<th style="text-align:center">幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">未提交读（read-uncommitted）</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">不可重复读（提交读）（read-committed）</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">可重复读（repeatable-read）</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">是</td>
+</tr>
+<tr>
+<td style="text-align:center">串行化（serializable）</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="MySQL的MVCC机制"><a href="#MySQL的MVCC机制" class="headerlink" title="MySQL的MVCC机制"></a>MySQL的MVCC机制</h3><p>MVCC是一种多版本并发控制机制，是MySQL的InnoDB存储引擎实现隔离级别的一种具体方式，用于实现提交读和可重复读这两种隔离级别。MVCC是通过保存数据在某个时间点的快照来实现该机制，其在每行记录后面保存两个隐藏的列，分别保存这个行的创建版本号和删除版本号，然后Innodb的MVCC使用到的快照存储在Undo日志中，该日志通过回滚指针把一个数据行所有快照连接起来。</p>
+<h3 id="SQL优化方法有哪些"><a href="#SQL优化方法有哪些" class="headerlink" title="SQL优化方法有哪些"></a>SQL优化方法有哪些</h3><ul>
+<li>通过建立索引对查询进行优化</li>
+<li>对查询进行优化，应尽量避免全表扫描</li>
+</ul>
+<h3 id="MySQL引擎和区别"><a href="#MySQL引擎和区别" class="headerlink" title="MySQL引擎和区别"></a>MySQL引擎和区别</h3><h4 id="MySQL引擎"><a href="#MySQL引擎" class="headerlink" title="MySQL引擎"></a>MySQL引擎</h4><p>MySQL中的数据用各种不同的技术存储在文件（或者内存）中。这些技术中的每一种技术都使用不同的存储机制、索引技巧、锁定水平并且最终提供广泛的不同的功能和能力。通过选择不同的技术，你能够获得额外的速度或者功能，从而改善你的应用的整体功能。</p>
+<p>数据库引擎是用于存储、处理和保护数据的核心服务。利用数据库引擎可控制访问权限并快速处理事务，从而满足企业内大多数需要处理大量数据的应用程序的要求。使用数据库引擎创建用于联机事务处理或联机分析处理数据的关系数据库。这包括创建用于存储数据的表和用于查看、管理和保护数据安全的数据库对象（如索引、视图和存储过程）。</p>
+<p>MySQL存储引擎主要有： MyIsam、InnoDB、Memory、Blackhole、CSV、Performance_Schema、Archive、Federated、Mrg_Myisam。</p>
+<p>但是最常用的是InnoDB和Mylsam。</p>
+<h4 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h4><p>InnoDB是一个事务型的存储引擎，有行级锁定和外键约束。</p>
+<p>Innodb引擎提供了对数据库ACID事务的支持，并且实现了SQL标准的四种隔离级别，关于数据库事务与其隔离级别的内容请见数据库事务与其隔离级别这类型的文章。该引擎还提供了行级锁和外键约束，它的设计目标是处理大容量数据库系统，它本身其实就是基于MySQL后台的完整数据库系统，MySQL运行时Innodb会在内存中建立缓冲池，用于缓冲数据和索引。但是该引擎不支持FULLTEXT类型的索引，而且它没有保存表的行数，当SELECT COUNT(*) FROM TABLE时需要扫描全表。当需要使用数据库事务时，该引擎当然是首选。由于锁的粒度更小，写操作不会锁定全表，所以在并发较高时，使用Innodb引擎会提升效率。但是使用行级锁也不是绝对的，如果在执行一个SQL语句时MySQL不能确定要扫描的范围，InnoDB表同样会锁全表。</p>
+<p>适用场景：经常更新的表，适合处理多重并发的更新请求。</p>
+<p>支持事务。</p>
+<p>可以从灾难中恢复（通过bin-log日志等）。</p>
+<p>外键约束。只有它支持外键。</p>
+<p>支持自动增加列属性auto_increment。</p>
+<p>索引结构：</p>
+<p>InnoDB也是B+Tree索引结构。Innodb的索引文件本身就是数据文件，即B+Tree的数据域存储的就是实际的数据，这种索引就是聚集索引。这个索引的key就是数据表的主键，因此InnoDB表数据文件本身就是主索引。</p>
+<p>InnoDB的辅助索引数据域存储的也是相应记录主键的值而不是地址，所以当以辅助索引查找时，会先根据辅助索引找到主键，再根据主键索引找到实际的数据。所以Innodb不建议使用过长的主键，否则会使辅助索引变得过大。建议使用自增的字段作为主键，这样B+Tree的每一个结点都会被顺序的填满，而不会频繁的分裂调整，会有效的提升插入数据的效率。</p>
+<h4 id="Mylsam"><a href="#Mylsam" class="headerlink" title="Mylsam"></a>Mylsam</h4><p>MyIASM是MySQL默认的引擎，但是它没有提供对数据库事务的支持，也不支持行级锁和外键，因此当INSERT或UPDATE数据时即写操作需要锁定整个表，效率便会低一些。MyIsam 存储引擎独立于操作系统，也就是可以在windows上使用，也可以比较简单的将数据转移到linux操作系统上去。</p>
+<p>适用场景：</p>
+<p>不支持事务的设计，但是并不代表着有事务操作的项目不能用MyIsam存储引擎，可以在service层进行根据自己的业务需求进行相应的控制。</p>
+<p>不支持外键的表设计。</p>
+<p>查询速度很快，如果数据库insert和update的操作比较多的话比较适用。</p>
+<p>整天对表进行加锁的场景。</p>
+<p>MyISAM极度强调快速读取操作。</p>
+<p>MyIASM中存储了表的行数，于是SELECT COUNT(*) FROM TABLE时只需要直接读取已经保存好的值而不需要进行全表扫描。如果表的读操作远远多于写操作且不需要数据库事务的支持，那么MyIASM也是很好的选择。</p>
+<p>缺点：就是不能在表损坏后主动恢复数据。</p>
+<p>索引结构：</p>
+<p>MyISAM索引结构：MyISAM索引用的B+ tree来储存数据，MyISAM索引的指针指向的是键值的地址，地址存储的是数据。B+Tree的数据域存储的内容为实际数据的地址，也就是说它的索引和实际的数据是分开的，只不过是用索引指向了实际的数据，这种索引就是所谓的非聚集索引。</p>
+<h4 id="InnoDB和Mylsam的区别"><a href="#InnoDB和Mylsam的区别" class="headerlink" title="InnoDB和Mylsam的区别"></a>InnoDB和Mylsam的区别</h4><ol>
+<li><p>事务：MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持，提供事务支持已经外部键等高级数据库功能。</p>
+</li>
+<li><p>性能：MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快。</p>
+</li>
+<li><p>行数保存：InnoDB 中不保存表的具体行数，也就是说，执行select count() fromtable时，InnoDB要扫描一遍整个表来计算有多少行，但是MyISAM只要简单的读出保存好的行数即可。注意的是，当count()语句包含where条件时，两种表的操作是一样的。</p>
+</li>
+<li><p>索引存储：对于AUTO_INCREMENT类型的字段，InnoDB中必须包含只有该字段的索引，但是在MyISAM表中，可以和其他字段一起建立联合索引。MyISAM支持全文索引（FULLTEXT）、压缩索引，InnoDB不支持。<br>MyISAM的索引和数据是分开的，并且索引是有压缩的，内存使用率就对应提高了不少。能加载更多索引，<strong>而Innodb是索引和数据是紧密捆绑的，没有使用压缩从而会造成Innodb比MyISAM体积庞大不小。（InnoDB缺点）</strong><br>InnoDB存储引擎被完全与MySQL服务器整合，InnoDB存储引擎为在主内存中缓存数据和索引而维持它自己的缓冲池。InnoDB存储它的表＆索引在一个表空间中，表空间可以包含数个文件（或原始磁盘分区）。这与MyISAM表不同，比如在MyISAM表中每个表被存在分离的文件中。InnoDB 表可以是任何尺寸，即使在文件尺寸被限制为2GB的操作系统上。</p>
+</li>
+<li><p>服务器数据备份：InnoDB必须导出SQL来备份，LOAD TABLE FROM MASTER操作对InnoDB是不起作用的，解决方法是首先把InnoDB表改成MyISAM表，导入数据后再改成InnoDB表，但是对于使用的额外的InnoDB特性（例如外键）的表不适用。<br>MyISAM应对错误编码导致的数据恢复速度快。MyISAM的数据是以文件的形式存储，所以在跨平台的数据转移中会很方便。在备份和恢复时可单独针对某个表进行操作。<br>InnoDB是拷贝数据文件、备份 binlog，或者用 mysqldump，在数据量达到几十G的时候就相对痛苦了。</p>
+</li>
+<li><p>锁的支持：MyISAM只支持表锁。InnoDB支持表锁、行锁，行锁大幅度提高了多用户并发操作的新能。但是InnoDB的行锁，只是在WHERE的主键是有效的，非主键的WHERE都会锁全表的。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>面经知识汇总</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机网络整理</title>
+    <url>/2020/04/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<blockquote>
+<p>面试常见的计算机网络考点</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="综合"><a href="#综合" class="headerlink" title="综合"></a>综合</h2><h3 id="OSI七层模型和TCP-IP四层模型，每层列举2个协议"><a href="#OSI七层模型和TCP-IP四层模型，每层列举2个协议" class="headerlink" title="OSI七层模型和TCP/IP四层模型，每层列举2个协议"></a>OSI七层模型和TCP/IP四层模型，每层列举2个协议</h3><p>OSI七层模型及其包含的协议如下：<br>物理层：通过媒介传输比特，确定机械及电气规范，传输单位为 <code>bit</code>，主要包括的协议为：IEE802.3、CLOCK、RJ45<br>数据链路层：将比特组装成帧和点到点的传递，传输单位为 <code>帧</code>，主要包括的协议为MAC、VLAN、PPP<br>网络层：负责数据包从源到宿的传递和网际互连，传输单位为 <code>包</code>，主要包括的协议为IP、ARP、ICMP<br>传输层：提供端到端的可靠报文传递和错误恢复，传输单位为 <code>报文</code>，主要包括的协议为TCP、UDP<br>会话层：建立、管理和终止会话，传输单位为 <code>SPDU</code>，主要包括的协议为RPC、NFS<br>表示层：对数据进行翻译、加密和压缩，传输单位为 <code>PPDU</code>，主要包括的协议为JPEG、ASCII<br>应用层：允许访问OSI环境的手段，传输单位为 <code>APDU</code>，主要包括的协议为FTP、HTTP、DNS</p>
+<p>TCP/IP4层模型包括：<br>网络接口层：MAC、VLAN<br>网络层:IP、ARP、ICMP<br>传输层:TCP、UDP<br>应用层:HTTP、DNS、SMTP</p>
+<h3 id="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"><a href="#搜索baidu，会用到计算机网络中的什么层？每层是干什么的" class="headerlink" title="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"></a>搜索baidu，会用到计算机网络中的什么层？每层是干什么的</h3><p>浏览器中输入URL，浏览器要将URL解析为IP地址，解析域名就要用到DNS协议，首先主机会查询DNS的缓存，如果没有就给本地DNS发送查询请求。DNS查询分为两种方式，一种是 <code>递归查询</code>，一种是 <code>迭代查询</code>。如果是迭代查询，本地的DNS服务器，向根域名服务器发送查询请求，根域名服务器告知该域名的一级域名服务器，然后本地服务器给该一级域名服务器发送查询请求，然后依次类推直到查询到该域名的IP地址。DNS服务器是基于UDP的，因此会用到UDP协议。</p>
+<blockquote>
+<ul>
+<li><strong>递归查询：</strong> 也就是DNS客户端送出查询要求后，如果DNS服务器内没有需要的数据，则DNS服务器会代替客户端向其他的DNS服务顺查询。（我帮你查）</li>
+<li><strong>循环查询：</strong> 一般DNS服务器与DNS服务器之间的查询属于这种查询方式。当第一台DNS服务器在向第2台DNS服务器提出查询要求后，如果第2台DNS服务器内没有所需要的数据，则它会提供第3台DNS服务器的IP地址给第1台。（我把下个的地址给你你自己去查）</li>
+</ul>
+</blockquote>
+<p>得到IP地址后，浏览器就要与服务器建立一个http连接。因此要用到 <code>http协议</code>，http协议报文格式上面已经提到。http生成一个get请求报文，将该报文传给TCP层处理，所以还会用到 <code>TCP协议</code>。如果采用https还会使用https协议先对http数据进行加密。<br>TCP层如果有需要先将HTTP数据包分片，分片依据路径MTU和MSS。TCP的数据包然后会发送给IP层，用到 <code>IP协议</code>。IP层通过路由选路，一跳一跳发送到目的地址。当然在一个网段内的寻址是通过以太网协议实现（也可以是其他物理层协议，比如PPP、SLIP），以太网协议需要直到目的IP地址的物理地址，有需要 <code>ARP协议</code>。</p>
+<p>其中：</p>
+<ol>
+<li><p>DNS协议、http协议、https协议属于应用层</p>
+<p> 应用层是体系结构中的最高层。应用层确定进程之间通信的性质以满足用户的需要。这里的进程就是指正在运行的程序。应用层不仅要提供应用进程所需要的信息交换和远地操作，而且还要作为互相作用的应用进程的用户代理，来完成一些为进行语义上有意义的信息交换所必须的功能。应用层直接为用户的应用进程提供服务。</p>
+</li>
+<li><p>TCP/UDP属于传输层</p>
+<p> 传输层的任务就是负责主机中两个进程之间的通信。因特网的传输层可使用两种不同协议：即面向连接的传输控制协议TCP，和无连接的用户数据报协议UDP。面向连接的服务能够提供可靠的交付，但无连接服务则不保证提供可靠的交付，它只是“尽最大努力交付”。这两种服务方式都很有用，备有其优缺点。在分组交换网内的各个交换结点机都没有传输层。</p>
+</li>
+<li><p>IP协议、ARP协议属于网络层</p>
+<p> 网络层负责为分组交换网上的不同主机提供通信。在发送数据时，网络层将运输层产生的报文段或用户数据报封装成分组或包进行传送。在TCP/IP体系中，分组也叫作IP数据报，或简称为数据报。网络层的另一个任务就是要选择合适的路由，使源主机运输层所传下来的分组能够交付到目的主机。</p>
+</li>
+<li><p>数据链路层</p>
+<p> 当发送数据时，数据链路层的任务是将在网络层交下来的IP数据报组装成帧，在两个相邻结点间的链路上传送以帧为单位的数据。每一帧包括数据和必要的控制信息（如同步信息、地址信息、差错控制、以及流量控制信息等）。控制信息使接收端能够知道—个帧从哪个比特开始和到哪个比特结束。控制信息还使接收端能够检测到所收到的帧中有无差错。</p>
+</li>
+<li><p>物理层</p>
+<p> 物理层的任务就是透明地传送比特流。在物理层上所传数据的单位是比特。传递信息所利用的一些物理媒体，如双绞线、同轴电缆、光缆等，并不在物理层之内而是在物理层的下面。因此也有人把物理媒体当做第0层。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>过程</strong><br>在浏览器地址栏键入URL，按下回车之后会经历以下流程：<br>1、浏览器向 DNS 服务器请求解析该 URL 中的域名所对应的 IP 地址；<br>2、解析出 IP 地址后，根据该 IP 地址和默认端口80，和服务器建立TCP连接；<br>3、浏览器发出读取文件（URL中域名后面部分对应的文件）的HTTP 请求，该请求报文作为 TCP 三次握手的第三个报文的数据发送给服务器；<br>4、服务器对浏览器请求作出响应，并把对应的 html 文本发送给浏览器；<br>5、释放 TCP 连接；<br>6、浏览器将该 html 文本并显示内容。</p>
+</blockquote>
+<h2 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h2><h3 id="TCP的三次握手与四次挥手"><a href="#TCP的三次握手与四次挥手" class="headerlink" title="TCP的三次握手与四次挥手"></a>TCP的三次握手与四次挥手</h3><p><code>序列号seq</code>：占4个字节，用来标记数据段的顺序，TCP把连接中发送的所有数据字节都编上一个序号，第一个字节的编号由本地随机产生；给字节编上序号后，就给每一个报文段指派一个序号；序列号seq就是这个报文段中的第一个字节的数据编号。</p>
+<p><code>确认号ack</code>：占4个字节，期待收到对方下一个报文段的第一个数据字节的序号；序列号表示报文段携带数据的第一个字节的编号；而确认号指的是期望接收到下一个字节的编号；因此当前报文段最后一个字节的编号+1即为确认号。</p>
+<p><code>确认ACK</code>：占1位，仅当ACK = 1时，确认号字段才有效。ACK = 0时，确认号无效</p>
+<p><code>同步SYN</code>：连接建立时用于同步序号。当SYN=1，ACK=0时表示：这是一个连接请求报文段。若同意连接，则在响应报文段中使得SYN=1，ACK=1。因此，SYN=1表示这是一个连接请求，或连接接受报文。SYN这个标志位只有在TCP建产连接时才会被置1，握手完成后SYN标志位被置0。</p>
+<p><code>终止FIN</code>：用来释放一个连接。FIN = 1表示：此报文段的发送方的数据已经发送完毕，并要求释放运输连接</p>
+<p>PS：ACK、SYN和FIN这些大写的单词表示标志位，其值要么是1，要么是0；ack、seq小写的单词表示序号。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">URG</td>
+<td style="text-align:center">紧急指针是否有效。为1，表示某一位需要被优先处理</td>
+</tr>
+<tr>
+<td style="text-align:center">ACK</td>
+<td style="text-align:center">确认号是否有效，一般置为1。</td>
+</tr>
+<tr>
+<td style="text-align:center">PSH</td>
+<td style="text-align:center">提示接收端应用程序立即从TCP缓冲区把数据读走。</td>
+</tr>
+<tr>
+<td style="text-align:center">RST</td>
+<td style="text-align:center">对方要求重新建立连接，复位。</td>
+</tr>
+<tr>
+<td style="text-align:center">SYN</td>
+<td style="text-align:center">请求建立连接，并在其序列号的字段进行序列号的初始值设定。建立连接，设置为1</td>
+</tr>
+<tr>
+<td style="text-align:center">FIN</td>
+<td style="text-align:center">希望断开连接。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="三次握手理解"><a href="#三次握手理解" class="headerlink" title="三次握手理解"></a>三次握手理解</h4><p><img src="/2020/04/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%95%B4%E7%90%86/三次握手.png" srcset="/img/loading.gif" alt="三次握手理解"></p>
+<ul>
+<li><p><strong>第一次握手</strong>：建立连接时，客户端发送syn包（syn=x）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。</p>
+</li>
+<li><p><strong>第二次握手</strong>：服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；</p>
+</li>
+<li><p><strong>第三次握手</strong>：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。</p>
+</li>
+</ul>
+<h4 id="四次挥手过程理解"><a href="#四次挥手过程理解" class="headerlink" title="四次挥手过程理解"></a>四次挥手过程理解</h4><p><img src="/2020/04/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%95%B4%E7%90%86/四次挥手.png" srcset="/img/loading.gif" alt="四次挥手理解"></p>
+<ol>
+<li>客户端进程发出连接释放报文，并且停止发送数据。释放数据报文首部，FIN=1，其序列号为seq=u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，FIN报文段即使不携带数据，也要消耗一个序号。</li>
+<li>服务器收到连接释放报文，发出确认报文，ACK=1，ack=u+1，并且带上自己的序列号seq=v，此时，服务端就进入了CLOSE-WAIT（关闭等待）状态。TCP服务器通知高层的应用进程，客户端向服务器的方向就释放了，这时候处于半关闭状态，即客户端已经没有数据要发送了，但是服务器若发送数据，客户端依然要接受。这个状态还要持续一段时间，也就是整个CLOSE-WAIT状态持续的时间。</li>
+<li>客户端收到服务器的确认请求后，此时，客户端就进入FIN-WAIT-2（终止等待2）状态，等待服务器发送连接释放报文（在这之前还需要接受服务器发送的最后的数据）。</li>
+<li>服务器将最后的数据发送完毕后，就向客户端发送连接释放报文，FIN=1，ack=u+1，由于在半关闭状态，服务器很可能又发送了一些数据，假定此时的序列号为seq=w，此时，服务器就进入了LAST-ACK（最后确认）状态，等待客户端的确认。</li>
+<li>客户端收到服务器的连接释放报文后，必须发出确认，ACK=1，ack=w+1，而自己的序列号是seq=u+1，此时，客户端就进入了TIME-WAIT（时间等待）状态。注意此时TCP连接还没有释放，必须经过2∗∗MSL（最长报文段寿命）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态。</li>
+<li>服务器只要收到了客户端发出的确认，立即进入CLOSED状态。同样，撤销TCB后，就结束了这次的TCP连接。可以看到，服务器结束TCP连接的时间要比客户端早一些。</li>
+</ol>
+<h4 id="常见考点"><a href="#常见考点" class="headerlink" title="常见考点"></a>常见考点</h4><h5 id="为什么连接的时候是三次握手，关闭的时候却是四次握手"><a href="#为什么连接的时候是三次握手，关闭的时候却是四次握手" class="headerlink" title="为什么连接的时候是三次握手，关闭的时候却是四次握手"></a>为什么连接的时候是三次握手，关闭的时候却是四次握手</h5><p><strong>答</strong>：因为当Server端收到Client端的SYN连接请求报文后，可以直接发送SYN+ACK报文。其中ACK报文是用来应答的，SYN报文是用来同步的。但是关闭连接时，当Server端收到FIN报文时，很可能并不会立即关闭SOCKET，所以只能先回复一个ACK报文，告诉Client端，”你发的FIN报文我收到了”。只有等到我Server端所有的报文都发送完了，我才能发送FIN报文，因此不能一起发送。故需要四步握手。</p>
+<h5 id="为什么TIME-WAIT状态需要经过2MSL-最大报文段生存时间-才能返回到CLOSE状态"><a href="#为什么TIME-WAIT状态需要经过2MSL-最大报文段生存时间-才能返回到CLOSE状态" class="headerlink" title="为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态"></a>为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态</h5><p><strong>答</strong>：虽然按道理，四个报文都发送完毕，我们可以直接进入CLOSE状态了，但是我们必须假设网络是不可靠的，有可以最后一个ACK丢失。所以TIME_WAIT状态就是用来重发可能丢失的ACK报文。在Client发送出最后的ACK回复，但该ACK可能丢失。Server如果没有收到ACK，将不断重复发送FIN片段。所以Client不能立即关闭，它必须确认Server接收到了该ACK。Client会在发送出ACK之后进入到TIME_WAIT状态。Client会设置一个计时器，等待2MSL的时间。如果在该时间内再次收到FIN，那么Client会重发ACK并再次等待2MSL。所谓的2MSL是两倍的MSL(Maximum Segment Lifetime)。MSL指一个片段在网络中最大的存活时间，2MSL就是一个发送和一个回复所需的最大时间。如果直到2MSL，Client都没有再次收到FIN，那么Client推断ACK已经被成功接收，则结束TCP连接。</p>
+<h5 id="为什么不能用两次握手进行连接"><a href="#为什么不能用两次握手进行连接" class="headerlink" title="为什么不能用两次握手进行连接"></a>为什么不能用两次握手进行连接</h5><p><strong>答</strong>：3次握手完成两个重要的功能，既要双方做好发送数据的准备工作（双方都知道彼此已准备好），也要允许双方就初始序列号进行协商，这个序列号在握手过程中被发送和确认。</p>
+<p>现在把三次握手改成仅需要两次握手，有两种解释：</p>
+<ul>
+<li><p><strong>死锁</strong> 是可能发生的。作为例子，考虑计算机S和C之间的通信，假定C给S发送一个连接请求分组，S收到了这个分组，并发 送了确认应答分组。按照两次握手的协定，S认为连接已经成功地建立了，可以开始发送数据分组。可是，C在S的应答分组在传输中被丢失的情况下，将不知道S 是否已准备好，不知道S建立什么样的序列号，C甚至怀疑S是否收到自己的连接请求分组。在这种情况下，C认为连接还未建立成功，将忽略S发来的任何数据分组，只等待连接确认应答分组。而S在发出的分组超时后，重复发送同样的分组。这样就形成了死锁。</p>
+</li>
+<li><p>客户端发起了一个连接请求在网络中滞留了很长时间，以至于在连接建立好并断开连接后，它才到达服务端，那么服务端就会认为这是新的连接请求，于是建立连接，但是实际上客户端根本就没有发送建立请求，也不会理睬服务端，因此导致服务端空等而浪费资源。</p>
+</li>
+</ul>
+<h5 id="如果已经建立了连接，但是客户端突然出现故障了怎么办"><a href="#如果已经建立了连接，但是客户端突然出现故障了怎么办" class="headerlink" title="如果已经建立了连接，但是客户端突然出现故障了怎么办"></a>如果已经建立了连接，但是客户端突然出现故障了怎么办</h5><p><strong>答</strong>：TCP还设有一个保活计时器，显然，客户端如果出现故障，服务器不能一直等下去，白白浪费资源。服务器每收到一次客户端的请求后都会重新复位这个计时器，时间通常是设置为2小时，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔75秒钟发送一次。若一连发送10个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
+<h3 id="UDP-和-TCP-的特点"><a href="#UDP-和-TCP-的特点" class="headerlink" title="UDP 和 TCP 的特点"></a>UDP 和 TCP 的特点</h3><ul>
+<li><p><strong>用户数据报协议 UDP（User Datagram Protocol）</strong> 是 <strong>无连接</strong> 的，<strong>尽最大可能交付</strong>，没有拥塞控制，面向报文（对于应用程序传下来的报文不合并也不拆分，只是添加 UDP 首部），支持一对一、一对多、多对一和多对多的交互通信。</p>
+</li>
+<li><p><strong>传输控制协议 TCP（Transmission Control Protocol）</strong> 是 <strong>面向连接</strong> 的，<strong>提供可靠交付</strong>，有流量控制，拥塞控制，提供全双工通信，面向字节流（把应用层传下来的报文看成字节流，把字节流组织成大小不等的数据块），每一条 TCP 连接只能是点对点的（一对一）。</p>
+</li>
+</ul>
+<h3 id="TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度"><a href="#TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度" class="headerlink" title="TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度"></a>TCP拥塞控制，以及达到什么情况的时候开始减慢增长的速度</h3><p>拥塞控制是防止过多的数据注入网络，使得网络中的路由器或者链路过载。流量控制是点对点的通信量控制，而拥塞控制是全局的网络流量整体性的控制。发送双方都有一个拥塞窗口——cwnd。</p>
+<ol>
+<li><p>慢开始<br>最开始发送方的拥塞窗口为1，由小到大逐渐增大发送窗口和拥塞窗口。每经过一个传输轮次，拥塞窗口cwnd加倍。当cwnd超过慢开始门限，则使用拥塞避免算法，避免cwnd增长过大。</p>
+</li>
+<li><p>拥塞避免<br>每经过一个往返时间RTT，cwnd就增长1。<br>在慢开始和拥塞避免的过程中，一旦发现网络拥塞，就把慢开始门限设为当前值的一半，并且重新设置cwnd为1，重新慢启动。（乘法减小，加法增大）</p>
+</li>
+<li><p>快重传<br>接收方每次收到一个失序的报文段后就立即发出重复确认，发送方只要连续收到三个重复确认就立即重传（尽早重传未被确认的报文段）。</p>
+</li>
+<li><p>快恢复<br>当发送方连续收到了三个重复确认，就乘法减半（慢开始门限减半），将当前的cwnd设置为慢开始门限，并且采用拥塞避免算法（连续收到了三个重复请求，说明当前网络可能没有拥塞）。<br>采用快恢复算法时，慢开始只在建立连接和网络超时才使用。</p>
+</li>
+</ol>
+<p>达到什么情况的时候开始减慢增长的速度？</p>
+<p><strong>答：</strong></p>
+<ul>
+<li><p>采用慢开始和拥塞避免算法的时候</p>
+<ol>
+<li>一旦cwnd &gt; 慢开始门限，就采用拥塞避免算法，减慢增长速度</li>
+<li>一旦出现丢包的情况，就重新进行慢开始，减慢增长速度</li>
+</ol>
+</li>
+<li><p>采用快恢复和快重传算法的时候</p>
+<ol>
+<li>一旦cwnd &gt; 慢开始门限，就采用拥塞避免算法，减慢增长速度</li>
+<li>一旦发送方连续收到了三个重复确认，就采用拥塞避免算法，减慢增长速度</li>
+</ol>
+</li>
+</ul>
+<h3 id="TCP用了哪些措施保证其可靠性"><a href="#TCP用了哪些措施保证其可靠性" class="headerlink" title="TCP用了哪些措施保证其可靠性"></a>TCP用了哪些措施保证其可靠性</h3><ol>
+<li><p>序列号、确认应答、超时重传<br>数据到达接收方，接收方需要发出一个确认应答，表示已经收到该数据段，并且确认序号会说明了它下一次需要接收的数据序列号。如果发送发迟迟未收到确认应答，那么可能是发送的数据丢失，也可能是确认应答丢失，这时发送方在等待一定时间后会进行重传。这个时间一般是2*RTT(报文段往返时间）+一个偏差值。</p>
+</li>
+<li><p>窗口控制与高速重发控制/快速重传（重复确认应答）<br>TCP会利用窗口控制来提高传输速度，意思是在一个窗口大小内，不用一定要等到应答才能发送下一段数据，窗口大小就是无需等待确认而可以继续发送数据的最大值。如果不使用窗口控制，每一个没收到确认应答的数据都要重发。<br>使用窗口控制，如果数据段1001-2000丢失，后面数据每次传输，确认应答都会不停地发送序号为1001的应答，表示我要接收1001开始的数据，发送端如果收到3次相同应答，就会立刻进行重发；但还有种情况有可能是数据都收到了，但是有的应答丢失了，这种情况不会进行重发，因为发送端知道，如果是数据段丢失，接收端不会放过它的，会疯狂向它提醒……</p>
+</li>
+<li><p>拥塞控制<br>如果把窗口定的很大，发送端连续发送大量的数据，可能会造成网络的拥堵（大家都在用网，你在这狂发，吞吐量就那么大，当然会堵），甚至造成网络的瘫痪。所以TCP在为了防止这种情况而进行了拥塞控制。<br>慢启动：定义拥塞窗口，一开始将该窗口大小设为1，之后每次收到确认应答（经过一个RTT），将拥塞窗口大小*2。<br>拥塞避免：设置慢启动阈值，一般开始都设为65536。拥塞避免是指当拥塞窗口大小达到这个阈值，拥塞窗口的值不再指数上升，而是加法增加（每次确认应答/每个RTT，拥塞窗口大小+1），以此来避免拥塞。<br>将报文段的超时重传看做拥塞，则一旦发生超时重传，我们需要先将阈值设为当前窗口大小的一半，并且将窗口大小设为初值1，然后重新进入慢启动过程。<br>快速重传：在遇到3次重复确认应答（高速重发控制）时，代表收到了3个报文段，但是这之前的1个段丢失了，便对它进行立即重传。<br>然后，先将阈值设为当前窗口大小的一半，然后将拥塞窗口大小设为慢启动阈值+3的大小。<br>这样可以达到：在TCP通信时，网络吞吐量呈现逐渐的上升，并且随着拥堵来降低吞吐量，再进入慢慢上升的过程，网络不会轻易的发生瘫痪。</p>
+</li>
+</ol>
+<h3 id="IP地址作用，以及MAC地址作用"><a href="#IP地址作用，以及MAC地址作用" class="headerlink" title="IP地址作用，以及MAC地址作用"></a>IP地址作用，以及MAC地址作用</h3><p>MAC地址是一个硬件地址，用来定义网络设备的位置，主要由 <code>数据链路层</code> 负责。而IP地址是IP协议提供的一种 <code>统一的地址格式</code>，为互联网上的每一个网络和每一台主机分配一个逻辑地址，以此来屏蔽物理地址的差异。</p>
+<h3 id="TCP-IP数据链路层的交互过程"><a href="#TCP-IP数据链路层的交互过程" class="headerlink" title="TCP/IP数据链路层的交互过程"></a>TCP/IP数据链路层的交互过程</h3><p>网络层等到数据链路层用MAC地址作为通信目标，数据包到达网络等准备往数据链层发送的时候，首先会去自己的ARP缓存表(存着IP-MAC对应关系)去查找改目标IP的MAC地址，如果查到了，就讲目标IP的MAC地址封装到链路层数据包的包头。如果缓存中没有找到，会发起一个广播：who is ip XXX tell ip XXX，所有收到的广播的机器看这个IP是不是自己的，如果是自己的，则以单拨的形式将自己的MAC地址回复给请求的机器。</p>
+<h3 id="传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文"><a href="#传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文" class="headerlink" title="传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文"></a>传递到IP层怎么知道报文该给哪个应用程序，它怎么区分UDP报文还是TCP报文</h3><p>根据端口区分：看ip头中的协议标识字段，17是UDP，6是TCP。</p>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><h4 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h4><ol>
+<li><p>在浏览器中输入一个域名，例如www.tmall.com，操作系统会先检查自己本地的hosts文件是否有这个网址映射关系，如果有，就先调用这个IP地址映射，完成域名解析， windows下hosts文件在C:/Windows/System32/drivers/etc/hosts下，linux一般都在/etc/hosts下。</p>
+</li>
+<li><p>如果hosts里没有这个ip到域名的映射，那么就要查找本地DNS解析器缓存，是否有这个域名到ip地址的映射关系，如果有，直接返回，完成域名解析。</p>
+</li>
+<li><p>如果本机的hosts与本地DNS解析器缓存都没有相应的网址映射关系，那么就要找到你的TCP/ip参数中设置的首选DNS服务器，我们叫它本地DNS服务器，此服务器收到查询时，如果要查询的域名，包含在本地配置区域资源中，则返回解析结果给客户机，完成域名解析，此解析具有权威性。</p>
+</li>
+<li><p>如果要查询的域名，不由本地DNS服务器区域解析，但该服务器已缓存了此网址映射关系，则调用这个域名到ip地址的映射，完成域名解析，但是此解析不具有权威性。</p>
+</li>
+<li><p>如果本地DNS服务器本地区域文件与缓存解析都失效，则根据本地DNS服务器的设置（是否设置转发器）进行查询，如果未用转发模式，本地DNS就把请求发至13台根DNS，根DNS服务器收到请求后会判断这个域名(.com)是谁来授权管理，并会返回一个负责该顶级域名服务器的一个IP。本地DNS服务器收到IP信息后，将会联系负责.com域的这台服务器。这台负责(.com)域名的服务器收到请求后，如果自己无法解析，它就会找一个管理(.com)域的下一级DNS服务器地址 (tmall.com)给本地DNS服务器。当本地DNS服务器收到这个地址后，就会找(tmall.com)域服务器，重复上面的动作，进行查询，直至找到 (www.tmall.com)主机。</p>
+</li>
+<li><p>如果用的是转发模式，此DNS服 务器就会把请求转发至上一级DNS服务器，由上一级服务器进行解析，上一级服务器如果不能解析，或找根DNS或把转请求转至上上级，以此循环。不管是本地 DNS服务器用是是转发，还是根提示，最后都是把结果返回给本地DNS服务器，由此DNS服务器再返回给客户机。</p>
+</li>
+</ol>
+<p>这里我们把从客户端到本地DNS服务器的查找称为递归查询，而DNS服务器之间的交互查询称为迭代查询。</p>
+<h4 id="DNS劫持"><a href="#DNS劫持" class="headerlink" title="DNS劫持"></a>DNS劫持</h4><p>DNS劫持又称域名劫持，是指在劫持的网络范围内拦截域名解析的请求，分析请求的域名，把审查范围以外的请求放行，否则返回假的IP地址或者什么都不做使请求失去响应，其效果就是对特定的网络不能反应或访问的是假网址。举一个简单的例子，比如你输入的域名地址是www.google.cn然后弹出来百度的页面，很明显发生了DNS域名劫持。</p>
+<p>应对DNS劫持的方法</p>
+<ol>
+<li><p>我们都知道，访问一个网站用域名而不用ip地址的原因就是逻辑地址不好记，但是如果你知道这个网页的ip地址的话，你可以直接输入ip地址来访问从而绕开DNS解析。</p>
+</li>
+<li><p>将自己的电脑DNS解析地址手动设置为国内比较权威又稳定的服务器地址，例如114.114.114.114、8.8.8.8。</p>
+</li>
+<li><p>修改你的路由器密码，登录路由器192.168.1.1，更改你的用户密码，然后最好重新启动路由器。</p>
+</li>
+</ol>
+<p>作为运营商来处理DNS劫持，一般运营商都会有提供多台DNS解析服务器，负责一个区域的DNS解析至少会有两台，其中的一台发生了DNS劫持运营商就会停止该服务器的网络地址解析工作而启动备预案，这样就可以预防发生DNS劫持而导致用户主机受到攻击甚至发生某些不法的钓鱼网站窃取用户账户密码，造成财务损失的严重事故。</p>
+<h2 id="HTTP-HTTPS"><a href="#HTTP-HTTPS" class="headerlink" title="HTTP/HTTPS"></a>HTTP/HTTPS</h2><h3 id="HTTP和HTTPS的区别，以及HTTPS有什么缺点"><a href="#HTTP和HTTPS的区别，以及HTTPS有什么缺点" class="headerlink" title="HTTP和HTTPS的区别，以及HTTPS有什么缺点"></a>HTTP和HTTPS的区别，以及HTTPS有什么缺点</h3><p>HTTP协议和HTTPS协议区别如下：</p>
+<ul>
+<li><p>HTTP协议是以 <code>明文</code> 的方式在网络中传输数据，而HTTPS协议传输的数据则是经过 <code>TLS加密</code> 后的，HTTPS具有更高的安全性</p>
+</li>
+<li><p>HTTPS在TCP三次握手阶段之后，还需要进行SSL的handshake，协商加密使用的对称加密密钥</p>
+</li>
+<li><p>HTTPS协议需要服务端申请证书，浏览器端安装对应的根证书</p>
+</li>
+<li><p>HTTP协议端口是80，HTTPS协议端口是443</p>
+</li>
+</ul>
+<p><strong>HTTPS优点：</strong></p>
+<ul>
+<li><p>HTTPS传输数据过程中使用密钥进行加密，所以安全性更高</p>
+</li>
+<li><p>HTTPS协议可以认证用户和服务器，确保数据发送到正确的用户和服务器</p>
+</li>
+</ul>
+<p><strong>HTTPS缺点：</strong></p>
+<ul>
+<li><p>HTTPS握手阶段延时较高：由于在进行HTTP会话之前还需要进行SSL握手，因此HTTPS协议握手阶段延时增加</p>
+</li>
+<li><p>HTTPS部署成本高：一方面HTTPS协议需要使用证书来验证自身的安全性，所以需要购买CA证书；另一方面由于采用HTTPS协议需要进行加解密的计算，占用CPU资源较多，需要的服务器配置或数目高。</p>
+</li>
+</ul>
+<h3 id="HTTP返回码"><a href="#HTTP返回码" class="headerlink" title="HTTP返回码"></a>HTTP返回码</h3><p>HTTP协议的响应报文由状态行、响应头部和响应包体组成，其响应状态码总体描述如下：<br>1xx：指示信息——表示请求已接收，继续处理。<br>2xx：成功——表示请求已被成功接收、理解、接受。<br>3xx：重定向——要完成请求必须进行更进一步的操作。<br>4xx：客户端错误——请求有语法错误或请求无法实现。<br>5xx：服务器端错误——服务器未能实现合法的请求。</p>
+<p>常见状态代码、状态描述的详细说明如下：<br>200 OK：客户端请求成功。<br>206 partial content服务器已经正确处理部分GET请求，实现断点续传或同时分片下载，该请求必须包含Range请求头来指示客户端期望得到的范围。<br>300 multiple choices（可选重定向）:被请求的资源有一系列可供选择的反馈信息，由浏览器/用户自行选择其中一个。<br>301 moved permanently（永久重定向）：该资源已被永久移动到新位置，将来任何对该资源的访问都要使用本响应返回的若干个URI之一。<br>302 move temporarily(临时重定向)：请求的资源现在临时从不同的URI中获得，<br>304 not modified:如果客户端发送一个待条件的GET请求并且该请求以经被允许，而文档内容未被改变，则返回304,该响应不包含包体（即可直接使用缓存）。<br>403 Forbidden：服务器收到请求，但是拒绝提供服务。<br>404 not Found：请求资源不存在，举个例子：输入了错误的URL。</p>
+<h3 id="HTTP过程概述"><a href="#HTTP过程概述" class="headerlink" title="HTTP过程概述"></a>HTTP过程概述</h3><p>HTTP协议定义Web客户端如何从Web服务器请求Web页面，以及服务器如何把Web页面传送给客户端。HTTP协议采用了请求/响应模型。客户端向服务器发送一个请求报文，请求报文包含请求的方法、URL、协议版本、请求头部和请求数据。服务器以一个状态行作为响应，响应的内容包括协议的版本、成功或者错误代码、服务器信息、响应头部和响应数据。</p>
+<p>HTTP请求/响应的步骤如下：</p>
+<ol>
+<li><p>客户端连接到Web服务器<br>一个HTTP客户端，通常是浏览器，与Web服务器的HTTP端口（默认为80）建立一个TCP套接字连接。例如：<a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a></p>
+</li>
+<li><p>发送HTTP请求<br>通过TCP套接字，客户端向Web服务器发送一个文本的请求报文，一个请求报文由请求行、请求头部、空行和请求数据4部分组成。</p>
+</li>
+<li><p>服务器接受请求并返回HTTP响应<br>Web服务器解析请求，定位请求资源。服务器将资源复本写到TCP套接字，由客户端读取。一个响应由状态行、响应头部、空行和响应数据4部分组成。</p>
+</li>
+<li><p>释放连接TCP连接<br>若connection模式为close，则服务器主动关闭TCP连接，客户端被动关闭连接，释放TCP连接；若connection模式为keepalive，则该连接会保持一段时间，在该时间内可以继续接收请求。</p>
+</li>
+<li><p>客户端浏览器解析HTML内容<br>客户端浏览器首先解析状态行，查看表明请求是否成功的状态代码。然后解析每一个响应头，响应头告知以下为若干字节的HTML文档和文档的字符集。客户端浏览器读取响应数据HTML，根据HTML的语法对其进行格式化，并在浏览器窗口中显示。</p>
+</li>
+</ol>
+<h3 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a>GET和POST的区别</h3><ol>
+<li><p>概括<br>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；<br>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）</p>
+</li>
+<li><p>区别：</p>
+<ol>
+<li><p>get参数通过url传递，post放在request body中。</p>
+</li>
+<li><p>get请求在url中传递的参数是有长度限制的，而post没有。</p>
+</li>
+<li><p>get比post更不安全，因为参数直接暴露在url中，所以不能用来传递敏感信息。</p>
+</li>
+<li><p>get请求只能进行url编码，而post支持多种编码方式。</p>
+</li>
+<li><p>get请求会浏览器主动cache，而post支持多种编码方式。</p>
+</li>
+<li><p>get请求参数会被完整保留在浏览历史记录里，而post中的参数不会被保留。</p>
+</li>
+<li><p>GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。</p>
+</li>
+<li><p><strong>GET产生一个TCP数据包；POST产生两个TCP数据包。</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="session和cookie的区别"><a href="#session和cookie的区别" class="headerlink" title="session和cookie的区别"></a>session和cookie的区别</h2><ol>
+<li>cookie数据存放在客户的浏览器上，session数据放在服务器上。</li>
+<li>cookie不是很安全，别人可以分析存放在本地的cookie并进行cookie欺骗，考虑到安全应当使用session。</li>
+<li>session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能，考虑到减轻服务器性能方面，应当使用cookie。</li>
+<li>单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie。</li>
+<li>可以考虑将登陆信息等重要信息存放为session，其他信息如果需要保留，可以放在cookie中。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>面经知识汇总</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常见排序及时间复杂度</title>
     <url>/2020/03/31/%E5%B8%B8%E8%A7%81%E6%8E%92%E5%BA%8F%E5%8F%8A%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/</url>
     <content><![CDATA[<blockquote>
@@ -122,15 +780,13 @@
 <p>面试常见的操作系统考点</p>
 </blockquote>
 <a id="more"></a>
-<h2 id="说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的"><a href="#说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的" class="headerlink" title="说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的"></a>说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的</h2><p><strong>基本概念：</strong></p>
-<ul>
+<h2 id="说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的"><a href="#说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的" class="headerlink" title="说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的"></a>说一下进程与线程的概念，以及为什么要有进程线程，其中有什么区别，他们各自又是怎么同步的</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
 <li><p><code>进程</code> 是对运行时程序的 <code>封装</code>，<strong>是系统进行资源调度和分配的的基本单位</strong>，实现了操作系统的并发；</p>
 </li>
-<li><p><code>线程</code> 是进程的子任务，是<strong>CPU调度和分派的基本单位</strong>，用于保证程序的实时性，实现进程内部的并发；线程是<strong>操作系统可识别的最小执行和调度单位</strong>。每个线程都独自占用一个虚拟处理器：独自的寄存器组，指令计数器和处理器状态。每个线程完成不同的任务，但是共享同一地址空间（也就是同样的动态内存，映射文件，目标代码等等），打开的文件队列和其他内核资源。</p>
+<li><p><code>线程</code> 是进程的子任务，是<strong>CPU调度和分派的基本单位</strong>，用于保证程序的实时性，实现进程内部的并发；线程是 <strong>操作系统可识别的最小执行和调度单位</strong>。每个线程都独自占用一个虚拟处理器：独自的寄存器组，指令计数器和处理器状态。每个线程完成不同的任务，但是共享同一地址空间（也就是同样的动态内存，映射文件，目标代码等等），打开的文件队列和其他内核资源。</p>
 </li>
 </ul>
-<p><strong>区别：</strong></p>
-<ol>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ol>
 <li><p>一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程。线程依赖于进程而存在。</p>
 </li>
 <li><p>进程在执行过程中拥有独立的内存单元，而多个线程共享进程的内存。（资源分配给进程，同一进程的所有线程共享该进程的所有资源。<strong>同一进程中的多个线程共享代码段（代码和常量），数据段（全局变量和静态变量），扩展段（堆存储）。</strong> 但是每个线程拥有自己的栈段，栈段又叫运行时段，用来存放所有局部变量和临时变量。）</p>
@@ -139,7 +795,7 @@
 </li>
 <li><p><code>系统开销</code>：由于在创建或撤消进程时，系统都要为之分配或回收资源，如内存空间、I／O设备等。因此，操作系统所付出的开销将显著地大于在创建或撤消线程时的开销。类似地，在进行进程切换时，涉及到整个当前进程CPU环境的保存以及新被调度运行的进程的CPU环境的设置。而线程切换只须保存和设置少量寄存器的内容，并不涉及存储器管理方面的操作。可见，进程切换的开销也远大于线程切换的开销。</p>
 </li>
-<li><p><code>通信</code>：由于同一进程中的多个线程具有相同的地址空间，致使它们之间的同步和通信的实现，也变得比较容易。进程间通信IPC，线程间可以直接读写进程数据段（如全局变量）来进行通信——需要进程同步和互斥手段的辅助，以保证数据的一致性。在有的系统中，线程的切换、同步和通信都无须操作系统内核的干预</p>
+<li><p><code>通信</code>：由于同一进程中的多个线程具有相同的地址空间，致使它们之间的同步和通信的实现，也变得比较容易。进程间通信IPC，线程间可以直接读写进程数据段（如全局变量）来进行通信——需要进程同步和互斥手段的辅助，以保证数据的一致性。在有的系统中，线程的切换、同步和通信都无须操作系统内核的干预。</p>
 </li>
 <li><p>进程编程调试简单可靠性高，但是创建销毁开销大；线程正相反，开销小，切换速度快，但是编程调试相对复杂。</p>
 </li>
@@ -148,8 +804,7 @@
 <li><p>进程适应于多核、多机分布；线程适用于多核。</p>
 </li>
 </ol>
-<p><strong>进程间通信的方式：</strong></p>
-<p>进程间通信主要包括 <code>管道</code>、<code>系统IPC（包括消息队列、信号量、信号、共享内存等）</code>、以及 <code>套接字socket</code>。</p>
+<h3 id="进程间通信的方式"><a href="#进程间通信的方式" class="headerlink" title="进程间通信的方式"></a>进程间通信的方式</h3><p>进程间通信主要包括 <code>管道</code>、<code>系统IPC（包括消息队列、信号量、信号、共享内存等）</code>、以及 <code>套接字socket</code>。</p>
 <ol>
 <li><p><strong>管道</strong></p>
 <p> <code>管道</code> 主要包括 <code>无名管道</code> 和 <code>命名管道</code>：管道可用于具有亲缘关系的父子进程间的通信，有名管道除了具有管道所具有的功能外，它还允许无亲缘关系进程间的通信。</p>
@@ -219,13 +874,18 @@
 </li>
 </ol>
 </li>
-<li><p><strong>套接字SOCKET</strong></p>
-<p> <code>socket</code> 也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同主机之间的进程通信。</p>
-<p> 线程间通信的方式:</p>
-<p> <code>临界区</code>：通过多线程的串行化来访问公共资源或一段代码，速度快，适合控制数据访问；</p>
-<p> <code>互斥量Synchronized/Lock</code>：采用互斥对象机制，只有拥有互斥对象的线程才有访问公共资源的权限。因为互斥对象只有一个，所以可以保证公共资源不会被多个线程同时访问</p>
-<p> <code>信号量Semphare</code>：为控制具有有限数量的用户资源而设计的，它允许多个线程在同一时刻去访问同一个资源，但一般需要限制同一时刻访问此资源的最大线程数目。</p>
-<p> <code>事件（信号），Wait/Notify</code>：通过通知操作的方式来保持多线程同步，还可以方便的实现多线程优先级的比较操作</p>
+<li><p><strong>套接字socket</strong></p>
+<p><code>socket</code> 也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同主机之间的进程通信。</p>
+</li>
+</ol>
+<h3 id="线程间通信的方式"><a href="#线程间通信的方式" class="headerlink" title="线程间通信的方式"></a>线程间通信的方式</h3><ol>
+<li><p><code>临界区</code>：通过多线程的串行化来访问公共资源或一段代码，速度快，适合控制数据访问；</p>
+</li>
+<li><p><code>互斥量Synchronized/Lock</code>：采用互斥对象机制，只有拥有互斥对象的线程才有访问公共资源的权限。因为互斥对象只有一个，所以可以保证公共资源不会被多个线程同时访问</p>
+</li>
+<li><p><code>信号量Semaphore</code>：为控制具有有限数量的用户资源而设计的，它允许多个线程在同一时刻去访问同一个资源，但一般需要限制同一时刻访问此资源的最大线程数目。</p>
+</li>
+<li><p><code>事件（信号），Wait/Notify</code>：通过通知操作的方式来保持多线程同步，还可以方便的实现多线程优先级的比较操作</p>
 </li>
 </ol>
 <h2 id="说一说Linux虚拟地址空间"><a href="#说一说Linux虚拟地址空间" class="headerlink" title="说一说Linux虚拟地址空间"></a>说一说Linux虚拟地址空间</h2><p>为了防止不同进程同一时刻在物理内存中运行而对物理内存的争夺和践踏，采用了虚拟内存。<br>虚拟内存技术使得不同进程在运行过程中，它所看到的是自己独自占有了当前系统的4G内存。所有进程共享同一物理内存，每个进程只把自己目前需要的虚拟内存空间映射并存储到物理内存上。 事实上，在每个进程创建加载时，内核只是为进程「创建」了虚拟内存的布局，具体就是初始化进程控制表中内存相关的链表，实际上并不立即就把虚拟内存对应位置的程序数据和代码（比如 <code>.text</code>、<code>.data</code> 段）拷贝到物理内存中，只是建立好虚拟内存和磁盘文件之间的映射就好（叫做存储器映射），等到运行到对应的程序时，才会通过缺页异常，来拷贝数据。还有进程运行过程中，要动态分配内存，比如 <code>malloc</code> 时，也只是分配了虚拟内存，即为这块虚拟内存对应的页表项做相应设置，当进程真正访问到此数据时，才引发缺页异常。</p>
@@ -262,18 +922,749 @@
 </ol>
 </li>
 </ul>
-<h2 id="说一说操作系统中的程序的内存结构"><a href="#说一说操作系统中的程序的内存结构" class="headerlink" title="说一说操作系统中的程序的内存结构"></a>说一说操作系统中的程序的内存结构</h2><p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/内存结构.png" srcset="/img/loading.gif" alt="内存结构"></p>
-<p>一个程序本质上都是由 <code>BSS段</code>、<code>data段</code>、<code>text段</code> 三个组成的。可以看到一个可执行程序在存储（没有调入内存）时分为代码段、数据区和未初始化数据区三部分。</p>
+<h2 id="说一说操作系统中的程序的内存结构"><a href="#说一说操作系统中的程序的内存结构" class="headerlink" title="说一说操作系统中的程序的内存结构"></a>说一说操作系统中的程序的内存结构</h2><p>一个程序本质上都是由 <code>BSS段</code>、<code>data段</code>、<code>text段</code> 三个组成的。可以看到一个可执行程序在存储（没有调入内存）时分为代码段、数据区和未初始化数据区三部分。</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/内存结构.png" srcset="/img/loading.gif" alt="内存结构"></p>
 <p><strong>BSS段（未初始化数据区）：</strong> 通常用来存放程序中未初始化的全局变量和静态变量的一块内存区域。BSS段属于静态分配，程序结束后静态变量资源由系统自动释放。</p>
 <p><strong>数据段：</strong> 存放程序中已初始化的全局变量的一块内存区域。数据段也属于静态内存分配</p>
 <p><strong>代码段：</strong> 存放程序执行代码的一块内存区域。这部分区域的大小在程序运行前就已经确定，并且内存区域属于只读。在代码段中，也有可能包含一些只读的常数变量</p>
+<blockquote>
 <p>text段和data段在编译时已经分配了空间，而BSS段并不占用可执行文件的大小，它是由链接器来获取内存的。</p>
 <p>BSS段（未进行初始化的数据）的内容并不存放在磁盘上的程序文件中。其原因是内核在程序开始运行前将它们设置为0。需要存放在程序文件中的只有正文段和初始化数据段。</p>
 <p>data段（已经初始化的数据）则为数据分配空间，数据保存到目标文件中。</p>
 <p>数据段包含经过初始化的全局变量以及它们的值。BSS段的大小从可执行文件中得到，然后链接器得到这个大小的内存块，紧跟在数据段的后面。当这个内存进入程序的地址空间后全部清零。包含数据段和BSS段的整个区段此时通常称为数据区。</p>
+</blockquote>
 <p>可执行程序在运行时又多出两个区域：栈区和堆区。</p>
 <p><strong>栈区：</strong> 由编译器自动释放，存放函数的参数值、局部变量等。每当一个函数被调用时，该函数的返回类型和一些调用的信息被存放到栈中。然后这个被调用的函数再为他的自动变量和临时变量在栈上分配空间。每调用一个函数一个新的栈就会被使用。栈区是从高地址位向低地址位增长的，是一块连续的内存区域，最大容量是由系统预先定义好的，申请的栈空间超过这个界限时会提示溢出，用户能从栈中获取的空间较小。</p>
 <p><strong>堆区：</strong> 用于动态分配内存，位于BSS和栈中间的地址区域。由程序员申请分配和释放。堆是从低地址位向高地址位增长，采用链式存储结构。频繁的malloc/free造成内存空间的不连续，产生碎片。当申请堆空间时库函数是按照一定的算法搜索可用的足够大的空间。因此堆的效率比栈要低的多。</p>
+<h2 id="A-a-new-A-a-gt-i-10-在内核中的内存分配上发生了什么"><a href="#A-a-new-A-a-gt-i-10-在内核中的内存分配上发生了什么" class="headerlink" title="A* a = new A; a-&gt;i = 10; 在内核中的内存分配上发生了什么"></a><code>A* a = new A; a-&gt;i = 10;</code> 在内核中的内存分配上发生了什么</h2><ol>
+<li><p><code>A *a</code>：a是一个局部变量，类型为指针，故而操作系统在程序栈区开辟4/8字节的空间（0x000m），分配给指针a。</p>
+</li>
+<li><p><code>new A</code>：通过new动态的在堆区申请类A大小的空间（0x000n）。</p>
+</li>
+<li><p><code>a = new A</code>：将指针a的内存区域填入栈中类A申请到的地址的地址。即*(0x000m) = 0x000n。</p>
+</li>
+<li><p><code>a-&gt;i</code>：先找到指针a的地址0x000m，通过a的值0x000n和i在类a中偏移offset，得到a-&gt;i的地址0x000n + offset，进行 <code>*(0x000n + offset) = 10</code> 的赋值操作，即内存0x000n + offset的值是10。</p>
+</li>
+</ol>
+<h2 id="说一说操作系统中的缺页中断"><a href="#说一说操作系统中的缺页中断" class="headerlink" title="说一说操作系统中的缺页中断"></a>说一说操作系统中的缺页中断</h2><p><code>malloc()</code> 和 <code>mmap()</code> 等内存分配函数，在分配时只是建立了进程虚拟地址空间，并没有分配虚拟内存对应的物理内存。当进程访问这些没有建立映射关系的虚拟内存时，处理器自动触发一个缺页异常。</p>
+<p>缺页中断：在请求分页系统中，可以通过查询页表中的状态位来确定所要访问的页面是否存在于内存中。每当所要访问的页面不在内存是，会产生一次缺页中断，此时操作系统会根据页表中的外存地址在外存中找到所缺的一页，将其调入内存。</p>
+<p>缺页本身是一种中断，与一般的中断一样，需要经过4个处理步骤：</p>
+<ol>
+<li><p>保护CPU现场；</p>
+</li>
+<li><p>分析中断原因；</p>
+</li>
+<li><p>转入缺页中断处理程序进行处理；</p>
+</li>
+<li><p>恢复CPU现场，继续执行。</p>
+</li>
+</ol>
+<p>但是缺页中断是由于所要访问的页面不存在于内存时，由硬件所产生的一种特殊的中断，因此，与一般的中断存在 <strong>区别</strong>：</p>
+<ol>
+<li><p>在指令执行期间产生和处理缺页中断信号；</p>
+</li>
+<li><p>一条指令在执行期间，可能产生多次缺页中断；</p>
+</li>
+<li><p>缺页中断返回是，执行产生中断的一条指令，而一般的中断返回是，执行下一条指令。</p>
+</li>
+</ol>
+<h2 id="回答一下-fork-和-vfork-的区别"><a href="#回答一下-fork-和-vfork-的区别" class="headerlink" title="回答一下 fork 和 vfork 的区别"></a>回答一下 <code>fork</code> 和 <code>vfork</code> 的区别</h2><h3 id="fork的基础知识"><a href="#fork的基础知识" class="headerlink" title="fork的基础知识"></a>fork的基础知识</h3><p>fork：创建一个和当前进程映像一样的进程可以通过 <code>fork()</code> 系统调用：</p>
+<pre><code class="lang-C">#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+pid_t fork(void);
+</code></pre>
+<p>成功调用 <code>fork()</code> 会创建一个新的进程，它几乎与调用 <code>fork()</code> 的进程一模一样，这两个进程都会继续运行。在子进程中，成功的 <code>fork()</code> 调用会返回0。在父进程中 <code>fork()</code> 返回子进程的pid。如果出现错误，<code>fork()</code> 返回一个负值。</p>
+<p>最常见的 <code>fork()</code> 用法是创建一个新的进程，然后使用 <code>exec()</code> 载入二进制映像，替换当前进程的映像。这种情况下，派生（fork）了新的进程，而这个子进程会执行一个新的二进制可执行文件的映像。这种“派生加执行”的方式是很常见的。</p>
+<p>在早期的Unix系统中，创建进程比较原始。当调用fork时，内核会把所有的内部数据结构复制一份，复制进程的页表项，然后把父进程的地址空间中的内容逐页的复制到子进程的地址空间中。但从内核角度来说，逐页的复制方式是十分耗时的。现代的Unix系统采取了更多的优化，例如Linux，采用了写时复制的方法，而不是对父进程空间进程整体复制。</p>
+<h3 id="vfork的基础知识"><a href="#vfork的基础知识" class="headerlink" title="vfork的基础知识"></a>vfork的基础知识</h3><p>在实现写时复制之前，Unix的设计者们就一直很关注在fork后立刻执行exec所造成的地址空间的浪费。BSD的开发者们在3.0的BSD系统中引入了 <code>vfork( )</code> 系统调用。</p>
+<pre><code class="lang-C">#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+pid_t vfork(void);
+</code></pre>
+<p>除了子进程必须要立刻执行一次对exec的系统调用，或者调用 <code>_exit()</code> 退出，对 <code>vfork()</code> 的成功调用所产生的结果和 <code>fork()</code> 是一样的。 <code>vfork()</code> 会挂起父进程直到子进程终止或者运行了一个新的可执行文件的映像。通过这样的方式，<code>vfork()</code> 避免了地址空间的按页复制。在这个过程中，父进程和子进程共享相同的地址空间和页表项。实际上 <code>vfork()</code> 只完成了一件事：复制内部的内核数据结构。因此，子进程也就不能修改地址空间中的任何内存。</p>
+<p><code>vfork()</code> 是一个历史遗留产物，Linux本不应该实现它。需要注意的是，即使增加了写时复制，<code>vfork()</code> 也要比 <code>fork()</code> 快，因为它没有进行页表项的复制。然而，写时复制的出现减少了对于替换 <code>fork()</code> 争论。实际上，直到2.2.0内核，<code>vfork()</code> 只是一个封装过的 <code>fork()</code>。因为对 <code>vfork()</code> 的需求要小于 <code>fork()</code>，所以 <code>vfork()</code> 的这种实现方式是可行的。</p>
+<blockquote>
+<p>补充知识点：<strong>写时复制</strong></p>
+<p>Linux采用了写时复制的方法，以减少fork时对父进程空间进程整体复制带来的开销。</p>
+<p>写时复制是一种采取了惰性优化方法来避免复制时的系统开销。它的前提很简单：如果有多个进程要读取它们自己的那部门资源的副本，那么复制是不必要的。每个进程只要保存一个指向这个资源的指针就可以了。只要没有进程要去修改自己的“副本”，就存在着这样的幻觉：每个进程好像独占那个资源。从而就避免了复制带来的负担。如果一个进程要修改自己的那份资源“副本”，那么就会复制那份资源，并把复制的那份提供给进程。不过其中的复制对进程来说是透明的。这个进程就可以修改复制后的资源了，同时其他的进程仍然共享那份没有修改过的资源。所以这就是名称的由来：在写入时进行复制。</p>
+<p>写时复制的主要好处在于：如果进程从来就不需要修改资源，则不需要进行复制。惰性算法的好处就在于它们尽量推迟代价高昂的操作，直到必要的时刻才会去执行。</p>
+<p>在使用虚拟内存的情况下，写时复制（Copy-On-Write）是以页为基础进行的。所以，只要进程不修改它全部的地址空间，那么就不必复制整个地址空间。在fork( )调用结束后，父进程和子进程都相信它们有一个自己的地址空间，但实际上它们共享父进程的原始页，接下来这些页又可以被其他的父进程或子进程共享。</p>
+<p>写时复制在内核中的实现非常简单。与内核页相关的数据结构可以被标记为只读和写时复制。如果有进程试图修改一个页，就会产生一个缺页中断。内核处理缺页中断的方式就是对该页进行一次透明复制。这时会清除页面的COW属性，表示着它不再被共享。</p>
+<p>现代的计算机系统结构中都在内存管理单元（MMU）提供了硬件级别的写时复制支持，所以实现是很容易的。</p>
+<p>在调用 <code>fork()</code> 时，写时复制是有很大优势的。因为大量的fork之后都会跟着执行exec，那么复制整个父进程地址空间中的内容到子进程的地址空间完全是在浪费时间：如果子进程立刻执行一个新的二进制可执行文件的映像，它先前的地址空间就会被交换出去。写时复制可以对这种情况进行优化。</p>
+</blockquote>
+<h3 id="fork和vfork的区别"><a href="#fork和vfork的区别" class="headerlink" title="fork和vfork的区别"></a>fork和vfork的区别</h3><ol>
+<li><p><code>fork()</code> 的子进程拷贝父进程的数据段和代码段；<code>vfork()</code> 的子进程与父进程共享数据段</p>
+</li>
+<li><p><code>fork()</code> 的父子进程的执行次序不确定；<code>vfork()</code> 保证子进程先运行，在调用exec或exit之前与父进程数据是共享的，在它调用exec或exit之后父进程才可能被调度运行。</p>
+</li>
+<li><p><code>vfork()</code> 保证子进程先运行，在它调用exec或exit之后父进程才可能被调度运行。如果在调用这两个函数之前子进程依赖于父进程的进一步动作，则会导致死锁。</p>
+</li>
+<li><p>当需要改变共享数据段中变量的值，则拷贝父进程。</p>
+</li>
+</ol>
+<h2 id="如何修改文件最大句柄数"><a href="#如何修改文件最大句柄数" class="headerlink" title="如何修改文件最大句柄数"></a>如何修改文件最大句柄数</h2><p>linux默认最大文件句柄数是1024个，在linux服务器文件并发量比较大的情况下，系统会报”too many open files”的错误。故在linux服务器高并发调优时，往往需要预先调优Linux参数，修改Linux最大文件句柄数。</p>
+<p>有两种方法：</p>
+<ol>
+<li><p><code>ulimit -n &lt;可以同时打开的文件数&gt;</code><br>  将当前进程的最大句柄数修改为指定的参数（注：该方法只针对当前进程有效，重新打开一个shell或者重新开启一个进程，参数还是之前的值）</p>
+<p>  首先用ulimit -a查询Linux相关的参数，如下所示：</p>
+<blockquote>
+<p>core file size          (blocks, -c) 0<br>data seg size           (kbytes, -d) unlimited<br>scheduling priority             (-e) 0<br>file size               (blocks, -f) unlimited<br>pending signals                 (-i) 94739<br>max locked memory       (kbytes, -l) 64<br>max memory size         (kbytes, -m) unlimited<br>open files                      (-n) 1024<br>pipe size            (512 bytes, -p) 8<br>POSIX message queues     (bytes, -q) 819200<br>real-time priority              (-r) 0<br>stack size              (kbytes, -s) 8192<br>cpu time               (seconds, -t) unlimited<br>max user processes              (-u) 94739<br>virtual memory          (kbytes, -v) unlimited<br>file locks                      (-x) unlimited</p>
+</blockquote>
+<p>  其中，open files就是最大文件句柄数，默认是1024个。</p>
+<p>  修改Linux最大文件句柄数：<code>ulimit -n 2048</code>，将最大句柄数修改为2048个。</p>
+</li>
+<li><p>对所有进程都有效的方法，修改Linux系统参数<br>  <code>vi /etc/security/limits.conf</code> 添加</p>
+<pre><code class="lang-vim">  soft nofile 65536
+  hard nofile 65536
+</code></pre>
+<p>  将最大句柄数改为65536，修改以后保存，注销当前用户，重新登录，修改后的参数就生效了。</p>
+</li>
+</ol>
+<h2 id="说一说并发-concurrency-和并行-parallelism"><a href="#说一说并发-concurrency-和并行-parallelism" class="headerlink" title="说一说并发(concurrency)和并行(parallelism)"></a>说一说并发(concurrency)和并行(parallelism)</h2><p>并发（concurrency）：指宏观上看起来两个程序在同时运行，比如说在单核CPU上的多任务。但是从微观上看两个程序的指令是交织着运行的，你的指令之间穿插着我的指令，我的指令之间穿插着你的，在单个周期内只运行了一个指令。这种并发并不能提高计算机的性能，只能提高效率。</p>
+<p>并行（parallelism）：指严格物理意义上的同时运行，比如多核CPU，两个程序分别运行在两个核上，两者之间互不影响，单个周期内每个程序都运行了自己的指令，也就是运行了两条指令。这样说来并行的确提高了计算机的效率。所以现在的CPU都是往多核方面发展。</p>
+<h2 id="MySQL的端口号是多少，如何修改这个端口号"><a href="#MySQL的端口号是多少，如何修改这个端口号" class="headerlink" title="MySQL的端口号是多少，如何修改这个端口号"></a>MySQL的端口号是多少，如何修改这个端口号</h2><h3 id="查看端口号"><a href="#查看端口号" class="headerlink" title="查看端口号"></a>查看端口号</h3><p>使用命令 <code>show global variables like &#39;port&#39;;</code> 查看端口号 ，MySQL的默认端口是3306。（补充：sqlserver默认端口号为：1433；oracle默认端口号为：1521；DB2默认端口号为：5000；PostgreSQL默认端口号为：5432）</p>
+<h3 id="修改端口号"><a href="#修改端口号" class="headerlink" title="修改端口号"></a>修改端口号</h3><p>编辑 <code>/etc/my.cnf</code> 文件，早期版本有可能是 <code>my.conf</code> 文件名，增加端口参数，并且设定端口，注意该端口未被使用，保存退出。</p>
+<h2 id="说一说操作系统中的页表寻址"><a href="#说一说操作系统中的页表寻址" class="headerlink" title="说一说操作系统中的页表寻址"></a>说一说操作系统中的页表寻址</h2><p>页式内存管理，内存分成固定长度的一个个页片。操作系统为每一个进程维护了一个从虚拟地址到物理地址的映射关系的数据结构，叫页表，页表的内容就是该进程的虚拟地址到物理地址的一个映射。页表中的每一项都记录了这个页的基地址。通过页表，由逻辑地址的高位部分先找到逻辑地址对应的页基地址，再由页基地址偏移一定长度就得到最后的物理地址，偏移的长度由逻辑地址的低位部分决定。一般情况下，这个过程都可以由硬件完成，所以效率还是比较高的。<strong>页式内存管理的优点就是比较灵活，内存管理以较小的页为单位，方便内存换入换出和扩充地址空间。</strong></p>
+<h3 id="Linux最初的两级页表机制"><a href="#Linux最初的两级页表机制" class="headerlink" title="Linux最初的两级页表机制"></a>Linux最初的两级页表机制</h3><p>两级分页机制将32位的虚拟空间分成三段，低12位表示页内偏移，高20位分成两段分别表示两级页表的偏移。</p>
+<ul>
+<li><p>PGD(Page Global Directory)：最高10位，全局页目录表索引</p>
+</li>
+<li><p>PTE(Page Table Entry)：中间10位，页表入口索引</p>
+</li>
+</ul>
+<p>当在进行地址转换时，结合在CR3寄存器中存放的页目录(page directory，PGD)的这一页的物理地址，再加上从虚拟地址中抽出高10位叫做页目录表项(内核也称这为PGD)的部分作为偏移，即定位到可以描述该地址的PGD；从该PGD中可以获取可以描述该地址的页表的物理地址，再加上从虚拟地址中抽取中间10位作为偏移，即定位到可以描述该地址的PTE；在这个PTE中即可获取该地址对应的页的物理地址，加上从虚拟地址中抽取的最后12位，即形成该页的页内偏移，即可最终完成从虚拟地址到物理地址的转换。从上述过程中，可以看出，对虚拟地址的分级解析过程，实际上就是不断深入页表层次，逐渐定位到最终地址的过程，所以这一过程被叫做page table walk。</p>
+<h3 id="Linux的三级页表机制"><a href="#Linux的三级页表机制" class="headerlink" title="Linux的三级页表机制"></a>Linux的三级页表机制</h3><p>当x86引入物理地址扩展(Pisycal Addrress Extension，PAE)后，可以支持大于4G的物理内存(32位），但虚拟地址依然是32位，原先的页表项不适用，它实际多4bytes被扩充到8bytes，这意味着，每一页现在能存放的PTE数目从1024变成512了(4k/8)。相应地，页表层级发生了变化，Linux新增加了一个层级，叫做页中间目录(page middle directory，PMD)，变成：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">cr3</td>
+<td style="text-align:center">指向一个PDPT</td>
+<td style="text-align:center">crs寄存器存储</td>
+</tr>
+<tr>
+<td style="text-align:center">PGD</td>
+<td style="text-align:center">指向PDPT中4个项中的一个</td>
+<td style="text-align:center">位31~30</td>
+</tr>
+<tr>
+<td style="text-align:center">PMD</td>
+<td style="text-align:center">指向页目录中512项中的一个</td>
+<td style="text-align:center">位29~21</td>
+</tr>
+<tr>
+<td style="text-align:center">PTE</td>
+<td style="text-align:center">指向页表中512项中的一个</td>
+<td style="text-align:center">位20~12</td>
+</tr>
+<tr>
+<td style="text-align:center">page offset</td>
+<td style="text-align:center">4KB页中的偏移</td>
+<td style="text-align:center">位11~0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>现在就同时存在2级页表和3级页表，在代码管理上肯定不方便。巧妙的是，Linux采取了一种抽象方法：所有架构全部使用3级页表：即PGD -&gt; PMD -&gt; PTE。那只使用2级页表(如非PAE的x86)怎么办？</p>
+<p>办法是针对使用2级页表的架构，把PMD抽象掉，即虚设一个PMD表项。这样在page table walk过程中，PGD本直接指向PTE的，现在不了，指向一个虚拟的PMD，然后再由PMD指向PTE。这种抽象保持了代码结构的统一。</p>
+<h3 id="Linux的四级页表机制"><a href="#Linux的四级页表机制" class="headerlink" title="Linux的四级页表机制"></a>Linux的四级页表机制</h3><p>硬件在发展，3级页表很快又捉襟见肘了，原因是64位CPU出现了，比如x86_64，它的硬件是实实在在支持4级页表的。它支持48位的虚拟地址空间。如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">位数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">PML4</td>
+<td style="text-align:center">指向一个PDPT</td>
+<td style="text-align:center">位47~39</td>
+</tr>
+<tr>
+<td style="text-align:center">PGD</td>
+<td style="text-align:center">指向PDPT中4个项中的一个</td>
+<td style="text-align:center">位38~30</td>
+</tr>
+<tr>
+<td style="text-align:center">PMD</td>
+<td style="text-align:center">指向页目录中512项中的一个</td>
+<td style="text-align:center">位29~21</td>
+</tr>
+<tr>
+<td style="text-align:center">PTE</td>
+<td style="text-align:center">指向页表中512项中的一个</td>
+<td style="text-align:center">位20~12</td>
+</tr>
+<tr>
+<td style="text-align:center">page offset</td>
+<td style="text-align:center">4KB页中的偏移</td>
+<td style="text-align:center">位11~0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Linux内核针为使用原来的3级列表(PGD-&gt;PMD-&gt;PTE)，做了折衷。即采用一个唯一的，共享的顶级层次，叫PML4。这个PML4没有编码在地址中，这样就能套用原来的3级列表方案了。不过代价就是，由于只有唯一的PML4，寻址空间被局限在 $(2^{39}=)$ 512G，而本来PML4段有9位，可以支持512个PML4表项的。现在为了使用3级列表方案，只能限制使用一个，512G的空间很快就又不够用了，解决方案呼之欲出。</p>
+<p>在2004年10月，当时的X86_64架构代码的维护者Andi Kleen提交了一个叫做4 level page tables for Linux的PATCH系列，为Linux内核带来了4级页表的支持。在他的解决方案中，不出意料地，按照x86_64规范，新增了一个PML4的层级，在这种解决方案中，x86_64拥一个有512条目的PML4，512条目的PGD，512条目的PMD，512条目的PTE。对于仍使用3级目录的架构来说，它们依然拥有一个虚拟的PML4，相关的代码会在编译时被优化掉。 这样，就把Linux内核的3级列表扩充为4级列表。这系列PATCH工作得不错，不久被纳入Andrew Morton的-mm树接受测试。不出意外的话，它将在v2.6.11版本中释出。但是，另一个知名开发者Nick Piggin提出了一些看法，他认为Andi的Patch很不错，不过他认为最好还是把PGD作为第一级目录，把新增加的层次放在中间，并给出了他自己的Patch：alternate 4-level page tables patches。Andi更想保持自己的PATCH，他认为Nick不过是玩了改名的游戏，而且他的PATCH经过测试很稳定，快被合并到主线了，不宜再折腾。不过Linus却表达了对Nick Piggin的支持，理由是Nick的做法conceptually least intrusive。毕竟作为Linux的扛把子，稳定对于Linus来说意义重大。最终，不意外地，最后Nick Piggin的PATCH在v2.6.11版本中被合并入主线。在这种方案中，4级页表分别是：PGD -&gt; PUD -&gt; PMD -&gt; PTE。</p>
+<h2 id="说一说有了进程，为什么还要有线程"><a href="#说一说有了进程，为什么还要有线程" class="headerlink" title="说一说有了进程，为什么还要有线程"></a>说一说有了进程，为什么还要有线程</h2><p>线程产生的原因：</p>
+<p>进程可以使多个程序能并发执行，以提高资源的利用率和系统的吞吐量；但是其具有一些缺点：</p>
+<p>进程在同一时间只能干一件事</p>
+<p>进程在执行的过程中如果阻塞，整个进程就会挂起，即使进程中有些工作不依赖于等待的资源，仍然不会执行。</p>
+<p>因此，操作系统引入了比进程粒度更小的线程，<strong>作为并发执行的基本单位</strong>，从而减少程序在并发执行时所付出的时空开销，提高并发性。和进程相比，线程的优势如下：</p>
+<ul>
+<li><p>从 <strong>资源</strong> 上来讲，线程是一种非常”节俭”的多任务操作方式。在Linux系统下，启动一个新的进程必须分配给它独立的地址空间，建立众多的数据表来维护它的代码段、堆栈段和数据段，这是一种”昂贵”的多任务工作方式。</p>
+</li>
+<li><p>从 <strong>切换效率</strong> 上来讲，运行于一个进程中的多个线程，它们之间使用相同的地址空间，而且线程间彼此切换所需时间也远远小于进程间切换所需要的时间。据统计，一个进程的开销大约是一个线程开销的30倍左右。</p>
+</li>
+<li><p>从 <strong>通信机制</strong> 上来讲，线程间方便的通信机制。对不同进程来说，它们具有独立的数据空间，要进行数据的传递只能通过进程间通信的方式进行，这种方式不仅费时，而且很不方便。线程则不然，由于同一进城下的线程之间贡献数据空间，所以一个线程的数据可以直接为其他线程所用，这不仅快捷，而且方便。</p>
+</li>
+</ul>
+<p>除以上优点外，多线程程序作为一种多任务、并发的工作方式，还有如下优点：</p>
+<ol>
+<li><p>使多CPU系统更加有效。操作系统会保证当线程数不大于CPU数目时，不同的线程运行于不同的CPU上。</p>
+</li>
+<li><p>改善程序结构。一个既长又复杂的进程可以考虑分为多个线程，成为几个独立或半独立的运行部分，这样的程序才会利于理解和修改。</p>
+</li>
+</ol>
+<h2 id="单核机器上写多线程程序，是否需要考虑加锁，为什么"><a href="#单核机器上写多线程程序，是否需要考虑加锁，为什么" class="headerlink" title="单核机器上写多线程程序，是否需要考虑加锁，为什么"></a>单核机器上写多线程程序，是否需要考虑加锁，为什么</h2><p>在单核机器上写多线程程序，仍然需要线程锁。</p>
+<p>因为线程锁通常用来实现线程的同步和通信。在单核机器上的多线程程序，仍然存在线程同步的问题。因为在抢占式操作系统中，通常为每个线程分配一个时间片，当某个线程时间片耗尽时，操作系统会将其挂起，然后运行另一个线程。如果这两个线程共享某些数据，<strong>不使用线程锁的前提下，可能会导致共享数据修改引起冲突。</strong></p>
+<h2 id="线程需要保存哪些上下文，SP、PC、EAX这些寄存器是干嘛用的"><a href="#线程需要保存哪些上下文，SP、PC、EAX这些寄存器是干嘛用的" class="headerlink" title="线程需要保存哪些上下文，SP、PC、EAX这些寄存器是干嘛用的"></a>线程需要保存哪些上下文，SP、PC、EAX这些寄存器是干嘛用的</h2><p>线程在切换的过程中需要保存当前线程Id、线程状态、堆栈、寄存器状态等信息。其中寄存器主要包括SP、PC、EAX等寄存器，其主要功能如下：</p>
+<ul>
+<li>SP:堆栈指针，指向当前栈的栈顶地址</li>
+<li>PC:程序计数器，存储下一条将要执行的指令</li>
+<li>EAX:累加寄存器，用于加法乘法的缺省寄存器</li>
+</ul>
+<h2 id="线程间的同步方式，最好说出具体的系统调用"><a href="#线程间的同步方式，最好说出具体的系统调用" class="headerlink" title="线程间的同步方式，最好说出具体的系统调用"></a>线程间的同步方式，最好说出具体的系统调用</h2><ul>
+<li><p><strong>信号量</strong></p>
+<p>   信号量是一种特殊的变量，可用于线程同步。它只取自然数值，并且只支持两种操作：</p>
+<p>   <strong>P(SV)：</strong> 如果信号量SV大于0，将它减一；如果SV值为0，则挂起该线程。<br>   <strong>V(SV)：</strong> 如果有其他进程因为等待SV而挂起，则唤醒，然后将SV+1；否则直接将SV+1。</p>
+<p>   其系统调用为：</p>
+<p>   <code>sem_wait(sem_t *sem)</code>：以原子操作的方式将信号量减1，如果信号量值为0，则sem_wait将被阻塞，直到这个信号量具有非0值。<br>   <code>sem_post(sem_t *sem)</code>：以原子操作将信号量值+1。当信号量大于0时，其他正在调用sem_wait等待信号量的线程将被唤醒。</p>
+</li>
+<li><p><strong>互斥量</strong></p>
+<p>   互斥量又称互斥锁，主要用于线程互斥，不能保证按序访问，可以和条件锁一起实现同步。当进入临界区时，需要获得互斥锁并且加锁；当离开临界区时，需要对互斥锁解锁，以唤醒其他等待该互斥锁的线程。其主要的系统调用如下：</p>
+<p>   <code>pthread_mutex_init</code>：初始化互斥锁<br>   <code>pthread_mutex_destroy</code>：销毁互斥锁<br>   <code>pthread_mutex_lock</code>：以原子操作的方式给一个互斥锁加锁，如果目标互斥锁已经被上锁，pthread_mutex_lock调用将阻塞，直到该互斥锁的占有者将其解锁。<br>   <code>pthread_mutex_unlock</code>：以一个原子操作的方式给一个互斥锁解锁。</p>
+</li>
+<li><p><strong>条件变量</strong></p>
+<p>   条件变量，又称条件锁，用于在线程之间同步共享数据的值。条件变量提供一种线程间通信机制：当某个共享数据达到某个值时，唤醒等待这个共享数据的一个/多个线程。即，当某个共享变量等于某个值时，调用 signal/broadcast。此时操作共享变量时需要加锁。其主要的系统调用如下：</p>
+<p>   <code>pthread_cond_init</code>：初始化条件变量<br>   <code>pthread_cond_destroy</code>：销毁条件变量<br>   <code>pthread_cond_signal</code>：唤醒一个等待目标条件变量的线程。哪个线程被唤醒取决于调度策略和优先级。<br>   <code>pthread_cond_wait</code>：等待目标条件变量。需要一个加锁的互斥锁确保操作的原子性。该函数中在进入wait状态前首先进行解锁，然后接收到信号后会再加锁，保证该线程对共享资源正确访问。</p>
+</li>
+</ul>
+<h2 id="说一下多线程和多进程的不同"><a href="#说一下多线程和多进程的不同" class="headerlink" title="说一下多线程和多进程的不同"></a>说一下多线程和多进程的不同</h2><p><strong>进程是资源分配的最小单位，而线程时CPU调度的最小单位。</strong></p>
+<p>多线程之间共享同一个进程的地址空间，<strong>线程间通信简单，同步复杂</strong>，线程创建、销毁和切换简单，速度快，占用内存少，适用于多核分布式系统，但是线程间会相互影响，一个线程意外终止会导致同一个进程的其他线程也终止，程序可靠性弱。</p>
+<p>而多进程间拥有各自独立的运行地址空间，进程间不会相互影响，程序可靠性强，但是进程创建、销毁和切换复杂，速度慢，占用内存多，<strong>进程间通信复杂，但是同步简单</strong>，适用于多核、多机分布。</p>
+<h2 id="游戏服务器应该为每个用户开辟一个线程还是一个进程，为什么"><a href="#游戏服务器应该为每个用户开辟一个线程还是一个进程，为什么" class="headerlink" title="游戏服务器应该为每个用户开辟一个线程还是一个进程，为什么"></a>游戏服务器应该为每个用户开辟一个线程还是一个进程，为什么</h2><p>游戏服务器应该为每个用户开辟一个进程。</p>
+<p>因为同一进程间的线程会相互影响，一个线程死掉会影响其他线程，从而导致进程崩溃。因此为了保证不同用户之间不会相互影响，应该为每个用户开辟一个进程。</p>
+<h2 id="说一说OS缺页置换算法"><a href="#说一说OS缺页置换算法" class="headerlink" title="说一说OS缺页置换算法"></a>说一说OS缺页置换算法</h2><p>当访问一个内存中不存在的页，并且内存已满，则需要从内存中调出一个页或将数据送至磁盘对换区，替换一个页，这种现象叫做缺页置换。</p>
+<p>当前操作系统最常采用的缺页置换算法如下：</p>
+<h3 id="先进先出（FIFO）算法"><a href="#先进先出（FIFO）算法" class="headerlink" title="先进先出（FIFO）算法"></a>先进先出（FIFO）算法</h3><p>置换最先调入内存的页面，即置换在内存中驻留时间最久的页面。按照进入内存的先后次序排列成队列，从队尾进入，从队首删除。</p>
+<ul>
+<li><p>思想：最近刚访问的，将来访问的可能性比较大。</p>
+</li>
+<li><p>实现：使用一个队列，新加入的页面放入队尾，每次淘汰队首的页面，即最先进入的数据，最先被淘汰。</p>
+</li>
+<li><p>弊端：无法体现页面冷热信息。</p>
+</li>
+</ul>
+<h3 id="最不经常访问淘汰（LFU）算法"><a href="#最不经常访问淘汰（LFU）算法" class="headerlink" title="最不经常访问淘汰（LFU）算法"></a>最不经常访问淘汰（LFU）算法</h3><ul>
+<li><p>思想：如果数据过去被访问多次，那么将来被访问的频率也更高。</p>
+</li>
+<li><p>实现：每个数据块一个引用计数，所有数据块按照引用计数排序，具有相同引用计数的数据块则按照时间排序。每次淘汰队尾数据块。</p>
+</li>
+<li><p>开销：排序开销。</p>
+</li>
+<li><p>弊端：缓存颠簸。</p>
+</li>
+</ul>
+<h3 id="最近最少使用（LRU）算法"><a href="#最近最少使用（LRU）算法" class="headerlink" title="最近最少使用（LRU）算法"></a>最近最少使用（LRU）算法</h3><p>置换最近一段时间以来最长时间未访问过的页面。根据程序局部性原理，刚被访问的页面，可能马上又要被访问；而较长时间内没有被访问的页面，可能最近不会被访问。</p>
+<ul>
+<li><p>思想：如果数据最近被访问过，那么将来被访问的几率也更高。</p>
+</li>
+<li><p>实现：使用一个栈，新页面或者命中的页面则将该页面移动到栈底，每次替换栈顶的缓存页面。</p>
+</li>
+<li><p>优点：LRU算法对热点数据命中率是很高的。</p>
+</li>
+<li><p>缺陷：</p>
+<ul>
+<li><p>缓存颠簸，当缓存（1，2，3）满了，之后数据访问（0，3，2，1，0，3，2，1。。。）。</p>
+</li>
+<li><p>缓存污染，突然大量偶发性的数据访问，会让内存中存放大量冷数据。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="说一下多进程和多线程的使用场景"><a href="#说一下多进程和多线程的使用场景" class="headerlink" title="说一下多进程和多线程的使用场景"></a>说一下多进程和多线程的使用场景</h2><ul>
+<li><p>多进程模型的优势是CPU，适用于CPU密集型。同时，多进程模型也适用于多机分布式场景中，易于多机扩展。</p>
+</li>
+<li><p>多线程模型主要优势为线程间切换代价较小，因此适用于I/O密集型的工作场景，因此I/O密集型的工作场景经常会由于I/O阻塞导致频繁的切换线程。同时，多线程模型也适用于单机多核分布式场景。</p>
+</li>
+</ul>
+<h2 id="说一说死锁发生的条件以及如何解决死锁"><a href="#说一说死锁发生的条件以及如何解决死锁" class="headerlink" title="说一说死锁发生的条件以及如何解决死锁"></a>说一说死锁发生的条件以及如何解决死锁</h2><p>死锁是指两个或两个以上进程在执行过程中，因争夺资源而造成的下相互等待的现象。</p>
+<h3 id="死锁发生的四个必要条件"><a href="#死锁发生的四个必要条件" class="headerlink" title="死锁发生的四个必要条件"></a>死锁发生的四个必要条件</h3><h4 id="互斥条件"><a href="#互斥条件" class="headerlink" title="互斥条件"></a>互斥条件</h4><p>一个资源一段时间内只能由一个进程占用。</p>
+<h4 id="请求和保持（占用并等待）条件"><a href="#请求和保持（占用并等待）条件" class="headerlink" title="请求和保持（占用并等待）条件"></a>请求和保持（占用并等待）条件</h4><p>进程获得一定的资源后，又对其他资源发出请求，但是该资源可能被其他进程占有，此时请求阻塞，但该进程不会释放自己已经占有的资源。</p>
+<h4 id="不可剥夺条件"><a href="#不可剥夺条件" class="headerlink" title="不可剥夺条件"></a>不可剥夺条件</h4><p>进程已获得的资源，在未完成使用之前，不可被剥夺，只能在使用后自己释放。</p>
+<h4 id="环路等待条件"><a href="#环路等待条件" class="headerlink" title="环路等待条件"></a>环路等待条件</h4><p>进程发生死锁后，必然存在一个进程-资源之间的环形链。</p>
+<h3 id="解决死锁的方法即破坏上述四个条件之一"><a href="#解决死锁的方法即破坏上述四个条件之一" class="headerlink" title="解决死锁的方法即破坏上述四个条件之一"></a>解决死锁的方法即破坏上述四个条件之一</h3><p>主要方法如下：</p>
+<ul>
+<li><p>资源一次性分配，从而剥夺请求和保持条件；</p>
+</li>
+<li><p>可剥夺资源：即当进程新的资源未得到满足时，释放已占有的资源，从而破坏不可剥夺的条件；</p>
+</li>
+<li><p>有序资源分配法：系统给每类资源赋予一个序号，每个进程按编号递增的请求资源，释放则相反，从而破坏环路等待的条件。</p>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>死锁检测<ul>
+<li>银行家算法：如果系统现存的各种资源可以满足申请者的最大需求量，就满足。</li>
+</ul>
+</li>
+<li>死锁排除<ol>
+<li>资源剥夺</li>
+<li>撤销进程</li>
+<li>进程回退</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<h2 id="虚拟内存和物理内存怎么对应"><a href="#虚拟内存和物理内存怎么对应" class="headerlink" title="虚拟内存和物理内存怎么对应"></a>虚拟内存和物理内存怎么对应</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><h4 id="物理地址（physical-address）"><a href="#物理地址（physical-address）" class="headerlink" title="物理地址（physical address）"></a>物理地址（physical address）</h4><p>用于内存芯片级的单元寻址，与处理器和CPU连接的地址总线相对应。</p>
+<p>虽然可以直接把物理地址理解成插在机器上那根内存本身，把内存看成一个从0字节一直到最大空量逐字节的编号的大数组，然后把这个数组叫做物理地址，但是事实上，这只是一个硬件提供给软件的抽象，内存的寻址方式并不是这样。所以，说它是“与地址总线相对应”，是更贴切一些，不过抛开对物理内存寻址方式的考虑，直接把物理地址与物理的内存一一对应，也是可以接受的。也许错误的理解更利于形而上的抽象。</p>
+<h4 id="虚拟地址-virtual-memory"><a href="#虚拟地址-virtual-memory" class="headerlink" title="虚拟地址(virtual memory)"></a>虚拟地址(virtual memory)</h4><p>这是对整个内存（不要与机器上插那条对上号）的抽象描述。它是相对于物理内存来讲的，可以直接理解成“不直实的”，“假的”内存，例如，一个0x08000000内存地址，它并不对就物理地址上那个大数组中0x08000000 - 1那个地址元素；</p>
+<p>之所以是这样，是因为现代操作系统都提供了一种内存管理的抽象，即虚拟内存（virtual memory）。进程使用虚拟内存中的地址，由操作系统协助相关硬件，把它“转换”成真正的物理地址。这个“转换”，是所有问题讨论的关键。</p>
+<p>有了这样的抽象，一个程序，就可以使用比真实物理地址大得多的地址空间。甚至多个进程可以使用相同的地址。不奇怪，因为转换后的物理地址并非相同的。</p>
+<blockquote>
+<p>可以把连接后的程序反编译看一下，发现连接器已经为程序分配了一个地址，例如，要调用某个函数A，代码不是call A，而是call 0x0811111111 ，也就是说，函数A的地址已经被定下来了。没有这样的“转换”，没有虚拟地址的概念，这样做是根本行不通的。</p>
+</blockquote>
+<h3 id="地址转换"><a href="#地址转换" class="headerlink" title="地址转换"></a>地址转换</h3><h4 id="第一步：CPU段式管理中——逻辑地址转线性地址"><a href="#第一步：CPU段式管理中——逻辑地址转线性地址" class="headerlink" title="第一步：CPU段式管理中——逻辑地址转线性地址"></a>第一步：CPU段式管理中——逻辑地址转线性地址</h4><p>CPU要利用其段式内存管理单元，先将一个逻辑地址转换成一个线程地址。</p>
+<p>一个逻辑地址由两部分组成，<strong>[段标识符:段内偏移量]</strong>。</p>
+<p>段标识符是由一个16位长的字段组成，称为段选择符。其中前13位是一个索引号。后面3位包含一些硬件细节，如图：</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/段选择符.png" srcset="/img/loading.gif" alt="段选择符"></p>
+<p>通过段标识符中的索引号从GDT或者LDT找到该段的段描述符，段描述符中的base字段是段的起始地址</p>
+<p>段描述符：Base字段，它描述了一个段的开始位置的线性地址。</p>
+<p>一些全局的段描述符，就放在全局段描述符表(GDT)中，一些局部的，例如每个进程自己的，就放在所谓的局部段描述符表(LDT)中。</p>
+<p>GDT在内存中的地址和大小存放在CPU的GDTR控制寄存器中，而LDT则在LDTR寄存器中。</p>
+<p>段起始地址 + 段内偏移量 = 线性地址</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/数据段、代码段、系统段描述符.png" srcset="/img/loading.gif" alt="操作系统整理/数据段、代码段、系统段描述符"></p>
+<p>首先，给定一个完整的逻辑地址 <strong>[段选择符:段内偏移地址]</strong>，</p>
+<ol>
+<li><p>看段选择符的T1 = 0还是1，知道当前要转换是GDT中的段，还是LDT中的段，再根据相应寄存器，得到其地址和大小。我们就有了一个数组了。</p>
+</li>
+<li><p>拿出段选择符中前13位，可以在这个数组中，查找到对应的段描述符，这样，它了Base，即基地址就知道了。</p>
+</li>
+<li><p>把Base + offset，就是要转换的线性地址了。</p>
+</li>
+</ol>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/地址转换过程.png" srcset="/img/loading.gif" alt="地址转换过程"></p>
+<h4 id="第二步：页式管理——线性地址转物理地址"><a href="#第二步：页式管理——线性地址转物理地址" class="headerlink" title="第二步：页式管理——线性地址转物理地址"></a>第二步：页式管理——线性地址转物理地址</h4><p>再利用其页式内存管理单元，转换为最终物理地址。</p>
+<h5 id="linux假的段式管理"><a href="#linux假的段式管理" class="headerlink" title="linux假的段式管理"></a>linux假的段式管理</h5><p>Intel要求两次转换，这样虽说是兼容了，但是却是很冗余，但是这是Intel硬件的要求。</p>
+<p>其它某些硬件平台，没有二次转换的概念，Linux也需要提供一个高层抽象，来提供一个统一的界面。</p>
+<p>所以，Linux的段式管理，事实上只是“哄骗”了一下硬件而已。</p>
+<p>按照Intel的本意，全局的用GDT，每个进程自己的用LDT——不过Linux则对所有的进程都使用了相同的段来对指令和数据寻址。即用户数据段，用户代码段，对应的，内核中的是内核数据段和内核代码段。</p>
+<p>在Linux下，逻辑地址与线性地址总是一致的，即逻辑地址的偏移量字段的值与线性地址的值总是相同的。</p>
+<h5 id="linux页式管理"><a href="#linux页式管理" class="headerlink" title="linux页式管理"></a>linux页式管理</h5><p>CPU的页式内存管理单元，负责把一个线性地址，最终翻译为一个物理地址。</p>
+<p>线性地址被分为以固定长度为单位的组，称为页（page），例如一个32位的机器，线性地址最大可为4G，可以用4KB为一个页来划分，这页，整个线性地址就被划分为一个total_page[$2^{20}$]的大数组，共有2的20个次方个页。</p>
+<p>另一类“页”，我们称之为物理页，或者是页框、页桢的。是分页单元把所有的物理内存也划分为固定长度的管理单位，它的长度一般与内存页是一一对应的。</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/二级页表.png" srcset="/img/loading.gif" alt="二级页表"></p>
+<p>每个进程都有自己的页目录，当进程处于运行态的时候，其页目录地址存放在cr3寄存器中。</p>
+<p>每一个32位的线性地址被划分为三部份：<strong>[页目录索引(10位):页表索引(10位):页内偏移(12位)]</strong></p>
+<p>依据以下步骤进行转换：</p>
+<p>从cr3中取出进程的页目录地址（操作系统负责在调度进程的时候，把这个地址装入对应寄存器）；</p>
+<p>根据线性地址前十位，在数组中，找到对应的索引项，因为引入了二级管理模式，页目录中的项，不再是页的地址，而是一个页表的地址。（又引入了一个数组），页的地址被放到页表中去了。</p>
+<p>根据线性地址的中间十位，在页表（也是数组）中找到页的起始地址；</p>
+<p>将页的起始地址与线性地址中最后12位相加。</p>
+<h6 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h6><p>内存节约：如果一级页表中的一个页表条目为空，那么那所指的二级页表就根本不会存在。这表现出一种巨大的潜在节约，因为对于一个典型的程序，4GB虚拟地址空间的大部份都会是未分配的；</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/四级页表.png" srcset="/img/loading.gif" alt="四级页表"></p>
+<p>32位，PGD = 10bit，PUD = PMD = 0，table = 10bit，offset = 12bit</p>
+<p>64位，PUD和PMD ≠ 0</p>
+<h2 id="说一说操作系统中的结构体对齐，字节对齐"><a href="#说一说操作系统中的结构体对齐，字节对齐" class="headerlink" title="说一说操作系统中的结构体对齐，字节对齐"></a>说一说操作系统中的结构体对齐，字节对齐</h2><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ol>
+<li><p>平台原因（移植原因）：不是所有的硬件平台都能访问任意地址上的任意数据的；某些硬件平台只能在某些地址处取某些特定类型的数据，否则抛出硬件异常。</p>
+</li>
+<li><p>性能原因：数据结构（尤其是栈）应该尽可能地在自然边界上对齐。原因在于，为了访问未对齐的内存，处理器需要作两次内存访问；而对齐的内存访问仅需要一次访问。</p>
+</li>
+</ol>
+<h3 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h3><ol>
+<li><p>数据成员对齐规则：结构（struct）（或联合（union））的数据成员，第一个数据成员放在offset为0的地方，以后每个数据成员的对齐按照 <code>#pragma pack</code> 指定的数值和这个数据成员自身长度中，比较小的那个进行。</p>
+</li>
+<li><p>结构（或联合）的整体对齐规则：在数据成员完成各自对齐之后，结构（或联合）本身也要进行对齐，对齐将按照 <code>#pragma pack</code> 指定的数值和结构（或联合）最大数据成员长度中，比较小的那个进行。</p>
+</li>
+<li><p>结构体作为成员：如果一个结构里有某些结构体成员，则结构体成员要从其内部最大元素大小的整数倍地址开始存储。</p>
+</li>
+</ol>
+<h3 id="定义结构体对齐"><a href="#定义结构体对齐" class="headerlink" title="定义结构体对齐"></a>定义结构体对齐</h3><p>可以通过预编译命令 <code>#pragma pack(n), n = 1, 2, 4, 8, 16</code> 来改变这一系数，其中的n就是指定的“对齐系数”。</p>
+<h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><pre><code class="lang-C++">#pragma pack(2)
+struct AA
+{
+    int a;   //长度4 &gt; 2 按2对齐；偏移量为0；存放位置区间[0,3]
+    char b;  //长度1 &lt; 2 按1对齐；偏移量为4；存放位置区间[4]
+    short c; //长度2 = 2 按2对齐；偏移量要提升到2的倍数6；存放位置区间[6,7]
+    char d;  //长度1 &lt; 2 按1对齐；偏移量为8；存放位置区间[8]；共九个字节
+};
+#pragma pack()
+</code></pre>
+<h2 id="互斥锁（mutex）机制，以及互斥锁和读写锁的区别"><a href="#互斥锁（mutex）机制，以及互斥锁和读写锁的区别" class="headerlink" title="互斥锁（mutex）机制，以及互斥锁和读写锁的区别"></a>互斥锁（mutex）机制，以及互斥锁和读写锁的区别</h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><h4 id="互斥锁mutex"><a href="#互斥锁mutex" class="headerlink" title="互斥锁mutex"></a>互斥锁mutex</h4><p>用于保证在任何时刻，都只能有一个线程访问该对象。当获取锁操作失败时，线程会进入睡眠，等待锁释放时被唤醒。</p>
+<h4 id="读写锁rwlock"><a href="#读写锁rwlock" class="headerlink" title="读写锁rwlock"></a>读写锁rwlock</h4><p>分为读锁和写锁。处于读操作时，可以允许多个线程同时获得读操作。但是同一时刻只能有一个线程可以获得写锁。其它获取写锁失败的线程都会进入睡眠状态，直到写锁释放时被唤醒。 注意：写锁会阻塞其它读写锁。当有一个线程获得写锁在写时，读锁也不能被其它线程获取；写者优先于读者（一旦有写者，则后续读者必须等待，唤醒时优先考虑写者）。适用于读取数据的频率远远大于写数据的频率的场合。</p>
+<h3 id="互斥锁和读写锁的区别"><a href="#互斥锁和读写锁的区别" class="headerlink" title="互斥锁和读写锁的区别"></a>互斥锁和读写锁的区别</h3><ul>
+<li><p>读写锁区分读者和写者，而互斥锁不区分；</p>
+</li>
+<li><p>互斥锁同一时间只允许一个线程访问该对象，无论读写；读写锁同一时间内只允许一个写者，但是允许多个读者同时读对象。</p>
+</li>
+</ul>
+<h3 id="Linux的4种锁机制"><a href="#Linux的4种锁机制" class="headerlink" title="Linux的4种锁机制"></a>Linux的4种锁机制</h3><h4 id="互斥锁mutex-1"><a href="#互斥锁mutex-1" class="headerlink" title="互斥锁mutex"></a>互斥锁mutex</h4><p>用于保证在任何时刻，都只能有一个线程访问该对象。当获取锁操作失败时，线程会进入睡眠，等待锁释放时被唤醒。</p>
+<h4 id="读写锁rwlock-1"><a href="#读写锁rwlock-1" class="headerlink" title="读写锁rwlock"></a>读写锁rwlock</h4><p>分为读锁和写锁。处于读操作时，可以允许多个线程同时获得读操作。但是同一时刻只能有一个线程可以获得写锁。其它获取写锁失败的线程都会进入睡眠状态，直到写锁释放时被唤醒。 注意：写锁会阻塞其它读写锁。当有一个线程获得写锁在写时，读锁也不能被其它线程获取；写者优先于读者（一旦有写者，则后续读者必须等待，唤醒时优先考虑写者）。适用于读取数据的频率远远大于写数据的频率的场合。</p>
+<h4 id="自旋锁spinlock"><a href="#自旋锁spinlock" class="headerlink" title="自旋锁spinlock"></a>自旋锁spinlock</h4><p>在任何时刻同样只能有一个线程访问对象。但是当获取锁操作失败时，不会进入睡眠，而是会在原地自旋，直到锁被释放。这样节省了线程从睡眠状态到被唤醒期间的消耗，在加锁时间短暂的环境下会极大的提高效率。但如果加锁时间过长，则会非常浪费CPU资源。</p>
+<h4 id="RCU（read-copy-update）"><a href="#RCU（read-copy-update）" class="headerlink" title="RCU（read-copy-update）"></a>RCU（read-copy-update）</h4><p>在修改数据时，首先需要读取数据，然后生成一个副本，对副本进行修改。修改完成后，再将老数据update成新的数据。使用RCU时，读者几乎不需要同步开销，既不需要获得锁，也不使用原子指令，不会导致锁竞争，因此就不用考虑死锁问题了。而对于写者的同步开销较大，它需要复制被修改的数据，还必须使用锁机制同步并行其它写者的修改操作。在有大量读操作，少量写操作的情况下效率非常高。</p>
+<h2 id="说一说进程状态转换图，动态就绪，静态就绪，动态阻塞，静态阻塞"><a href="#说一说进程状态转换图，动态就绪，静态就绪，动态阻塞，静态阻塞" class="headerlink" title="说一说进程状态转换图，动态就绪，静态就绪，动态阻塞，静态阻塞"></a>说一说进程状态转换图，动态就绪，静态就绪，动态阻塞，静态阻塞</h2><h3 id="进程的5种基本状态"><a href="#进程的5种基本状态" class="headerlink" title="进程的5种基本状态"></a>进程的5种基本状态</h3><p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/进程状态转换图.png" srcset="/img/loading.gif" alt="进程状态转换图"></p>
+<ol>
+<li><p>创建状态：进程正在被创建；</p>
+</li>
+<li><p>就绪状态：进程被加入到就绪队列中等待CPU调度运行；</p>
+</li>
+<li><p>执行状态：进程正在被运行；</p>
+</li>
+<li><p>等待阻塞状态：进程因为某种原因，比如等待I/O，等待设备，而暂时不能运行；</p>
+</li>
+<li><p>终止状态：进程运行完毕。</p>
+</li>
+</ol>
+<h3 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a>交换技术</h3><p>当多个进程竞争内存资源时，会造成内存资源紧张，并且，如果此时没有就绪进程，处理机会空闲，I/0速度比处理机速度慢得多，可能出现全部进程阻塞等待I/O。</p>
+<p>针对以上问题，提出了两种解决方法：</p>
+<ul>
+<li><p>交换技术：换出一部分进程到外存，腾出内存空间。</p>
+</li>
+<li><p>虚拟存储技术：每个进程只能装入一部分程序和数据。</p>
+</li>
+</ul>
+<p>在交换技术上，将内存暂时不能运行的进程，或者暂时不用的数据和程序，换出到外存，来腾出足够的内存空间，把已经具备运行条件的进程，或进程所需的数据和程序换入到内存。</p>
+<p>从而出现了进程的挂起状态：进程被交换到外存，进程状态就成为了挂起状态。</p>
+<h3 id="活动阻塞，静止阻塞，活动就绪，静止就绪"><a href="#活动阻塞，静止阻塞，活动就绪，静止就绪" class="headerlink" title="活动阻塞，静止阻塞，活动就绪，静止就绪"></a>活动阻塞，静止阻塞，活动就绪，静止就绪</h3><ul>
+<li><p>活动阻塞：进程在内存，但是由于某种原因被阻塞了。</p>
+</li>
+<li><p>静止阻塞：进程在外存，同时被某种原因阻塞了。</p>
+</li>
+<li><p>活动就绪：进程在内存，处于就绪状态，只要给CPU和调度就可以直接运行。</p>
+</li>
+<li><p>静止就绪：进程在外存，处于就绪状态，只要调度到内存，给CPU和调度就可以运行。</p>
+</li>
+</ul>
+<p>从而出现了：</p>
+<p>活动就绪 ——  静止就绪（内存不够，调到外存）</p>
+<p>活动阻塞 ——  静止阻塞（内存不够，调到外存）</p>
+<p>执行     ——  静止就绪（时间片用完）</p>
+<h2 id="给你一个类，里面有static、virtual之类的，来说一说这个类的内存分布"><a href="#给你一个类，里面有static、virtual之类的，来说一说这个类的内存分布" class="headerlink" title="给你一个类，里面有static、virtual之类的，来说一说这个类的内存分布"></a>给你一个类，里面有static、virtual之类的，来说一说这个类的内存分布</h2><h3 id="static修饰符"><a href="#static修饰符" class="headerlink" title="static修饰符"></a>static修饰符</h3><h4 id="static修饰成员变量"><a href="#static修饰成员变量" class="headerlink" title="static修饰成员变量"></a>static修饰成员变量</h4><p>对于非静态数据成员，每个类对象都有自己的拷贝。而静态数据成员被当做是类的成员，无论这个类被定义了多少个，静态数据成员都只有一份拷贝，为该类型的所有对象所共享（包括其派生类）。所以，静态数据成员的值对每个对象都是一样的，它的值可以更新。</p>
+<p>因为静态数据成员在全局数据区分配内存，属于本类的所有对象共享，所以它不属于特定的类对象，在没有产生类对象前就可以使用。</p>
+<h4 id="static修饰成员函数"><a href="#static修饰成员函数" class="headerlink" title="static修饰成员函数"></a>static修饰成员函数</h4><p><strong>与普通的成员函数相比，静态成员函数由于不是与任何的对象相联系，因此它不具有this指针。从这个意义上来说，它无法访问属于类对象的非静态数据成员，也无法访问非静态成员函数，只能调用其他的静态成员函数。</strong></p>
+<p>static修饰的成员函数，在代码区分配内存。</p>
+<h3 id="C-继承和虚函数"><a href="#C-继承和虚函数" class="headerlink" title="C++继承和虚函数"></a>C++继承和虚函数</h3><p>C++多态分为静态多态和动态多态。静态多态是通过重载和模板技术实现，在编译的时候确定。动态多态通过虚函数和继承关系来实现，执行动态绑定，在运行的时候确定。</p>
+<p>动态多态实现有几个条件：</p>
+<ol>
+<li><p>虚函数；</p>
+</li>
+<li><p>一个基类的指针或引用指向派生类的对象；</p>
+</li>
+</ol>
+<p>基类指针在调用成员函数（虚函数）时，就会去查找该对象的虚函数表。虚函数表的地址在每个对象的首地址。查找该虚函数表中该函数的指针进行调用。</p>
+<p>每个对象中保存的只是一个虚函数表的指针，C++内部为每一个类维持一个虚函数表，该类的对象的都指向这同一个虚函数表。</p>
+<p>虚函数表中为什么就能准确查找相应的函数指针呢？因为在类设计的时候，虚函数表直接从基类也继承过来，如果覆盖了其中的某个虚函数，那么虚函数表的指针就会被替换，因此可以根据指针准确找到该调用哪个函数。</p>
+<h3 id="virtual修饰符"><a href="#virtual修饰符" class="headerlink" title="virtual修饰符"></a>virtual修饰符</h3><p><strong>如果一个类是局部变量则该类数据存储在栈区，如果一个类是通过new/malloc动态申请的，则该类数据存储在堆区。</strong></p>
+<p>如果该类是virutal继承而来的子类，则该类的虚函数表指针和该类其他成员一起存储。虚函数表指针指向只读数据段中的类虚函数表，虚函数表中存放着一个个函数指针，函数指针指向代码段中的具体函数。</p>
+<p>如果类中成员是virtual属性，会隐藏父类对应的属性。</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/栈区堆区.png" srcset="/img/loading.gif" alt="栈区堆区"></p>
+<h2 id="回答一下软链接和硬链接区别"><a href="#回答一下软链接和硬链接区别" class="headerlink" title="回答一下软链接和硬链接区别"></a>回答一下软链接和硬链接区别</h2><p>为了解决文件共享问题，Linux引入了软链接和硬链接。除了为Linux解决文件共享使用，还带来了隐藏文件路径、增加权限安全及节省存储等好处。</p>
+<ul>
+<li>若1个inode号对应多个文件名，则为硬链接，即硬链接就是同一个文件使用了不同的 <strong>别名</strong>，使用 <code>ln</code> 创建。</li>
+<li>若文件用户数据块中存放的内容是另一个文件的路径名指向，则该文件是软连接。软连接是一个普通文件，<strong>有自己独立的inode</strong>，但是其数据块内容比较特殊。</li>
+</ul>
+<h2 id="什么是大端小端以及如何判断大端小端"><a href="#什么是大端小端以及如何判断大端小端" class="headerlink" title="什么是大端小端以及如何判断大端小端"></a>什么是大端小端以及如何判断大端小端</h2><p>大端是指低字节存储在高地址；小端存储是指低字节存储在低地址。</p>
+<p>我们可以根据联合体来判断该系统是大端还是小端。因为联合体变量总是从低地址存储。</p>
+<p><img src="/2020/03/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%B4%E7%90%86/测试大端小端.png" srcset="/img/loading.gif" alt="测试大端小端"></p>
+<h2 id="静态变量什么时候初始化"><a href="#静态变量什么时候初始化" class="headerlink" title="静态变量什么时候初始化"></a>静态变量什么时候初始化</h2><p>静态变量存储在虚拟地址空间的数据段和BSS段。</p>
+<p>C语言中其在代码执行之前初始化，属于编译期初始化。</p>
+<p>而C++中由于引入对象，对象生成必须调用构造函数，因此C++规定全局或局部静态对象当且仅当对象首次用到时进行构造。</p>
+<h2 id="说一说用户态和内核态区别"><a href="#说一说用户态和内核态区别" class="headerlink" title="说一说用户态和内核态区别"></a>说一说用户态和内核态区别</h2><p>用户态和内核态是操作系统的两种运行级别，<strong>两者最大的区别就是特权级不同</strong>。用户态拥有最低的特权级，内核态拥有较高的特权级。运行在用户态的程序不能直接访问操作系统内核数据结构和程序。</p>
+<p>内核态和用户态之间的转换方式主要包括：系统调用、异常和中断。</p>
+<h2 id="如何设计server，使得能够接收多个客户端的请求"><a href="#如何设计server，使得能够接收多个客户端的请求" class="headerlink" title="如何设计server，使得能够接收多个客户端的请求"></a>如何设计server，使得能够接收多个客户端的请求</h2><p>多线程，线程池，IO复用</p>
+<h2 id="死循环-来连接时新建线程的方法效率有点低，怎么改进"><a href="#死循环-来连接时新建线程的方法效率有点低，怎么改进" class="headerlink" title="死循环+来连接时新建线程的方法效率有点低，怎么改进"></a>死循环+来连接时新建线程的方法效率有点低，怎么改进</h2><p>提前创建好一个线程池，用生产者消费者模型，创建一个任务队列，队列作为临界资源，有了新连接，就挂在到任务队列上，队列为空所有线程睡眠。</p>
+<p>改进死循环：使用select epoll这样的技术。</p>
+<h2 id="怎么唤醒被阻塞的socket线程"><a href="#怎么唤醒被阻塞的socket线程" class="headerlink" title="怎么唤醒被阻塞的socket线程"></a>怎么唤醒被阻塞的socket线程</h2><p>给阻塞时候缺少的资源。</p>
+<h2 id="怎样确定当前线程是繁忙还是阻塞"><a href="#怎样确定当前线程是繁忙还是阻塞" class="headerlink" title="怎样确定当前线程是繁忙还是阻塞"></a>怎样确定当前线程是繁忙还是阻塞</h2><p>使用ps命令查看。</p>
+<h2 id="请问就绪状态的进程在等待什么"><a href="#请问就绪状态的进程在等待什么" class="headerlink" title="请问就绪状态的进程在等待什么"></a>请问就绪状态的进程在等待什么</h2><p>被调度使用cpu的运行权。</p>
+<h2 id="说一说多线程的同步，锁的机制"><a href="#说一说多线程的同步，锁的机制" class="headerlink" title="说一说多线程的同步，锁的机制"></a>说一说多线程的同步，锁的机制</h2><p>同步的时候用一个互斥量，在访问共享资源前对互斥量进行加锁，在访问完成后释放互斥量上的锁。对互斥量进行加锁以后，任何其他试图再次对互斥量加锁的线程将会被阻塞直到当前线程释放该互斥锁。如果释放互斥锁时有多个线程阻塞，所有在该互斥锁上的阻塞线程都会变成可运行状态，第一个变为运行状态的线程可以对互斥量加锁，其他线程将会看到互斥锁依然被锁住，只能回去再次等待它重新变为可用。在这种方式下，每次只有一个线程可以向前执行。</p>
+<h2 id="两个进程访问临界区资源，会不会出现都获得自旋锁的情况"><a href="#两个进程访问临界区资源，会不会出现都获得自旋锁的情况" class="headerlink" title="两个进程访问临界区资源，会不会出现都获得自旋锁的情况"></a>两个进程访问临界区资源，会不会出现都获得自旋锁的情况</h2><p>单核cpu，并且开了抢占可以造成这种情况。</p>
+<h2 id="说一说内存溢出和内存泄漏"><a href="#说一说内存溢出和内存泄漏" class="headerlink" title="说一说内存溢出和内存泄漏"></a>说一说内存溢出和内存泄漏</h2><h3 id="内存溢出"><a href="#内存溢出" class="headerlink" title="内存溢出"></a>内存溢出</h3><p>指程序申请内存时，没有足够的内存供申请者使用。内存溢出就是你要的内存空间超过了系统实际分配给你的空间，此时系统相当于没法满足你的需求，就会报内存溢出的错误。</p>
+<h4 id="内存溢出原因"><a href="#内存溢出原因" class="headerlink" title="内存溢出原因"></a>内存溢出原因</h4><ul>
+<li><p>内存中加载的数据量过于庞大，如一次从数据库取出过多数据；</p>
+</li>
+<li><p>集合类中有对对象的引用，使用完后未清空，使得不能回收；</p>
+</li>
+<li><p>代码中存在死循环或循环产生过多重复的对象实体；</p>
+</li>
+<li><p>使用的第三方软件中的BUG；</p>
+</li>
+<li><p>启动参数内存值设定的过小。</p>
+</li>
+</ul>
+<h3 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h3><p>内存泄漏是指由于疏忽或错误造成了程序未能释放掉不再使用的内存的情况。内存泄漏并非指内存在物理上的消失，而是应用程序分配某段内存后，由于设计错误，失去了对该段内存的控制，因而造成了内存的浪费。</p>
+<h4 id="内存泄漏的分类"><a href="#内存泄漏的分类" class="headerlink" title="内存泄漏的分类"></a>内存泄漏的分类</h4><ol>
+<li><p>堆内存泄漏（Heap leak）。对内存指的是程序运行中根据需要分配通过malloc、realloc、new等从堆中分配的一块内存，再是完成后必须通过调用对应的free或者delete删掉。如果程序的设计的错误导致这部分内存没有被释放，那么此后这块内存将不会被使用，就会产生Heap Leak。</p>
+</li>
+<li><p>系统资源泄露（Resource Leak）。主要指程序使用系统分配的资源比如Bitmap、handle、socket等没有使用相应的函数释放掉，导致系统资源的浪费，严重可导致系统效能降低，系统运行不稳定。</p>
+</li>
+<li><p>没有将基类的析构函数定义为虚函数。当基类指针指向子类对象时，如果基类的析构函数不是virtual，那么子类的析构函数将不会被调用，子类的资源没有正确是释放，因此造成内存泄露。</p>
+</li>
+</ol>
+<h2 id="常用线程模型"><a href="#常用线程模型" class="headerlink" title="常用线程模型"></a>常用线程模型</h2><h3 id="Future模型"><a href="#Future模型" class="headerlink" title="Future模型"></a>Future模型</h3><p>该模型通常在使用的时候需要结合Callable接口配合使用。</p>
+<p>Future是把结果放在将来获取，当前主线程并不急于获取处理结果。允许子线程先进行处理一段时间，处理结束之后就把结果保存下来，当主线程需要使用的时候再向子线程索取。</p>
+<p>Callable是类似于Runnable的接口，其中call方法类似于run方法，所不同的是run方法不能抛出受检异常没有返回值，而call方法则可以抛出受检异常并可设置返回值。两者的方法体都是线程执行体。</p>
+<h3 id="fork-amp-join模型"><a href="#fork-amp-join模型" class="headerlink" title="fork&amp;join模型"></a>fork&amp;join模型</h3><p>该模型包含递归思想和回溯思想，递归用来拆分任务，回溯用合并结果。可以用来处理一些可以进行拆分的大任务。其主要是把一个大任务逐级拆分为多个子任务，然后分别在子线程中执行，当每个子线程执行结束之后逐级回溯，返回结果进行汇总合并，最终得出想要的结果。</p>
+<p>这里模拟一个摘苹果的场景：有100棵苹果树，每棵苹果树有10个苹果，现在要把他们摘下来。为了节约时间，规定每个线程最多只能摘10棵苹树以便于节约时间。各个线程摘完之后汇总计算总苹果树。</p>
+<h3 id="actor模型"><a href="#actor模型" class="headerlink" title="actor模型"></a>actor模型</h3><p>actor模型属于一种基于消息传递机制并行任务处理思想，它以消息的形式来进行线程间数据传输，避免了全局变量的使用，进而避免了数据同步错误的隐患。actor在接受到消息之后可以自己进行处理，也可以继续传递（分发）给其它actor进行处理。在使用actor模型的时候需要使用第三方Akka提供的框架。</p>
+<h3 id="生产者消费者模型"><a href="#生产者消费者模型" class="headerlink" title="生产者消费者模型"></a>生产者消费者模型</h3><p>生产者消费者模型都比较熟悉，其核心是使用一个缓存来保存任务。开启一个/多个线程来生产任务，然后再开启一个/多个来从缓存中取出任务进行处理。这样的好处是任务的生成和处理分隔开，生产者不需要处理任务，只负责向生成任务然后保存到缓存。而消费者只需要从缓存中取出任务进行处理。使用的时候可以根据任务的生成情况和处理情况开启不同的线程来处理。比如，生成的任务速度较快，那么就可以灵活的多开启几个消费者线程进行处理，这样就可以避免任务的处理响应缓慢的问题。</p>
+<h3 id="master-worker模型"><a href="#master-worker模型" class="headerlink" title="master-worker模型"></a>master-worker模型</h3><p>master-worker模型类似于任务分发策略，开启一个master线程接收任务，然后在master中根据任务的具体情况进行分发给其它worker子线程，然后由子线程处理任务。如需返回结果，则worker处理结束之后把处理结果返回给master。</p>
+<h2 id="说一说协程"><a href="#说一说协程" class="headerlink" title="说一说协程"></a>说一说协程</h2><h3 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h3><p>协程，又称微线程，纤程，英文名Coroutine。协程看上去也是子程序，但执行过程中，在子程序内部可中断，然后转而执行别的子程序，在适当的时候再返回来接着执行。</p>
+<p>例如：</p>
+<pre><code class="lang-Python">def A():
+    print(&#39;1&#39;)
+    print(&#39;2&#39;)
+    print(&#39;3&#39;)
+def B():
+    print(&#39;x&#39;)
+    print(&#39;y&#39;)
+    print(&#39;z&#39;)
+</code></pre>
+<p>由协程运行结果可能是12x3yz。在执行A的过程中，可以随时中断，去执行B，B也可能在执行过程中中断再去执行A。但协程的特点在于是一个线程执行。</p>
+<h3 id="协程和线程区别"><a href="#协程和线程区别" class="headerlink" title="协程和线程区别"></a>协程和线程区别</h3><p>那和多线程比，协程最大的优势就是协程极高的执行效率。</p>
+<p>因为子程序切换不是线程切换，而是由程序自身控制，因此，<strong>没有线程切换的开销</strong>，和多线程比，线程数量越多，协程的性能优势就越明显。</p>
+<p>第二大优势就是 <strong>不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突</strong>，在协程中控制共享资源不加锁，只需要判断状态就好了，所以执行效率比多线程高很多。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>在协程上利用多核CPU呢——多进程+协程，既充分利用多核，又充分发挥协程的高效率，可获得极高的性能。</p>
+<p>Python对协程的支持还非常有限，用在generator中的yield可以一定程度上实现协程。虽然支持不完全，但已经可以发挥相当大的威力了。</p>
+<h2 id="系统调用是什么，你用过哪些系统调用"><a href="#系统调用是什么，你用过哪些系统调用" class="headerlink" title="系统调用是什么，你用过哪些系统调用"></a>系统调用是什么，你用过哪些系统调用</h2><h3 id="概念-3"><a href="#概念-3" class="headerlink" title="概念"></a>概念</h3><p>在计算机中，系统调用（英语：system call），又称为系统呼叫，指运行在使用者空间的程序向操作系统内核请求需要更高权限运行的服务。系统调用提供了用户程序与操作系统之间的接口（即系统调用是用户程序和内核交互的接口）。</p>
+<p>操作系统中的状态分为管态（内核态）和目态（用户态）。大多数系统交互式操作需求在内核态执行。如设备IO操作或者进程间通信。特权指令：一类只能在核心态下运行而不能在用户态下运行的特殊指令。不同的操作系统特权指令会有所差异，但是一般来说主要是和硬件相关的一些指令。用户程序只在用户态下运行，有时需要访问系统核心功能，这时通过系统调用接口使用系统调用。</p>
+<p>应用程序有时会需要一些危险的、权限很高的指令，如果把这些权限放心地交给用户程序是很危险的（比如一个进程可能修改另一个进程的内存区，导致其不能运行），但是又不能完全不给这些权限。于是有了系统调用，危险的指令被包装成系统调用，用户程序只能调用而无权自己运行那些危险的指令。另外，计算机硬件的资源是有限的，为了更好的管理这些资源，所有的资源都由操作系统控制，进程只能向操作系统请求这些资源。操作系统是这些资源的唯一入口，这个入口就是系统调用。</p>
+<h3 id="系统调用举例"><a href="#系统调用举例" class="headerlink" title="系统调用举例"></a>系统调用举例</h3><p>对文件进行写操作，程序向打开的文件写入字符串“hello world”，open和write都是系统调用。如下：</p>
+<pre><code class="lang-C++">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+#include &lt;fcntl.h&gt;
+int main(int argc, char *argv[])
+{
+    if (argc &lt; 2)
+        return 0;
+    //用读写追加方式打开一个已经存在的文件
+    int fd = open(argv[1], O_RDWR | O_APPEND);
+    if (fd == -1)
+    {
+        printf(&quot;error is %s\n&quot;, strerror(errno));
+    }
+    else
+    {
+        //打印文件描述符号
+        printf(&quot;success fd = %d\n&quot;, fd);
+        char buf[100];
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, &quot;hello world\n&quot;);
+        write(fd, buf, strlen(buf));
+        close(fd);
+    }
+    return 0;
+}
+</code></pre>
+<p>还有写数据write，创建进程fork，vfork等都是系统调用。</p>
+<h2 id="手写一下fork调用示例"><a href="#手写一下fork调用示例" class="headerlink" title="手写一下fork调用示例"></a>手写一下fork调用示例</h2><h3 id="概念-4"><a href="#概念-4" class="headerlink" title="概念"></a>概念</h3><p>fork：创建一个和当前进程映像一样的进程可以通过 <code>fork()</code> 系统调用：</p>
+<p>成功调用 <code>fork()</code> 会创建一个新的进程，它几乎与调用 <code>fork()</code> 的进程一模一样，这两个进程都会继续运行。在子进程中，成功的 <code>fork()</code> 调用会返回0。在父进程中 <code>fork()</code> 返回子进程的pid。如果出现错误，<code>fork()</code> 返回一个负值。</p>
+<p>最常见的 <code>fork()</code> 用法是创建一个新的进程，然后使用exec()载入二进制映像，替换当前进程的映像。这种情况下，派生（fork）了新的进程，而这个子进程会执行一个新的二进制可执行文件的映像。这种“派生加执行”的方式是很常见的。</p>
+<p>在早期的Unix系统中，创建进程比较原始。当调用fork时，内核会把所有的内部数据结构复制一份，复制进程的页表项，然后把父进程的地址空间中的内容逐页的复制到子进程的地址空间中。但从内核角度来说，逐页的复制方式是十分耗时的。现代的Unix系统采取了更多的优化，例如Linux，采用了写时复制的方法，而不是对父进程空间进程整体复制。</p>
+<h3 id="fork实例"><a href="#fork实例" class="headerlink" title="fork实例"></a>fork实例</h3><pre><code class="lang-C++">int main(void)
+{
+    pid_t pid;
+    signal(SIGCHLD, SIG_IGN);
+    printf(&quot;before fork pid:%d\n&quot;, getpid());
+    int abc = 10;
+    pid = fork();
+    if (pid == -1) //错误返回
+    {
+        perror(&quot;tile&quot;);
+        return -1;
+    }
+    if (pid &gt; 0) //父进程空间
+    {
+        abc++;
+        printf(&quot;parent:pid:%d \n&quot;, getpid());
+        printf(&quot;abc:%d \n&quot;, abc);
+        sleep(20);
+    }
+    else if (pid == 0) //子进程空间
+    {
+        abc++;
+        printf(&quot;child:%d, parent: %d\n&quot;, getpid(), getppid());
+        printf(&quot;abc:%d&quot;, abc);
+    }
+    printf(&quot;fork after...\n&quot;);
+}
+</code></pre>
+<h2 id="说一说用户态到内核态的转化原理"><a href="#说一说用户态到内核态的转化原理" class="headerlink" title="说一说用户态到内核态的转化原理"></a>说一说用户态到内核态的转化原理</h2><h3 id="用户态切换到内核态的3种方式"><a href="#用户态切换到内核态的3种方式" class="headerlink" title="用户态切换到内核态的3种方式"></a>用户态切换到内核态的3种方式</h3><ol>
+<li><p>系统调用</p>
+<p>  这是用户进程主动要求切换到内核态的一种方式，用户进程通过系统调用申请操作系统提供的服务程序完成工作。而系统调用的机制其核心还是使用了操作系统为用户特别开放的一个中断来实现，例如Linux的ine 80h中断。</p>
+</li>
+<li><p>异常</p>
+<p>  当CPU在执行运行在用户态的程序时，发现了某些事件不可知的异常，这是会触发由当前运行进程切换到处理此。异常的内核相关程序中，也就到了内核态，比如缺页异常。</p>
+</li>
+<li><p>外围设备的中断</p>
+<p>  当外围设备完成用户请求的操作之后，会向CPU发出相应的中断信号，这时CPU会暂停执行下一条将要执行的指令，转而去执行中断信号的处理程序，如果先执行的指令是用户态下的程序，那么这个转换的过程自然也就发生了有用户态到内核态的切换。比如硬盘读写操作完成，系统会切换到硬盘读写的中断处理程序中执行后续操作等。</p>
+</li>
+</ol>
+<h3 id="切换操作"><a href="#切换操作" class="headerlink" title="切换操作"></a>切换操作</h3><p>从出发方式看，可以在认为存在前述3种不同的类型，但是从最终实际完成由用户态到内核态的切换操作上来说，涉及的关键步骤是完全一样的，没有任何区别，都相当于执行了一个中断响应的过程，因为系统调用实际上最终是中断机制实现的，而异常和中断处理机制基本上是一样的，用户态切换到内核态的步骤主要包括：</p>
+<ol>
+<li><p>从当前进程的描述符中提取其内核栈的ss0及esp0信息；</p>
+</li>
+<li><p>使用ss0和esp0指向的内核栈将当前进程的cs、eip、eflags、ss、esp信息保存起来，这个过程也完成了由用户栈找到内核栈的切换过程，同时保存了被暂停执行的程序的下一条指令；</p>
+</li>
+<li><p>将先前由中断向量检索得到的中断处理程序的cs、eip信息装入相应的寄存器，开始执行中断处理程序，这时就转到了内核态的程序执行了。</p>
+</li>
+</ol>
+<h2 id="说一下源码到可执行文件的过程"><a href="#说一下源码到可执行文件的过程" class="headerlink" title="说一下源码到可执行文件的过程"></a>说一下源码到可执行文件的过程</h2><h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><p>主要处理源代码文件中的以 <code>#</code> 开头的预编译指令。处理规则见下</p>
+<ol>
+<li><p>删除所有的 <code>#define</code>，展开所有的宏定义。</p>
+</li>
+<li><p>处理所有的条件预编译指令，如 <code>#if</code>、<code>#endif</code>、<code>#ifdef</code>、<code>#elif</code> 和 <code>#else</code>。</p>
+</li>
+<li><p>处理 <code>#include</code> 预编译指令，将文件内容替换到它的位置，这个过程是递归进行的，文件中包含其他文件。</p>
+</li>
+<li><p>删除所有的注释，<code>//</code> 和 <code>/**/</code>。</p>
+</li>
+<li><p>保留所有的 <code>#pragma</code> 编译器指令，编译器需要用到他们，如：<code>#pragma once</code> 是为了防止有文件被重复引用。</p>
+</li>
+<li><p>添加行号和文件标识，便于编译时编译器产生调试用的行号信息，和编译时产生编译错误或警告是能够显示行号。</p>
+</li>
+</ol>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>把预编译之后生成的 <code>xxx.i</code> 或 <code>xxx.ii</code> 文件，进行一系列词法分析、语法分析、语义分析及优化后，生成相应的汇编代码文件。</p>
+<ol>
+<li><p>词法分析：利用类似于“有限状态机”的算法，将源代码程序输入到扫描机中，将其中的字符序列分割成一系列的记号。</p>
+</li>
+<li><p>语法分析：语法分析器对由扫描器产生的记号，进行语法分析，产生语法树。由语法分析器输出的语法树是一种以表达式为节点的树。</p>
+</li>
+<li><p>语义分析：语法分析器只是完成了对表达式语法层面的分析，语义分析器则对表达式是否有意义进行判断，其分析的语义是静态语义——在编译期能分期的语义，相对应的动态语义是在运行期才能确定的语义。</p>
+</li>
+<li><p>优化：源代码级别的一个优化过程。</p>
+</li>
+<li><p>目标代码生成：由代码生成器将中间代码转换成目标机器代码，生成一系列的代码序列——汇编语言表示。</p>
+</li>
+<li><p>目标代码优化：目标代码优化器对上述的目标机器代码进行优化：寻找合适的寻址方式、使用位移来替代乘法运算、删除多余的指令等。</p>
+</li>
+</ol>
+<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><p>将汇编代码转变成机器可以执行的指令（机器码文件）。 汇编器的汇编过程相对于编译器来说更简单，没有复杂的语法，也没有语义，更不需要做指令优化，只是根据汇编指令和机器指令的对照表一一翻译过来，汇编过程有汇编器as完成。经汇编之后，产生目标文件（与可执行文件格式几乎一样）<code>xxx.o（Windows下）</code>、<code>xxx.obj（Linux下）</code>。</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>将不同的源文件产生的目标文件进行链接，从而形成一个可以执行的程序。链接分为静态链接和动态链接：</p>
+<h4 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h4><p>函数和数据被编译进一个二进制文件。在使用静态库的情况下，在编译链接可执行文件时，链接器从库中复制这些函数和数据并把它们和应用程序的其它模块组合起来创建最终的可执行文件。</p>
+<p>空间浪费：因为每个可执行程序中对所有需要的目标文件都要有一份副本，所以如果多个程序对同一个目标文件都有依赖，会出现同一个目标文件都在内存存在多个副本；</p>
+<p>更新困难：每当库函数的代码修改了，这个时候就需要重新进行编译链接形成可执行程序。</p>
+<p>运行速度快：但是静态链接的优点就是，在可执行程序中已经具备了所有执行程序所需要的任何东西，在执行的时候运行速度快。</p>
+<h4 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h4><p>动态链接的基本思想是把程序按照模块拆分成各个相对独立部分，在程序运行时才将它们链接在一起形成一个完整的程序，而不是像静态链接一样把所有程序模块都链接成一个单独的可执行文件。</p>
+<p>共享库：就是即使需要每个程序都依赖同一个库，但是该库不会像静态链接那样在内存中存在多分，副本，而是这多个程序在执行时共享同一份副本；</p>
+<p>更新方便：更新时只需要替换原来的目标文件，而无需将所有的程序再重新链接一遍。当程序下一次运行时，新版本的目标文件会被自动加载到内存并且链接起来，程序就完成了升级的目标。</p>
+<p>性能损耗：因为把链接推迟到了程序运行时，所以每次执行程序都需要进行链接，所以性能会有一定损失。</p>
+<h2 id="说一下微内核与宏内核"><a href="#说一下微内核与宏内核" class="headerlink" title="说一下微内核与宏内核"></a>说一下微内核与宏内核</h2><h3 id="宏内核"><a href="#宏内核" class="headerlink" title="宏内核"></a>宏内核</h3><p>除了最基本的进程、线程管理、内存管理外，将文件系统、驱动、网络协议等等都集成在内核里面，例如Linux内核。</p>
+<ul>
+<li>优点：效率高。</li>
+<li>缺点：稳定性差，开发过程中的bug经常会导致整个系统挂掉。</li>
+</ul>
+<h3 id="微内核"><a href="#微内核" class="headerlink" title="微内核"></a>微内核</h3><p>内核中只有最基本的调度、内存管理。驱动、文件系统等都是用户态的守护进程去实现的。</p>
+<ul>
+<li>优点：稳定。驱动等的错误只会导致相应进程死掉，不会导致整个系统都崩溃。</li>
+<li>缺点：效率低。典型代表QNX，QNX的文件系统是跑在用户态的进程，称为resmgr的东西，是订阅发布机制，文件系统的错误只会导致这个守护进程挂掉。不过数据吞吐量就比较不乐观了。</li>
+</ul>
+<h2 id="说一下僵尸进程"><a href="#说一下僵尸进程" class="headerlink" title="说一下僵尸进程"></a>说一下僵尸进程</h2><h3 id="正常进程"><a href="#正常进程" class="headerlink" title="正常进程"></a>正常进程</h3><p>正常情况下，子进程是通过父进程创建的，子进程再创建新的进程。子进程的结束和父进程的运行是一个异步过程，即父进程永远无法预测子进程到底什么时候结束。 当一个进程完成它的工作终止之后，它的父进程需要调用 <code>wait()</code> 或者 <code>waitpid()</code> 系统调用取得子进程的终止状态。</p>
+<p>Unix提供了一种机制可以保证只要父进程想知道子进程结束时的状态信息， 就可以得到：在每个进程退出的时候，内核释放该进程所有的资源，包括打开的文件、占用的内存等。但是仍然为其保留一定的信息，直到父进程通过wait / waitpid来取时才释放。</p>
+<p>保存信息包括：</p>
+<ol>
+<li><p>进程号the process ID</p>
+</li>
+<li><p>退出状态the termination status of the process</p>
+</li>
+<li><p>运行时间the amount of CPU time taken by the process等</p>
+</li>
+</ol>
+<h3 id="孤儿进程"><a href="#孤儿进程" class="headerlink" title="孤儿进程"></a>孤儿进程</h3><p>一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。孤儿进程将被init进程（进程号为1）所收养，并由init进程对它们完成状态收集工作。</p>
+<h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3><p>一个进程使用fork创建子进程，如果子进程退出，而父进程并没有调用wait或waitpid获取子进程的状态信息，那么子进程的进程描述符仍然保存在系统中。这种进程称之为僵尸进程。</p>
+<p>僵尸进程是一个进程必然会经过的过程：这是每个子进程在结束时都要经过的阶段。</p>
+<p>如果子进程在exit()之后，父进程没有来得及处理，这时用ps命令就能看到子进程的状态是“Z”。如果父进程能及时处理，可能用ps命令就来不及看到子进程的僵尸状态，但这并不等于子进程不经过僵尸状态。</p>
+<p>如果父进程在子进程结束之前退出，则子进程将由init接管。init将会以父进程的身份对僵尸状态的子进程进行处理。</p>
+<h4 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h4><p>如果进程不调用wait / waitpid的话， 那么保留的那段信息就不会释放，其进程号就会一直被占用，但是系统所能使用的进程号是有限的，如果大量的产生僵死进程，将因为没有可用的进程号而导致系统不能产生新的进程。</p>
+<h4 id="外部消灭"><a href="#外部消灭" class="headerlink" title="外部消灭"></a>外部消灭</h4><p>通过kill发送SIGTERM或者SIGKILL信号消灭产生僵尸进程的进程，它产生的僵死进程就变成了孤儿进程，这些孤儿进程会被init进程接管，init进程会wait()这些孤儿进程，释放它们占用的系统进程表中的资源。</p>
+<h4 id="内部解决"><a href="#内部解决" class="headerlink" title="内部解决"></a>内部解决</h4><ol>
+<li><p>子进程退出时向父进程发送SIGCHLD信号，父进程处理SIGCHLD信号。在信号处理函数中调用wait进行处理僵尸进程。</p>
+</li>
+<li><p>fork两次，原理是将子进程成为孤儿进程，从而其的父进程变为init进程，通过init进程可以处理僵尸进程。</p>
+</li>
+</ol>
+<h2 id="GDB调试用过吗，什么是条件断点"><a href="#GDB调试用过吗，什么是条件断点" class="headerlink" title="GDB调试用过吗，什么是条件断点"></a>GDB调试用过吗，什么是条件断点</h2><h3 id="GDB调试"><a href="#GDB调试" class="headerlink" title="GDB调试"></a>GDB调试</h3><p>GDB 是自由软件基金会（Free Software Foundation）的软件工具之一。它的作用是协助程序员找到代码中的错误。如果没有GDB的帮助，程序员要想跟踪代码的执行流程，唯一的办法就是添加大量的语句来产生特定的输出。但这一手段本身就可能会引入新的错误，从而也就无法对那些导致程序崩溃的错误代码进行分析。</p>
+<p>GDB的出现减轻了开发人员的负担，他们可以在程序运行的时候单步跟踪自己的代码，或者通过断点暂时中止程序的执行。此外，他们还能够随时察看变量和内存的当前状态，并监视关键的数据结构是如何影响代码运行的。</p>
+<h3 id="条件断点"><a href="#条件断点" class="headerlink" title="条件断点"></a>条件断点</h3><p>条件断点是当满足条件就中断程序运行，命令：break line-or-function if expr。</p>
+<p>例如：(gdb)break 666 if testsize==100</p>
+<h2 id="介绍一下5种IO模型"><a href="#介绍一下5种IO模型" class="headerlink" title="介绍一下5种IO模型"></a>介绍一下5种IO模型</h2><ol>
+<li><p>阻塞IO：调用者调用了某个函数，等待这个函数返回，期间什么也不做，不停的去检查这个函数有没有返回，必须等这个函数返回才能进行下一步动作。</p>
+</li>
+<li><p>非阻塞IO：非阻塞等待，每隔一段时间就去检测IO事件是否就绪。没有就绪就可以做其他事。</p>
+</li>
+<li><p>信号驱动IO：Linux用套接口进行信号驱动IO，安装一个信号处理函数，进程继续运行并不阻塞，当IO时间就绪，进程收到SIGIO信号。然后处理IO事件。</p>
+</li>
+<li><p>IO复用/多路转接IO：linux用select/poll函数实现IO复用模型，这两个函数也会使进程阻塞，但是和阻塞IO所不同的是这两个函数可以同时阻塞多个IO操作。而且可以同时对多个读操作、写操作的IO函数进行检测。知道有数据可读或可写时，才真正调用IO操作函数。</p>
+</li>
+<li><p>异步IO：Linux中，可以调用aio_read函数告诉内核描述字缓冲区指针和缓冲区的大小、文件偏移及通知的方式，然后立即返回，当内核将数据拷贝到缓冲区后，再通知应用程序。</p>
+</li>
+</ol>
+<h2 id="说一说异步编程的事件循环"><a href="#说一说异步编程的事件循环" class="headerlink" title="说一说异步编程的事件循环"></a>说一说异步编程的事件循环</h2><p>事件循环就是不停循环等待时间的发生，然后将这个事件的所有处理器，以及他们订阅这个事件的时间顺序依次依次执行。当这个事件的所有处理器都被执行完毕之后，事件循环就会开始继续等待下一个事件的触发，不断往复。当同时并发地处理多个请求时，以上的概念也是正确的，可以这样理解：在单个的线程中，事件处理器是一个一个按顺序执行的。即如果某个事件绑定了两个处理器，那么第二个处理器会在第一个处理器执行完毕后，才开始执行。在这个事件的所有处理器都执行完毕之前，事件循环不会去检查是否有新的事件触发。在单个线程中，一切都是有顺序地一个一个地执行的。</p>
+<h2 id="操作系统为什么要分内核态和用户态"><a href="#操作系统为什么要分内核态和用户态" class="headerlink" title="操作系统为什么要分内核态和用户态"></a>操作系统为什么要分内核态和用户态</h2><p>为了安全性。</p>
+<p>在CPU的一些指令中，有的指令如果用错，将会导致整个系统崩溃。分了内核态和用户态后，当用户需要操作这些指令时候，内核为其提供了API，可以通过系统调用陷入内核，让内核去执行这些操作。</p>
+<h2 id="为什么要有page-cache，操作系统怎么设计的page-cache"><a href="#为什么要有page-cache，操作系统怎么设计的page-cache" class="headerlink" title="为什么要有page cache，操作系统怎么设计的page cache"></a>为什么要有page cache，操作系统怎么设计的page cache</h2><p>加快从磁盘读取文件的速率。</p>
+<p>page cache中有一部分磁盘文件的缓存，因为从磁盘中读取文件比较慢，所以读取文件先去page cache中去查找，如果命中，则不需要去磁盘中读取，大大加快读取速度。在 Linux 内核中，文件的每个数据块最多只能对应一个 Page Cache 项，它通过两个数据结构来管理这些 Cache<br>项，一个是radix tree，另一个是双向链表。Radix tree 是一种搜索树，Linux内核利用这个数据结构来通过文件内偏移快速定位Cache项。</p>
+<h2 id="server端监听端口，但还没有客户端连接进来，此时进程处于什么状态"><a href="#server端监听端口，但还没有客户端连接进来，此时进程处于什么状态" class="headerlink" title="server端监听端口，但还没有客户端连接进来，此时进程处于什么状态"></a>server端监听端口，但还没有客户端连接进来，此时进程处于什么状态</h2><p>这个需要看服务端的编程模型，如果如上一个问题的回答描述的这样，则处于阻塞状态，如果使用了epoll、select等这样的io复用情况下，处于运行状态。</p>
+<h2 id="怎么实现线程池"><a href="#怎么实现线程池" class="headerlink" title="怎么实现线程池"></a>怎么实现线程池</h2><ol>
+<li>设置一个生产者消费者队列，作为临界资源；</li>
+<li>初始化n个线程，并让其运行起来，加锁去队列取任务运行；</li>
+<li>当任务队列为空的时候，所有线程阻塞；</li>
+<li>当生产者队列来了一个任务后，先对队列加锁，把任务挂在到队列上，然后使用条件变量去通知阻塞中的一个线程。</li>
+</ol>
+<h2 id="Linux下怎么得到一个文件的100到200行"><a href="#Linux下怎么得到一个文件的100到200行" class="headerlink" title="Linux下怎么得到一个文件的100到200行"></a>Linux下怎么得到一个文件的100到200行</h2><pre><code class="lang-shell">sed -n &#39;100,200p&#39; inputfile
+awk &#39;NR&gt;=100&amp;&amp;NR&lt;=200{print}&#39; inputfile
+head -200 inputfile|tail -100
+</code></pre>
+<h2 id="说一下linux内核中的Timer定时器机制"><a href="#说一下linux内核中的Timer定时器机制" class="headerlink" title="说一下linux内核中的Timer定时器机制"></a>说一下linux内核中的Timer定时器机制</h2><h3 id="低精度时钟"><a href="#低精度时钟" class="headerlink" title="低精度时钟"></a>低精度时钟</h3><p>Linux 2.6.16之前，内核只支持低精度时钟，内核定时器的工作方式：</p>
+<ol>
+<li><p>系统启动后，会读取时钟源设备（RTC、HPET、PIT……），初始化当前系统时间。</p>
+</li>
+<li><p>内核会根据HZ（系统定时器频率，节拍率）参数值，设置时钟事件设备，启动tick（节拍）中断。HZ表示1秒种产生多少个时钟硬件中断，tick就表示连续两个中断的间隔时间。</p>
+</li>
+<li><p>设置时钟事件设备后，时钟事件设备会定时产生一个tick中断，触发时钟中断处理函数，更新系统时钟,并检测timer wheel，进行超时事件的处理。</p>
+</li>
+</ol>
+<p>在上面工作方式下，Linux 2.6.16 之前，内核软件定时器采用timer wheel多级时间轮的实现机制，维护操作系统的所有定时事件。timer wheel的触发是基于系统tick周期性中断。</p>
+<p>所以说这之前，linux只能支持ms级别的时钟，随着时钟源硬件设备的精度提高和软件高精度计时的需求，有了高精度时钟的内核设计。</p>
+<h3 id="高精度时钟"><a href="#高精度时钟" class="headerlink" title="高精度时钟"></a>高精度时钟</h3><p>Linux 2.6.16 ，内核支持了高精度的时钟，内核采用新的定时器hrtimer，其实现逻辑和Linux 2.6.16 之前定时器逻辑区别：</p>
+<p>hrtimer采用红黑树进行高精度定时器的管理，而不是时间轮；</p>
+<p>高精度时钟定时器不在依赖系统的tick中断，而是基于事件触发。</p>
+<p>旧内核的定时器实现依赖于系统定时器硬件定期的tick，基于该tick，内核会扫描timer wheel处理超时事件，会更新jiffies，wall time（墙上时间，现实时间），process的使用时间等等工作。</p>
+<p>新的内核不再会直接支持周期性的tick，新内核定时器框架采用了基于事件触发，而不是以前的周期性触发。新内核实现了hrtimer（high resolution timer）：于事件触发。</p>
+<p>hrtimer的工作原理：</p>
+<p>通过将高精度时钟硬件的下次中断触发时间设置为红黑树中最早到期的Timer的时间，时钟到期后从红黑树中得到下一个 Timer 的到期时间，并设置硬件，如此循环反复。</p>
+<p>在高精度时钟模式下，操作系统内核仍然需要周期性的tick中断，以便刷新内核的一些任务。hrtimer是基于事件的，不会周期性出发tick中断，所以为了实现周期性的tick中断（dynamic tick）：系统创建了一个模拟 tick 时钟的特殊 hrtimer，将其超时时间设置为一个tick时长，在超时回来后，完成对应的工作，然后再次设置下一个tick的超时时间，以此达到周期性tick中断的需求。</p>
+<p>引入了dynamic tick，是为了能够在使用高精度时钟的同时节约能源，这样会产生tickless 情况下，会跳过一些 tick。</p>
+<p>新内核对相关的时间硬件设备进行了统一的封装，定义了主要有下面两个结构：</p>
+<p>时钟源设备（closk source device）：抽象那些能够提供计时功能的系统硬件，比如 RTC（Real Time Clock）、TSC（Time Stamp Counter），HPET，ACPI PM-Timer，PIT等。不同时钟源提供的精度不一样，现在pc大都是支持高精度模式（high-resolution mode）也支持低精度模式（low-resolution mode）。</p>
+<p>时钟事件设备（clock event device）：系统中可以触发 one-shot（单次）或者周期性中断的设备都可以作为时钟事件设备。</p>
+<p>当前内核同时存在新旧timer wheel 和 hrtimer两套timer的实现，内核启动后会进行从低精度模式到高精度时钟模式的切换，hrtimer模拟的tick中断将驱动传统的低精度定时器系统（基于时间轮）和内核进程调度。</p>
 ]]></content>
       <categories>
         <category>面经知识汇总</category>
@@ -300,6 +1691,13 @@
 </ul>
 </li>
 </ul>
+<h3 id="C-的多态"><a href="#C-的多态" class="headerlink" title="C++的多态"></a>C++的多态</h3><p>多态的定义简单来说就是使一条语句有多种状态。</p>
+<h4 id="重载"><a href="#重载" class="headerlink" title="重载"></a>重载</h4><h5 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h5><p>重载是在 <strong>同一作用域</strong> 内（不管是模块内还是类内，只要是在同一作用域内），具有相同函数名，不同的形参个数或者形参类型。返回值可以相同也可以不同（在函数名、形参个数、形参类型都相同而返回值类型不同的情况下无法构成重载，编译器报错。这个道理很简单，在函数调用的时候是不看返回值类型的）。</p>
+<h5 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h5><p>重载是一种静态多态，即在编译的时候确定的。C++实现重载的方式是跟编译器有关，编译过后C++的函数名会发生改变，会带有形参个数、类型以及返回值类型的信息（虽然带有返回值类型但是返回值类型不能区分这个函数），所以编译器能够区分具有不同形参个数或者类型以及相同函数名的函数。插一句，在C语言中编译器编译过后函数名中不会带有形参个数以及类型的信息，因此C语言没有重载的特性。由此带来麻烦的一点是如果想要在C++中调用C语言的库，需要特殊的操作（extern “C”{}）。库中的函数经过C编译器编译的话会生成不带有形参信息的函数名，而用C++的编译器编译过后会生成带有形参信息的函数名，因此将会找不到这个函数。extern “C”{}的作用是使在这个作用域中的语句用C编译器编译，这样就不会出错。这也是一种语言兼容性的问题。</p>
+<h4 id="重写"><a href="#重写" class="headerlink" title="重写"></a>重写</h4><h5 id="实现方式-1"><a href="#实现方式-1" class="headerlink" title="实现方式"></a>实现方式</h5><p>重写是在 <strong>不同作用域内（一个在父类一个在子类）</strong>，函数名、形参个数、形参类型、返回值类型都相同并且父类中带有virtual关键字（换言之子类中带不带virtual都没有关系）**。有一种特殊的情况：函数返回值类型可以不同但是必须是指针或者引用，并且两个虚函数的返回值之间必须要构成父子类关系。这种情况称之为协变，也是一种重写。引入协变的好处是为了避免危险的类型转换。</p>
+<h5 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h5><p>重写是一种动态多态，即在运行时确定的。C++实现重写的方式也跟编译器有关，编译器在实例化一个具有虚函数的类时会生成一个vptr指针 <strong>（这就是为什么静态函数、友元函数不能声明为虚函数，因为它们不实例化也可以调用，而虚函数必须要实例化，这也是为什么构造函数不能声明为虚函数，因为你要调用虚函数必须得要有vptr指针，而构造函数此时还没有被调用，内存中还不存在vptr指针，逻辑上矛盾了）</strong>。vptr指针在类的内存空间中占最低地址的四字节。vptr指针指向的空间称为虚函数表，vptr指针指向其表头，在虚函数表里面按声明顺序存放了虚函数的函数指针，如果在子类中重写了，在子类的内存空间中也会产生一个vptr指针，同时会把父类的虚函数表copy一下当做自己的，然后如果在子类中重新声明了虚函数，会按声明顺序接在父类的虚函数函数指针下。而子类中重写的虚函数则会替换掉虚函数表中原先父类的虚函数函数指针。重点来了，在调用虚函数时，不管调用他的是父类的指针、引用还是子类的指针、引用，他都不管，只看他所指向或者引用的对象的类型（这也称为动态联编），如果是父类的对象，那就调用父类里面的vptr指针然后找到相应的虚函数，如果是子类的对象，那就调用子类里面的vptr指针然后找到相应的虚函数。当然这样子的过程相比静态多态而言，时间和空间上的开销都多了（这也是为什么内联函数为什么不能声明为虚函数，因为这和内联函数加快执行速度的初衷相矛盾）。</p>
+<h4 id="重定义"><a href="#重定义" class="headerlink" title="重定义"></a>重定义</h4><h5 id="实现方式-2"><a href="#实现方式-2" class="headerlink" title="实现方式"></a>实现方式</h5><p>重定义是在 <strong>不同作用域内的（一个在父类一个在子类）</strong>，只要函数名相同，且不构成重写，均称之为重定义</p>
+<h5 id="实现原理-2"><a href="#实现原理-2" class="headerlink" title="实现原理"></a>实现原理</h5><p>重定义的实现原理跟继承树中函数的寻找方式有关，他会从当前对象的类作用域内开始查找同名的函数，如果没有找到就一直向上查找直到基类为止。如果找到一个同名的函数就停止。这也就说明他不管函数的形参类型或者个数是不是一样，只要函数名一样，他就认为是找到了，如果这时候形参类型或者个数不一致，编译器就会报错。多重继承的查找，如果在同一层内出现一样的函数声明那么编译器会报错不知道调用哪一个函数，这类问题也叫钻石继承问题。钻石问题的解决方案可以通过虚继承来实现，这样就不会存在多个一样的函数声明。</p>
 <h3 id="static关键字的作用"><a href="#static关键字的作用" class="headerlink" title="static关键字的作用"></a>static关键字的作用</h3><ol>
 <li><p><strong>全局静态变量</strong><br>在全局变量前加上关键字static，全局变量就定义成一个全局静态变量。<br>静态存储区，在整个程序运行期间一直存在。<br>初始化：未经初始化的全局静态变量会被自动初始化为 <code>0</code>（自动对象的值是任意的，除非他被显式初始化）；<br>作用域：全局静态变量在声明他的文件之外是不可见的，准确地说是从定义之处开始，到文件结尾。</p>
 </li>
@@ -455,7 +1853,7 @@
 <h3 id="介绍一下C-中的智能指针"><a href="#介绍一下C-中的智能指针" class="headerlink" title="介绍一下C++中的智能指针"></a>介绍一下C++中的智能指针</h3><p>智能指针主要用于管理在堆上分配的内存，它将普通的指针封装为一个栈对象。当栈对象的生存周期结束后，会在析构函数中释放掉申请的内存，从而防止内存泄漏。C++11中最常用的智能指针类型为 <code>shared_ptr</code>，它采用引用计数的方法，记录当前内存资源被多少个智能指针引用。该引用计数的内存在堆上分配。当新增一个时引用计数加1，当过期时引用计数减一。只有引用计数为 <code>0</code> 时，智能指针才会自动释放引用的内存资源。对 <code>shared_ptr</code> 进行初始化时不能将一个普通指针直接赋值给智能指针，因为一个是指针，一个是类。可以通过 <code>make_shared</code> 函数或者通过构造函数传入普通指针。并可以通过 <code>get</code> 函数获得普通指针。</p>
 <h3 id="回答一下智能指针有没有内存泄露的情况"><a href="#回答一下智能指针有没有内存泄露的情况" class="headerlink" title="回答一下智能指针有没有内存泄露的情况"></a>回答一下智能指针有没有内存泄露的情况</h3><p>当两个对象相互使用一个 <code>shared_ptr</code> 成员变量指向对方，会造成循环引用，使引用计数失效，从而导致内存泄漏。</p>
 <h3 id="智能指针的内存泄漏如何解决"><a href="#智能指针的内存泄漏如何解决" class="headerlink" title="智能指针的内存泄漏如何解决"></a>智能指针的内存泄漏如何解决</h3><p>为了解决循环引用导致的内存泄漏，引入了 <code>weak_ptr</code> 弱指针，<code>weak_ptr</code> 的构造函数不会修改引用计数的值，从而不会对对象的内存进行管理，其类似一个普通指针，但 <strong>不指向引用计数的共享内存</strong>，但是其可以检测到所管理的对象是否已经被释放，从而避免非法访问。</p>
-<h3 id="c-中的引用和指针"><a href="#c-中的引用和指针" class="headerlink" title="c++中的引用和指针"></a>c++中的引用和指针</h3><p><strong>定义：</strong></p>
+<h3 id="C-中的引用和指针"><a href="#C-中的引用和指针" class="headerlink" title="C++中的引用和指针"></a>C++中的引用和指针</h3><p><strong>定义：</strong></p>
 <ol>
 <li><p><code>引用</code>：<br>C++是C语言的继承，它可进行过程化程序设计，又可以进行以抽象数据类型为特点的基于对象的程序设计，还可以进行以继承和多态为特点的面向对象的程序设计。引用就是C++对C语言的重要扩充。引用就是某一变量的一个别名，对引用的操作与对变量直接操作完全一样。引用的声明方法：<code>类型标识符 &amp;引用名=目标变量名;</code>引用引入了对象的一个同义词。定义引用的表示方法与定义指针相似，只是用 <code>&amp;</code> 代替了 <code>*</code>。</p>
 </li>
@@ -520,6 +1918,7 @@ pid_t fork(void);
 </ol>
 <p>值得一提的是，析构函数和构造函数的调用顺序相反。</p>
 <h3 id="说一下静态函数和虚函数的区别"><a href="#说一下静态函数和虚函数的区别" class="headerlink" title="说一下静态函数和虚函数的区别"></a>说一下静态函数和虚函数的区别</h3><p>静态函数在编译的时候就已经确定运行时机，虚函数在运行的时候动态绑定。虚函数因为用了虚函数表机制，调用的时候会增加一次内存开销。</p>
+<p><img src="/2020/03/21/C++%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/虚函数表.jpg" srcset="/img/loading.gif" alt="虚函数表"></p>
 <h3 id="说一说重载和覆盖"><a href="#说一说重载和覆盖" class="headerlink" title="说一说重载和覆盖"></a>说一说重载和覆盖</h3><ul>
 <li><code>重载</code>：两个函数名相同，但是参数列表不同（个数，类型），返回值类型没有要求，在同一作用域中。</li>
 <li><code>重写</code>：子类继承了父类，父类中的函数是虚函数，在子类中重新定义了这个虚函数，这种情况是重写。</li>
@@ -556,9 +1955,33 @@ pid_t fork(void);
 <h3 id="写个函数在main函数执行前先运行"><a href="#写个函数在main函数执行前先运行" class="headerlink" title="写个函数在main函数执行前先运行"></a>写个函数在main函数执行前先运行</h3><p>有2种方式：</p>
 <ol>
 <li><p>法1</p>
-<pre><code class="lang-C"> __attribute((constructor))void before()
+<pre><code class="lang-C"> __attribute__((constructor))void before()
  {
      printf(&quot;before main\n&quot;);
+ }
+</code></pre>
+<p> 或者</p>
+<pre><code class="lang-C"> #include &lt;stdio.h&gt;
+ #include &lt;stdlib.h&gt;
+
+ static void before(void) __attribute__((constructor));
+ static void after(void) __attribute__((destructor));
+
+ static void before()
+ {
+     printf(&quot;before main\n&quot;);
+ }
+
+ static void after(void)
+ {
+     printf(&quot;after main\n&quot;);
+ }
+
+ int main()
+ {
+
+     printf(&quot;main\n&quot;);
+     return 0;
  }
 </code></pre>
 </li>
