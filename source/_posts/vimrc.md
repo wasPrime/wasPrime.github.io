@@ -90,7 +90,7 @@ set fileencodings=utf-8,gbk
 :autocmd FileType python :set smartindent
 ```
 
-## Install Vim plugin
+## Vim Plugin Commands
 
 ```vim
 <!-- Install specific plugin such as  -->
