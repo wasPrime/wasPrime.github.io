@@ -2,7 +2,7 @@
 
 ## Install node
 
-Install `node` from <https://www.nodejs.org>
+Install `node` from <https://nodejs.org>
 
 ## Install Hexo
 
@@ -13,18 +13,64 @@ sudo npm install hexo-cli -g
 npm install hexo-deployer-git --save
 ```
 
-## Run
+More info:
+
+- [Hexo](https://hexo.io/)
+- [Hexo documentation](https://hexo.io/docs/)
+- [Hexo troubleshooting](https://hexo.io/docs/troubleshooting.html)
+- [Hexo GitHub issues](https://github.com/hexojs/hexo/issues)
+
+## Quick Start
+
+### Clone
 
 ```bash
 git clone git@github.com:wasPrime/wasPrime.github.io.git
+```
 
+### Init
+
+```bash
 hexo init
+```
+
+### Create a new page
+
+```bash
 hexo new "page_name" # hexo new
+```
+
+More info: [Writing](https://hexo.io/docs/writing.html)
+
+### Clean cache
+
+```bash
 hexo clean
+```
+
+### Generate static files
+
+```bash
 hexo g # hexo generate
+```
+
+More info: [Generating](https://hexo.io/docs/generating.html)
+
+### Run local server
+
+```bash
 hexo s # hexo server
+```
+
+More info: [Server](https://hexo.io/docs/server.html)
+
+### Deploy to remote sites
+
+``` bash
 hexo deploy -g # hexo deploy
 ```
+
+More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
 
 ## Theme
 
@@ -47,4 +93,4 @@ Adjust to custom setting by changing `_config.fluid.yml`.
 
 ## Pages Configuration
 
-Refer to <https://hexo.io/docs/front-matter> if adding tags and so on.
+Refer to <https://hexo.io/docs/front-matter> if any property need to be added or updated such as `categories` `tags`.
