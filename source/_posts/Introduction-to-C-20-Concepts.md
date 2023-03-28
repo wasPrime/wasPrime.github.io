@@ -243,7 +243,7 @@ auto sum = add(1, 2);
 Addable auto sum = add(1, 2);
 ```
 
-### Best Pratice: Prefer concept names over `auto` for local variables[^prefer-concept-names-over-auto-for-local-variables]
+### Best Pratice: Prefer concept names over `auto` for local variables[^1]
 
 ```C++
 template <typename T>
@@ -256,7 +256,7 @@ concept Sequence = requires(T t) {
 Sequence auto container = std::vector<int>{1, 2, 3};
 ```
 
-[^prefer-concept-names-over-auto-for-local-variables]:[ISOCPP C++ Core Guidelines T.12](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#t12-prefer-concept-names-over-auto-for-local-variables)
+[^1]: [ISOCPP C++ Core Guidelines T.12](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#t12-prefer-concept-names-over-auto-for-local-variables)
 
 ### Association: static interface/polymorphism
 
