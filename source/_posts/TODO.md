@@ -1,7 +1,7 @@
 ---
 title: TODO
 tags:
-- TODO
+- todo
 ---
 
 {% note primary %}
@@ -12,7 +12,7 @@ List what category of articles would be written.
 
 - [ ] Deleter in `std::shared_ptr`
 - [ ] What is `enable_shared_from_this`
-- [ ] Concepts
+- [x] ~~Concepts~~
 - [ ] Coroutines
 - [ ] Ranges
 - [ ] Modules
