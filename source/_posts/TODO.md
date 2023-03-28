@@ -11,6 +11,7 @@ List what category of articles would be written.
 ## C++
 
 - [ ] Deleter in `std::shared_ptr`
+- [ ] What is `enable_shared_from_this`
 - [ ] Concepts
 - [ ] Coroutines
 - [ ] Ranges
