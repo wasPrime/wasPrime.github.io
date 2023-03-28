@@ -1,7 +1,7 @@
 ---
 title: Introduction to C++20 Concepts
 categories:
-- dev
+- [dev, cpp]
 tags:
 - cpp
 - cpp20

@@ -1,8 +1,9 @@
 ---
 title: Configurate Vim
 categories:
-- configuration
+- [configuration, vim]
 tags:
+- configuration
 - vim
 ---
 
