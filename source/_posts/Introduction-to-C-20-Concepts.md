@@ -328,7 +328,7 @@ concept Clonable = requires (C clonable) {
 };
 ```
 
-### Rewrite the previous example by `Concepts`
+## Rewrite the previous example by `Concepts`
 
 It's time to rewrite the previous example by `Concepts`!
 
