@@ -12,7 +12,7 @@ tags:
 
 If we declare multiple classes:
 
-```cpp
+```C++
 class Base {...};
 class Derived : public Base {...};
 class NotDerived {...};
@@ -22,7 +22,7 @@ I ever met a situation where I would like to deserialize a string expression int
 
 The original declaration of the parser:
 
-```cpp
+```C++
 template <typename T>
 int parse(const std::string& input, std::shared_ptr<T>& output) {...}
 
@@ -45,7 +45,7 @@ For readability and debugging, it is necessary to express constaints explicitly.
 
 Here is a kind of implmentation in C++11:
 
-```cpp
+```C++
 template <typename T>
 typename std::enable_if<std::is_base_of<Base, T>::value, int>::type
   parse(const std::string& input, std::shared_ptr<T>& output) {...}
@@ -57,7 +57,7 @@ But it's invasive! We had modified the appearance of the return type `int`.
 
 We can rewrite it in another form:
 
-```cpp
+```C++
 // `std::enable_if<bool>` is equivalent to `std::enable_if<bool, void>`
 template <typename T, typename = typename std::enable_if<std::is_base_of<Base, T>::value>::type>
 int parse(const std::string& input, std::shared_ptr<T>& output) {...}
@@ -75,7 +75,7 @@ After C++17 `xxx_v<T>` is available and it's equivalent to `xxx<T>::value`
 
 The previous code can be rewrited as below:
 
-```cpp
+```C++
 template <typename T, typename = std::enable_if_t<std::is_base_of_v<Base, T>>>
 int parse(const std::string& input, std::shared_ptr<T>& output) {...}
 ```
@@ -90,7 +90,7 @@ At the end of this page, this example rewritten by `concepts` will be shown.
 
 ## The simplest concepts
 
-```cpp
+```C++
 template <typename T>
 concept Any = true;
 
@@ -104,7 +104,7 @@ It's easy to understand that concepts are essentially compile-time constant bool
 
 Here provides a way to reuse constexpr bool so that we may have impression that concepts can be united with constexpr bool.
 
-```cpp
+```C++
 template <typename T>
 inline constexpr bool is_any_v = true;
 
@@ -116,14 +116,14 @@ concept Any = is_any_v<T>;
 
 Assume we had declared a concept named whose declaration like below:
 
-```cpp
+```C++
 template <typename T>
 concept Addable = requires(T x, T y) { x + y; };
 ```
 
 The concept has at least these 3 ways to use:
 
-```cpp
+```C++
 template <typename T>
 requires Addable<T>
 auto add1(T x, T y) {
@@ -131,14 +131,14 @@ auto add1(T x, T y) {
 }
 ```
 
-```cpp
+```C++
 template <Addable T> // Equivalent to template <Addable<> T>
 auto add2(T x, T y) {
   return x + y;
 }
 ```
 
-```cpp
+```C++
 auto add3(Addable auto x, Addable auto y) {
   return x + y;
 }
@@ -146,7 +146,7 @@ auto add3(Addable auto x, Addable auto y) {
 
 ## Constraints on member functions
 
-```cpp
+```C++
 class PowerThing {
 public:
   int power() { return 0; }
@@ -170,7 +170,7 @@ In this case, I would like to show two places to notice:
 
 ## Constraints on member variables
 
-```cpp
+```C++
 class PowerThing {
 public:
   int power;
@@ -202,14 +202,14 @@ I've introduced how to write a concept that indicates a single type is addable. 
 
 It's not really hard and we can quickly make it:
 
-```cpp
+```C++
 template <typename T, typename Y>
 concept Addable = requires(T t, Y y) { t + y; };
 ```
 
 And we can also summarize its usage with 3 forms corresponding to the single type concept.
 
-```cpp
+```C++
 template <typename T, typename Y>
   requires Addable<T, Y>
 auto add1(T t, Y y) {
@@ -217,14 +217,14 @@ auto add1(T t, Y y) {
 }
 ```
 
-```cpp
+```C++
 template <typename Y, Addable<Y> T>
 auto add2(T t, Y y) {
   return t + y;
 }
 ```
 
-```cpp
+```C++
 auto add3(auto y, Addable<decltype(y)> auto t) {
   return t + y;
 }
@@ -234,7 +234,7 @@ The second and the third look weird. They are similar to the syntactic sugar jus
 
 ## Constraints on return values
 
-```cpp
+```C++
 Addable auto add(Addable auto x, Addable auto y) { return x + y; }
 
 // Bad case:
@@ -245,7 +245,7 @@ Addable auto sum = add(1, 2);
 
 ### Best Pratice: Prefer concept names over `auto` for local variables[^prefer-concept-names-over-auto-for-local-variables]
 
-```cpp
+```C++
 template <typename T>
 concept Sequence = requires(T t) {
                      t.begin()++;
@@ -260,7 +260,7 @@ Sequence auto container = std::vector<int>{1, 2, 3};
 
 ### Association: static interface/polymorphism
 
-```cpp
+```C++
 template <typename T>
 concept Sequence = requires(T t) {...};
 
@@ -288,7 +288,7 @@ Most importantly, it's readable compared with a single `auto`.
 
 ## Anonymous Concept
 
-```cpp
+```C++
 template <typename Container>
   requires
     /* Anonymous concept begin */
@@ -311,7 +311,7 @@ I summarize it as a best practice.
 
 ### The Duplicative Form
 
-```cpp
+```C++
 template<typename C>
 concept Clonable = requires (C clonable) {
   clonable.clone();
@@ -321,7 +321,7 @@ concept Clonable = requires (C clonable) {
 
 ### The Concise Form
 
-```cpp
+```C++
 template<typename C>
 concept Clonable = requires (C clonable) {
   { clonable.clone() } -> std::same_as<C>;
@@ -334,14 +334,14 @@ It's time to rewrite the previous example by `Concepts`!
 
 Let's review the previous form:
 
-```cpp
+```C++
 template <typename T, typename = std::enable_if_t<std::is_base_of_v<Base, T>>>
 int parse(const std::string& input, std::shared_ptr<T>& output) {...}
 ```
 
 And rewrite it to a new form:
 
-```cpp
+```C++
 template <typename T, typename Base>
 concept InheriteFrom = std::is_base_of_v<Base, T>;
 
