@@ -930,8 +930,8 @@ tag:
   banner_img_height: 80
   banner_mask_alpha: 0.3
   tagcloud:
-    min_font: 15
-    max_font: 30
+    min_font: 20
+    max_font: 35
     unit: px
     start_color: "#BBBBEE"
     end_color: "#337ab7"
