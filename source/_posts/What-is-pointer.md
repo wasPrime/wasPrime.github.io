@@ -37,6 +37,8 @@ The result on my machine is:
 value: 1, address: 0x16fbe348c
 ```
 
+### Analysis of demo1
+
 The `&i` is used to get the address of `i`, and `%p` is formatted in hexadecimal form.
 
 So `0x16fbe348c` is the address of `i` on my machine in this execution, and it's probably not going to be this address when I do another execution or when you do an execution. It doesn't matter, as long as there is an output. :)
@@ -57,7 +59,7 @@ Now we can bring in the concept of pointer.
 We may frequently encounter something like `int* i_ptr = &i`. That's the pointer. However, we currently have at lease two questions to explain:
 
 1. How to understand it in our mind?
-2. How does it relate to the example above？
+2. How does pointer relate to the example above？
 
 In order to clearly answer them, let's take a look at another example:
 
@@ -88,6 +90,8 @@ value: 0x16db8f48c, address: 0x16db8f480
 1. At this time I did another run, the address of `i` is `0x16db8f48c` which is different with that as `0x16fbe348c` in demo1. It's normal and I won't repeat it later.
 2. The purpose of using `%p` to output the value of `i_ptr` is to output the content in hexadecimal. It's convenient to compare the address of `i` and the value of `i_ptr`.
 {% endnote %}
+
+### Analysis of demo2
 
 It's easy to find that the address of `i` and the value of `i_ptr` are the same, `0x16db8f48c`.
 
@@ -198,6 +202,8 @@ Look back the memory model about value and address we learned just now.
 
 The actual result is that a `segmentation fault` occured. If you could have foreseen this, you certainly had understood it and you wouldn't have to read on. :)
 
+### Analysis of demo3
+
 Firstly, let's analyze demo3.
 
 In memory, the `i` in `main` like this:
@@ -229,7 +235,10 @@ address            b
 
 But the `i` in `main` hasn't changed at all, so the effect of modifying `i` in `main` hasn't been achieved.
 
-Let's look at demo4 again. At the beginning, it's consistent with demo3. The memory space of i in main is as follows:
+### Analysis of demo4
+
+Let's look at demo4 again.
+At the beginning, it's consistent with demo3. The memory space of i in main is as follows:
 
 ```log
         +-----------+
@@ -259,6 +268,8 @@ address       a
 ```
 
 We modified `i` in `main` successfully by indirect access of the pointer!
+
+### Analysis of demo5
 
 Then look at demo5.
 
@@ -319,6 +330,13 @@ int main(int argc, char* argv[]) {
 ```
 
 By analyzing the memory structure from demo1 to demo5, hope you can figure out why demo6 works properly. :)
+
+### Analysis of demo6
+
+{% note info %}
+**Tips:**
+Its transformation in memory model is almost entirely indentical to demo4.
+{% endnote %}
 
 ## Pointer and Array
 
