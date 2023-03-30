@@ -98,10 +98,10 @@ It's easy to find that the address of `i` and the value of `i_ptr` are the same,
 Based on current information, we can imagine a relationship like this:
 
 ```log
-        +-----------+     +-------------------------+
-value   |   i = 1   | ----|   i_ptr = 0x16db8f48c   |
-        +-----------+   | +-------------------------+
-address  0x16db8f48c  <--         0x16db8f480
+        +-----------+       +-------------------------+
+value   |   i = 1   |   ----|   i_ptr = 0x16db8f48c   |
+        +-----------+   |   +-------------------------+
+address  0x16db8f48c  <--           0x16db8f480
 ```
 
 What we have just mentioned above is that, if we have a memory address, we can easily access the value on this address. In that way, since the value of `i_ptr` is actually the address of `i`, we can access `i` by `*i_ptr`. In other words, is's exactly equivalent between `*i_ptr = 2;` and `i = 2;`!
@@ -250,10 +250,10 @@ address       a
 When entering the function, `i_ptr` is as follows:
 
 ```log
-        +---------------+
-value   |   i_ptr = a   |
-        +---------------+
-address         b
+        +---------------+        +-----------+
+value   |   i_ptr = a   |----    |   i = 1   |
+        +---------------+   |    +-----------+
+address         b           ---------> a
 ```
 
 Note that the value of `i_ptr` (`a`) is the address of `i`.
@@ -261,10 +261,10 @@ Note that the value of `i_ptr` (`a`) is the address of `i`.
 After `*i = 2;`, `i_ptr` didn't change but `i` was modified:
 
 ```log
-        +-----------+
-value   |   i = 2   |
-        +-----------+
-address       a
+        +---------------+        +-----------+
+value   |   i_ptr = a   |----    |   i = 2   |
+        +---------------+   |    +-----------+
+address         b           ---------> a
 ```
 
 We modified `i` in `main` successfully by indirect access of the pointer!
@@ -340,4 +340,17 @@ Its transformation in memory model is almost entirely indentical to demo4.
 
 ## Pointer and Array
 
-Need to be written...
+We all know an array is a contiguous amount of memory space. For example, `int arr[3];` is like this:
+
+```log
+        +---------+---------+---------+
+value   |   int   |   int   |   int   |
+        +---------+---------+---------+
+address     arr      arr+1     arr+2
+```
+
+`arr` is actually an address. Based on it, we'll quickly think of associating pointers with arrays in this way `int* p = arr;`. Further on, we can use this pointer `p` to read or modify a particular value of the array by `p[0]` `p[1]` `p[2]`. If `x` is an index, `p[x]` means the value offseting some units from the basic address. It's equivalent to `*(p + x)` even `*((int*)((char*)p + x * sizeof(int)))`. That's it. An arithmetic offset. No magic.
+
+{% note warning %}
+Since `p[x]` is just the value based on the address accumulated by `p` and `x`, `x[p]` is also available. It's supported by most compilers, but it's a heresy, not a best practice. It's best to know this, but it's best not to use it. :)
+{% endnote %}
