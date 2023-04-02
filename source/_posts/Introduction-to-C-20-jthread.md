@@ -269,3 +269,7 @@ int main() {
     return 0;
 }
 ```
+
+{% note info %}
+Refer to <https://github.com/josuttis/jthread/tree/master/source> if needing more examples.
+{% endnote %}
