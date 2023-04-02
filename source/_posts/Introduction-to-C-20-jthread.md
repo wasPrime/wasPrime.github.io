@@ -119,7 +119,7 @@ private:
 };
 ```
 
-`std::jthread` looks basically similar to `std::thread`. It identifies the thread state by `joinable()` and adjusts the thread state by `join()`. In addition to this, we cann't ignore the member variable `stop_source` whose type is `stop_source`. What is it?
+`std::jthread` looks basically similar to `std::thread`. It identifies the thread state by `joinable()` and adjusts the thread state by `join()`. In addition to this, we cann't ignore the member variable `_Ssource` whose type is `stop_source`. What is it?
 
 ## `stop_source`
 
