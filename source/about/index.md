@@ -3,4 +3,8 @@ title: about
 layout: about
 ---
 
-wasPrime's Blog
+## Introduction
+
+Lives and works in Shanghai, China.
+
+I restarted this blog in March 2023 so that I'd have a place to dump essays about what I have been learning. :)
