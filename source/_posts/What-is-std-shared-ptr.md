@@ -6,6 +6,7 @@ categories:
 - [dev, cpp]
 tags:
 - cpp
+- cpp11
 - pointer
 - smart_pointer
 - shared_ptr

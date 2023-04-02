@@ -5,6 +5,7 @@ categories:
 - [dev, cpp]
 tags:
 - cpp
+- cpp20
 - thread
 - jthread
 ---

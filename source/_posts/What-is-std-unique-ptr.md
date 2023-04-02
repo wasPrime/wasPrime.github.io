@@ -5,6 +5,7 @@ categories:
 - [dev, cpp]
 tags:
 - cpp
+- cpp11
 - pointer
 - smart_pointer
 - unique_ptr
