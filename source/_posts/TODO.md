@@ -11,10 +11,13 @@ List what category of articles would be written.
 
 ## C++
 
-- [ ] RTTI
-- [ ] Deleter in `std::shared_ptr`
-- [ ] What is `enable_shared_from_this`
+- [x] ~~Deleter in `std::shared_ptr`~~
+- [x] ~~What is `enable_shared_from_this`~~
 - [x] ~~Concepts~~
+- [x] ~~jthread~~
+- [ ] RTTI
+- [ ] std::span
+- [ ] future
 - [ ] Coroutines
 - [ ] Ranges
 - [ ] Modules
