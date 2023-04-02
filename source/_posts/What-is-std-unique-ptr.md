@@ -25,7 +25,7 @@ After C++11, `std::unique_ptr` is used widely and it's often a best practice for
 The design philosophy of `std::unique_ptr` is simple. It's just a wrapper of a raw pointer and it controls the life cycle of the target object by RAII (especially within its destructor).
 
 {% note info %}
-Use the implementation of `std::unique_ptr` in MSVC STL.
+The implementation of `std::unique_ptr` shown in this page is from MSVC STL.
 {% endnote %}
 
 ```C++
