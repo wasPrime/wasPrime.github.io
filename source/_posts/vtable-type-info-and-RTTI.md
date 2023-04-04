@@ -47,8 +47,7 @@ int main() {
 
     const std::type_info& type = typeid(Base);
     std::cout << "type_info addr: " << &type << std::endl;
-    std::cout << "type_info size: " << std::hex << "0x" << sizeof(type)
-            << std::endl;
+    std::cout << "type_info size: " << std::hex << "0x" << sizeof(type) << std::endl;
 
     return 0;
 }
