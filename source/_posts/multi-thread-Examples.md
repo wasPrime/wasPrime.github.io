@@ -10,6 +10,7 @@ tags:
 - promise
 - future
 - packaged_task
+- shared_future
 ---
 
 ## `std::promise`
@@ -92,6 +93,51 @@ int main() {
 
     int result = future.get();
     std::cout << "result: " << result << std::endl;
+
+    return 0;
+}
+```
+
+## `std::shared_future`
+
+`future.get()` can be called only once, otherwise there is a segmentation fault.
+
+```C++
+#include <future>
+#include <iostream>
+
+int main() {
+    std::promise<int> promise;
+
+    std::future<int> future = promise.get_future();
+
+    promise.set_value(1);
+
+    std::cout << future.get() << std::endl;
+
+    // Segmentation fault when call `future.get()` secondly
+    // std::cout << future.get() << std::endl;
+
+    return 0;
+}
+```
+
+If we have to get the result from the future such as inside multiple threads, we can request for help from `std::shared_future` whose feature is a little similar to `std::shared_ptr`.
+
+```C++
+#include <future>
+#include <iostream>
+
+int main() {
+    std::promise<int> promise;
+
+    std::shared_future<int> shared_future1 = promise.get_future();
+    std::shared_future<int> shared_future2 = future1;
+
+    promise.set_value(1);
+
+    std::cout << shared_future1.get() << std::endl;
+    std::cout << shared_future2.get() << std::endl;
 
     return 0;
 }
