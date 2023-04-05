@@ -76,6 +76,7 @@ int sum_with_multi_thread(int from, int to, size_t thread_num) {
 ## `std::packaged_task`
 
 ```C++
+#include <chrono>
 #include <future>
 #include <iostream>
 
