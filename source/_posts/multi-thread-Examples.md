@@ -133,6 +133,9 @@ int main() {
     std::promise<int> promise;
 
     std::shared_future<int> shared_future1 = promise.get_future();
+    // The initialization of `shared_future1` is actually equivalent to the code below:
+    // std::future<int> future = promise.get_future();
+    // std::shared_future<int> shared_future1 = std::move(future);
     std::shared_future<int> shared_future2 = future1;
 
     promise.set_value(1);
