@@ -1,0 +1,812 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="The implementation of std::shared_ptr shown in this page is from MSVC STL.             ArchitectureclassDiagram  _Ptr_base &lt;|-- shared_ptr _Ptr_base &lt;|-- weak_ptr _Ptr_base o-- _Ref">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is std::shared_ptr">
+<meta property="og:url" content="http://wasprime.github.io/2023/04/02/What-is-std-shared-ptr/index.html">
+<meta property="og:site_name" content="wasPrime&#39;s Blog">
+<meta property="og:description" content="The implementation of std::shared_ptr shown in this page is from MSVC STL.             ArchitectureclassDiagram  _Ptr_base &lt;|-- shared_ptr _Ptr_base &lt;|-- weak_ptr _Ptr_base o-- _Ref">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-02T05:36:53.000Z">
+<meta property="article:modified_time" content="2023-04-02T16:01:10.204Z">
+<meta property="article:author" content="wasPrime">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="pointer">
+<meta property="article:tag" content="cpp11">
+<meta property="article:tag" content="smart_pointer">
+<meta property="article:tag" content="shared_ptr">
+<meta property="article:tag" content="enable_shared_from_this">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>What is std::shared_ptr - wasPrime&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wasprime.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wasPrime</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="What is std::shared_ptr"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-02 13:36" pubdate>
+          April 2, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          27k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">What is std::shared_ptr</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-info">
+            <p>The implementation of <code>std::shared_ptr</code> shown in this page is from MSVC STL.</p>
+          </div>
+
+<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><pre><code class=" mermaid">classDiagram
+
+_Ptr_base &lt;|-- shared_ptr
+_Ptr_base &lt;|-- weak_ptr
+_Ptr_base o-- _Ref_count_base
+
+_Ref_count_base &lt;|-- _Ref_count
+
+_Ptr_base: - element_type* _ptr
+_Ptr_base: - _Ref_count_base* _Rep
+_Ptr_base: - _Move_construct_from(...)
+_Ptr_base: - _Copy_construct_from(...)
+_Ptr_base: - _Alias_construct_from(...)
+_Ptr_base: - _Alias_move_construct_from(...)
+_Ptr_base: - _Construct_from_weak(...)
+_Ptr_base: - _Weakly_construct_from(...)
+
+shared_ptr: + Constructor()
+shared_ptr: + Assignment()
+shared_ptr: + Destructor()
+shared_ptr: + swap()
+shared_ptr: + get()
+shared_ptr: + reset()
+shared_ptr: + operator*
+shared_ptr: + operator-&gt;
+shared_ptr: + operator[]
+shared_ptr: + operator bool
+
+weak_ptr: + Constructor()
+weak_ptr: + Assignment()
+weak_ptr: + Destructor()
+weak_ptr: + swap()
+weak_ptr: + reset()
+weak_ptr: + expired()
+weak_ptr: + lock()
+
+_Ref_count_base: - _Atomic_counter_t _Uses
+_Ref_count_base: - _Atomic_counter_t _Weaks
+_Ref_count_base: - _Incref()
+_Ref_count_base: - _Incwref()
+_Ref_count_base: - _Decref()
+_Ref_count_base: - _Decwref()
+_Ref_count_base: - _Use_count()
+_Ref_count_base: - _Destroy()
+_Ref_count_base: - _Delete_this()
+
+_Ref_count: - _Ty* _ptr
+_Ref_count: - _Destroy()
+_Ref_count: - _Delete_this()
+</code></pre>
+
+<div class="note note-primary">
+            <p>Note that <code>element_type* _ptr</code> in <code>_Ptr_base</code> isn’t the same with <code>_Ty* _ptr</code> in <code>_Ref_count</code> strictly.</p>
+          </div>
+
+<h2 id="Control-Block-Ref-count-base"><a href="#Control-Block-Ref-count-base" class="headerlink" title="Control Block (_Ref_count_base)"></a>Control Block (<code>_Ref_count_base</code>)</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// The abstract base class of control block</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">__declspec</span>(novtable) _Ref_count_base &#123; <span class="hljs-comment">// common code for reference counting</span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// The implementations are in derived class</span><br>    <span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> _Destroy() <span class="hljs-keyword">noexcept</span>     = <span class="hljs-number">0</span>; <span class="hljs-comment">// destroy managed resource (target object)</span><br>    <span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> _Delete_this() <span class="hljs-keyword">noexcept</span> = <span class="hljs-number">0</span>; <span class="hljs-comment">// destroy self</span><br><br>    _Atomic_counter_t _Uses  = <span class="hljs-number">1</span>;<br>    _Atomic_counter_t _Weaks = <span class="hljs-number">1</span>;<br><br><span class="hljs-keyword">protected</span>:<br>    <span class="hljs-keyword">constexpr</span> _Ref_count_base() <span class="hljs-keyword">noexcept</span> = <span class="hljs-keyword">default</span>; <span class="hljs-comment">// non-atomic initializations</span><br><br><span class="hljs-keyword">public</span>:<br>    _Ref_count_base(<span class="hljs-type">const</span> _Ref_count_base&amp;) = <span class="hljs-keyword">delete</span>;<br>    _Ref_count_base&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> _Ref_count_base&amp;) = <span class="hljs-keyword">delete</span>;<br><br>    <span class="hljs-keyword">virtual</span> ~_Ref_count_base() <span class="hljs-keyword">noexcept</span> &#123;&#125; <span class="hljs-comment">// TRANSITION, should be non-virtual</span><br><br>    <span class="hljs-type">bool</span> _Incref_nz() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// increment use count if not zero, return true if successful</span><br>        <span class="hljs-keyword">auto</span>&amp; _Volatile_uses = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-keyword">volatile</span> <span class="hljs-type">long</span>&amp;&gt;(_Uses);<br>        <span class="hljs-type">long</span> _Count = __iso_volatile_load32(<span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span>*&gt;(&amp;_Volatile_uses));<br><br>        <span class="hljs-keyword">while</span> (_Count != <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-type">const</span> <span class="hljs-type">long</span> _Old_value = _INTRIN_RELAXED(_InterlockedCompareExchange)(&amp;_Volatile_uses, _Count + <span class="hljs-number">1</span>, _Count);<br>            <span class="hljs-keyword">if</span> (_Old_value == _Count) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br><br>            _Count = _Old_value;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Incref() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// increment use count</span><br>        _MT_INCR(_Uses);<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Incwref() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// increment weak reference count</span><br>        _MT_INCR(_Weaks);<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Decref() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// decrement use count</span><br>        <span class="hljs-keyword">if</span> (_MT_DECR(_Uses) == <span class="hljs-number">0</span>) &#123;<br>            _Destroy();<br>            _Decwref();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Decwref() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// decrement weak reference count</span><br>        <span class="hljs-keyword">if</span> (_MT_DECR(_Weaks) == <span class="hljs-number">0</span>) &#123;<br>            _Delete_this();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">long</span> _Use_count() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">long</span>&gt;(_Uses);<br>    &#125;<br><br>    <span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span>* _Get_deleter(<span class="hljs-type">const</span> type_info&amp;) <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ref_count</span> : <span class="hljs-keyword">public</span> _Ref_count_base &#123; <span class="hljs-comment">// handle reference counting for pointer without deleter</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">explicit</span> _Ref_count(_Ty* _Px) : _Ref_count_base(), _Ptr(_Px) &#123;&#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">void</span> _Destroy() <span class="hljs-keyword">noexcept</span> <span class="hljs-keyword">override</span> &#123; <span class="hljs-comment">// destroy managed resource</span><br>        <span class="hljs-keyword">delete</span> _Ptr;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Delete_this() <span class="hljs-keyword">noexcept</span> <span class="hljs-keyword">override</span> &#123; <span class="hljs-comment">// destroy self</span><br>        <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    _Ty* _Ptr;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Ptr-base"><a href="#Ptr-base" class="headerlink" title="Ptr_base"></a><code>Ptr_base</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ptr_base</span> &#123; <span class="hljs-comment">// base class for `shared_ptr` and `weak_ptr`</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> element_type = <span class="hljs-type">remove_extent_t</span>&lt;_Ty&gt;;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">long</span> <span class="hljs-title">use_count</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Rep ? _Rep-&gt;_Use_count() : <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">bool</span> <span class="hljs-title">owner_before</span><span class="hljs-params">(<span class="hljs-type">const</span> _Ptr_base&lt;_Ty2&gt;&amp; _Right)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-comment">// compare addresses of manager objects</span><br>        <span class="hljs-keyword">return</span> _Rep &lt; _Right._Rep;<br>    &#125;<br><br>    _Ptr_base(<span class="hljs-type">const</span> _Ptr_base&amp;) = <span class="hljs-keyword">delete</span>;<br>    _Ptr_base&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> _Ptr_base&amp;) = <span class="hljs-keyword">delete</span>;<br><br><span class="hljs-keyword">protected</span>:<br>    <span class="hljs-function">_NODISCARD element_type* <span class="hljs-title">get</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Ptr;<br>    &#125;<br><br>    <span class="hljs-keyword">constexpr</span> _Ptr_base() <span class="hljs-keyword">noexcept</span> = <span class="hljs-keyword">default</span>;<br><br>    ~_Ptr_base() = <span class="hljs-keyword">default</span>;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Move_construct_from(_Ptr_base&lt;_Ty2&gt;&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement shared_ptr&#x27;s (converting) move ctor and weak_ptr&#x27;s move ctor</span><br>        _Ptr = _Right._Ptr;<br>        _Rep = _Right._Rep;<br><br>        _Right._Ptr = <span class="hljs-literal">nullptr</span>;<br>        _Right._Rep = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Copy_construct_from(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement shared_ptr&#x27;s (converting) copy ctor</span><br>        _Other._Incref();<br><br>        _Ptr = _Other._Ptr;<br>        _Rep = _Other._Rep;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Alias_construct_from(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Other, element_type* _Px) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement shared_ptr&#x27;s aliasing ctor</span><br>        _Other._Incref();<br><br>        _Ptr = _Px;<br>        _Rep = _Other._Rep;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Alias_move_construct_from(shared_ptr&lt;_Ty2&gt;&amp;&amp; _Other, element_type* _Px) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement shared_ptr&#x27;s aliasing move ctor</span><br>        _Ptr = _Px;<br>        _Rep = _Other._Rep;<br><br>        _Other._Ptr = <span class="hljs-literal">nullptr</span>;<br>        _Other._Rep = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty0</span>&gt;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">weak_ptr</span>; <span class="hljs-comment">// specifically, weak_ptr::lock()</span><br><br>    <span class="hljs-comment">// weak -&gt; shared</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">bool</span> _Construct_from_weak(<span class="hljs-type">const</span> weak_ptr&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement shared_ptr&#x27;s ctor from weak_ptr, and weak_ptr::lock()</span><br>        <span class="hljs-keyword">if</span> (_Other._Rep &amp;&amp; _Other._Rep-&gt;_Incref_nz()) &#123;<br>            _Ptr = _Other._Ptr;<br>            _Rep = _Other._Rep;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Incref() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (_Rep) &#123;<br>            _Rep-&gt;_Incref();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Decref() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// decrement reference count</span><br>        <span class="hljs-keyword">if</span> (_Rep) &#123;<br>            _Rep-&gt;_Decref();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Swap(_Ptr_base&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// swap pointers</span><br>        <span class="hljs-function">_STD <span class="hljs-title">swap</span><span class="hljs-params">(_Ptr, _Right._Ptr)</span></span>;<br>        <span class="hljs-function">_STD <span class="hljs-title">swap</span><span class="hljs-params">(_Rep, _Right._Rep)</span></span>;<br>    &#125;<br><br>    <span class="hljs-comment">// shared -&gt; weak</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Weakly_construct_from(<span class="hljs-type">const</span> _Ptr_base&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// implement weak_ptr&#x27;s ctors</span><br>        <span class="hljs-keyword">if</span> (_Other._Rep) &#123;<br>            _Ptr = _Other._Ptr;<br>            _Rep = _Other._Rep;<br>            _Rep-&gt;_Incwref();<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _STL_INTERNAL_CHECK(!_Ptr &amp;&amp; !_Rep);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Weakly_convert_lvalue_avoiding_expired_conversions(<span class="hljs-type">const</span> _Ptr_base&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement weak_ptr&#x27;s copy converting ctor</span><br>        <span class="hljs-keyword">if</span> (_Other._Rep) &#123;<br>            _Rep = _Other._Rep; <span class="hljs-comment">// always share ownership</span><br>            _Rep-&gt;_Incwref();<br><br>            <span class="hljs-keyword">if</span> (_Rep-&gt;_Incref_nz()) &#123;<br>                _Ptr = _Other._Ptr; <span class="hljs-comment">// keep resource alive during conversion, handling virtual inheritance</span><br>                _Rep-&gt;_Decref();<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                _STL_INTERNAL_CHECK(!_Ptr);<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _STL_INTERNAL_CHECK(!_Ptr &amp;&amp; !_Rep);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">void</span> _Weakly_convert_rvalue_avoiding_expired_conversions(_Ptr_base&lt;_Ty2&gt;&amp;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// implement weak_ptr&#x27;s move converting ctor</span><br>        _Rep        = _Other._Rep; <span class="hljs-comment">// always transfer ownership</span><br>        _Other._Rep = <span class="hljs-literal">nullptr</span>;<br><br>        <span class="hljs-keyword">if</span> (_Rep &amp;&amp; _Rep-&gt;_Incref_nz()) &#123;<br>            _Ptr = _Other._Ptr; <span class="hljs-comment">// keep resource alive during conversion, handling virtual inheritance</span><br>            _Rep-&gt;_Decref();<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _STL_INTERNAL_CHECK(!_Ptr);<br>        &#125;<br><br>        _Other._Ptr = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Incwref() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (_Rep) &#123;<br>            _Rep-&gt;_Incwref();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Decwref() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// decrement weak reference count</span><br>        <span class="hljs-keyword">if</span> (_Rep) &#123;<br>            _Rep-&gt;_Decwref();<br>        &#125;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    element_type* _Ptr&#123;<span class="hljs-literal">nullptr</span>&#125;;<br>    _Ref_count_base* _Rep&#123;<span class="hljs-literal">nullptr</span>&#125;;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty0</span>&gt;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ptr_base</span>;<br><br>    <span class="hljs-keyword">friend</span> shared_ptr&lt;_Ty&gt;;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty0</span>&gt;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">atomic</span>;<br><br>    <span class="hljs-keyword">friend</span> _Exception_ptr_access;<br><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> _HAS_STATIC_RTTI</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty0</span>&gt;<br>    <span class="hljs-function"><span class="hljs-keyword">friend</span> _Dx* <span class="hljs-title">get_deleter</span><span class="hljs-params">(<span class="hljs-type">const</span> shared_ptr&lt;_Ty0&gt;&amp; _Sx)</span> <span class="hljs-keyword">noexcept</span></span>;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// _HAS_STATIC_RTTI</span></span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a><code>shared_ptr</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">shared_ptr</span> : <span class="hljs-keyword">public</span> _Ptr_base&lt;_Ty&gt; &#123; <span class="hljs-comment">// class for reference counted resource management</span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">using</span> _Mybase = _Ptr_base&lt;_Ty&gt;;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> <span class="hljs-keyword">typename</span> _Mybase::element_type;<br><br>    <span class="hljs-keyword">using</span> weak_type = weak_ptr&lt;_Ty&gt;;<br><br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-title">shared_ptr</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>= <span class="hljs-keyword">default</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-title">shared_ptr</span><span class="hljs-params">(<span class="hljs-type">nullptr_t</span>)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125; <span class="hljs-comment">// construct empty shared_ptr</span><br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;<span class="hljs-type">conditional_t</span>&lt;is_array_v&lt;_Ty&gt;, _Can_array_delete&lt;_Ux&gt;, _Can_scalar_delete&lt;_Ux&gt;&gt;,<br>                        _SP_convertible&lt;_Ux, _Ty&gt;&gt;,<br>            <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-keyword">explicit</span> <span class="hljs-built_in">shared_ptr</span>(_Ux* _Px) &#123; <span class="hljs-comment">// construct shared_ptr object that owns _Px</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">constexpr</span> (is_array_v&lt;_Ty&gt;) &#123;<br>            _Setpd(_Px, default_delete&lt;_Ux[]&gt;&#123;&#125;);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _Temporary_owner&lt;_Ux&gt; _Owner(_Px);<br>            _Set_ptr_rep_and_enable_shared(_Owner._Ptr, <span class="hljs-keyword">new</span> _Ref_count&lt;_Ux&gt;(_Owner._Ptr));<br>            _Owner._Ptr = <span class="hljs-literal">nullptr</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;is_move_constructible&lt;_Dx&gt;, _Can_call_function_object&lt;_Dx&amp;, _Ux*&amp;&gt;,<br>                        _SP_convertible&lt;_Ux, _Ty&gt;&gt;,<br>            <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(_Ux* _Px, _Dx _Dt) &#123; <span class="hljs-comment">// construct with _Px, deleter</span><br>        _Setpd(_Px, _STD <span class="hljs-built_in">move</span>(_Dt));<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Alloc</span>,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;is_move_constructible&lt;_Dx&gt;, _Can_call_function_object&lt;_Dx&amp;, _Ux*&amp;&gt;,<br>                        _SP_convertible&lt;_Ux, _Ty&gt;&gt;,<br>            <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(_Ux* _Px, _Dx _Dt, _Alloc _Ax) &#123; <span class="hljs-comment">// construct with _Px, deleter, allocator</span><br>        _Setpda(_Px, _STD <span class="hljs-built_in">move</span>(_Dt), _Ax);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;is_move_constructible&lt;_Dx&gt;, _Can_call_function_object&lt;_Dx&amp;, <span class="hljs-type">nullptr_t</span>&amp;&gt;&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(<span class="hljs-type">nullptr_t</span>, _Dx _Dt) &#123; <span class="hljs-comment">// construct with nullptr, deleter</span><br>        _Setpd(<span class="hljs-literal">nullptr</span>, _STD <span class="hljs-built_in">move</span>(_Dt));<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Alloc</span>,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;is_move_constructible&lt;_Dx&gt;, _Can_call_function_object&lt;_Dx&amp;, <span class="hljs-type">nullptr_t</span>&amp;&gt;&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(<span class="hljs-type">nullptr_t</span>, _Dx _Dt, _Alloc _Ax) &#123; <span class="hljs-comment">// construct with nullptr, deleter, allocator</span><br>        _Setpda(<span class="hljs-literal">nullptr</span>, _STD <span class="hljs-built_in">move</span>(_Dt), _Ax);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Right, element_type* _Px) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// construct shared_ptr object that aliases _Right</span><br>        <span class="hljs-keyword">this</span>-&gt;_Alias_construct_from(_Right, _Px);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(shared_ptr&lt;_Ty2&gt;&amp;&amp; _Right, element_type* _Px) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// move construct shared_ptr object that aliases _Right</span><br>        <span class="hljs-keyword">this</span>-&gt;_Alias_move_construct_from(_STD <span class="hljs-built_in">move</span>(_Right), _Px);<br>    &#125;<br><br>    <span class="hljs-built_in">shared_ptr</span>(<span class="hljs-type">const</span> shared_ptr&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// construct shared_ptr object that owns same resource as _Other</span><br>        <span class="hljs-keyword">this</span>-&gt;_Copy_construct_from(_Other);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;_SP_pointer_compatible&lt;_Ty2, _Ty&gt;::value, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// construct shared_ptr object that owns same resource as _Other</span><br>        <span class="hljs-keyword">this</span>-&gt;_Copy_construct_from(_Other);<br>    &#125;<br><br>    <span class="hljs-built_in">shared_ptr</span>(shared_ptr&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// construct shared_ptr object that takes resource from _Right</span><br>        <span class="hljs-keyword">this</span>-&gt;_Move_construct_from(_STD <span class="hljs-built_in">move</span>(_Right));<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;_SP_pointer_compatible&lt;_Ty2, _Ty&gt;::value, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(shared_ptr&lt;_Ty2&gt;&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// construct shared_ptr object that takes resource from _Right</span><br>        <span class="hljs-keyword">this</span>-&gt;_Move_construct_from(_STD <span class="hljs-built_in">move</span>(_Right));<br>    &#125;<br><br>    <span class="hljs-comment">// Upgrade from weak_ptr to shared_ptr</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;_SP_pointer_compatible&lt;_Ty2, _Ty&gt;::value, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-keyword">explicit</span> <span class="hljs-built_in">shared_ptr</span>(<span class="hljs-type">const</span> weak_ptr&lt;_Ty2&gt;&amp; _Other) &#123; <span class="hljs-comment">// construct shared_ptr object that owns resource *_Other</span><br>        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>-&gt;_Construct_from_weak(_Other)) &#123;<br>            _Throw_bad_weak_ptr();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;_SP_pointer_compatible&lt;_Ux, _Ty&gt;,<br>                        is_convertible&lt;<span class="hljs-keyword">typename</span> unique_ptr&lt;_Ux, _Dx&gt;::pointer, element_type*&gt;&gt;,<br>            <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">shared_ptr</span>(unique_ptr&lt;_Ux, _Dx&gt;&amp;&amp; _Other) &#123;<br>        <span class="hljs-keyword">using</span> _Fancy_t   = <span class="hljs-keyword">typename</span> unique_ptr&lt;_Ux, _Dx&gt;::pointer;<br>        <span class="hljs-keyword">using</span> _Raw_t     = <span class="hljs-keyword">typename</span> unique_ptr&lt;_Ux, _Dx&gt;::element_type*;<br>        <span class="hljs-keyword">using</span> _Deleter_t = <span class="hljs-type">conditional_t</span>&lt;is_reference_v&lt;_Dx&gt;, <span class="hljs-keyword">decltype</span>(_STD <span class="hljs-built_in">ref</span>(_Other.<span class="hljs-built_in">get_deleter</span>())), _Dx&gt;;<br><br>        <span class="hljs-type">const</span> _Fancy_t _Fancy = _Other.<span class="hljs-built_in">get</span>();<br><br>        <span class="hljs-keyword">if</span> (_Fancy) &#123;<br>            <span class="hljs-type">const</span> _Raw_t _Raw = _Fancy;<br>            <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Rx =<br>                <span class="hljs-keyword">new</span> _Ref_count_resource&lt;_Fancy_t, _Deleter_t&gt;(_Fancy, _STD forward&lt;_Dx&gt;(_Other.<span class="hljs-built_in">get_deleter</span>()));<br>            _Set_ptr_rep_and_enable_shared(_Raw, _Rx);<br>            _Other.<span class="hljs-built_in">release</span>();<br>        &#125;<br>    &#125;<br><br>    ~<span class="hljs-built_in">shared_ptr</span>() <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// release resource</span><br>        <span class="hljs-keyword">this</span>-&gt;_Decref();<br>    &#125;<br><br>    shared_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> shared_ptr&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">shared_ptr</span>(_Right).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    shared_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">shared_ptr</span>(_Right).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    shared_ptr&amp; <span class="hljs-keyword">operator</span>=(shared_ptr&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// take resource from _Right</span><br>        <span class="hljs-built_in">shared_ptr</span>(_STD <span class="hljs-built_in">move</span>(_Right)).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    shared_ptr&amp; <span class="hljs-keyword">operator</span>=(shared_ptr&lt;_Ty2&gt;&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// take resource from _Right</span><br>        <span class="hljs-built_in">shared_ptr</span>(_STD <span class="hljs-built_in">move</span>(_Right)).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>&gt;<br>    shared_ptr&amp; <span class="hljs-keyword">operator</span>=(unique_ptr&lt;_Ux, _Dx&gt;&amp;&amp; _Right) &#123; <span class="hljs-comment">// move from unique_ptr</span><br>        <span class="hljs-built_in">shared_ptr</span>(_STD <span class="hljs-built_in">move</span>(_Right)).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(shared_ptr&amp; _Other)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>-&gt;_Swap(_Other);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-comment">// release resource and convert to empty shared_ptr object</span><br>        <span class="hljs-built_in">shared_ptr</span>().<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>&gt;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">(_Ux* _Px)</span> </span>&#123; <span class="hljs-comment">// release, take ownership of _Px</span><br>        <span class="hljs-built_in">shared_ptr</span>(_Px).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>&gt;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">(_Ux* _Px, _Dx _Dt)</span> </span>&#123; <span class="hljs-comment">// release, take ownership of _Px, with deleter _Dt</span><br>        <span class="hljs-built_in">shared_ptr</span>(_Px, _Dt).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Alloc</span>&gt;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">(_Ux* _Px, _Dx _Dt, _Alloc _Ax)</span> </span>&#123; <span class="hljs-comment">// release, take ownership of _Px, with deleter _Dt, allocator _Ax</span><br>        <span class="hljs-built_in">shared_ptr</span>(_Px, _Dt, _Ax).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">using</span> _Mybase::get;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span> = _Ty, <span class="hljs-type">enable_if_t</span>&lt;!disjunction_v&lt;is_array&lt;_Ty2&gt;, is_void&lt;_Ty2&gt;&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    _NODISCARD _Ty2&amp; <span class="hljs-keyword">operator</span>*() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-built_in">get</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span> = _Ty, <span class="hljs-type">enable_if_t</span>&lt;!is_array_v&lt;_Ty2&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    _NODISCARD _Ty2* <span class="hljs-keyword">operator</span>-&gt;() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">get</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span> = _Ty, <span class="hljs-keyword">class</span> _Elem = element_type, <span class="hljs-type">enable_if_t</span>&lt;is_array_v&lt;_Ty2&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    _NODISCARD _Elem&amp; <span class="hljs-keyword">operator</span>[](<span class="hljs-type">ptrdiff_t</span> _Idx) <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> <span class="hljs-comment">/* strengthened */</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">get</span>()[_Idx];<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">get</span>() != <span class="hljs-literal">nullptr</span>;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_UxptrOrNullptr</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>&gt;<br>    <span class="hljs-type">void</span> _Setpd(<span class="hljs-type">const</span> _UxptrOrNullptr _Px, _Dx _Dt) &#123; <span class="hljs-comment">// take ownership of _Px, deleter _Dt</span><br>        _Temporary_owner_del&lt;_UxptrOrNullptr, _Dx&gt; _Owner(_Px, _Dt);<br>        _Set_ptr_rep_and_enable_shared(<br>            _Owner._Ptr, <span class="hljs-keyword">new</span> _Ref_count_resource&lt;_UxptrOrNullptr, _Dx&gt;(_Owner._Ptr, _STD <span class="hljs-built_in">move</span>(_Dt)));<br>        _Owner._Call_deleter = <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_UxptrOrNullptr</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Alloc</span>&gt;<br>    <span class="hljs-type">void</span> _Setpda(<span class="hljs-type">const</span> _UxptrOrNullptr _Px, _Dx _Dt, _Alloc _Ax) &#123; <span class="hljs-comment">// take ownership of _Px, deleter _Dt, allocator _Ax</span><br>        <span class="hljs-keyword">using</span> _Alref_alloc = _Rebind_alloc_t&lt;_Alloc, _Ref_count_resource_alloc&lt;_UxptrOrNullptr, _Dx, _Alloc&gt;&gt;;<br><br>        _Temporary_owner_del&lt;_UxptrOrNullptr, _Dx&gt; _Owner(_Px, _Dt);<br>        _Alref_alloc _Alref(_Ax);<br>        _Alloc_construct_ptr&lt;_Alref_alloc&gt; _Constructor(_Alref);<br>        _Constructor._Allocate();<br>        _Construct_in_place(*_Constructor._Ptr, _Owner._Ptr, _STD <span class="hljs-built_in">move</span>(_Dt), _Ax);<br>        _Set_ptr_rep_and_enable_shared(_Owner._Ptr, _Unfancy(_Constructor._Ptr));<br>        _Constructor._Ptr    = <span class="hljs-literal">nullptr</span>;<br>        _Owner._Call_deleter = <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ux</span>&gt;<br>    <span class="hljs-type">void</span> _Set_ptr_rep_and_enable_shared(_Ux* <span class="hljs-type">const</span> _Px, _Ref_count_base* <span class="hljs-type">const</span> _Rx) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// take ownership of _Px</span><br>        <span class="hljs-keyword">this</span>-&gt;_Ptr = _Px;<br>        <span class="hljs-keyword">this</span>-&gt;_Rep = _Rx;<br>        <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(conjunction_v&lt;negation&lt;is_array&lt;_Ty&gt;&gt;, negation&lt;is_volatile&lt;_Ux&gt;&gt;, _Can_enable_shared&lt;_Ux&gt;&gt;)</span> </span>&#123;<br>            <span class="hljs-keyword">if</span> (_Px &amp;&amp; _Px-&gt;_Wptr.<span class="hljs-built_in">expired</span>()) &#123;<br>                _Px-&gt;_Wptr = shared_ptr&lt;<span class="hljs-type">remove_cv_t</span>&lt;_Ux&gt;&gt;(*<span class="hljs-keyword">this</span>, <span class="hljs-keyword">const_cast</span>&lt;<span class="hljs-type">remove_cv_t</span>&lt;_Ux&gt;*&gt;(_Px));<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Set_ptr_rep_and_enable_shared(<span class="hljs-type">nullptr_t</span>, _Ref_count_base* <span class="hljs-type">const</span> _Rx) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// take ownership of nullptr</span><br>        <span class="hljs-keyword">this</span>-&gt;_Ptr = <span class="hljs-literal">nullptr</span>;<br>        <span class="hljs-keyword">this</span>-&gt;_Rep = _Rx;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="shared-ptr-and-array"><a href="#shared-ptr-and-array" class="headerlink" title="shared_ptr and array"></a><code>shared_ptr</code> and array</h3><p>Before C++17, we have to specify deleter when using <code>shared_ptr</code> for array. e.g.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">std::shared_ptr&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">ptr</span><span class="hljs-params">(<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">10</span>], std::default_delete&lt;<span class="hljs-type">int</span>[]&gt;())</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>After C++17, <code>shared_ptr</code> supports array and we don’t have to provide custom deleter. e.g.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">std::shared_ptr&lt;<span class="hljs-type">int</span>[]&gt; <span class="hljs-title">ptr</span><span class="hljs-params">(<span class="hljs-keyword">new</span> <span class="hljs-type">int</span>[<span class="hljs-number">10</span>])</span></span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Set-ptr-rep-and-enable-shared"><a href="#Set-ptr-rep-and-enable-shared" class="headerlink" title="_Set_ptr_rep_and_enable_shared"></a><code>_Set_ptr_rep_and_enable_shared</code></h3><p><code>_Set_ptr_rep_and_enable_shared</code> is related to <code>enable_from_shared_this</code>.</p>
+<p><code>_Wptr</code> is actually a <code>weak_ptr</code>. <code>expired()</code> means its use count is 0. In other words, it can be initialized.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">weak_ptr</span> : <span class="hljs-keyword">public</span> _Ptr_base&lt;_Ty&gt; &#123; <span class="hljs-comment">// class for pointer to reference </span><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">bool</span> <span class="hljs-title">expired</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">use_count</span>() == <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-comment">// Others...</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="enable-from-shared-this"><a href="#enable-from-shared-this" class="headerlink" title="enable_from_shared_this"></a><code>enable_from_shared_this</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">enable_shared_from_this</span> &#123; <span class="hljs-comment">// provide member functions that create shared_ptr to this</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> _Esft_type = enable_shared_from_this;<br><br>    <span class="hljs-function">_NODISCARD shared_ptr&lt;_Ty&gt; <span class="hljs-title">shared_from_this</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">shared_ptr</span>&lt;_Ty&gt;(_Wptr);<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD shared_ptr&lt;<span class="hljs-type">const</span> _Ty&gt; <span class="hljs-title">shared_from_this</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">shared_ptr</span>&lt;<span class="hljs-type">const</span> _Ty&gt;(_Wptr);<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD weak_ptr&lt;_Ty&gt; <span class="hljs-title">weak_from_this</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Wptr;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD weak_ptr&lt;<span class="hljs-type">const</span> _Ty&gt; <span class="hljs-title">weak_from_this</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Wptr;<br>    &#125;<br><br><span class="hljs-keyword">protected</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-title">enable_shared_from_this</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> : _Wptr() &#123;</span>&#125;<br><br>    <span class="hljs-built_in">enable_shared_from_this</span>(<span class="hljs-type">const</span> enable_shared_from_this&amp;) <span class="hljs-keyword">noexcept</span> : _Wptr() &#123;<br>        <span class="hljs-comment">// construct (must value-initialize _Wptr)</span><br>    &#125;<br><br>    enable_shared_from_this&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> enable_shared_from_this&amp;) <span class="hljs-keyword">noexcept</span> &#123; <span class="hljs-comment">// assign (must not change _Wptr)</span><br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    ~<span class="hljs-built_in">enable_shared_from_this</span>() = <span class="hljs-keyword">default</span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Yty</span>&gt;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">shared_ptr</span>;<br><br>    <span class="hljs-keyword">mutable</span> weak_ptr&lt;_Ty&gt; _Wptr;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>Notice that there is no way to initialize the <code>_Wptr</code> in <code>enable_shared_from_this</code> hence we need to construct <code>shared_ptr</code> in advance to apply <code>enable_shared_from_this</code> correctly.</p>
+<h2 id="make-shared"><a href="#make-shared" class="headerlink" title="make_shared"></a><code>make_shared</code></h2><p>We all know <code>make_shared</code> is the best practice of the usage about <code>shared_ptr</code>. But why?</p>
+<h3 id="Ref-count-obj2"><a href="#Ref-count-obj2" class="headerlink" title="_Ref_count_obj2"></a><code>_Ref_count_obj2</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">_Wrap</span> &#123;<br>    _Ty _Value; <span class="hljs-comment">// workaround for VSO-586813 &quot;T^ is not allowed in a union&quot;</span><br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ref_count_obj2</span> : <span class="hljs-keyword">public</span> _Ref_count_base &#123; <span class="hljs-comment">// handle reference counting for object in control block, no allocator</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span>... _Types&gt;<br>    <span class="hljs-keyword">explicit</span> _Ref_count_obj2(_Types&amp;&amp;... _Args) : _Ref_count_base() &#123;<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> _HAS_CXX20</span><br>        <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(<span class="hljs-keyword">sizeof</span>...(_Types) == <span class="hljs-number">1</span> &amp;&amp; (is_same_v&lt;_For_overwrite_tag, <span class="hljs-type">remove_cvref_t</span>&lt;_Types&gt;&gt; &amp;&amp; ...))</span> </span>&#123;<br>            _Default_construct_in_place(_Storage._Value);<br>            ((<span class="hljs-type">void</span>) _Args, ...);<br>        &#125; <span class="hljs-keyword">else</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// _HAS_CXX20</span></span><br>        &#123;<br>            _Construct_in_place(_Storage._Value, _STD forward&lt;_Types&gt;(_Args)...);<br>        &#125;<br>    &#125;<br><br>    ~_Ref_count_obj2() <span class="hljs-keyword">noexcept</span> <span class="hljs-keyword">override</span> &#123; <span class="hljs-comment">// TRANSITION, should be non-virtual</span><br>        <span class="hljs-comment">// nothing to do, _Storage._Value was already destroyed in _Destroy</span><br><br>        <span class="hljs-comment">// N4849 [class.dtor]/7:</span><br>        <span class="hljs-comment">// &quot;A defaulted destructor for a class X is defined as deleted if:</span><br>        <span class="hljs-comment">// X is a union-like class that has a variant member with a non-trivial destructor&quot;</span><br>    &#125;<br><br>    <span class="hljs-keyword">union</span> &#123;<br>        _Wrap&lt;_Ty&gt; _Storage;<br>    &#125;;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">void</span> _Destroy() <span class="hljs-keyword">noexcept</span> <span class="hljs-keyword">override</span> &#123; <span class="hljs-comment">// destroy managed resource</span><br>        _Destroy_in_place(_Storage._Value);<br>    &#125;<br><br>    <span class="hljs-type">void</span> _Delete_this() <span class="hljs-keyword">noexcept</span> <span class="hljs-keyword">override</span> &#123; <span class="hljs-comment">// destroy self</span><br>        <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">if</span> _HAS_CXX20</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span>... _Types,<br>    <span class="hljs-keyword">class</span> = <span class="hljs-type">void_t</span>&lt;<span class="hljs-keyword">decltype</span>(::<span class="hljs-built_in">new</span> (_STD <span class="hljs-built_in">declval</span>&lt;<span class="hljs-type">void</span>*&gt;()) _Ty(_STD <span class="hljs-built_in">declval</span>&lt;_Types&gt;()...))&gt;&gt;<br><span class="hljs-keyword">constexpr</span> _Ty* <span class="hljs-built_in">construct_at</span>(_Ty* <span class="hljs-type">const</span> _Location, _Types&amp;&amp;... _Args) <span class="hljs-built_in">noexcept</span>(<br>    <span class="hljs-built_in">noexcept</span>(::<span class="hljs-built_in">new</span> (_Voidify_iter(_Location)) _Ty(_STD forward&lt;_Types&gt;(_Args)...))) <span class="hljs-comment">/* strengthened */</span> &#123;<br>    <span class="hljs-keyword">return</span> ::<span class="hljs-built_in">new</span> (_Voidify_iter(_Location)) _Ty(_STD forward&lt;_Types&gt;(_Args)...);<br>&#125;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// _HAS_CXX20</span></span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span>... _Types&gt;<br>_CONSTEXPR20 <span class="hljs-type">void</span> _Construct_in_place(_Ty&amp; _Obj, _Types&amp;&amp;... _Args) <span class="hljs-built_in">noexcept</span>(<br>    is_nothrow_constructible_v&lt;_Ty, _Types...&gt;) &#123;<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> _HAS_CXX20</span><br>    <span class="hljs-keyword">if</span> (_STD <span class="hljs-built_in">is_constant_evaluated</span>()) &#123;<br>        <span class="hljs-function">_STD <span class="hljs-title">construct_at</span><span class="hljs-params">(_STD addressof(_Obj), _STD forward&lt;_Types&gt;(_Args)...)</span></span>;<br>    &#125; <span class="hljs-keyword">else</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// _HAS_CXX20</span></span><br>    &#123;<br>        ::<span class="hljs-built_in">new</span> (_Voidify_iter(_STD <span class="hljs-built_in">addressof</span>(_Obj))) _Ty(_STD forward&lt;_Types&gt;(_Args)...);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-type">void</span> _Default_construct_in_place(_Ty&amp; _Obj) <span class="hljs-built_in">noexcept</span>(is_nothrow_default_constructible_v&lt;_Ty&gt;) &#123;<br>    ::<span class="hljs-keyword">new</span> (_Voidify_iter(_STD <span class="hljs-built_in">addressof</span>(_Obj))) _Ty;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>We can find the counters in <code>_Ref_count_base</code> and the target object (<code>_Storage</code> in <code>_Ref_count_obj2</code>) are allocated at the same time.</p>
+<p>There are at lease 2 advantages in this way:</p>
+<ul>
+<li>Allocates memory at a tight memory space.</li>
+<li>Allocates just once to reduce the number of system calls.</li>
+</ul>
+<h3 id="The-implementation-of-make-shared"><a href="#The-implementation-of-make-shared" class="headerlink" title="The implementation of make_shared"></a>The implementation of <code>make_shared</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span>... _Types&gt;<br>_NODISCARD<br><span class="hljs-meta">#<span class="hljs-keyword">if</span> _HAS_CXX20</span><br>    <span class="hljs-type">enable_if_t</span>&lt;!is_array_v&lt;_Ty&gt;, shared_ptr&lt;_Ty&gt;&gt;<br><span class="hljs-meta">#<span class="hljs-keyword">else</span> <span class="hljs-comment">// _HAS_CXX20</span></span><br>    shared_ptr&lt;_Ty&gt;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span> <span class="hljs-comment">// _HAS_CXX20</span></span><br>    <span class="hljs-built_in">make_shared</span>(_Types&amp;&amp;... _Args) &#123; <span class="hljs-comment">// make a shared_ptr to non-array object</span><br>    <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Rx = <span class="hljs-keyword">new</span> _Ref_count_obj2&lt;_Ty&gt;(_STD forward&lt;_Types&gt;(_Args)...);<br>    shared_ptr&lt;_Ty&gt; _Ret;<br>    _Ret._Set_ptr_rep_and_enable_shared(_STD <span class="hljs-built_in">addressof</span>(_Rx-&gt;_Storage._Value), _Rx);<br>    <span class="hljs-keyword">return</span> _Ret;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Deleter-in-shared-ptr"><a href="#Deleter-in-shared-ptr" class="headerlink" title="Deleter in shared_ptr"></a>Deleter in <code>shared_ptr</code></h2><p>An interesting point:</p>
+<pre><code class=" mermaid">classDiagram
+
+shared_ptr o-- _Ref_count
+
+shared_ptr: - element_type* _ptr
+
+_Ref_count: - _Ty* _ptr
+_Ref_count: - _Destroy()
+_Ref_count: - _Delete_this()
+</code></pre>
+
+<p>There are 2 pointers:</p>
+<ul>
+<li><code>element_type* _ptr</code>: the pointer of specified type for <code>shared_ptr&lt;T&gt;</code></li>
+<li><code>_Ty* _ptr</code>: the pointer approximating to the real type</li>
+</ul>
+<p>Maybe it’s still a little confusing.</p>
+<p>Given a base class and its derived class:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Base</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Base&quot;</span> &lt;&lt; std::endl; &#125;<br>    ~<span class="hljs-built_in">Base</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;~Base&quot;</span> &lt;&lt; std::endl; &#125;;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Derived</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;Derived&quot;</span> &lt;&lt; std::endl; &#125;<br>    ~<span class="hljs-built_in">Derived</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;~Derived&quot;</span> &lt;&lt; std::endl; &#125;;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Note that their destructors aren’t marked as <code>virtual</code>.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++">&#123; Base* base = <span class="hljs-keyword">new</span> Derived; &#125;<br>&#123; <span class="hljs-function">std::unique_ptr&lt;Base&gt; <span class="hljs-title">base</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Derived)</span></span>; &#125;<br>&#123; <span class="hljs-function">std::shared_ptr&lt;Base&gt; <span class="hljs-title">base</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Derived)</span></span>; &#125;<br></code></pre></td></tr></table></figure>
+
+<p>The first two cases will result in memory leak, but the last one will release correctly. Why?</p>
+<p>The reason why it’s special to bind an object with <code>shared_ptr</code> is that <code>shared_ptr</code> has <code>_Ref_count</code> leveraging the real pointer and real deleter!<br>More specifically, in this case, <code>element_type*</code> in <code>shared_ptr&lt;T&gt;</code> refers to <code>Base*</code>. But <code>_Ref_count&lt;_Ty&gt;</code> is specialized as <code>_Ref_count&lt;Derived&gt;</code> thus <code>_Ty*</code> in <code>_Ref_count</code> refers to <code>Derived*</code>, and <code>_Destroy()</code> is to delete a <code>Derived</code> object.</p>
+<p>However, the example below would still result in memory leak.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++">&#123;<br>    Base *base = <span class="hljs-keyword">new</span> Derived;<br>    <span class="hljs-function">std::shared_ptr&lt;Base&gt; <span class="hljs-title">base_ptr</span><span class="hljs-params">(base)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Because the original type of the object has lost when the <code>shared_ptr</code> is constructed.</p>
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a><code>weak_ptr</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">weak_ptr</span> : <span class="hljs-keyword">public</span> _Ptr_base&lt;_Ty&gt; &#123; <span class="hljs-comment">// class for pointer to reference counted resource</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// When a constructor is converting from weak_ptr&lt;_Ty2&gt; to weak_ptr&lt;_Ty&gt;, the below type trait intentionally asks</span><br>    <span class="hljs-comment">// whether it would be possible to static_cast from _Ty* to const _Ty2*; see N4901 [expr.static.cast]/11.</span><br><br>    <span class="hljs-comment">// Primary template, the value is used when the substitution fails.</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-keyword">class</span> = <span class="hljs-type">const</span> _Ty2*&gt;<br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> _Must_avoid_expired_conversions_from = <span class="hljs-literal">true</span>;<br><br>    <span class="hljs-comment">// Template specialization, the value is used when the substitution succeeds.</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span><br>        _Must_avoid_expired_conversions_from&lt;_Ty2, <span class="hljs-keyword">decltype</span>(<span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">const</span> _Ty2*&gt;(<span class="hljs-built_in">static_cast</span>&lt;_Ty*&gt;(<span class="hljs-literal">nullptr</span>)))&gt; =<br>            <span class="hljs-literal">false</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-title">weak_ptr</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br><br>    <span class="hljs-built_in">weak_ptr</span>(<span class="hljs-type">const</span> weak_ptr&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">this</span>-&gt;_Weakly_construct_from(_Other); <span class="hljs-comment">// same type, no conversion</span><br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;_SP_pointer_compatible&lt;_Ty2, _Ty&gt;::value, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">weak_ptr</span>(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">this</span>-&gt;_Weakly_construct_from(_Other); <span class="hljs-comment">// shared_ptr keeps resource alive during conversion</span><br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;_SP_pointer_compatible&lt;_Ty2, _Ty&gt;::value, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">weak_ptr</span>(<span class="hljs-type">const</span> weak_ptr&lt;_Ty2&gt;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> _Avoid_expired_conversions = _Must_avoid_expired_conversions_from&lt;_Ty2&gt;;<br><br>        <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(_Avoid_expired_conversions)</span> </span>&#123;<br>            <span class="hljs-keyword">this</span>-&gt;_Weakly_convert_lvalue_avoiding_expired_conversions(_Other);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">this</span>-&gt;_Weakly_construct_from(_Other);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-built_in">weak_ptr</span>(weak_ptr&amp;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">this</span>-&gt;_Move_construct_from(_STD <span class="hljs-built_in">move</span>(_Other));<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;_SP_pointer_compatible&lt;_Ty2, _Ty&gt;::value, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">weak_ptr</span>(weak_ptr&lt;_Ty2&gt;&amp;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> _Avoid_expired_conversions = _Must_avoid_expired_conversions_from&lt;_Ty2&gt;;<br><br>        <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(_Avoid_expired_conversions)</span> </span>&#123;<br>            <span class="hljs-keyword">this</span>-&gt;_Weakly_convert_rvalue_avoiding_expired_conversions(_STD <span class="hljs-built_in">move</span>(_Other));<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">this</span>-&gt;_Move_construct_from(_STD <span class="hljs-built_in">move</span>(_Other));<br>        &#125;<br>    &#125;<br><br>    ~<span class="hljs-built_in">weak_ptr</span>() <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">this</span>-&gt;_Decwref();<br>    &#125;<br><br>    weak_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> weak_ptr&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">weak_ptr</span>(_Right).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    weak_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> weak_ptr&lt;_Ty2&gt;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">weak_ptr</span>(_Right).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    weak_ptr&amp; <span class="hljs-keyword">operator</span>=(weak_ptr&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">weak_ptr</span>(_STD <span class="hljs-built_in">move</span>(_Right)).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    weak_ptr&amp; <span class="hljs-keyword">operator</span>=(weak_ptr&lt;_Ty2&gt;&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">weak_ptr</span>(_STD <span class="hljs-built_in">move</span>(_Right)).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br>    weak_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> shared_ptr&lt;_Ty2&gt;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">weak_ptr</span>(_Right).<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-comment">// release resource, convert to null weak_ptr object</span><br>        weak_ptr&#123;&#125;.<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(weak_ptr&amp; _Other)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>-&gt;_Swap(_Other);<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">bool</span> <span class="hljs-title">expired</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">use_count</span>() == <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD shared_ptr&lt;_Ty&gt; <span class="hljs-title">lock</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-comment">// convert to shared_ptr</span><br>        shared_ptr&lt;_Ty&gt; _Ret;<br>        (<span class="hljs-type">void</span>) _Ret._Construct_from_weak(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> _Ret;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/cpp/">#cpp</a>
+      
+        <a href="/tags/pointer/">#pointer</a>
+      
+        <a href="/tags/cpp11/">#cpp11</a>
+      
+        <a href="/tags/smart-pointer/">#smart_pointer</a>
+      
+        <a href="/tags/shared-ptr/">#shared_ptr</a>
+      
+        <a href="/tags/enable-shared-from-this/">#enable_shared_from_this</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>What is std::shared_ptr</div>
+      <div>http://wasprime.github.io/2023/04/02/What-is-std-shared-ptr/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>wasPrime</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 2, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>April 3, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/03/Introduction-to-C-20-jthread/" title="Introduction to C++20 jthread">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Introduction to C++20 jthread</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/01/What-is-std-unique-ptr/" title="What is std::unique_ptr">
+                        <span class="hidden-mobile">What is std::unique_ptr</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
