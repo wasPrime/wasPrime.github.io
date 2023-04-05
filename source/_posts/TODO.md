@@ -15,8 +15,8 @@ List what category of articles would be written.
 - [x] ~~What is `enable_shared_from_this`~~
 - [x] ~~Concepts~~
 - [x] ~~jthread~~
-- [ ] RTTI
-- [ ] std::span
+- [x] ~~RTTI~~
+- [ ] std::string_view, std::span
 - [ ] future
 - [ ] Coroutines
 - [ ] Ranges
