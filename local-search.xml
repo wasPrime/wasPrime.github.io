@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>Some Template Meta Programming Practices</title>
+    <link href="/2023/04/06/Some-Template-Meta-Programming-Practices/"/>
+    <url>/2023/04/06/Some-Template-Meta-Programming-Practices/</url>
+    
+    <content type="html"><![CDATA[<h2 id="A-discovery"><a href="#A-discovery" class="headerlink" title="A discovery"></a>A discovery</h2><p>I found <a href="https://www.zhihu.com/question/593538067/answer/2967552181">a case</a> that struck me.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">temp</span> &#123;<br>    T value;<br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span>... Ts&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">temp</span> &#123;<br>    temp&lt;T&gt; value_temp;<br>    temp&lt;Ts...&gt; rest_temps;<br>&#125;;<br></code></pre></td></tr></table></figure><p>It can’t pass compiling with a error message - <em>Too many template parameters in template redeclaration</em>.</p><p>It would work if we changed it as below:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span>... Ts&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">temp</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">temp</span>&lt;T&gt; &#123;<br>    T value;<br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>, <span class="hljs-keyword">class</span>... Ts&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">temp</span> &#123;<br>    temp&lt;T&gt; value_temp;<br>    temp&lt;Ts...&gt; rest_temps;<br>&#125;;<br></code></pre></td></tr></table></figure><blockquote><p>The declaration with multiple parameters certainly can be placed at the beginning, as long as you like. :)</p></blockquote><h2 id="Accumulate-the-parameters-in-the-template"><a href="#Accumulate-the-parameters-in-the-template" class="headerlink" title="Accumulate the parameters in the template"></a>Accumulate the parameters in the template</h2><p>I wrote the below code to practice template specialization.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-type">int</span> i, <span class="hljs-type">int</span>... Args&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Sum</span> &#123;<br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> value = i + Sum&lt;Args...&gt;::value;<br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-type">int</span> i&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Sum</span>&lt;i&gt; &#123;<br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> value = i;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::cout &lt;&lt; Sum&lt;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&gt;::value &lt;&lt; std::endl;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+      <category>template</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>template</tag>
+      
+      <tag>template-meta-programming</tag>
+      
+      <tag>tmp</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>multi-thread Examples</title>
     <link href="/2023/04/05/multi-thread-Examples/"/>
     <url>/2023/04/05/multi-thread-Examples/</url>
@@ -16,6 +51,8 @@
       <category>dev</category>
       
       <category>cpp</category>
+      
+      <category>stl</category>
       
     </categories>
     
@@ -91,6 +128,8 @@
       
       <category>cpp</category>
       
+      <category>stl</category>
+      
     </categories>
     
     
@@ -99,6 +138,8 @@
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -124,6 +165,8 @@
       
       <category>cpp</category>
       
+      <category>stl</category>
+      
     </categories>
     
     
@@ -131,9 +174,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
+      <tag>stl</tag>
       
       <tag>pointer</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -161,6 +206,8 @@
       
       <category>cpp</category>
       
+      <category>stl</category>
+      
     </categories>
     
     
@@ -168,9 +215,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
+      <tag>stl</tag>
       
       <tag>pointer</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -234,11 +283,11 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>c</tag>
       
       <tag>basic</tag>
+      
+      <tag>pointer</tag>
       
     </tags>
     
@@ -260,6 +309,8 @@
       
       <category>cpp</category>
       
+      <category>stl</category>
+      
     </categories>
     
     
@@ -268,6 +319,8 @@
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
@@ -311,7 +364,7 @@
     <link href="/2023/03/27/TODO/"/>
     <url>/2023/03/27/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input disabled="" type="checkbox"> future</li><li><input disabled="" type="checkbox"> Coroutines</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li></ul>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> Coroutines</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul>]]></content>
     
     
     
