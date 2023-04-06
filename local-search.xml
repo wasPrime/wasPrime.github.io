@@ -176,9 +176,9 @@
       
       <tag>stl</tag>
       
-      <tag>pointer</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>pointer</tag>
       
       <tag>smart_pointer</tag>
       
@@ -217,9 +217,9 @@
       
       <tag>stl</tag>
       
-      <tag>pointer</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>pointer</tag>
       
       <tag>smart_pointer</tag>
       
@@ -283,11 +283,11 @@
     
     <tags>
       
+      <tag>pointer</tag>
+      
       <tag>c</tag>
       
       <tag>basic</tag>
-      
-      <tag>pointer</tag>
       
     </tags>
     
