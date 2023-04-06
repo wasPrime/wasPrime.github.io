@@ -17,7 +17,15 @@ List what category of articles would be written.
 - [x] ~~jthread~~
 - [x] ~~RTTI~~
 - [ ] std::string_view, std::span
-- [ ] future
+- [x] ~~promise, future, packaged_task, shared_future~~
 - [ ] Coroutines
 - [ ] Ranges
 - [ ] Modules
+- [ ] muduo
+- [ ] bthread
+- [ ] bRPC
+
+## Go
+
+- [ ] goroutines
+- [ ] M:N scheduling models

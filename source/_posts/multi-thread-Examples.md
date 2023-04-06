@@ -2,7 +2,7 @@
 title: multi-thread Examples
 date: 2023-04-05 22:00:00
 categories:
-- [dev, cpp]
+- [dev, cpp, stl]
 tags:
 - cpp
 - cpp11

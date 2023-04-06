@@ -2,10 +2,11 @@
 title: Introduction to C++20 jthread
 date: 2023-04-03 00:00:00
 categories:
-- [dev, cpp]
+- [dev, cpp, stl]
 tags:
 - cpp
 - cpp20
+- stl
 - thread
 - jthread
 ---
