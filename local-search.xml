@@ -13,18 +13,18 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C#</category>
+      <category>csharp</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C#</tag>
+      <tag>csharp</tag>
       
-      <tag>.NET</tag>
+      <tag>dot_net</tag>
       
     </tags>
     
@@ -42,9 +42,9 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
       <category>template</category>
       
@@ -53,7 +53,7 @@
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
       <tag>template</tag>
       
@@ -77,20 +77,20 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
-      <category>STL</category>
+      <category>stl</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
-      <tag>C++11</tag>
+      <tag>cpp11</tag>
       
       <tag>multi-thread</tag>
       
@@ -118,18 +118,18 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
-      <tag>RTTI</tag>
+      <tag>rtti</tag>
       
       <tag>vtable</tag>
       
@@ -153,22 +153,22 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
-      <category>STL</category>
+      <category>stl</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
-      <tag>C++20</tag>
+      <tag>cpp20</tag>
       
-      <tag>STL</tag>
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -190,24 +190,24 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
-      <category>STL</category>
+      <category>stl</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
-      <tag>STL</tag>
+      <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>pointer</tag>
-      
-      <tag>C++11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -231,24 +231,24 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
-      <category>STL</category>
+      <category>stl</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
-      <tag>STL</tag>
+      <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>pointer</tag>
-      
-      <tag>C++11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -270,22 +270,22 @@
     
     <categories>
       
-      <category>Configuration</category>
+      <category>configuration</category>
       
-      <category>Cmake</category>
+      <category>cmake</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>Configuration</tag>
+      <tag>configuration</tag>
       
-      <tag>Cmake</tag>
+      <tag>cmake</tag>
       
       <tag>make</tag>
       
-      <tag>CmakeLists</tag>
+      <tag>cmakelists</tag>
       
     </tags>
     
@@ -303,20 +303,20 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C</category>
+      <category>c</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C</tag>
+      <tag>pointer</tag>
+      
+      <tag>c</tag>
       
       <tag>basic</tag>
-      
-      <tag>pointer</tag>
       
     </tags>
     
@@ -334,24 +334,24 @@
     
     <categories>
       
-      <category>Dev</category>
+      <category>dev</category>
       
-      <category>C++</category>
+      <category>cpp</category>
       
-      <category>STL</category>
+      <category>stl</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>C++</tag>
+      <tag>cpp</tag>
       
-      <tag>C++20</tag>
+      <tag>cpp20</tag>
       
-      <tag>STL</tag>
+      <tag>stl</tag>
       
-      <tag>Concepts</tag>
+      <tag>concepts</tag>
       
     </tags>
     
@@ -369,7 +369,7 @@
     
     <categories>
       
-      <category>Configuration</category>
+      <category>configuration</category>
       
       <category>vim</category>
       
@@ -378,7 +378,7 @@
     
     <tags>
       
-      <tag>Configuration</tag>
+      <tag>configuration</tag>
       
       <tag>vim</tag>
       
@@ -399,7 +399,7 @@
     
     <tags>
       
-      <tag>TODO</tag>
+      <tag>todo</tag>
       
     </tags>
     
