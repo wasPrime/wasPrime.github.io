@@ -2,10 +2,10 @@
 title: .NET HttpWebRequest Connection Limit
 date: 2023-04-07 22:00:00
 categories:
-- [Dev, C#]
+- [dev, csharp]
 tags:
-- C#
-- .NET
+- csharp
+- .net
 ---
 
 ## Trap
@@ -77,7 +77,7 @@ System.Net.ServicePointManager.DefaultConnectionLimit = 512;
 
 ## Other Informations
 
-As for `HttpClient` after .NET 4.5, it seems that it doesn't have the connection limit. **Note that** it's different to `HttpWebRequest`.
+As for `HttpClient` after .NET 4.5, it seems that it doesn't have the connection limit.
 
 ## References
 

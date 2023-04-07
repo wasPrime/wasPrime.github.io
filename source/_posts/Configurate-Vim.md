@@ -2,9 +2,9 @@
 title: Configurate Vim
 date: 2023-03-28 00:00:00
 categories:
-- [Configuration, vim]
+- [configuration, vim]
 tags:
-- Configuration
+- configuration
 - vim
 ---
 

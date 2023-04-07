@@ -2,11 +2,11 @@
 title: What is std::unique_ptr
 date: 2023-04-01 22:23:02
 categories:
-- [Dev, C++, STL]
+- [dev, cpp, stl]
 tags:
-- C++
-- C++11
-- STL
+- cpp
+- cpp11
+- stl
 - pointer
 - smart_pointer
 - unique_ptr

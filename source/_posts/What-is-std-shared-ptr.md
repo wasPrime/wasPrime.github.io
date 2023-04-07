@@ -3,11 +3,11 @@ title: What is std::shared_ptr
 date: 2023-04-02 13:36:53
 mermaid: true
 categories:
-- [Dev, C++, STL]
+- [dev, cpp, stl]
 tags:
-- C++
-- C++11
-- STL
+- cpp
+- cpp11
+- stl
 - pointer
 - smart_pointer
 - shared_ptr

@@ -2,9 +2,9 @@
 title: What is pointer
 date: 2023-03-30 00:00:00
 categories:
-- [Dev, C]
+- [dev, c]
 tags:
-- C
+- c
 - basic
 - pointer
 ---
