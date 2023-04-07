@@ -2,12 +2,12 @@
 title: Configurate Cmake
 date: 2023-03-31 00:00:00
 categories:
-- [configuration, cmake]
+- [Configuration, Cmake]
 tags:
-- configuration
-- cmake
+- Configuration
+- Cmake
 - make
-- cmakelists
+- CmakeLists
 ---
 
 {% note primary %}

@@ -2,12 +2,12 @@
 title: Introduction to C++20 Concepts
 date: 2023-03-29 00:00:00
 categories:
-- [dev, cpp, stl]
+- [Dev, C++, STL]
 tags:
-- cpp
-- cpp20
-- stl
-- concepts
+- C++
+- C++20
+- STL
+- Concepts
 ---
 
 ## Why we need `Concepts`?

@@ -2,10 +2,10 @@
 title: multi-thread Examples
 date: 2023-04-05 22:00:00
 categories:
-- [dev, cpp, stl]
+- [Dev, C++, STL]
 tags:
-- cpp
-- cpp11
+- C++
+- C++11
 - multi-thread
 - promise
 - future

@@ -2,10 +2,10 @@
 title: vtable, type_info and RTTI
 date: 2023-04-04 22:18:55
 categories:
-- [dev, cpp]
+- [Dev, C++]
 tags:
-- cpp
-- rtti
+- C++
+- RTTI
 - vtable
 - vfunction
 - type_info

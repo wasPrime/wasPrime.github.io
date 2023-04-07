@@ -2,9 +2,9 @@
 title: Some Template Meta Programming Practices
 date: 2023-04-06 22:17:04
 categories:
-- [dev, cpp, template]
+- [Dev, C++, template]
 tags:
-- cpp
+- C++
 - template
 - template-meta-programming
 - tmp
