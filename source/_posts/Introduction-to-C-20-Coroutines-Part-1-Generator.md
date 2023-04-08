@@ -210,7 +210,7 @@ no member named 'yield_value' in 'std::__n4861::__coroutine_traits_impl<fibonacc
 
 #### Definition of `promise_type`
 
-Since there are a few functions and contents, let me fill them in and explain them one by one.
+Since there are a few functions and contents, let me fill them in and explain them in comments.
 
 > In order to distinguish the execution time, I add some output to help understand.
 
