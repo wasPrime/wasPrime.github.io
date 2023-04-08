@@ -330,13 +330,13 @@ int main() {
     fibonacci_generator f = fib();
     std::cout << "-----------------------------------after fib()" << std::endl;
 
-    std::cout << "-----------------------------------loop" << std::endl;
+    std::cout << "-----------------------------------loop begins" << std::endl;
     for (int i = 0; i < 3; i++) {
         std::cout << "-----------------------------------begin: " << i << std::endl;
         std::cout << f() << std::endl;
         std::cout << "-----------------------------------end: " << i << std::endl;
     }
-    std::cout << "-----------------------------------loop" << std::endl;
+    std::cout << "-----------------------------------loop ends" << std::endl;
 
     return 0;
 }
@@ -351,7 +351,7 @@ fibonacci_generator::promise_type::get_return_object
 fibonacci_generator()
 fibonacci_generator::promise_type::initial_suspend
 -----------------------------------after fib()
------------------------------------loop
+-----------------------------------loop begins
 -----------------------------------begin: 0
 fibonacci_generator::operator()
 fib()
@@ -373,7 +373,7 @@ before co_yield
 fibonacci_generator::promise_type::yield_value
 2
 -----------------------------------end: 2
------------------------------------loop
+-----------------------------------loop ends
 ~fibonacci_generator()
 ```
 
