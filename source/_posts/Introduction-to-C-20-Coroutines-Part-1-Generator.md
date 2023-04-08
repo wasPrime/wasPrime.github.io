@@ -378,7 +378,7 @@ fibonacci_generator::promise_type::yield_value
 ```
 
 {% note primary %}
-To understand the life cycle of coroutine or other case, there is a useful method to insert some output at the beginning and the end of functions and other any necessary locations. :)
+To understand the life cycle of coroutines or other cases, there is a useful method to insert some output at the beginning and the end of functions and other any necessary locations. :)
 {% endnote %}
 
 ## More Explanations
