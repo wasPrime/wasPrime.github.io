@@ -35,7 +35,7 @@ The solution to fix it isn't hard. We just need to increase the connection limit
 ### Adjust in Configuration
 
 1. Open the configuration file `App.config` in the project.
-2. The original configuration might like this:
+2. The original configuration might be like this:
 
     ```XML
     <?xml version="1.0" encoding="utf-8" ?>
