@@ -24,7 +24,7 @@
 <meta property="og:description" content="Why corouties were imported in C++20? In order to explain it, we could begin with some examples about Fibonacci sequences. FibonacciAt the beginning, we can write down code like below. 012345678910111">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-08T13:17:21.000Z">
-<meta property="article:modified_time" content="2023-04-08T17:49:01.305Z">
+<meta property="article:modified_time" content="2023-04-08T17:56:35.557Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="cpp">
 <meta property="article:tag" content="cpp20">
@@ -344,7 +344,7 @@
 <p>There are several complaints from compiler:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs log">no member named &#x27;initial_suspend&#x27; in &#x27;std::__n4861::__coroutine_traits_impl&lt;fibonacci_generator, void&gt;::promise_type&#x27; &#123;aka &#x27;fibonacci_generator::promise_type&#x27;&#125;<br>no member named &#x27;unhandled_exception&#x27; in &#x27;std::__n4861::__coroutine_traits_impl&lt;fibonacci_generator, void&gt;::promise_type&#x27; &#123;aka &#x27;fibonacci_generator::promise_type&#x27;&#125;<br>no member named &#x27;final_suspend&#x27; in &#x27;std::__n4861::__coroutine_traits_impl&lt;fibonacci_generator, void&gt;::promise_type&#x27; &#123;aka &#x27;fibonacci_generator::promise_type&#x27;&#125;<br>no member named &#x27;get_return_object&#x27; in &#x27;std::__n4861::__coroutine_traits_impl&lt;fibonacci_generator, void&gt;::promise_type&#x27; &#123;aka &#x27;fibonacci_generator::promise_type&#x27;&#125;<br>no member named &#x27;yield_value&#x27; in &#x27;std::__n4861::__coroutine_traits_impl&lt;fibonacci_generator, void&gt;::promise_type&#x27; &#123;aka &#x27;fibonacci_generator::promise_type&#x27;&#125;<br></code></pre></td></tr></table></figure>
 
-<h4 id="Definition-of-promise-type"><a href="#Definition-of-promise-type" class="headerlink" title="Definition of promise_type"></a>Definition of <code>promise_type</code></h4><p>Since there are a few functions and contents, let me fill them in and explain them one by one.</p>
+<h4 id="Definition-of-promise-type"><a href="#Definition-of-promise-type" class="headerlink" title="Definition of promise_type"></a>Definition of <code>promise_type</code></h4><p>Since there are a few functions and contents, let me fill them in and explain them in comments.</p>
 <blockquote>
 <p>In order to distinguish the execution time, I add some output to help understand.</p>
 </blockquote>
