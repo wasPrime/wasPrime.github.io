@@ -224,6 +224,9 @@ struct fibonacci_generator {
         promise_type() {
             std::cout << "promise_type()" << std::endl;
         }
+        ~promise_type() {
+            std::cout << "~promise_type() " << std::endl;
+        }
 
         int current_{0};  // store the state/value
 
@@ -286,7 +289,10 @@ struct fibonacci_generator {
 
     ~fibonacci_generator() {
         std::cout << "~fibonacci_generator()" << std::endl;
+
+        std::cout << "before handle_.destroy()" << std::endl;
         handle_.destroy();
+        std::cout << "after handle_.destroy()" << std::endl;
     }
 };
 ```
@@ -375,6 +381,9 @@ fibonacci_generator::promise_type::yield_value
 -----------------------------------end: 2
 -----------------------------------loop ends
 ~fibonacci_generator()
+before handle_.destroy()
+~promise_type() 
+after handle_.destroy()
 ```
 
 {% note primary %}

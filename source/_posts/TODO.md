@@ -23,6 +23,7 @@ List what category of articles would be written.
 - [ ] Modules
 - [ ] muduo
 - [ ] bthread
+- [ ] bvar
 - [ ] bRPC
 
 ## Go
