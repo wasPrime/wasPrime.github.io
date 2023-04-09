@@ -1,5 +1,5 @@
 ---
-title: Configurate Cmake
+title: Configure Cmake
 date: 2023-03-31 00:00:00
 categories:
 - [configuration, cmake]

@@ -1,5 +1,5 @@
 ---
-title: Configurate Vim
+title: Configure Vim
 date: 2023-03-28 00:00:00
 categories:
 - [configuration, vim]
@@ -14,7 +14,7 @@ tags:
 curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim > ~/.vim/autoload
 ```
 
-## Configurate `.vimrc` file
+## Configure `.vimrc` file
 
 {% note success %}
 Copy the below configuration to `~/.vimrc`.

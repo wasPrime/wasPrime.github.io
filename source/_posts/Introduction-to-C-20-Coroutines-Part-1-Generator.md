@@ -432,6 +432,46 @@ fibonacci_generator fib(int dummy) {
 
 It can be understanded that the coroutine is initialized by some parameters.
 
+### 5. Abstract Workflow
+
+The abstract workflow of coroutine is below:
+
+```log
+{
+promise-type promise(promise-constructor-arguments); 
+try {
+    co_await promise.initial_suspend(); // The first suspension after created
+    function-body // 函数体
+} catch ( ... ) {
+    if (!initial-await-resume-called)
+    throw; 
+    promise.unhandled_exception(); 
+}
+
+final-suspend:
+co_await promise.final_suspend(); // The last suspension
+}
+```
+
+If we ignore exception handler, it can be simplified as below:
+
+```log
+{
+promise-type promise; 
+
+co_await promise.initial_suspend(); 
+
+function-body // 函数体
+
+final-suspend:
+co_await promise.final_suspend(); 
+}
+```
+
+### 6. the Perspective of `co_yield` as Syntax Sugar
+
+`co_yield x` is equivalent to `co_await promise.yield_value(x)`.
+
 ## Example: Pop up elements from multiple vectors
 
 ```C++
@@ -528,3 +568,4 @@ int main() {
 - [C++20’s Coroutines for Beginners - Andreas Fertig - CppCon 2022](https://www.youtube.com/watch?v=8sEe-4tig_A)
 - [Deciphering C++ Coroutines - A Diagrammatic Coroutine Cheat Sheet - Andreas Weis - CppCon 2022](https://www.youtube.com/watch?v=J7fYddslH0Q)
   - syncronous `read()` and asyncronous `co_await async_read`
+- [知乎专栏: C++20 新特性 协程 Coroutines(1)](https://zhuanlan.zhihu.com/p/349210290)
