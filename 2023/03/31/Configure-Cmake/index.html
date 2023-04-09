@@ -16,22 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="List what category of articles would be written.             C++  Deleter in std::shared_ptr  What is enable_shared_from_this  Concepts  jthread  RTTI  std::string_view, std::span  promis">
+    <meta name="description" content="A basic CmakeLists.txt example from a WebServer library.Help to quickly start a project.             Basic file tree1234567891011.├── CMakeLists.txt├── src│   ├── CMakeLists.txt│   ├── Im">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TODO">
-<meta property="og:url" content="http://wasprime.github.io/2023/03/27/TODO/index.html">
+<meta property="og:title" content="Configure Cmake">
+<meta property="og:url" content="http://wasprime.github.io/2023/03/31/Configure-Cmake/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="List what category of articles would be written.             C++  Deleter in std::shared_ptr  What is enable_shared_from_this  Concepts  jthread  RTTI  std::string_view, std::span  promis">
+<meta property="og:description" content="A basic CmakeLists.txt example from a WebServer library.Help to quickly start a project.             Basic file tree1234567891011.├── CMakeLists.txt├── src│   ├── CMakeLists.txt│   ├── Im">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-03-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-09T14:03:07.872Z">
+<meta property="article:published_time" content="2023-03-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-09T16:05:39.000Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="todo">
+<meta property="article:tag" content="configuration">
+<meta property="article:tag" content="cmake">
+<meta property="article:tag" content="make">
+<meta property="article:tag" content="cmakelists">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>TODO - wasPrime&#39;s Blog</title>
+  <title>Configure Cmake - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="TODO"></span>
+            <span id="subtitle" data-typed-text="Configure Cmake"></span>
           
         </div>
 
@@ -208,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-03-27 00:00" pubdate>
-          March 27, 2023 am
+        <time datetime="2023-03-31 00:00" pubdate>
+          March 31, 2023 am
         </time>
       </span>
     
@@ -220,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          258 words
+          4.1k words
         
       </span>
     
@@ -231,7 +234,7 @@
         
         
         
-          1 mins
+          9 mins
         
       </span>
     
@@ -282,35 +285,22 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">TODO</h1>
+            <h1 style="display: none">Configure Cmake</h1>
             
             
               <div class="markdown-body">
                 
                 <div class="note note-primary">
-            <p>List what category of articles would be written.</p>
+            <p>A basic <code>CmakeLists.txt</code> example from <a target="_blank" rel="noopener" href="https://github.com/wasPrime/WebServer">a WebServer library</a>.<br>Help to quickly start a project.</p>
           </div>
 
-<h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul>
-<li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li>
-<li><input disabled="" type="checkbox"> std::string_view, std::span</li>
-<li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li>
-<li><input disabled="" type="checkbox"> Coroutines</li>
-<li><input disabled="" type="checkbox"> Ranges</li>
-<li><input disabled="" type="checkbox"> Modules</li>
-<li><input disabled="" type="checkbox"> muduo</li>
-<li><input disabled="" type="checkbox"> bthread</li>
-<li><input disabled="" type="checkbox"> bvar</li>
-<li><input disabled="" type="checkbox"> bRPC</li>
-</ul>
-<h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul>
-<li><input disabled="" type="checkbox"> goroutines</li>
-<li><input disabled="" type="checkbox"> M:N scheduling models</li>
-</ul>
+<h2 id="Basic-file-tree"><a href="#Basic-file-tree" class="headerlink" title="Basic file tree"></a>Basic file tree</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs log">.<br>├── CMakeLists.txt<br>├── src<br>│   ├── CMakeLists.txt<br>│   ├── Implementation.cc<br>│   └── include<br>│       ├── Header1.h<br>│       └── Header2.h<br>└── test<br>    ├── CMakeLists.txt<br>    └── Test.cc<br></code></pre></td></tr></table></figure>
+
+<h2 id="Cmake-lists"><a href="#Cmake-lists" class="headerlink" title="Cmake lists"></a>Cmake lists</h2><h3 id="CmakeLists-txt-in-the-root-path"><a href="#CmakeLists-txt-in-the-root-path" class="headerlink" title="CmakeLists.txt in the root path"></a><code>CmakeLists.txt</code> in the root path</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-comment"># CMake configuration file of WebServer</span><br><br><span class="hljs-keyword">cmake_minimum_required</span>(VERSION <span class="hljs-number">3.10</span>)<br><br><span class="hljs-comment"># set language std</span><br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD <span class="hljs-number">20</span>)<br><span class="hljs-comment"># set language std and disable fallback to a previous version</span><br><span class="hljs-keyword">set</span>(CMAKE_CXX_STANDARD_REQUIRED <span class="hljs-keyword">ON</span>)<br><span class="hljs-comment"># Disable CXX Syntax EXTENSIONS</span><br><span class="hljs-keyword">set</span>(CMAKE_CXX_EXTENSIONS <span class="hljs-keyword">OFF</span>)<br><span class="hljs-keyword">set</span>(CMAKE_EXPORT_COMPILE_COMMANDS <span class="hljs-keyword">ON</span>)<br><br><span class="hljs-keyword">project</span>(WebServer<br>        VERSION <span class="hljs-number">0.1</span><br>        DESCRIPTION <span class="hljs-string">&quot;WebServer&quot;</span><br>        LANGUAGES CXX<br>        )<br><br><span class="hljs-comment"># People keep running CMake in the wrong folder, completely nuking their project or creating weird bugs.</span><br><span class="hljs-comment"># This checks if you&#x27;re running CMake from a folder that already has CMakeLists.txt.</span><br><span class="hljs-comment"># Importantly, this catches the common case of running it from the root directory.</span><br><span class="hljs-keyword">file</span>(TO_CMAKE_PATH <span class="hljs-string">&quot;$&#123;PROJECT_BINARY_DIR&#125;/CMakeLists.txt&quot;</span> PATH_TO_CMAKELISTS_TXT)<br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">EXISTS</span> <span class="hljs-string">&quot;$&#123;PATH_TO_CMAKELISTS_TXT&#125;&quot;</span>)<br>    <span class="hljs-keyword">message</span>(FATAL_ERROR <span class="hljs-string">&quot;Run CMake from a build subdirectory! \&quot;mkdir build ; cd build ; cmake .. \&quot; \</span><br><span class="hljs-string">    Some junk files were created in this folder (CMakeCache.txt, CMakeFiles); you should delete those.&quot;</span>)<br><span class="hljs-keyword">endif</span> ()<br><br><span class="hljs-comment">######################################################################################################################</span><br><span class="hljs-comment"># COMPILER SETUP</span><br><span class="hljs-comment">######################################################################################################################</span><br><br><span class="hljs-keyword">include_directories</span>(<span class="hljs-string">&quot;src/include&quot;</span>)<br><br><span class="hljs-keyword">set</span>(BASIC_CXXFLAGS <span class="hljs-string">&quot;-O2 -g -pipe -fPIC -Wall -Wextra -Werror -pedantic-errors -pthread&quot;</span>)<br><span class="hljs-keyword">set</span>(EXTRA_WARNINGS <span class="hljs-string">&quot;-Wnon-virtual-dtor -Wold-style-cast -Woverloaded-virtual -Wsign-promo -Wswitch-default -Wfloat-equal -Wshadow -Wcast-qual -Wextra-semi -Wno-unused-parameter -Wno-attributes&quot;</span>)<br><br><span class="hljs-comment"># Compiler flags.</span><br><span class="hljs-keyword">set</span>(CMAKE_CXX_FLAGS <span class="hljs-string">&quot;$&#123;CMAKE_CXX_FLAGS&#125; $&#123;BASIC_CXXFLAGS&#125; $&#123;EXTRA_WARNINGS&#125;&quot;</span>)<br><span class="hljs-comment"># cmake -DCMAKE_BUILD_TYPE=DEBUG ..</span><br><span class="hljs-comment"># set(CMAKE_CXX_FLAGS_DEBUG &quot;$&#123;CMAKE_CXX_FLAGS_DEBUG&#125; -O0 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls&quot;)</span><br><span class="hljs-keyword">set</span>(CMAKE_EXE_LINKER_FLAGS  <span class="hljs-string">&quot;$&#123;CMAKE_EXE_LINKER_FLAGS&#125; -fPIC&quot;</span>)<br><span class="hljs-keyword">set</span>(CMAKE_SHARED_LINKER_FLAGS <span class="hljs-string">&quot;$&#123;CMAKE_SHARED_LINKER_FLAGS&#125; -fPIC&quot;</span>)<br><span class="hljs-keyword">set</span>(CMAKE_STATIC_LINKER_FLAGS <span class="hljs-string">&quot;$&#123;CMAKE_STATIC_LINKER_FLAGS&#125; -fPIC&quot;</span>)<br><br><span class="hljs-keyword">set</span>(GCC_COVERAGE_LINK_FLAGS <span class="hljs-string">&quot;-fPIC&quot;</span>)<br><span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;CMAKE_CXX_FLAGS: $&#123;CMAKE_CXX_FLAGS&#125;&quot;</span>)<br><span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;CMAKE_CXX_FLAGS_DEBUG: $&#123;CMAKE_CXX_FLAGS_DEBUG&#125;&quot;</span>)<br><span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;CMAKE_EXE_LINKER_FLAGS: $&#123;CMAKE_EXE_LINKER_FLAGS&#125;&quot;</span>)<br><span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;CMAKE_SHARED_LINKER_FLAGS: $&#123;CMAKE_SHARED_LINKER_FLAGS&#125;&quot;</span>)<br><br><span class="hljs-keyword">set</span>(CMAKE_RUNTIME_OUTPUT_DIRECTORY <span class="hljs-variable">$&#123;CMAKE_BINARY_DIR&#125;</span>/bin)<br><span class="hljs-keyword">set</span>(CMAKE_ARCHIVE_OUTPUT_DIRECTORY <span class="hljs-variable">$&#123;CMAKE_BINARY_DIR&#125;</span>/lib)<br><span class="hljs-keyword">set</span>(CMAKE_LIBRARY_OUTPUT_DIRECTORY <span class="hljs-variable">$&#123;CMAKE_BINARY_DIR&#125;</span>/lib)<br><br><span class="hljs-keyword">add_subdirectory</span>(src)<br><span class="hljs-keyword">add_subdirectory</span>(<span class="hljs-keyword">test</span>)<br><br><span class="hljs-comment">######################################################################################################################</span><br><span class="hljs-comment"># COMPILER END</span><br><span class="hljs-comment">######################################################################################################################</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="CmakeLists-txt-in-folder-src"><a href="#CmakeLists-txt-in-folder-src" class="headerlink" title="CmakeLists.txt in folder src"></a><code>CmakeLists.txt</code> in folder src</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">file</span>(GLOB resources *.cc)<br><span class="hljs-keyword">set</span>(server_shared_name server_shared)<br><span class="hljs-keyword">add_library</span>(<span class="hljs-variable">$&#123;server_shared_name&#125;</span> SHARED <span class="hljs-variable">$&#123;resources&#125;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="CmakeLists-txt-in-folder-test"><a href="#CmakeLists-txt-in-folder-test" class="headerlink" title="CmakeLists.txt in folder test"></a><code>CmakeLists.txt</code> in folder test</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">file</span>(GLOB test_resources *.cc)<br><br><span class="hljs-keyword">foreach</span>(test_source <span class="hljs-variable">$&#123;test_resources&#125;</span>)<br>    <span class="hljs-comment"># Create binary names from filenames</span><br>    <span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;test file path $&#123;test_source&#125;&quot;</span>)<br><br>    <span class="hljs-keyword">get_filename_component</span>(test_filename <span class="hljs-variable">$&#123;test_source&#125;</span> NAME)<br>    <span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;test filename $&#123;test_filename&#125;&quot;</span>)<br><br>    <span class="hljs-keyword">string</span>(REPLACE <span class="hljs-string">&quot;.cc&quot;</span> <span class="hljs-string">&quot;&quot;</span> test_name <span class="hljs-variable">$&#123;test_filename&#125;</span>)<br>    <span class="hljs-keyword">message</span>(STATUS <span class="hljs-string">&quot;test name $&#123;test_name&#125;&quot;</span>)<br>    <br>    <span class="hljs-keyword">add_executable</span>(<span class="hljs-variable">$&#123;test_name&#125;</span> <span class="hljs-variable">$&#123;test_source&#125;</span>)<br>    <span class="hljs-keyword">target_link_libraries</span>(<span class="hljs-variable">$&#123;test_name&#125;</span> server_shared pthread)<br><span class="hljs-keyword">endforeach</span>(test_source <span class="hljs-variable">$&#123;test_resources&#125;</span>)<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -319,11 +309,45 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/configuration/" class="category-chain-item">configuration</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/configuration/cmake/" class="category-chain-item">cmake</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
   
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/todo/">#todo</a>
+        <a href="/tags/configuration/">#configuration</a>
+      
+        <a href="/tags/cmake/">#cmake</a>
+      
+        <a href="/tags/make/">#make</a>
+      
+        <a href="/tags/cmakelists/">#cmakelists</a>
       
     </div>
   
@@ -335,8 +359,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>TODO</div>
-      <div>http://wasprime.github.io/2023/03/27/TODO/</div>
+      <div>Configure Cmake</div>
+      <div>http://wasprime.github.io/2023/03/31/Configure-Cmake/</div>
     </div>
     <div class="license-meta">
       
@@ -348,13 +372,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>March 27, 2023</div>
+          <div>March 31, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 9, 2023</div>
+          <div>April 10, 2023</div>
         </div>
       
       
@@ -385,15 +409,21 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/03/28/Configure-Vim/" title="Configure Vim">
+                      <a href="/2023/04/01/What-is-std-unique-ptr/" title="What is std::unique_ptr">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Configure Vim</span>
+                        <span class="hidden-mobile">What is std::unique_ptr</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2023/03/30/What-is-pointer/" title="What is pointer">
+                        <span class="hidden-mobile">What is pointer</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
