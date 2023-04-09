@@ -1,5 +1,5 @@
 ---
-title: Configure iTerm2 & zsh
+title: Configure iTerm2 and Zsh
 date: 2023-04-09 22:00:00
 categories:
 - [configuration, iterm2]
