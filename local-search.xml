@@ -4,9 +4,9 @@
   
   
   <entry>
-    <title>Configure iTerm2 &amp; zsh</title>
-    <link href="/2023/04/09/Configure-iTerm2-zsh/"/>
-    <url>/2023/04/09/Configure-iTerm2-zsh/</url>
+    <title>Configure iTerm2 and Zsh</title>
+    <link href="/2023/04/09/Configure-iTerm2-and-Zsh/"/>
+    <url>/2023/04/09/Configure-iTerm2-and-Zsh/</url>
     
     <content type="html"><![CDATA[<div class="note note-success">            <p>To configure the environments as below:</p><ul><li><code>Oh My Zsh</code></li><li><code>Powerline</code> font</li><li><code>agnoster</code> theme</li><li>Zsh extensions<ul><li><code>zsh-syntax-highlighting</code></li><li><code>zsh-autosuggestions</code></li></ul></li></ul>          </div><h2 id="Install-Oh-My-Zsh"><a href="#Install-Oh-My-Zsh" class="headerlink" title="Install Oh My Zsh"></a>Install <code>Oh My Zsh</code></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sh -c <span class="hljs-string">&quot;<span class="hljs-subst">$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span><br><span class="hljs-comment"># Or</span><br>sh -c <span class="hljs-string">&quot;<span class="hljs-subst">$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)</span>&quot;</span><br></code></pre></td></tr></table></figure><h2 id="Set-Theme"><a href="#Set-Theme" class="headerlink" title="Set Theme"></a>Set Theme</h2><p>Open <code>~/.zhsrc</code>, set <code>ZSH_THEME</code> as <code>agnoster</code>.</p><p><img src="/Configure-iTerm2-zsh/img/theme.jpeg" alt="theme"></p><div class="note note-info">            <ul><li><strong>Official Website:</strong> <a href="https://ohmyz.sh/">https://ohmyz.sh/</a></li><li><strong>Github:</strong> <a href="https://github.com/ohmyzsh/ohmyzsh">https://github.com/ohmyzsh/ohmyzsh</a></li></ul>          </div><h2 id="Set-iTerm2-Colors"><a href="#Set-iTerm2-Colors" class="headerlink" title="Set iTerm2 Colors"></a>Set iTerm2 Colors</h2><p>Open iTerm2 and open its <code>Preferences...</code> or press <code>⌘</code> + <code>,</code>, follow the path <code>Profiles &gt; Open Profiles &gt; Edit Profiles &gt; Colors</code> and select a color.</p><p><img src="/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg" alt="Colors"></p><h2 id="Install-amp-Set-Powerline-font"><a href="#Install-amp-Set-Powerline-font" class="headerlink" title="Install &amp; Set Powerline font"></a>Install &amp; Set <code>Powerline</code> font</h2><h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/powerline/fonts.git --depth=1<br><span class="hljs-built_in">cd</span> fonts<br>./install.sh<br></code></pre></td></tr></table></figure><h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>From <code>Profiles &gt; Open Profiles &gt; Edit Profiles &gt; Text</code> of iTerm2’s preferences, set font as <code>Powerline</code>.</p><p><img src="/Configure-iTerm2-zsh/img/iTerm2_font.jpeg" alt="iTerm2 font"></p><h2 id="Set-Transparency-amp-Background"><a href="#Set-Transparency-amp-Background" class="headerlink" title="Set Transparency &amp; Background"></a>Set Transparency &amp; Background</h2><p>From <code>Profiles &gt; Open Profiles &gt; Edit Profiles &gt; Window</code> of iTerm2’s preferences, set transparency and background.</p><p><img src="/Configure-iTerm2-zsh/img/iTerm2_background.jpeg" alt="iTerm2 transparency &amp; background"></p><h2 id="Install-Zsh-Extensions"><a href="#Install-Zsh-Extensions" class="headerlink" title="Install Zsh Extensions"></a>Install Zsh Extensions</h2><ol><li><p>Install from official website.</p> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="hljs-variable">$ZSH_CUSTOM</span>/plugins/zsh-syntax-highlighting<br>git <span class="hljs-built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git <span class="hljs-variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions<br></code></pre></td></tr></table></figure><blockquote><p><code>$ZSH_CUSTOM</code> is <code>~/.oh-my-zsh/custom</code>.</p></blockquote></li><li><p>Open <code>~/.zshrc</code>, find <code>plugins</code> and change it.</p> <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs vim"># Which plugins would you like <span class="hljs-keyword">to</span> load?<br># Standard plugins can <span class="hljs-keyword">be</span> found in $ZSH/plugins/<br># Custom plugins may <span class="hljs-keyword">be</span> added <span class="hljs-keyword">to</span> $ZSH_CUSTOM/plugins/<br># Example format: plugins=(rails git textmate <span class="hljs-keyword">ruby</span> lighthouse)<br># Add wisely, <span class="hljs-keyword">as</span> too many plugins slow down <span class="hljs-keyword">shell</span> startup.<br>plugins=(git zsh-<span class="hljs-keyword">syntax</span>-highlighting zsh-autosuggestions)<br></code></pre></td></tr></table></figure></li><li><p>Activate</p> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.zshrc<br></code></pre></td></tr></table></figure></li></ol><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://mp.weixin.qq.com/s/3Uh3CwZwxko8tiB1yEYj7Q">https://mp.weixin.qq.com/s/3Uh3CwZwxko8tiB1yEYj7Q</a></li></ul>]]></content>
     
@@ -273,9 +273,9 @@
       
       <tag>stl</tag>
       
-      <tag>pointer</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>pointer</tag>
       
       <tag>smart_pointer</tag>
       
@@ -314,9 +314,9 @@
       
       <tag>stl</tag>
       
-      <tag>pointer</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>pointer</tag>
       
       <tag>smart_pointer</tag>
       
@@ -380,11 +380,11 @@
     
     <tags>
       
+      <tag>pointer</tag>
+      
       <tag>c</tag>
       
       <tag>basic</tag>
-      
-      <tag>pointer</tag>
       
     </tags>
     
