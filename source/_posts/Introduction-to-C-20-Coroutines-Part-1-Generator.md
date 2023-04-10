@@ -438,18 +438,18 @@ The abstract workflow of coroutine is below:
 
 ```log
 {
-promise-type promise(promise-constructor-arguments); 
-try {
-    co_await promise.initial_suspend(); // The first suspension after created
-    function-body // 函数体
-} catch ( ... ) {
-    if (!initial-await-resume-called)
-    throw; 
-    promise.unhandled_exception(); 
-}
+    promise-type promise(promise-constructor-arguments); 
+    try {
+        co_await promise.initial_suspend(); // The first suspension after created
+        function-body
+    } catch ( ... ) {
+        if (!initial-await-resume-called)
+        throw; 
+        promise.unhandled_exception(); 
+    }
 
 final-suspend:
-co_await promise.final_suspend(); // The last suspension
+    co_await promise.final_suspend(); // The last suspension
 }
 ```
 
@@ -457,14 +457,14 @@ If we ignore exception handler, it can be simplified as below:
 
 ```log
 {
-promise-type promise; 
+    promise-type promise; 
 
-co_await promise.initial_suspend(); 
+    co_await promise.initial_suspend(); 
 
-function-body // 函数体
+    function-body
 
 final-suspend:
-co_await promise.final_suspend(); 
+    co_await promise.final_suspend(); 
 }
 ```
 
