@@ -16,6 +16,7 @@ List what category of articles would be written.
 - [x] ~~Concepts~~
 - [x] ~~jthread~~
 - [x] ~~RTTI~~
+- [x] ~~std::allocator~~
 - [ ] std::string_view, std::span
 - [x] ~~promise, future, packaged_task, shared_future~~
 - [ ] Coroutines
