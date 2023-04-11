@@ -16,26 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="等边三角形的内三角形最小周长今天弟弟问了一道初中数学题：三角形 ABC 是一个等边三角形，动点 P、M、N 分别在线段 AB、BC、AC 上运动，三角形 ABC 边长是 2，求三角形 PMN 的周长最小值。  题目可以概括为 等边三角形的内三角形最小周长，其解题思路和将军饮马问题一脉相承。 在解答这道题之前，可先尝试解答其更通用的形式：任意三角形的内三角形最小周长。 任意三角形的内三角形最小周长">
+    <meta name="description" content="new&#x2F;delete new operator as our familiar new operator, includes 2 steps: operator new to allocate memory placement new to call constructor   delete operator as our familiar delete operator, also i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="等边&#x2F;任意三角形的内三角形最小周长">
-<meta property="og:url" content="http://wasprime.github.io/2023/04/10/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/index.html">
+<meta property="og:title" content="Allocator in STL">
+<meta property="og:url" content="http://wasprime.github.io/2023/04/11/Allocator-in-STL/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="等边三角形的内三角形最小周长今天弟弟问了一道初中数学题：三角形 ABC 是一个等边三角形，动点 P、M、N 分别在线段 AB、BC、AC 上运动，三角形 ABC 边长是 2，求三角形 PMN 的周长最小值。  题目可以概括为 等边三角形的内三角形最小周长，其解题思路和将军饮马问题一脉相承。 在解答这道题之前，可先尝试解答其更通用的形式：任意三角形的内三角形最小周长。 任意三角形的内三角形最小周长">
+<meta property="og:description" content="new&#x2F;delete new operator as our familiar new operator, includes 2 steps: operator new to allocate memory placement new to call constructor   delete operator as our familiar delete operator, also i">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://wasprime.github.io/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/img/equilateral_triangle.jpeg">
-<meta property="og:image" content="http://wasprime.github.io/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/img/solution.png">
-<meta property="article:published_time" content="2023-04-10T14:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-11T14:32:00.631Z">
+<meta property="article:published_time" content="2023-04-11T14:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-11T16:52:56.019Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="math">
-<meta property="article:tag" content="triangle">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="basic">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="allocator">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://wasprime.github.io/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/img/equilateral_triangle.jpeg">
   
   
   
-  <title>等边/任意三角形的内三角形最小周长 - wasPrime&#39;s Blog</title>
+  <title>Allocator in STL - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="等边/任意三角形的内三角形最小周长"></span>
+            <span id="subtitle" data-typed-text="Allocator in STL"></span>
           
         </div>
 
@@ -212,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-10 22:00" pubdate>
-          April 10, 2023 pm
+        <time datetime="2023-04-11 22:00" pubdate>
+          April 11, 2023 pm
         </time>
       </span>
     
@@ -224,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k words
+          3.7k words
         
       </span>
     
@@ -235,7 +234,7 @@
         
         
         
-          4 mins
+          8 mins
         
       </span>
     
@@ -286,23 +285,68 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">等边/任意三角形的内三角形最小周长</h1>
+            <h1 style="display: none">Allocator in STL</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="等边三角形的内三角形最小周长"><a href="#等边三角形的内三角形最小周长" class="headerlink" title="等边三角形的内三角形最小周长"></a>等边三角形的内三角形最小周长</h2><p>今天弟弟问了一道初中数学题：<br>三角形 ABC 是一个等边三角形，动点 P、M、N 分别在线段 AB、BC、AC 上运动，三角形 ABC 边长是 2，求三角形 PMN 的周长最小值。</p>
-<p><img src="/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/img/equilateral_triangle.jpeg" srcset="/img/loading.gif" lazyload alt="equilateral_triangle"></p>
-<p>题目可以概括为 <strong>等边三角形的内三角形最小周长</strong>，其解题思路和将军饮马问题一脉相承。</p>
-<p>在解答这道题之前，可先尝试解答其更通用的形式：<strong>任意三角形的内三角形最小周长</strong>。</p>
-<h2 id="任意三角形的内三角形最小周长"><a href="#任意三角形的内三角形最小周长" class="headerlink" title="任意三角形的内三角形最小周长"></a>任意三角形的内三角形最小周长</h2><div class="note note-primary">
-            <p>思路源于知乎专栏 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/112601281">https://zhuanlan.zhihu.com/p/112601281</a>。</p>
+                <h2 id="new-x2F-delete"><a href="#new-x2F-delete" class="headerlink" title="new&#x2F;delete"></a><code>new</code>&#x2F;<code>delete</code></h2><ul>
+<li><code>new operator</code> as our familiar new operator, includes 2 steps:<ol>
+<li><code>operator new</code> to allocate memory</li>
+<li><code>placement new</code> to call constructor</li>
+</ol>
+</li>
+<li><code>delete operator</code> as our familiar delete operator, also includes 2 steps:<ol>
+<li>call destructor</li>
+<li><code>operator delete</code> to release memory</li>
+</ol>
+</li>
+</ul>
+<div class="note note-warning">
+            <p><code>new operator</code> and <code>delete operator</code> are not allowed to overload, but <code>operator new</code> and <code>operator delete</code> are allowed.</p>
           </div>
 
-<p><strong>结论：</strong><br>满足最小周长条件的三角形三个点都是原三角形三个顶点过其对边引的垂线的垂足。</p>
-<p><img src="/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/img/solution.png" srcset="/img/loading.gif" lazyload alt="solution"></p>
-<p>$$<br>\begin{align*}<br>&amp; 作 CD \bot AB；\newline<br>&amp; D^{‘} 和 D^{‘}_1 分别是点 D 关于 BC 和 AC 的轴对称点； \newline<br>&amp; CG 是 D^{‘} D^{‘}_1 的垂线 \newline<br>\newline<br>证明：&amp; \because D^{‘} 是点 D 关于 BC 的轴对称点 \newline<br>&amp; \therefore CD &#x3D; CD^{‘} \newline<br>同理 &amp; \because D^{‘}_1 是点 D 关于 AC 的轴对称点 \newline<br>&amp; \therefore CD &#x3D; CD^{‘}_1 \newline<br>&amp; \therefore CD^{‘} &#x3D; CD^{‘}_1 \newline<br>&amp; \therefore \angle CD^{‘}G &#x3D; CD^{‘}_1G \newline<br>又 &amp; \because CG 是 D^{‘} D^{‘}_1 的垂线 \newline<br>&amp; \therefore D^{‘}G &#x3D; CD^{‘}cos \angle CD^{‘}G, D^{‘}_1G &#x3D; CD^{‘}_1cos \angle CD^{‘}_1G \newline<br>&amp; \therefore D^{‘}D^{‘}_1 &#x3D; 2D^{‘}G &#x3D; 2CD^{‘}cos \angle CD^{‘}G &#x3D; 2CDcos \angle CD^{‘}G \newline<br>\newline<br>&amp; 已知 \because \angle ECF 一定 \newline<br>&amp; \therefore \angle CEF + \angle CFE 一定 \newline<br>&amp; \therefore \angle D^{‘}CE + \angle CD^{‘}G + \angle D^{‘}_1CF + \angle CD^{‘}_1G 一定 \newline<br>又 &amp; \angle ECF 一定 \newline<br>&amp; \therefore \angle DCE + \angle DCF 一定 \newline<br>&amp; \because D^{‘} 和 D^{‘}_1 分别是点 D 关于 BC 和 AC 的轴对称点 \newline<br>&amp; \therefore \angle DCE &#x3D; \angle D^{‘}CE, \angle DCF &#x3D; \angle D^{‘}_1CF \newline<br>&amp; \therefore \angle D^{‘}CE + \angle D^{‘}_1CF 一定 \newline<br>&amp; \therefore \angle CD^{‘}G + \angle CD^{‘}_1G 一定，且已证 \angle CD^{‘}G &#x3D; CD^{‘}_1G \newline<br>&amp; \therefore \angle CD^{‘}G 一定 \newline<br>\newline<br>又 &amp; \because D^{‘} 和 D^{‘}_1 分别是点 D 关于 BC 和 AC 的轴对称点 \newline<br>&amp; \therefore ED &#x3D; ED^{‘}, FD &#x3D; FD^{‘}_1 \newline<br>&amp; \therefore C_\triangle DEF &#x3D; ED + EF + FD &#x3D; ED^{‘} + EF + FD^{‘}_1 &#x3D; D^{‘}D^{‘}_1 &#x3D; 2CDcos \angle CD^{‘}G \newline<br>\newline<br>&amp; \because CD \bot AB \newline<br>&amp; \therefore 此时点 D 满足 CD 为最短线段，且已证 \angle CD^{‘}G 一定 \newline<br>&amp; \therefore 此时 C_\triangle DEF 最小 \newline<br>\end{align*}<br>$$</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在完成上述证明后，取一特殊情况，即该三角形为等边三角形，那么满足最小周长条件的目标三角形的三个点正好位于其所在线段的中点。</p>
+<h2 id="Two-tiers-of-memory-allocators"><a href="#Two-tiers-of-memory-allocators" class="headerlink" title="Two tiers of memory allocators"></a>Two tiers of memory allocators</h2><p>STL provides two tiers of memory allocators:</p>
+<ul>
+<li>When size that allocation needs is large than 128KB, use <code>new operator</code> directly.</li>
+<li>Otherwise for small objects, a secondary memory allocator, or memory pool, is used, which is implemented through a free linked list.</li>
+</ul>
+<p>The reason why to use two tiers of memory allocators is to reduce the frequency of mallocation and to reduce memory fragmentation.</p>
+<h3 id="The-first-tier"><a href="#The-first-tier" class="headerlink" title="The first tier"></a>The first tier</h3><h4 id="operator-new"><a href="#operator-new" class="headerlink" title="operator new"></a><code>operator new</code></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> *<span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>        Foo* p = (Foo*)<span class="hljs-built_in">malloc</span>(size);<br>        <span class="hljs-keyword">return</span> p;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(<span class="hljs-type">void</span>* p, <span class="hljs-type">size_t</span> size)</span></span>&#123;<br>        <span class="hljs-built_in">free</span>(p);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h4 id="placement-new"><a href="#placement-new" class="headerlink" title="placement new"></a><code>placement new</code></h4><p>A usage is:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">Object* p = <span class="hljs-built_in">new</span> (address) <span class="hljs-built_in">ClassConstruct</span>(...);<br></code></pre></td></tr></table></figure>
+
+<p>Another usage is:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;new&gt;</span> <span class="hljs-comment">// for placement new</span></span><br><br><span class="hljs-type">int</span>* ptr = ::<span class="hljs-keyword">operator</span> <span class="hljs-built_in">new</span>(<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>));<br>::<span class="hljs-keyword">new</span> ((<span class="hljs-type">void</span>*)ptr) <span class="hljs-built_in">int</span>();<br></code></pre></td></tr></table></figure>
+
+<p><code>placement new</code> is also a overloaded version of <code>operator new</code>! For instance:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// normal overloaded `operator new`</span><br>    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">malloc</span>(size);<br>    &#125;<br>    ​<br>    <span class="hljs-comment">// STL has provided the overloaded version of `placement new()`</span><br>    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size, <span class="hljs-type">void</span>* start)</span> </span>&#123; <br>        do_something;<br>        <span class="hljs-keyword">return</span> start; <br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<div class="note note-warning">
+            <p>Don’t forget to call destructor before <code>operator delete</code> if <code>placement new</code> is adopted unless its destructor isn’t necessary. In other words, the object is a trivially destructible object. We can use <code>std::is_trivially_destructible</code> to distinguish whether it’s a trivially destructible object or not.</p>
+          </div>
+
+<h4 id="allocator"><a href="#allocator" class="headerlink" title="allocator"></a>allocator</h4><p>There are 4 functions inside allocator:</p>
+<ul>
+<li><code>allocate(size_t __n)</code>: call <code>operator new</code></li>
+<li><code>deallocate(_Tp* __p, size_t __n)</code>: call <code>operator delete</code></li>
+<li><code>construct(_Up* __p, _Args&amp;&amp;... __args)</code>: call <code>placement new</code></li>
+<li><code>destroy(pointer __p)</code>: call destructor <code>~T()</code></li>
+</ul>
+<blockquote>
+<p>Some contents unnecessary to understand are removed.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Tp</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">_LIBCPP_TEMPLATE_VIS</span> allocator<br>    : <span class="hljs-keyword">private</span> __non_trivial_if&lt;!is_void&lt;_Tp&gt;::value, allocator&lt;_Tp&gt; &gt;<br>&#123;<br>    <span class="hljs-built_in">static_assert</span>(!is_volatile&lt;_Tp&gt;::value, <span class="hljs-string">&quot;std::allocator does not support volatile types&quot;</span>);<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">_LIBCPP_NODISCARD_AFTER_CXX17 _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17</span><br><span class="hljs-function">    _Tp* <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span> __n)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (__n &gt; allocator_traits&lt;allocator&gt;::<span class="hljs-built_in">max_size</span>(*<span class="hljs-keyword">this</span>))<br>            __throw_bad_array_new_length();<br>        <span class="hljs-keyword">if</span> (__libcpp_is_constant_evaluated()) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;_Tp*&gt;(::<span class="hljs-keyword">operator</span> <span class="hljs-built_in">new</span>(__n * <span class="hljs-built_in">sizeof</span>(_Tp)));<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;_Tp*&gt;(_VSTD::__libcpp_allocate(__n * <span class="hljs-built_in">sizeof</span>(_Tp), _LIBCPP_ALIGNOF(_Tp)));<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function">_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">deallocate</span><span class="hljs-params">(_Tp* __p, <span class="hljs-type">size_t</span> __n)</span> _NOEXCEPT </span>&#123;<br>        <span class="hljs-keyword">if</span> (__libcpp_is_constant_evaluated()) &#123;<br>            ::<span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(__p)</span></span>;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _VSTD::__libcpp_deallocate((<span class="hljs-type">void</span>*)__p, __n * <span class="hljs-built_in">sizeof</span>(_Tp), _LIBCPP_ALIGNOF(_Tp));<br>        &#125;<br>    &#125;<br><br>    _LIBCPP_DEPRECATED_IN_CXX17 <span class="hljs-keyword">typedef</span> _Tp*       pointer;<br>    _LIBCPP_DEPRECATED_IN_CXX17 <span class="hljs-keyword">typedef</span> <span class="hljs-type">const</span> _Tp* const_pointer;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Up</span>, <span class="hljs-keyword">class</span>... _Args&gt;<br>    <span class="hljs-function">_LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_INLINE_VISIBILITY</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">construct</span><span class="hljs-params">(_Up* __p, _Args&amp;&amp;... __args)</span> </span>&#123;<br>        ::<span class="hljs-keyword">new</span> ((<span class="hljs-type">void</span>*)__p) _Up(_VSTD::forward&lt;_Args&gt;(__args)...);<br>    &#125;<br><br>    <span class="hljs-function">_LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_INLINE_VISIBILITY</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">(pointer __p)</span> </span>&#123;<br>        __p-&gt;~_Tp();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="The-second-tier"><a href="#The-second-tier" class="headerlink" title="The second tier"></a>The second tier</h3><ol>
+<li>Allocate a large buffer of memory;</li>
+<li>Split it into multiple blocks and chain them as lists;</li>
+<li>The memory pool has such 16 lists, each of which is responsible for different size. But they have a rule that the size of the back one is twice than the front’s. For example, the 1st list is responsible for blocks with 4 bytes and the 7th list is responsible for blocks with 256 bytes.</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/548339711">https://zhuanlan.zhihu.com/p/548339711</a></li>
+</ul>
 
                 
               </div>
@@ -321,8 +365,22 @@
     
       <span class="category-chain">
         
-  <a href="/categories/math/" class="category-chain-item">math</a>
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
+
   
 
       </span>
@@ -336,9 +394,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/math/">#math</a>
+        <a href="/tags/cpp/">#cpp</a>
       
-        <a href="/tags/triangle/">#triangle</a>
+        <a href="/tags/basic/">#basic</a>
+      
+        <a href="/tags/stl/">#stl</a>
+      
+        <a href="/tags/allocator/">#allocator</a>
       
     </div>
   
@@ -350,8 +412,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>等边/任意三角形的内三角形最小周长</div>
-      <div>http://wasprime.github.io/2023/04/10/等边-任意三角形的内三角形最小周长/</div>
+      <div>Allocator in STL</div>
+      <div>http://wasprime.github.io/2023/04/11/Allocator-in-STL/</div>
     </div>
     <div class="license-meta">
       
@@ -363,13 +425,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>April 10, 2023</div>
+          <div>April 11, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 11, 2023</div>
+          <div>April 12, 2023</div>
         </div>
       
       
@@ -400,18 +462,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/11/Allocator-in-STL/" title="Allocator in STL">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Allocator in STL</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/09/Configure-iTerm2-and-Zsh/" title="Configure iTerm2 and Zsh">
-                        <span class="hidden-mobile">Configure iTerm2 and Zsh</span>
+                      <a href="/2023/04/10/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/" title="等边/任意三角形的内三角形最小周长">
+                        <span class="hidden-mobile">等边/任意三角形的内三角形最小周长</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -455,12 +511,6 @@
 
 
   
-
-
-  
-  
-
-
 
 
 
@@ -654,49 +704,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

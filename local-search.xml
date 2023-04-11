@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>Allocator in STL</title>
+    <link href="/2023/04/11/Allocator-in-STL/"/>
+    <url>/2023/04/11/Allocator-in-STL/</url>
+    
+    <content type="html"><![CDATA[<h2 id="new-x2F-delete"><a href="#new-x2F-delete" class="headerlink" title="new&#x2F;delete"></a><code>new</code>&#x2F;<code>delete</code></h2><ul><li><code>new operator</code> as our familiar new operator, includes 2 steps:<ol><li><code>operator new</code> to allocate memory</li><li><code>placement new</code> to call constructor</li></ol></li><li><code>delete operator</code> as our familiar delete operator, also includes 2 steps:<ol><li>call destructor</li><li><code>operator delete</code> to release memory</li></ol></li></ul><div class="note note-warning">            <p><code>new operator</code> and <code>delete operator</code> are not allowed to overload, but <code>operator new</code> and <code>operator delete</code> are allowed.</p>          </div><h2 id="Two-tiers-of-memory-allocators"><a href="#Two-tiers-of-memory-allocators" class="headerlink" title="Two tiers of memory allocators"></a>Two tiers of memory allocators</h2><p>STL provides two tiers of memory allocators:</p><ul><li>When size that allocation needs is large than 128KB, use <code>new operator</code> directly.</li><li>Otherwise for small objects, a secondary memory allocator, or memory pool, is used, which is implemented through a free linked list.</li></ul><p>The reason why to use two tiers of memory allocators is to reduce the frequency of mallocation and to reduce memory fragmentation.</p><h3 id="The-first-tier"><a href="#The-first-tier" class="headerlink" title="The first tier"></a>The first tier</h3><h4 id="operator-new"><a href="#operator-new" class="headerlink" title="operator new"></a><code>operator new</code></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> *<span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>        Foo* p = (Foo*)<span class="hljs-built_in">malloc</span>(size);<br>        <span class="hljs-keyword">return</span> p;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(<span class="hljs-type">void</span>* p, <span class="hljs-type">size_t</span> size)</span></span>&#123;<br>        <span class="hljs-built_in">free</span>(p);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h4 id="placement-new"><a href="#placement-new" class="headerlink" title="placement new"></a><code>placement new</code></h4><p>A usage is:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">Object* p = <span class="hljs-built_in">new</span> (address) <span class="hljs-built_in">ClassConstruct</span>(...);<br></code></pre></td></tr></table></figure><p>Another usage is:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;new&gt;</span> <span class="hljs-comment">// for placement new</span></span><br><br><span class="hljs-type">int</span>* ptr = ::<span class="hljs-keyword">operator</span> <span class="hljs-built_in">new</span>(<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>));<br>::<span class="hljs-keyword">new</span> ((<span class="hljs-type">void</span>*)ptr) <span class="hljs-built_in">int</span>();<br></code></pre></td></tr></table></figure><p><code>placement new</code> is also a overloaded version of <code>operator new</code>! For instance:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// normal overloaded `operator new`</span><br>    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">malloc</span>(size);<br>    &#125;<br>    ​<br>    <span class="hljs-comment">// STL has provided the overloaded version of `placement new()`</span><br>    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size, <span class="hljs-type">void</span>* start)</span> </span>&#123; <br>        do_something;<br>        <span class="hljs-keyword">return</span> start; <br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><div class="note note-warning">            <p>Don’t forget to call destructor before <code>operator delete</code> if <code>placement new</code> is adopted unless its destructor isn’t necessary. In other words, the object is a trivially destructible object. We can use <code>std::is_trivially_destructible</code> to distinguish whether it’s a trivially destructible object or not.</p>          </div><h4 id="allocator"><a href="#allocator" class="headerlink" title="allocator"></a>allocator</h4><p>There are 4 functions inside allocator:</p><ul><li><code>allocate(size_t __n)</code>: call <code>operator new</code></li><li><code>deallocate(_Tp* __p, size_t __n)</code>: call <code>operator delete</code></li><li><code>construct(_Up* __p, _Args&amp;&amp;... __args)</code>: call <code>placement new</code></li><li><code>destroy(pointer __p)</code>: call destructor <code>~T()</code></li></ul><blockquote><p>Some contents unnecessary to understand are removed.</p></blockquote><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Tp</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">_LIBCPP_TEMPLATE_VIS</span> allocator<br>    : <span class="hljs-keyword">private</span> __non_trivial_if&lt;!is_void&lt;_Tp&gt;::value, allocator&lt;_Tp&gt; &gt;<br>&#123;<br>    <span class="hljs-built_in">static_assert</span>(!is_volatile&lt;_Tp&gt;::value, <span class="hljs-string">&quot;std::allocator does not support volatile types&quot;</span>);<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">_LIBCPP_NODISCARD_AFTER_CXX17 _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17</span><br><span class="hljs-function">    _Tp* <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span> __n)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (__n &gt; allocator_traits&lt;allocator&gt;::<span class="hljs-built_in">max_size</span>(*<span class="hljs-keyword">this</span>))<br>            __throw_bad_array_new_length();<br>        <span class="hljs-keyword">if</span> (__libcpp_is_constant_evaluated()) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;_Tp*&gt;(::<span class="hljs-keyword">operator</span> <span class="hljs-built_in">new</span>(__n * <span class="hljs-built_in">sizeof</span>(_Tp)));<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;_Tp*&gt;(_VSTD::__libcpp_allocate(__n * <span class="hljs-built_in">sizeof</span>(_Tp), _LIBCPP_ALIGNOF(_Tp)));<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function">_LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR_AFTER_CXX17</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">deallocate</span><span class="hljs-params">(_Tp* __p, <span class="hljs-type">size_t</span> __n)</span> _NOEXCEPT </span>&#123;<br>        <span class="hljs-keyword">if</span> (__libcpp_is_constant_evaluated()) &#123;<br>            ::<span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(__p)</span></span>;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _VSTD::__libcpp_deallocate((<span class="hljs-type">void</span>*)__p, __n * <span class="hljs-built_in">sizeof</span>(_Tp), _LIBCPP_ALIGNOF(_Tp));<br>        &#125;<br>    &#125;<br><br>    _LIBCPP_DEPRECATED_IN_CXX17 <span class="hljs-keyword">typedef</span> _Tp*       pointer;<br>    _LIBCPP_DEPRECATED_IN_CXX17 <span class="hljs-keyword">typedef</span> <span class="hljs-type">const</span> _Tp* const_pointer;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Up</span>, <span class="hljs-keyword">class</span>... _Args&gt;<br>    <span class="hljs-function">_LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_INLINE_VISIBILITY</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">construct</span><span class="hljs-params">(_Up* __p, _Args&amp;&amp;... __args)</span> </span>&#123;<br>        ::<span class="hljs-keyword">new</span> ((<span class="hljs-type">void</span>*)__p) _Up(_VSTD::forward&lt;_Args&gt;(__args)...);<br>    &#125;<br><br>    <span class="hljs-function">_LIBCPP_DEPRECATED_IN_CXX17 _LIBCPP_INLINE_VISIBILITY</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">(pointer __p)</span> </span>&#123;<br>        __p-&gt;~_Tp();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="The-second-tier"><a href="#The-second-tier" class="headerlink" title="The second tier"></a>The second tier</h3><ol><li>Allocate a large buffer of memory;</li><li>Split it into multiple blocks and chain them as lists;</li><li>The memory pool has such 16 lists, each of which is responsible for different size. But they have a rule that the size of the back one is twice than the front’s. For example, the 1st list is responsible for blocks with 4 bytes and the 7th list is responsible for blocks with 256 bytes.</li></ol><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/548339711">https://zhuanlan.zhihu.com/p/548339711</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+      <category>stl</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>basic</tag>
+      
+      <tag>stl</tag>
+      
+      <tag>allocator</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>等边/任意三角形的内三角形最小周长</title>
     <link href="/2023/04/10/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/"/>
     <url>/2023/04/10/%E7%AD%89%E8%BE%B9-%E4%BB%BB%E6%84%8F%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E5%86%85%E4%B8%89%E8%A7%92%E5%BD%A2%E6%9C%80%E5%B0%8F%E5%91%A8%E9%95%BF/</url>
@@ -86,9 +121,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -261,9 +296,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -407,9 +442,9 @@
     
     <tags>
       
-      <tag>c</tag>
-      
       <tag>basic</tag>
+      
+      <tag>c</tag>
       
       <tag>pointer</tag>
       
@@ -442,9 +477,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
@@ -488,7 +523,7 @@
     <link href="/2023/03/27/TODO/"/>
     <url>/2023/03/27/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> Coroutines</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> Coroutines</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul>]]></content>
     
     
     
