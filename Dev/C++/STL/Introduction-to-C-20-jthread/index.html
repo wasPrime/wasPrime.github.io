@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="std::threadGenerally, we have to control std::thread‘s life cycle by writting join&#x2F;detach manually, but actually RAII can help to do it perfectly. Fortuantely, we can achieve it by using std::jth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to C++20 jthread">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-jthread/index.html">
+<meta property="og:site_name" content="wasPrime&#39;s Blog">
+<meta property="og:description" content="std::threadGenerally, we have to control std::thread‘s life cycle by writting join&#x2F;detach manually, but actually RAII can help to do it perfectly. Fortuantely, we can achieve it by using std::jth">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-07T17:54:10.377Z">
+<meta property="article:author" content="wasPrime">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="cpp20">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="thread">
+<meta property="article:tag" content="jthread">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Introduction to C++20 jthread - wasPrime&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wasprime.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wasPrime</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Introduction to C++20 jthread"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-03 00:00" pubdate>
+          April 3, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Introduction to C++20 jthread</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="std-thread"><a href="#std-thread" class="headerlink" title="std::thread"></a><code>std::thread</code></h2><p>Generally, we have to control <code>std::thread</code>‘s life cycle by writting <code>join</code>&#x2F;<code>detach</code> manually, but actually RAII can help to do it perfectly. Fortuantely, we can achieve it by using <code>std::jthread</code> in C++20 standard library.</p>
+<h2 id="std-jthread"><a href="#std-jthread" class="headerlink" title="std::jthread"></a><code>std::jthread</code></h2><div class="note note-info">
+            <p>The implementation of <code>std::jthread</code> shown in this page is from MSVC STL.</p>
+          </div>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">nostopstate_t</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">nostopstate_t</span><span class="hljs-params">()</span> </span>= <span class="hljs-keyword">default</span>;<br>&#125;;<br><span class="hljs-keyword">inline</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">nostopstate_t</span> nostopstate&#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">jthread</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> id                 = thread::id;<br>    <span class="hljs-keyword">using</span> native_handle_type = thread::native_handle_type;<br><br>    <span class="hljs-built_in">jthread</span>() <span class="hljs-keyword">noexcept</span> : _Impl&#123;&#125;, _Ssource&#123;nostopstate&#125; &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Fn</span>, <span class="hljs-keyword">class</span>... _Args, <span class="hljs-type">enable_if_t</span>&lt;!is_same_v&lt;<span class="hljs-type">remove_cvref_t</span>&lt;_Fn&gt;, jthread&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    _NODISCARD_CTOR <span class="hljs-keyword">explicit</span> <span class="hljs-built_in">jthread</span>(_Fn&amp;&amp; _Fx, _Args&amp;&amp;... _Ax) &#123;<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">constexpr</span> (is_invocable_v&lt;<span class="hljs-type">decay_t</span>&lt;_Fn&gt;, stop_token, <span class="hljs-type">decay_t</span>&lt;_Args&gt;...&gt;) &#123;<br>            _Impl._Start(_STD forward&lt;_Fn&gt;(_Fx), _Ssource.<span class="hljs-built_in">get_token</span>(), _STD forward&lt;_Args&gt;(_Ax)...);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            _Impl._Start(_STD forward&lt;_Fn&gt;(_Fx), _STD forward&lt;_Args&gt;(_Ax)...);<br>        &#125;<br>    &#125;<br><br>    ~<span class="hljs-built_in">jthread</span>() &#123;<br>        _Try_cancel_and_join();<br>    &#125;<br><br>    <span class="hljs-built_in">jthread</span>(<span class="hljs-type">const</span> jthread&amp;)     = <span class="hljs-keyword">delete</span>;<br>    <span class="hljs-built_in">jthread</span>(jthread&amp;&amp;) <span class="hljs-keyword">noexcept</span> = <span class="hljs-keyword">default</span>;<br>    jthread&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> jthread&amp;) = <span class="hljs-keyword">delete</span>;<br><br>    jthread&amp; <span class="hljs-keyword">operator</span>=(jthread&amp;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// note: the standard specifically disallows making self-move-assignment a no-op here</span><br>        <span class="hljs-comment">// N4861 [thread.jthread.cons]/13</span><br>        <span class="hljs-comment">// Effects: If joinable() is true, calls request_stop() and then join(). Assigns the state</span><br>        <span class="hljs-comment">// of x to *this and sets x to a default constructed state.</span><br>        _Try_cancel_and_join();<br>        _Impl    = _STD <span class="hljs-built_in">move</span>(_Other._Impl);<br>        _Ssource = _STD <span class="hljs-built_in">move</span>(_Other._Ssource);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(jthread&amp; _Other)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        _Impl.<span class="hljs-built_in">swap</span>(_Other._Impl);<br>        _Ssource.<span class="hljs-built_in">swap</span>(_Other._Ssource);<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">bool</span> <span class="hljs-title">joinable</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Impl.<span class="hljs-built_in">joinable</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">join</span><span class="hljs-params">()</span> </span>&#123;<br>        _Impl.<span class="hljs-built_in">join</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">detach</span><span class="hljs-params">()</span> </span>&#123;<br>        _Impl.<span class="hljs-built_in">detach</span>();<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD id <span class="hljs-title">get_id</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Impl.<span class="hljs-built_in">get_id</span>();<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD native_handle_type <span class="hljs-title">native_handle</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> <span class="hljs-comment">/* strengthened */</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Impl.<span class="hljs-built_in">native_handle</span>();<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD stop_source <span class="hljs-title">get_stop_source</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Ssource;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD stop_token <span class="hljs-title">get_stop_token</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Ssource.<span class="hljs-built_in">get_token</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">request_stop</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Ssource.<span class="hljs-built_in">request_stop</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(jthread&amp; _Lhs, jthread&amp; _Rhs)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        _Lhs.<span class="hljs-built_in">swap</span>(_Rhs);<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">static</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title">hardware_concurrency</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> thread::<span class="hljs-built_in">hardware_concurrency</span>();<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">void</span> _Try_cancel_and_join() <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (_Impl.<span class="hljs-built_in">joinable</span>()) &#123;<br>            _Ssource.<span class="hljs-built_in">request_stop</span>();<br>            _Impl.<span class="hljs-built_in">join</span>();<br>        &#125;<br>    &#125;<br><br>    thread _Impl;<br>    stop_source _Ssource;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><code>std::jthread</code> looks basically similar to <code>std::thread</code>. It identifies the thread state by <code>joinable()</code> and adjusts the thread state by <code>join()</code>. In addition to this, we cann’t ignore the member variable <code>_Ssource</code> whose type is <code>stop_source</code>. What is it?</p>
+<h2 id="stop-source"><a href="#stop-source" class="headerlink" title="stop_source"></a><code>stop_source</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">stop_source</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">stop_source</span>() : _State&#123;<span class="hljs-keyword">new</span> _Stop_state&#125; &#123;&#125;<br>    <span class="hljs-keyword">explicit</span> <span class="hljs-built_in">stop_source</span>(<span class="hljs-type">nostopstate_t</span>) <span class="hljs-keyword">noexcept</span> : _State&#123;&#125; &#123;&#125;<br>    <span class="hljs-built_in">stop_source</span>(<span class="hljs-type">const</span> stop_source&amp; _Other) <span class="hljs-keyword">noexcept</span> : _State&#123;_Other._State&#125; &#123;<br>        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Local = _State;<br>        <span class="hljs-keyword">if</span> (_Local != <span class="hljs-literal">nullptr</span>) &#123;<br>            _Local-&gt;_Stop_sources.<span class="hljs-built_in">fetch_add</span>(<span class="hljs-number">2</span>, memory_order_relaxed);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-built_in">stop_source</span>(stop_source&amp;&amp; _Other) <span class="hljs-keyword">noexcept</span> : _State&#123;<span class="hljs-function">_STD <span class="hljs-title">exchange</span><span class="hljs-params">(_Other._State, <span class="hljs-literal">nullptr</span>)</span>&#125; </span>&#123;&#125;<br>    stop_source&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> stop_source&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        stop_source&#123;_Other&#125;.<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    stop_source&amp; <span class="hljs-keyword">operator</span>=(stop_source&amp;&amp; _Other) <span class="hljs-keyword">noexcept</span> &#123;<br>        stop_source&#123;_STD <span class="hljs-built_in">move</span>(_Other)&#125;.<span class="hljs-built_in">swap</span>(*<span class="hljs-keyword">this</span>);<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    ~<span class="hljs-built_in">stop_source</span>() &#123;<br>        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Local = _State;<br>        <span class="hljs-keyword">if</span> (_Local != <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">if</span> ((_Local-&gt;_Stop_sources.<span class="hljs-built_in">fetch_sub</span>(<span class="hljs-number">2</span>, memory_order_acq_rel) &gt;&gt; <span class="hljs-number">1</span>) == <span class="hljs-number">1</span>) &#123;<br>                <span class="hljs-keyword">if</span> (_Local-&gt;_Stop_tokens.<span class="hljs-built_in">fetch_sub</span>(<span class="hljs-number">1</span>, memory_order_acq_rel) == <span class="hljs-number">1</span>) &#123;<br>                    <span class="hljs-keyword">delete</span> _Local;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(stop_source&amp; _Other)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-function">_STD <span class="hljs-title">swap</span><span class="hljs-params">(_State, _Other._State)</span></span>;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD stop_token <span class="hljs-title">get_token</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Local = _State;<br>        <span class="hljs-keyword">if</span> (_Local != <span class="hljs-literal">nullptr</span>) &#123;<br>            _Local-&gt;_Stop_tokens.<span class="hljs-built_in">fetch_add</span>(<span class="hljs-number">1</span>, memory_order_relaxed);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> stop_token&#123;_Local&#125;;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">bool</span> <span class="hljs-title">stop_requested</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Local = _State;<br>        <span class="hljs-keyword">return</span> _Local != <span class="hljs-literal">nullptr</span> &amp;&amp; _Local-&gt;_Stop_requested();<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">bool</span> <span class="hljs-title">stop_possible</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _State != <span class="hljs-literal">nullptr</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">request_stop</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Local = _State;<br>        <span class="hljs-keyword">return</span> _Local &amp;&amp; _Local-&gt;_Request_stop();<br>    &#125;<br><br>    _NODISCARD <span class="hljs-keyword">friend</span> <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>==(<span class="hljs-type">const</span> stop_source&amp; _Lhs, <span class="hljs-type">const</span> stop_source&amp; _Rhs) <span class="hljs-keyword">noexcept</span> = <span class="hljs-keyword">default</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(stop_source&amp; _Lhs, stop_source&amp; _Rhs)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-function">_STD <span class="hljs-title">swap</span><span class="hljs-params">(_Lhs._State, _Rhs._State)</span></span>;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    _Stop_state* _State;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Stop-state"><a href="#Stop-state" class="headerlink" title="_Stop_state"></a><code>_Stop_state</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">_Stop_state</span> &#123;<br>    atomic&lt;<span class="hljs-type">uint32_t</span>&gt; _Stop_tokens  = <span class="hljs-number">1</span>; <span class="hljs-comment">// plus one shared by all stop_sources</span><br>    atomic&lt;<span class="hljs-type">uint32_t</span>&gt; _Stop_sources = <span class="hljs-number">2</span>; <span class="hljs-comment">// plus the low order bit is the stop requested bit</span><br>    _Locked_pointer&lt;_Stop_callback_base&gt; _Callbacks;<br>    <span class="hljs-comment">// always uses relaxed operations; ordering provided by the _Callbacks lock</span><br>    <span class="hljs-comment">// (atomic just to get wait/notify support)</span><br>    atomic&lt;<span class="hljs-type">const</span> _Stop_callback_base*&gt; _Current_callback = <span class="hljs-literal">nullptr</span>;<br>    _Thrd_id_t _Stopping_thread                          = <span class="hljs-number">0</span>;<br><br>    _NODISCARD <span class="hljs-type">bool</span> _Stop_requested() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> (_Stop_sources.<span class="hljs-built_in">load</span>() &amp; <span class="hljs-type">uint32_t</span>&#123;<span class="hljs-number">1</span>&#125;) != <span class="hljs-number">0</span>;<br>    &#125;<br><br>    _NODISCARD <span class="hljs-type">bool</span> _Stop_possible() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> _Stop_sources.<span class="hljs-built_in">load</span>() != <span class="hljs-number">0</span>;<br>    &#125;<br><br>    _NODISCARD <span class="hljs-type">bool</span> _Request_stop() <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-comment">// Attempts to request stop and call callbacks, returns whether request was successful</span><br>        <span class="hljs-keyword">if</span> ((_Stop_sources.<span class="hljs-built_in">fetch_or</span>(<span class="hljs-type">uint32_t</span>&#123;<span class="hljs-number">1</span>&#125;) &amp; <span class="hljs-type">uint32_t</span>&#123;<span class="hljs-number">1</span>&#125;) != <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-comment">// another thread already requested</span><br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        _Stopping_thread = _Thrd_id();<br>        <span class="hljs-keyword">for</span> (;;) &#123;<br>            <span class="hljs-keyword">auto</span> _Head = _Callbacks._Lock_and_load();<br>            _Current_callback.<span class="hljs-built_in">store</span>(_Head, memory_order_relaxed);<br>            _Current_callback.<span class="hljs-built_in">notify_all</span>();<br>            <span class="hljs-keyword">if</span> (_Head == <span class="hljs-literal">nullptr</span>) &#123;<br>                _Callbacks._Store_and_unlock(<span class="hljs-literal">nullptr</span>);<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125;<br><br>            <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> _Next = _STD <span class="hljs-built_in">exchange</span>(_Head-&gt;_Next, <span class="hljs-literal">nullptr</span>);<br>            _STL_INTERNAL_CHECK(_Head-&gt;_Prev == <span class="hljs-literal">nullptr</span>);<br>            <span class="hljs-keyword">if</span> (_Next != <span class="hljs-literal">nullptr</span>) &#123;<br>                _Next-&gt;_Prev = <span class="hljs-literal">nullptr</span>;<br>            &#125;<br><br>            _Callbacks._Store_and_unlock(_Next); <span class="hljs-comment">// unlock before running _Head so other registrations</span><br>                                                 <span class="hljs-comment">// can detach without blocking on the callback</span><br><br>            _Head-&gt;_Fn(_Head); <span class="hljs-comment">// might destroy *_Head</span><br>        &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Usage-of-std-jthread"><a href="#Usage-of-std-jthread" class="headerlink" title="Usage of std::jthread"></a>Usage of <code>std::jthread</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::jthread <span class="hljs-title">thread</span><span class="hljs-params">([](std::stop_token st) &#123;</span></span><br><span class="hljs-params"><span class="hljs-function">        <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;</span></span><br><span class="hljs-params"><span class="hljs-function">        <span class="hljs-keyword">while</span> (!st.stop_requested()) &#123;</span></span><br><span class="hljs-params"><span class="hljs-function">            std::cout &lt;&lt; i++ &lt;&lt; std::endl;</span></span><br><span class="hljs-params"><span class="hljs-function">            std::this_thread::sleep_for(std::chrono::seconds(<span class="hljs-number">1</span>));</span></span><br><span class="hljs-params"><span class="hljs-function">        &#125;</span></span><br><span class="hljs-params"><span class="hljs-function">    &#125;)</span></span>;<br><br>    std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">5</span>));<br>    <span class="hljs-comment">// `request_stop()` will be called when thread&#x27;s dustruction</span><br>    <span class="hljs-comment">// So its explicit call can be omitted</span><br>    thread.<span class="hljs-built_in">request_stop</span>(); <br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>Refer to <a target="_blank" rel="noopener" href="https://github.com/josuttis/jthread/tree/master/source">https://github.com/josuttis/jthread/tree/master/source</a> if needing more examples.</p>
+          </div>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/cpp/">#cpp</a>
+      
+        <a href="/tags/cpp20/">#cpp20</a>
+      
+        <a href="/tags/stl/">#stl</a>
+      
+        <a href="/tags/thread/">#thread</a>
+      
+        <a href="/tags/jthread/">#jthread</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Introduction to C++20 jthread</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-jthread/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>wasPrime</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 3, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>April 8, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Dev/C++/vtable-type-info-and-RTTI/" title="vtable, type_info and RTTI">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">vtable, type_info and RTTI</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Dev/C++/STL/What-is-std-shared-ptr/" title="What is std::shared_ptr">
+                        <span class="hidden-mobile">What is std::shared_ptr</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

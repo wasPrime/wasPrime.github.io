@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Why we need Concepts?If we declare multiple classes: 123class Base &amp;#123;...&amp;#125;;class Derived : public Base &amp;#123;...&amp;#125;;class NotDerived &amp;#123;...&amp;#125;;  I ever met a situation where I would l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to C++20 Concepts">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Concepts/index.html">
+<meta property="og:site_name" content="wasPrime&#39;s Blog">
+<meta property="og:description" content="Why we need Concepts?If we declare multiple classes: 123class Base &amp;#123;...&amp;#125;;class Derived : public Base &amp;#123;...&amp;#125;;class NotDerived &amp;#123;...&amp;#125;;  I ever met a situation where I would l">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-07T17:54:10.376Z">
+<meta property="article:author" content="wasPrime">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="cpp20">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="concepts">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Introduction to C++20 Concepts - wasPrime&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wasprime.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wasPrime</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Introduction to C++20 Concepts"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-29 00:00" pubdate>
+          March 29, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Introduction to C++20 Concepts</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Why-we-need-Concepts"><a href="#Why-we-need-Concepts" class="headerlink" title="Why we need Concepts?"></a>Why we need <code>Concepts</code>?</h2><p>If we declare multiple classes:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span> &#123;...&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span> : <span class="hljs-keyword">public</span> Base &#123;...&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">NotDerived</span> &#123;...&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>I ever met a situation where I would like to deserialize a string expression into an object which must be inherited from <code>Base</code>.</p>
+<p>The original declaration of the parser:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">parse</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; input, std::shared_ptr&lt;T&gt;&amp; output)</span> </span>&#123;...&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">usage</span><span class="hljs-params">()</span> </span>&#123;<br>    std::shared_ptr&lt;Derived&gt; ptr;<br>    <span class="hljs-built_in">assert</span>(<span class="hljs-built_in">parse</span>(<span class="hljs-string">&quot;mock_string&quot;</span>, ptr) == <span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>But how can we create an explicit constraint that <code>T</code> inherits from <code>Base</code>?</p>
+<div class="note note-info">
+            <p>Of course, it’s sufficient to use native pointers.<br>Let’s assume we have to use smart pointers. :)</p>
+          </div>
+
+<h2 id="Constraints-are-neccessary-actually"><a href="#Constraints-are-neccessary-actually" class="headerlink" title="Constraints are neccessary actually"></a>Constraints are neccessary actually</h2><p>For readability and debugging, it is necessary to express constaints explicitly.</p>
+<p>Here is a kind of implmentation in C++11:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">typename</span> std::enable_if&lt;std::is_base_of&lt;Base, T&gt;::value, <span class="hljs-type">int</span>&gt;::<span class="hljs-function">type</span><br><span class="hljs-function">  <span class="hljs-title">parse</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; input, std::shared_ptr&lt;T&gt;&amp; output)</span> </span>&#123;...&#125;<br></code></pre></td></tr></table></figure>
+
+<p>But it’s invasive! We had modified the appearance of the return type <code>int</code>.</p>
+<h3 id="Rewrite-it"><a href="#Rewrite-it" class="headerlink" title="Rewrite it"></a>Rewrite it</h3><p>We can rewrite it in another form:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// `std::enable_if&lt;bool&gt;` is equivalent to `std::enable_if&lt;bool, void&gt;`</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> = <span class="hljs-keyword">typename</span> std::enable_if&lt;std::is_base_of&lt;Base, T&gt;::value&gt;::type&gt;<br><span class="hljs-type">int</span> <span class="hljs-built_in">parse</span>(<span class="hljs-type">const</span> std::string&amp; input, std::shared_ptr&lt;T&gt;&amp; output) &#123;...&#125;<br></code></pre></td></tr></table></figure>
+
+<p>As our common feeling, it’s still ugly. :(</p>
+<h3 id="Rewrite-it-again"><a href="#Rewrite-it-again" class="headerlink" title="Rewrite it again"></a>Rewrite it again</h3><div class="note note-info">
+            <p><strong>For type traits:</strong><br>After C++14 <code>xxx_t&lt;T&gt;</code> is available and it’s equivalent to <code>xxx&lt;T&gt;::type</code> (even <code>typename xxx&lt;T&gt;::type</code>)<br>After C++17 <code>xxx_v&lt;T&gt;</code> is available and it’s equivalent to <code>xxx&lt;T&gt;::value</code></p>
+          </div>
+
+<p>The previous code can be rewrited as below:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> = std::<span class="hljs-type">enable_if_t</span>&lt;std::is_base_of_v&lt;Base, T&gt;&gt;&gt;<br><span class="hljs-type">int</span> <span class="hljs-built_in">parse</span>(<span class="hljs-type">const</span> std::string&amp; input, std::shared_ptr&lt;T&gt;&amp; output) &#123;...&#125;<br></code></pre></td></tr></table></figure>
+
+<p>It’s still a little hard to read and understand, especially since the second argument looks strange in the template argument list. We clearly need a constraint but why we need to bring in a weird thing like <code>typename = ...</code>?</p>
+<p>Besides, template hell is horrible when displaying compiling error messages. It particularly affects the efficency to debug.</p>
+<h3 id="Concepts-is-coming"><a href="#Concepts-is-coming" class="headerlink" title="Concepts is coming"></a><code>Concepts</code> is coming</h3><p>At the end of this page, this example rewritten by <code>concepts</code> will be shown.</p>
+<h2 id="The-simplest-concepts"><a href="#The-simplest-concepts" class="headerlink" title="The simplest concepts"></a>The simplest concepts</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Any = <span class="hljs-literal">true</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> None = <span class="hljs-literal">false</span>;<br></code></pre></td></tr></table></figure>
+
+<p>It’s easy to understand that concepts are essentially compile-time constant booleans.</p>
+<h2 id="Unite-concepts-and-constexpr-bool"><a href="#Unite-concepts-and-constexpr-bool" class="headerlink" title="Unite concepts and constexpr bool"></a>Unite concepts and constexpr bool</h2><p>Here provides a way to reuse constexpr bool so that we may have impression that concepts can be united with constexpr bool.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">inline</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> is_any_v = <span class="hljs-literal">true</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Any = is_any_v&lt;T&gt;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Requirements-on-operations"><a href="#Requirements-on-operations" class="headerlink" title="Requirements on operations"></a>Requirements on operations</h2><p>Assume we had declared a concept named whose declaration like below:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Addable = <span class="hljs-built_in">requires</span>(T x, T y) &#123; x + y; &#125;;<br></code></pre></td></tr></table></figure>
+
+<p>The concept has at least these 3 ways to use:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-function"><span class="hljs-keyword">requires</span> Addable&lt;T&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add1</span><span class="hljs-params">(T x, T y)</span> </span>&#123;<br>  <span class="hljs-keyword">return</span> x + y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;Addable T&gt; <span class="hljs-comment">// Equivalent to template &lt;Addable&lt;&gt; T&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add2</span><span class="hljs-params">(T x, T y)</span> </span>&#123;<br>  <span class="hljs-keyword">return</span> x + y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add3</span><span class="hljs-params">(Addable <span class="hljs-keyword">auto</span> x, Addable <span class="hljs-keyword">auto</span> y)</span> </span>&#123;<br>  <span class="hljs-keyword">return</span> x + y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Constraints-on-member-functions"><a href="#Constraints-on-member-functions" class="headerlink" title="Constraints on member functions"></a>Constraints on member functions</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PowerThing</span> &#123;<br><span class="hljs-keyword">public</span>:<br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">power</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; &#125;<br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> HasPower = <span class="hljs-built_in">requires</span>(T t) &#123;<br>                     <span class="hljs-comment">// std::same_as&lt;decltype(t.power()), int&gt;;</span><br>                     &#123; t.<span class="hljs-built_in">power</span>() &#125; -&gt; std::same_as&lt;<span class="hljs-type">int</span>&gt;;<br>                   &#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">usage</span><span class="hljs-params">()</span> </span>&#123;<br>  HasPower <span class="hljs-keyword">auto</span> something_has_power = <span class="hljs-built_in">PowerThing</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>In this case, I would like to show two places to notice:</p>
+<ol>
+<li>The uncommented line is exactly equivalent to the commented out line although their forms have something different. The uncommented forms is a <strong>syntactic sugar</strong>. It means the return type of <code>t.power()</code> is filled in the first parameter position of <code>std::same_as</code>, and the type <code>int</code> is actually the second parameter.</li>
+<li>To decorate <code>auto</code>, or more precise saying is to constrain it, we can use a concept before <code>auto</code>. It’s a new usage.</li>
+</ol>
+<h2 id="Constraints-on-member-variables"><a href="#Constraints-on-member-variables" class="headerlink" title="Constraints on member variables"></a>Constraints on member variables</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PowerThing</span> &#123;<br><span class="hljs-keyword">public</span>:<br>  <span class="hljs-type">int</span> power;<br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> HasPower = <span class="hljs-built_in">requires</span>(T t) &#123;<br>    <span class="hljs-comment">// Bad case:</span><br>    <span class="hljs-comment">// &#123; t.power &#125; -&gt; std::same_as&lt;int&gt;;</span><br>    <span class="hljs-comment">//</span><br>    <span class="hljs-comment">// Compiler complains:</span><br>    <span class="hljs-comment">// Deduced type &#x27;PowerThing&#x27; does not satisfy &#x27;HasPower&#x27;</span><br>    <span class="hljs-comment">// Because type constraint &#x27;std::same_as&lt;int &amp;, int&gt;&#x27; was not satisfied</span><br><br>    <span class="hljs-comment">// Good case:</span><br>    <span class="hljs-keyword">requires</span> std::same_as&lt;<span class="hljs-keyword">decltype</span>(t.power), <span class="hljs-type">int</span>&gt;; <span class="hljs-comment">// `requires` can be omitted</span><br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">usage</span><span class="hljs-params">()</span> </span>&#123;<br>  HasPower <span class="hljs-keyword">auto</span> something_has_power = <span class="hljs-built_in">PowerThing</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Here we need to notice that <code>t.power</code> is actually a lvalue so the use of <code>std::same_as</code> should be done carefully.</p>
+<h2 id="Multiple-typenames"><a href="#Multiple-typenames" class="headerlink" title="Multiple typenames"></a>Multiple typenames</h2><p>I’ve introduced how to write a concept that indicates a single type is addable. How do we want to write a concept that indicates multiple types are addable?</p>
+<p>It’s not really hard and we can quickly make it:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> Y&gt;<br><span class="hljs-keyword">concept</span> Addable = <span class="hljs-built_in">requires</span>(T t, Y y) &#123; t + y; &#125;;<br></code></pre></td></tr></table></figure>
+
+<p>And we can also summarize its usage with 3 forms corresponding to the single type concept.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> Y&gt;<br>  <span class="hljs-function"><span class="hljs-keyword">requires</span> Addable&lt;T, Y&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add1</span><span class="hljs-params">(T t, Y y)</span> </span>&#123;<br>  <span class="hljs-keyword">return</span> t + y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Y, Addable&lt;Y&gt; T&gt;<br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add2</span><span class="hljs-params">(T t, Y y)</span> </span>&#123;<br>  <span class="hljs-keyword">return</span> t + y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">add3</span><span class="hljs-params">(<span class="hljs-keyword">auto</span> y, Addable&lt;<span class="hljs-keyword">decltype</span>(y)&gt; <span class="hljs-keyword">auto</span> t)</span> </span>&#123;<br>  <span class="hljs-keyword">return</span> t + y;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The second and the third look weird. They are similar to the syntactic sugar just mentioned. <code>T</code> is the first parameter and <code>Y</code> is the second. In order to declare <code>T</code> (or <code>auto t</code>), we have to swap they positions and declare <code>Y</code> (or <code>auto y</code>) in advance. It likes a trick and there may be some difficulty to understand. Therefore, we have to  take some tradeoffs between readability and writability.</p>
+<h2 id="Constraints-on-return-values"><a href="#Constraints-on-return-values" class="headerlink" title="Constraints on return values"></a>Constraints on return values</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">Addable <span class="hljs-keyword">auto</span> <span class="hljs-title">add</span><span class="hljs-params">(Addable <span class="hljs-keyword">auto</span> x, Addable <span class="hljs-keyword">auto</span> y)</span> </span>&#123; <span class="hljs-keyword">return</span> x + y; &#125;<br><br><span class="hljs-comment">// Bad case:</span><br><span class="hljs-keyword">auto</span> sum = <span class="hljs-built_in">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);<br><span class="hljs-comment">// Good case:</span><br>Addable <span class="hljs-keyword">auto</span> sum = <span class="hljs-built_in">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Best-Pratice-Prefer-concept-names-over-auto-for-local-variables-1"><a href="#Best-Pratice-Prefer-concept-names-over-auto-for-local-variables-1" class="headerlink" title="Best Pratice: Prefer concept names over auto for local variables[1]"></a>Best Pratice: Prefer concept names over <code>auto</code> for local variables<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[ISOCPP C++ Core Guidelines T.12](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#t12-prefer-concept-names-over-auto-for-local-variables)">[1]</span></a></sup></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Sequence = <span class="hljs-built_in">requires</span>(T t) &#123;<br>                     t.<span class="hljs-built_in">begin</span>()++;<br>                     t.<span class="hljs-built_in">begin</span>() != t.<span class="hljs-built_in">end</span>();<br>                     &#123; *t.<span class="hljs-built_in">begin</span>() &#125; -&gt; std::same_as&lt;<span class="hljs-keyword">typename</span> T::reference&gt;;<br>                   &#125;;<br><br>Sequence <span class="hljs-keyword">auto</span> container = std::vector&lt;<span class="hljs-type">int</span>&gt;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="Association-static-interface-x2F-polymorphism"><a href="#Association-static-interface-x2F-polymorphism" class="headerlink" title="Association: static interface&#x2F;polymorphism"></a>Association: static interface&#x2F;polymorphism</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-keyword">concept</span> Sequence = <span class="hljs-built_in">requires</span>(T t) &#123;...&#125;;<br><br><span class="hljs-keyword">enum class</span> <span class="hljs-title class_">SequenceType</span> &#123; VECTOR, LIST, OTHER &#125;;<br><br><span class="hljs-comment">// Type Factory</span><br><span class="hljs-keyword">template</span> &lt;SequenceType&gt;<br><span class="hljs-function">Sequence <span class="hljs-keyword">auto</span> <span class="hljs-title">get_sequence</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-keyword">template</span> &lt;&gt;<br>Sequence <span class="hljs-keyword">auto</span> <span class="hljs-built_in">get_sequence</span>&lt;SequenceType::VECTOR&gt;() &#123; <span class="hljs-keyword">return</span> std::vector&lt;<span class="hljs-type">int</span>&gt;&#123;&#125;; &#125;<br><br><span class="hljs-keyword">template</span> &lt;&gt;<br>Sequence <span class="hljs-keyword">auto</span> <span class="hljs-built_in">get_sequence</span>&lt;SequenceType::LIST&gt;() &#123; <span class="hljs-keyword">return</span> std::list&lt;<span class="hljs-type">int</span>&gt;&#123;&#125;; &#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">usage</span><span class="hljs-params">()</span> </span>&#123;<br>  <span class="hljs-comment">// `Sequence` can be omitted</span><br>  Sequence <span class="hljs-keyword">auto</span> sequence = <span class="hljs-built_in">get_sequence</span>&lt;SequenceType::VECTOR&gt;();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>It seems it implements a simple factory pattern by type enumeration values.<br>From another perspective, concept also looks like interface though it’s static context.<br>Most importantly, it’s readable compared with a single <code>auto</code>.</p>
+<h2 id="Anonymous-Concept"><a href="#Anonymous-Concept" class="headerlink" title="Anonymous Concept"></a>Anonymous Concept</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Container&gt;<br>  <span class="hljs-keyword">requires</span><br>    <span class="hljs-comment">/* Anonymous concept begin */</span><br>    <span class="hljs-built_in">requires</span>(Container container) &#123;<br>      &#123; container.<span class="hljs-built_in">size</span>() &#125; -&gt; std::same_as&lt;std::<span class="hljs-type">size_t</span>&gt;;<br>    &#125;<br>    <span class="hljs-comment">/* Anonymous concept end */</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_container_size</span><span class="hljs-params">(Container container)</span> </span>&#123;<br>  std::cout &lt;&lt; container.<span class="hljs-built_in">size</span>() &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The <code>requires</code> written twice isn’t a typo. It means it’s a anonymous concept used just here.</p>
+<h2 id="Merge-multiple-statements-as-far-as-possible"><a href="#Merge-multiple-statements-as-far-as-possible" class="headerlink" title="Merge multiple statements as far as possible"></a>Merge multiple statements as far as possible</h2><div class="note note-info">
+            <p>I summarize it as a best practice.</p>
+          </div>
+
+<h3 id="The-Duplicative-Form"><a href="#The-Duplicative-Form" class="headerlink" title="The Duplicative Form"></a>The Duplicative Form</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> C&gt;<br><span class="hljs-keyword">concept</span> Clonable = <span class="hljs-built_in">requires</span> (C clonable) &#123;<br>  clonable.<span class="hljs-built_in">clone</span>();<br>  <span class="hljs-keyword">requires</span> std::same_as&lt;<span class="hljs-keyword">decltype</span>(clonable.<span class="hljs-built_in">clone</span>()), C&gt;; <span class="hljs-comment">// `requires` can be omitted</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h3 id="The-Concise-Form"><a href="#The-Concise-Form" class="headerlink" title="The Concise Form"></a>The Concise Form</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> C&gt;<br><span class="hljs-keyword">concept</span> Clonable = <span class="hljs-built_in">requires</span> (C clonable) &#123;<br>  &#123; clonable.<span class="hljs-built_in">clone</span>() &#125; -&gt; std::same_as&lt;C&gt;;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="Rewrite-the-previous-example-by-Concepts"><a href="#Rewrite-the-previous-example-by-Concepts" class="headerlink" title="Rewrite the previous example by Concepts"></a>Rewrite the previous example by <code>Concepts</code></h2><p>It’s time to rewrite the previous example by <code>Concepts</code>!</p>
+<p>Let’s review the previous form:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> = std::<span class="hljs-type">enable_if_t</span>&lt;std::is_base_of_v&lt;Base, T&gt;&gt;&gt;<br><span class="hljs-type">int</span> <span class="hljs-built_in">parse</span>(<span class="hljs-type">const</span> std::string&amp; input, std::shared_ptr&lt;T&gt;&amp; output) &#123;...&#125;<br></code></pre></td></tr></table></figure>
+
+<p>And rewrite it to a new form:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span> Base&gt;<br><span class="hljs-keyword">concept</span> InheriteFrom = std::is_base_of_v&lt;Base, T&gt;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br>  <span class="hljs-function"><span class="hljs-keyword">requires</span> InheriteFrom&lt;T, Base&gt;</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">parse</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; input, std::shared_ptr&lt;T&gt;&amp; output)</span> </span>&#123;...&#125;<br></code></pre></td></tr></table></figure>
+
+<p>As we see, the readability of the form rewritten by <code>concepts</code> is undoubtedly better than the previous form. It directly points out the concept is a constraint by keyword <code>requires</code>. It’s great.</p>
+<section class="footnotes"><h2>References</h2><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#t12-prefer-concept-names-over-auto-for-local-variables">ISOCPP C++ Core Guidelines T.12</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/cpp/">#cpp</a>
+      
+        <a href="/tags/cpp20/">#cpp20</a>
+      
+        <a href="/tags/stl/">#stl</a>
+      
+        <a href="/tags/concepts/">#concepts</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Introduction to C++20 Concepts</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Concepts/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>wasPrime</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 29, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>April 8, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Dev/C/What-is-pointer/" title="What is pointer">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">What is pointer</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Configuration/Vim/Configure-Vim/" title="Configure Vim">
+                        <span class="hidden-mobile">Configure Vim</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

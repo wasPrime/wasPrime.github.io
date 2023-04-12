@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Smart PointerAs we know, using raw pointer has the opportunity to reault in memory leak if we forget to delete it or delete it with a wrong way. Therefore, there are potential risks. In traditional C+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is std::unique_ptr">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/What-is-std-unique-ptr/index.html">
+<meta property="og:site_name" content="wasPrime&#39;s Blog">
+<meta property="og:description" content="Smart PointerAs we know, using raw pointer has the opportunity to reault in memory leak if we forget to delete it or delete it with a wrong way. Therefore, there are potential risks. In traditional C+">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-01T14:23:02.000Z">
+<meta property="article:modified_time" content="2023-04-07T17:54:10.378Z">
+<meta property="article:author" content="wasPrime">
+<meta property="article:tag" content="pointer">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="cpp11">
+<meta property="article:tag" content="smart_pointer">
+<meta property="article:tag" content="unique_ptr">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>What is std::unique_ptr - wasPrime&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wasprime.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wasPrime</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="What is std::unique_ptr"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-01 22:23" pubdate>
+          April 1, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">What is std::unique_ptr</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Smart-Pointer"><a href="#Smart-Pointer" class="headerlink" title="Smart Pointer"></a>Smart Pointer</h2><p>As we know, using raw pointer has the opportunity to reault in memory leak if we forget to delete it or delete it with a wrong way. Therefore, there are potential risks.</p>
+<p>In traditional C++, there is <code>std::auto_ptr</code> but it will transfer the ownership of the target object after copying <code>std::auto_ptr</code>. It means that the original auto_ptr is deprecated and it couldn’t be used anymore, but we don’t have methods to avoid actually. It depends to programmers’ self-consciousness. It is also a risk.</p>
+<h2 id="std-unique-ptr"><a href="#std-unique-ptr" class="headerlink" title="std::unique_ptr"></a>std::unique_ptr</h2><p>After C++11, <code>std::unique_ptr</code> is used widely and it’s often a best practice for controlling the life cycle of an object. It means the unique handler leveraging the ownership of the target object. The ownership can’t be copied it can only be transformed by <code>std::move</code>.</p>
+<h3 id="The-declaration-of-std-unique-ptr"><a href="#The-declaration-of-std-unique-ptr" class="headerlink" title="The declaration of std::unique_ptr"></a>The declaration of <code>std::unique_ptr</code></h3><p>The design philosophy of <code>std::unique_ptr</code> is simple. It’s just a wrapper of a raw pointer and it controls the life cycle of the target object by RAII (especially within its destructor).</p>
+<div class="note note-info">
+            <p>The implementation of <code>std::unique_ptr</code> shown in this page is from MSVC STL.</p>
+          </div>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span> = default_delete&lt;_Ty&gt;&gt;<br><span class="hljs-keyword">class</span> unique_ptr;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">default_delete</span> &#123; <span class="hljs-comment">// default deleter for unique_ptr</span><br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-title">default_delete</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>= <span class="hljs-keyword">default</span>;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">enable_if_t</span>&lt;is_convertible_v&lt;_Ty2*, _Ty*&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">default_delete</span>(<span class="hljs-type">const</span> default_delete&lt;_Ty2&gt;&amp;) <span class="hljs-keyword">noexcept</span> &#123;&#125;<br><br>    <span class="hljs-type">void</span> <span class="hljs-built_in">operator</span>()(_Ty* _Ptr) <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> <span class="hljs-comment">/* strengthened */</span> &#123; <span class="hljs-comment">// delete a pointer</span><br>        <span class="hljs-built_in">static_assert</span>(<span class="hljs-number">0</span> &lt; <span class="hljs-built_in">sizeof</span>(_Ty), <span class="hljs-string">&quot;can&#x27;t delete an incomplete type&quot;</span>);<br>        <span class="hljs-keyword">delete</span> _Ptr;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><code>default_delete</code> is a default deleter for the target type <code>_Ty</code>.</p>
+<div class="note note-primary">
+            <p>There is an interesting point here:<br>The deleter is set in the template argument list instead of as a member variable of <code>unique_ptr</code>. The purpose of this kind of implementation is to save abstraction overhead as far as possible. It indicates the idea of <strong>zero overhead abstraction</strong> in C++.</p>
+          </div>
+
+<h3 id="The-implementation-of-std-unique-ptr"><a href="#The-implementation-of-std-unique-ptr" class="headerlink" title="The implementation of std::unique_ptr"></a>The implementation of <code>std::unique_ptr</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx</span> <span class="hljs-comment">/* = default_delete&lt;_Ty&gt; */</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">unique_ptr</span> &#123; <span class="hljs-comment">// non-copyable pointer to an object</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> pointer      = <span class="hljs-keyword">typename</span> _Get_deleter_pointer_type&lt;_Ty, <span class="hljs-type">remove_reference_t</span>&lt;_Dx&gt;&gt;::type; <span class="hljs-comment">// `_Ty*` in most situations</span><br>    <span class="hljs-keyword">using</span> element_type = _Ty;<br>    <span class="hljs-keyword">using</span> deleter_type = _Dx;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx2</span> = _Dx, _Unique_ptr_enable_default_t&lt;_Dx2&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-built_in">unique_ptr</span>() <span class="hljs-keyword">noexcept</span> : _Mypair(_Zero_then_variadic_args_t&#123;&#125;) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> _Dx2 = _Dx, _Unique_ptr_enable_default_t&lt;_Dx2&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-built_in">unique_ptr</span>(<span class="hljs-type">nullptr_t</span>) <span class="hljs-keyword">noexcept</span> : _Mypair(_Zero_then_variadic_args_t&#123;&#125;) &#123;&#125;<br><br>    unique_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">nullptr_t</span>) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">reset</span>();<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// The Standard depicts these constructors that accept pointer as taking type_identity_t&lt;pointer&gt; to inhibit CTAD.</span><br>    <span class="hljs-comment">// Since pointer is an opaque type alias in our implementation, it inhibits CTAD without extra decoration.</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx2</span> = _Dx, _Unique_ptr_enable_default_t&lt;_Dx2&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-keyword">explicit</span> <span class="hljs-built_in">unique_ptr</span>(pointer _Ptr) <span class="hljs-keyword">noexcept</span> : _Mypair(_Zero_then_variadic_args_t&#123;&#125;, _Ptr) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> _Dx2 = _Dx, <span class="hljs-type">enable_if_t</span>&lt;is_constructible_v&lt;_Dx2, <span class="hljs-type">const</span> _Dx2&amp;&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">unique_ptr</span>(pointer _Ptr, <span class="hljs-type">const</span> _Dx&amp; _Dt) <span class="hljs-keyword">noexcept</span> : _Mypair(_One_then_variadic_args_t&#123;&#125;, _Dt, _Ptr) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> _Dx2                                                                            = _Dx,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;negation&lt;is_reference&lt;_Dx2&gt;&gt;, is_constructible&lt;_Dx2, _Dx2&gt;&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">unique_ptr</span>(pointer _Ptr, _Dx&amp;&amp; _Dt) <span class="hljs-keyword">noexcept</span> : _Mypair(_One_then_variadic_args_t&#123;&#125;, _STD <span class="hljs-built_in">move</span>(_Dt), _Ptr) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> _Dx2                                                                                      = _Dx,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;is_reference&lt;_Dx2&gt;, is_constructible&lt;_Dx2, <span class="hljs-type">remove_reference_t</span>&lt;_Dx2&gt;&gt;&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">unique_ptr</span>(pointer, <span class="hljs-type">remove_reference_t</span>&lt;_Dx&gt;&amp;&amp;) = <span class="hljs-keyword">delete</span>;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx2</span> = _Dx, <span class="hljs-type">enable_if_t</span>&lt;is_move_constructible_v&lt;_Dx2&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">unique_ptr</span>(unique_ptr&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span><br>        : _Mypair(_One_then_variadic_args_t&#123;&#125;, _STD forward&lt;_Dx&gt;(_Right.<span class="hljs-built_in">get_deleter</span>()), _Right.<span class="hljs-built_in">release</span>()) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> _Ty2, <span class="hljs-keyword">class</span> _Dx2,<br>        <span class="hljs-type">enable_if_t</span>&lt;<br>            conjunction_v&lt;negation&lt;is_array&lt;_Ty2&gt;&gt;, is_convertible&lt;<span class="hljs-keyword">typename</span> unique_ptr&lt;_Ty2, _Dx2&gt;::pointer, pointer&gt;,<br>                <span class="hljs-type">conditional_t</span>&lt;is_reference_v&lt;_Dx&gt;, is_same&lt;_Dx2, _Dx&gt;, is_convertible&lt;_Dx2, _Dx&gt;&gt;&gt;,<br>            <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    <span class="hljs-built_in">unique_ptr</span>(unique_ptr&lt;_Ty2, _Dx2&gt;&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span><br>        : _Mypair(_One_then_variadic_args_t&#123;&#125;, _STD forward&lt;_Dx2&gt;(_Right.<span class="hljs-built_in">get_deleter</span>()), _Right.<span class="hljs-built_in">release</span>()) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> _Ty2, <span class="hljs-keyword">class</span> _Dx2,<br>        <span class="hljs-type">enable_if_t</span>&lt;conjunction_v&lt;negation&lt;is_array&lt;_Ty2&gt;&gt;, is_assignable&lt;_Dx&amp;, _Dx2&gt;,<br>                        is_convertible&lt;<span class="hljs-keyword">typename</span> unique_ptr&lt;_Ty2, _Dx2&gt;::pointer, pointer&gt;&gt;,<br>            <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    unique_ptr&amp; <span class="hljs-keyword">operator</span>=(unique_ptr&lt;_Ty2, _Dx2&gt;&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-built_in">reset</span>(_Right.<span class="hljs-built_in">release</span>());<br>        _Mypair._Get_first() = _STD forward&lt;_Dx2&gt;(_Right._Mypair._Get_first());<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Dx2</span> = _Dx, <span class="hljs-type">enable_if_t</span>&lt;is_move_assignable_v&lt;_Dx2&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>    unique_ptr&amp; <span class="hljs-keyword">operator</span>=(unique_ptr&amp;&amp; _Right) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> != _STD <span class="hljs-built_in">addressof</span>(_Right)) &#123;<br>            <span class="hljs-built_in">reset</span>(_Right.<span class="hljs-built_in">release</span>());<br>            _Mypair._Get_first() = _STD forward&lt;_Dx&gt;(_Right._Mypair._Get_first());<br>        &#125;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(unique_ptr&amp; _Right)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        _Swap_adl(_Mypair._Myval2, _Right._Mypair._Myval2);<br>        _Swap_adl(_Mypair._Get_first(), _Right._Mypair._Get_first());<br>    &#125;<br><br>    ~<span class="hljs-built_in">unique_ptr</span>() <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (_Mypair._Myval2) &#123;<br>            _Mypair._Get_first()(_Mypair._Myval2);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD _Dx&amp; <span class="hljs-title">get_deleter</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Mypair._Get_first();<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD <span class="hljs-type">const</span> _Dx&amp; <span class="hljs-title">get_deleter</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Mypair._Get_first();<br>    &#125;<br><br>    _NODISCARD <span class="hljs-type">add_lvalue_reference_t</span>&lt;_Ty&gt; <span class="hljs-keyword">operator</span>*() <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-title">noexcept</span><span class="hljs-params">(<span class="hljs-keyword">noexcept</span>(*_STD declval&lt;pointer&gt;()))</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> *_Mypair._Myval2;<br>    &#125;<br><br>    _NODISCARD pointer <span class="hljs-keyword">operator</span>-&gt;() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> _Mypair._Myval2;<br>    &#125;<br><br>    <span class="hljs-function">_NODISCARD pointer <span class="hljs-title">get</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _Mypair._Myval2;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">bool</span>&gt;(_Mypair._Myval2);<br>    &#125;<br><br>    <span class="hljs-function">pointer <span class="hljs-title">release</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> _STD <span class="hljs-built_in">exchange</span>(_Mypair._Myval2, <span class="hljs-literal">nullptr</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">(pointer _Ptr = <span class="hljs-literal">nullptr</span>)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        pointer _Old = _STD <span class="hljs-built_in">exchange</span>(_Mypair._Myval2, _Ptr);<br>        <span class="hljs-keyword">if</span> (_Old) &#123;<br>            _Mypair._Get_first()(_Old);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-built_in">unique_ptr</span>(<span class="hljs-type">const</span> unique_ptr&amp;) = <span class="hljs-keyword">delete</span>;<br>    unique_ptr&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> unique_ptr&amp;) = <span class="hljs-keyword">delete</span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span>, <span class="hljs-keyword">class</span>&gt;<br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">unique_ptr</span>;<br><br>    _Compressed_pair&lt;_Dx, pointer&gt; _Mypair; <span class="hljs-comment">// A pair of (deleter, _Ty*)</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Ignore the implementation of <code>template &lt;class _Ty, class _Dx&gt; class unique_ptr&lt;_Ty[], _Dx&gt;</code>.</p>
+</blockquote>
+<h3 id="The-implementation-of-Compressed-pair"><a href="#The-implementation-of-Compressed-pair" class="headerlink" title="The implementation of _Compressed_pair"></a>The implementation of <code>_Compressed_pair</code></h3><ul>
+<li><code>_Zero_then_variadic_args_t</code> indicates it will all used to construct <code>_Ty2</code> object with all given arguments.</li>
+<li><code>_One_then_variadic_args_t</code> indicates that the <code>_Ty1</code> object is constructed with the first argument and the <code>_Ty2</code> object is constructed with the rest arguments.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty1</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>, <span class="hljs-type">bool</span> = is_empty_v&lt;_Ty1&gt; &amp;&amp; !is_final_v&lt;_Ty1&gt;&gt;<br><span class="hljs-keyword">class</span> _Compressed_pair <span class="hljs-keyword">final</span> : <span class="hljs-keyword">private</span> _Ty1 &#123; <span class="hljs-comment">// store a pair of values, deriving from empty first</span><br><span class="hljs-keyword">public</span>:<br>    _Ty2 _Myval2;<br><br>    <span class="hljs-keyword">using</span> _Mybase = _Ty1; <span class="hljs-comment">// for visualization</span><br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span>... _Other2&gt;<br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">explicit</span> _Compressed_pair(_Zero_then_variadic_args_t, _Other2&amp;&amp;... _Val2) <span class="hljs-built_in">noexcept</span>(<br>        conjunction_v&lt;is_nothrow_default_constructible&lt;_Ty1&gt;, is_nothrow_constructible&lt;_Ty2, _Other2...&gt;&gt;)<br>        : _Ty1(), _Myval2(_STD forward&lt;_Other2&gt;(_Val2)...) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Other1</span>, <span class="hljs-keyword">class</span>... _Other2&gt;<br>    <span class="hljs-keyword">constexpr</span> _Compressed_pair(_One_then_variadic_args_t, _Other1&amp;&amp; _Val1, _Other2&amp;&amp;... _Val2) <span class="hljs-built_in">noexcept</span>(<br>        conjunction_v&lt;is_nothrow_constructible&lt;_Ty1, _Other1&gt;, is_nothrow_constructible&lt;_Ty2, _Other2...&gt;&gt;)<br>        : _Ty1(_STD forward&lt;_Other1&gt;(_Val1)), _Myval2(_STD forward&lt;_Other2&gt;(_Val2)...) &#123;&#125;<br><br>    <span class="hljs-keyword">constexpr</span> _Ty1&amp; _Get_first() <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-type">const</span> _Ty1&amp; _Get_first() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty1</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty2</span>&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">_Compressed_pair</span>&lt;_Ty1, _Ty2, <span class="hljs-literal">false</span>&gt; <span class="hljs-keyword">final</span> &#123; <span class="hljs-comment">// store a pair of values, not deriving from first</span><br><span class="hljs-keyword">public</span>:<br>    _Ty1 _Myval1;<br>    _Ty2 _Myval2;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span>... _Other2&gt;<br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-keyword">explicit</span> _Compressed_pair(_Zero_then_variadic_args_t, _Other2&amp;&amp;... _Val2) <span class="hljs-built_in">noexcept</span>(<br>        conjunction_v&lt;is_nothrow_default_constructible&lt;_Ty1&gt;, is_nothrow_constructible&lt;_Ty2, _Other2...&gt;&gt;)<br>        : _Myval1(), _Myval2(_STD forward&lt;_Other2&gt;(_Val2)...) &#123;&#125;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Other1</span>, <span class="hljs-keyword">class</span>... _Other2&gt;<br>    <span class="hljs-keyword">constexpr</span> _Compressed_pair(_One_then_variadic_args_t, _Other1&amp;&amp; _Val1, _Other2&amp;&amp;... _Val2) <span class="hljs-built_in">noexcept</span>(<br>        conjunction_v&lt;is_nothrow_constructible&lt;_Ty1, _Other1&gt;, is_nothrow_constructible&lt;_Ty2, _Other2...&gt;&gt;)<br>        : _Myval1(_STD forward&lt;_Other1&gt;(_Val1)), _Myval2(_STD forward&lt;_Other2&gt;(_Val2)...) &#123;&#125;<br><br>    <span class="hljs-keyword">constexpr</span> _Ty1&amp; _Get_first() <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> _Myval1;<br>    &#125;<br><br>    <span class="hljs-keyword">constexpr</span> <span class="hljs-type">const</span> _Ty1&amp; _Get_first() <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">return</span> _Myval1;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Note that</strong> <code>_Compressed_pair&lt;_Ty1, _Ty2, true&gt;</code> is used for empty base class optimization. It indicates we don’t have to allocate a memory space for it.</p>
+<p>How to understand <code>template &lt;class _Ty1, class _Ty2, bool = is_empty_v&lt;_Ty1&gt; &amp;&amp; !is_final_v&lt;_Ty1&gt;&gt;</code>?</p>
+<ul>
+<li>If <code>is_empty_v&lt;_Ty1&gt;</code> is false, we have to allocate a memory space for <code>_Ty1</code> (deleter) in <code>_Compressed_pair&lt;_Ty1, _Ty2, false&gt;</code>.</li>
+<li>If <code>is_final_v&lt;_Ty1&gt;</code> is true, <code>_Compressed_pair</code> cann’t inherit from <code>_Ty1</code> hence we have to allocate a memory space for it in <code>_Compressed_pair&lt;_Ty1, _Ty2, false&gt;</code>.</li>
+</ul>
+<h2 id="The-implementation-of-std-make-unique"><a href="#The-implementation-of-std-make-unique" class="headerlink" title="The implementation of std::make_unique"></a>The implementation of <code>std::make_unique</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span>... _Types, <span class="hljs-type">enable_if_t</span>&lt;!is_array_v&lt;_Ty&gt;, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>_NODISCARD unique_ptr&lt;_Ty&gt; <span class="hljs-built_in">make_unique</span>(_Types&amp;&amp;... _Args) &#123; <span class="hljs-comment">// make a unique_ptr</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">unique_ptr</span>&lt;_Ty&gt;(<span class="hljs-keyword">new</span> _Ty(_STD forward&lt;_Types&gt;(_Args)...));<br>&#125;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-type">enable_if_t</span>&lt;is_array_v&lt;_Ty&gt; &amp;&amp; extent_v&lt;_Ty&gt; == <span class="hljs-number">0</span>, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br>_NODISCARD unique_ptr&lt;_Ty&gt; <span class="hljs-built_in">make_unique</span>(<span class="hljs-type">const</span> <span class="hljs-type">size_t</span> _Size) &#123; <span class="hljs-comment">// make a unique_ptr</span><br>    <span class="hljs-keyword">using</span> _Elem = <span class="hljs-type">remove_extent_t</span>&lt;_Ty&gt;;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">unique_ptr</span>&lt;_Ty&gt;(<span class="hljs-keyword">new</span> _Elem[_Size]());<br>&#125;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-keyword">class</span>... _Types, <span class="hljs-type">enable_if_t</span>&lt;extent_v&lt;_Ty&gt; != <span class="hljs-number">0</span>, <span class="hljs-type">int</span>&gt; = <span class="hljs-number">0</span>&gt;<br><span class="hljs-type">void</span> <span class="hljs-built_in">make_unique</span>(_Types&amp;&amp;...) = <span class="hljs-keyword">delete</span>;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> _Ix = <span class="hljs-number">0</span>&gt;<br>_INLINE_VAR <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> extent_v = <span class="hljs-number">0</span>; <span class="hljs-comment">// determine extent of dimension _Ix of array _Ty</span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-type">size_t</span> _Nx&gt;<br>_INLINE_VAR <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> extent_v&lt;_Ty[_Nx], <span class="hljs-number">0</span>&gt; = _Nx;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> _Ix, <span class="hljs-type">size_t</span> _Nx&gt;<br>_INLINE_VAR <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> extent_v&lt;_Ty[_Nx], _Ix&gt; = extent_v&lt;_Ty, _Ix - <span class="hljs-number">1</span>&gt;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> _Ix&gt;<br>_INLINE_VAR <span class="hljs-keyword">constexpr</span> <span class="hljs-type">size_t</span> extent_v&lt;_Ty[], _Ix&gt; = extent_v&lt;_Ty, _Ix - <span class="hljs-number">1</span>&gt;;<br></code></pre></td></tr></table></figure>
+
+<p>It indicates that it’s available to write below code:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">auto</span> p1 = std::<span class="hljs-built_in">make_unique</span>&lt;<span class="hljs-type">int</span>&gt;();<br><span class="hljs-keyword">auto</span> p2 = std::<span class="hljs-built_in">make_unique</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">5</span>);<br><span class="hljs-keyword">auto</span> p3 = std::<span class="hljs-built_in">make_unique</span>&lt;<span class="hljs-type">int</span>[]&gt;(<span class="hljs-number">5</span>);<br></code></pre></td></tr></table></figure>
+
+<p>But it’s not allowed that:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">auto</span> p4 = std::<span class="hljs-built_in">make_unique</span>&lt;<span class="hljs-type">int</span>[<span class="hljs-number">5</span>]&gt;();<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/pointer/">#pointer</a>
+      
+        <a href="/tags/cpp/">#cpp</a>
+      
+        <a href="/tags/stl/">#stl</a>
+      
+        <a href="/tags/cpp11/">#cpp11</a>
+      
+        <a href="/tags/smart-pointer/">#smart_pointer</a>
+      
+        <a href="/tags/unique-ptr/">#unique_ptr</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>What is std::unique_ptr</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/What-is-std-unique-ptr/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>wasPrime</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 1, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>April 8, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Dev/C++/STL/What-is-std-shared-ptr/" title="What is std::shared_ptr">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">What is std::shared_ptr</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Configuration/Cmake/Configure-Cmake/" title="Configure Cmake">
+                        <span class="hidden-mobile">Configure Cmake</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

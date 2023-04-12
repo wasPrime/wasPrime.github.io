@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="A tutorial for C language beginners.             Pointer is an addressAs we all know, a variable or object always has a memory address, either on stack or on heap. For example, we suppoes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is pointer">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C/What-is-pointer/index.html">
+<meta property="og:site_name" content="wasPrime&#39;s Blog">
+<meta property="og:description" content="A tutorial for C language beginners.             Pointer is an addressAs we all know, a variable or object always has a memory address, either on stack or on heap. For example, we suppoes">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-07T17:54:10.377Z">
+<meta property="article:author" content="wasPrime">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="basic">
+<meta property="article:tag" content="pointer">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>What is pointer - wasPrime&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wasprime.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wasPrime</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="What is pointer"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-30 00:00" pubdate>
+          March 30, 2023 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">What is pointer</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-info">
+            <p>A tutorial for C language beginners.</p>
+          </div>
+
+<h2 id="Pointer-is-an-address"><a href="#Pointer-is-an-address" class="headerlink" title="Pointer is an address"></a>Pointer is an address</h2><p>As we all know, a variable or object always has a memory address, either on stack or on heap.</p>
+<p>For example, we suppoese to write a demo1 program like this:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// demo1</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;value: %d, address: %p\n&quot;</span>, i, &amp;i);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The result on my machine is:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs log">value: 1, address: 0x16fbe348c<br></code></pre></td></tr></table></figure>
+
+<h3 id="Analysis-of-demo1"><a href="#Analysis-of-demo1" class="headerlink" title="Analysis of demo1"></a>Analysis of demo1</h3><p>The <code>&amp;i</code> is used to get the address of <code>i</code>, and <code>%p</code> is formatted in hexadecimal form.</p>
+<p>So <code>0x16fbe348c</code> is the address of <code>i</code> on my machine in this execution, and it’s probably not going to be this address when I do another execution or when you do an execution. It doesn’t matter, as long as there is an output. :)</p>
+<p>Then there is a relationship between a value and its address:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +-----------+<br>value   |   i = 1   |<br>        +-----------+<br>address  0x16fbe348c<br></code></pre></td></tr></table></figure>
+
+<p>On the other hand, if we have a memory address, it’s easy to read and write the value on this address, as if we can accurately find the target building according to a particular street address.</p>
+<p>Now we can bring in the concept of pointer.</p>
+<p>We may frequently encounter something like <code>int* i_ptr = &amp;i</code>. That’s the pointer. However, we currently have at lease two questions to explain:</p>
+<ol>
+<li>How to understand it in our mind?</li>
+<li>How does pointer relate to the example above？</li>
+</ol>
+<p>In order to clearly answer them, let’s take a look at another example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// demo2</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;value: %d, address: %p\n&quot;</span>, i, &amp;i);<br>    <span class="hljs-type">int</span>* i_ptr = &amp;i;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;value: %p, address: %p\n&quot;</span>, i_ptr, &amp;i_ptr);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The result on my machine is:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">value: 1, address: 0x16db8f48c<br>value: 0x16db8f48c, address: 0x16db8f480<br></code></pre></td></tr></table></figure>
+
+<div class="note note-warning">
+            <p><strong>Tips:</strong></p><ol><li>At this time I did another run, the address of <code>i</code> is <code>0x16db8f48c</code> which is different with that as <code>0x16fbe348c</code> in demo1. It’s normal and I won’t repeat it later.</li><li>The purpose of using <code>%p</code> to output the value of <code>i_ptr</code> is to output the content in hexadecimal. It’s convenient to compare the address of <code>i</code> and the value of <code>i_ptr</code>.</li></ol>
+          </div>
+
+<h3 id="Analysis-of-demo2"><a href="#Analysis-of-demo2" class="headerlink" title="Analysis of demo2"></a>Analysis of demo2</h3><p>It’s easy to find that the address of <code>i</code> and the value of <code>i_ptr</code> are the same, <code>0x16db8f48c</code>.</p>
+<p>Based on current information, we can imagine a relationship like this:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +-----------+       +-------------------------+<br>value   |   i = 1   |   ----|   i_ptr = 0x16db8f48c   |<br>        +-----------+   |   +-------------------------+<br>address  0x16db8f48c  &lt;--           0x16db8f480<br></code></pre></td></tr></table></figure>
+
+<p>What we have just mentioned above is that, if we have a memory address, we can easily access the value on this address. In that way, since the value of <code>i_ptr</code> is actually the address of <code>i</code>, we can access <code>i</code> by <code>*i_ptr</code>. In other words, is’s exactly equivalent between <code>*i_ptr = 2;</code> and <code>i = 2;</code>!</p>
+<p>Now we are able to establish a connection between address and pointer.</p>
+<h2 id="Pointer-is-also-a-value"><a href="#Pointer-is-also-a-value" class="headerlink" title="Pointer is also a value"></a>Pointer is also a value</h2><p>Have you found that a variable is essentially a value on a address either a normal integer <code>i</code> or a pointer <code>i_ptr</code>?</p>
+<p>Every line of C language code would be compiled and transformed to assembly. Actually, there is no concept of data type in memory from assembly’s perspective. Only values one by one in memory space. That’s it.</p>
+<p>We can say <code>int</code> is a value, <code>float</code> is a value, as well as that <code>int*</code> even <code>int**</code> is also a value. Anyway, it’s only a value on a address no matter how the data type changes.</p>
+<p>Wait! Wait a moment! What is <code>int**</code> just mentioned?</p>
+<p>Let’s see a new example before we explain that. It’s an example we may encount when learning the usage of functions in C language.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// demo3</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">change</span><span class="hljs-params">(<span class="hljs-type">int</span> i_in_change)</span> &#123; i_in_change = <span class="hljs-number">2</span>; &#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;before change, i=%d\n&quot;</span>, i);<br>    change(i);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;after change, i=%d\n&quot;</span>, i);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The result is:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">before change, i=1<br>after change, i=1<br></code></pre></td></tr></table></figure>
+
+<p>We would like to change the value of <code>i</code> within the function <code>change</code>, but unfortunately <code>i</code> weren’t changed…</p>
+<p>The textbook would teach you to change it to something like demo4:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// demo4</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">change</span><span class="hljs-params">(<span class="hljs-type">int</span>* i_ptr)</span> &#123; *i_ptr = <span class="hljs-number">2</span>; &#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;before change, i=%d\n&quot;</span>, i);<br>    change(&amp;i);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;after change, i=%d\n&quot;</span>, i);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The result would be as expected:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">before change, i=1<br>after change, i=2<br></code></pre></td></tr></table></figure>
+
+<p>Could you find the exact reason?</p>
+<p>Let’s take a quiz and see what demo5 outputs:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// demo5</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">func</span><span class="hljs-params">(<span class="hljs-type">int</span>* i_ptr_in_func)</span> &#123; i_ptr_in_func = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>)); &#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>    <span class="hljs-type">int</span>* i_ptr = <span class="hljs-literal">NULL</span>;<br>    func(i_ptr);<br>    *i_ptr = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;*i_ptr=%d\n&quot;</span>, *i_ptr);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<div class="note note-warning">
+            <p>There is a memory leak in demo5. It’s just for demonstration reference.</p>
+          </div>
+
+<div class="note note-info">
+            <p><strong>A little hint:</strong><br>Look back the memory model about value and address we learned just now.</p>
+          </div>
+
+<p>The actual result is that a <code>segmentation fault</code> occured. If you could have foreseen this, you certainly had understood it and you wouldn’t have to read on. :)</p>
+<h3 id="Analysis-of-demo3"><a href="#Analysis-of-demo3" class="headerlink" title="Analysis of demo3"></a>Analysis of demo3</h3><p>Firstly, let’s analyze demo3.</p>
+<p>In memory, the <code>i</code> in <code>main</code> like this:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +-----------+<br>value   |   i = 1   |<br>        +-----------+<br>address       a<br></code></pre></td></tr></table></figure>
+
+<p>When entering the function <code>change</code>, a copy of <code>i</code> is actually copied out as <code>i_in_change</code>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +---------------------+<br>value   |   i_in_change = 1   |<br>        +---------------------+<br>address            b<br></code></pre></td></tr></table></figure>
+
+<p>Note that the address of <code>i_in_change</code> is <code>b</code> here and the address of <code>i</code> is <code>a</code>. It means they are different variable indeed. After we changed <code>i</code> by <code>i = 2;</code>, it became like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +---------------------+<br>value   |   i_in_change = 2   |<br>        +---------------------+<br>address            b<br></code></pre></td></tr></table></figure>
+
+<p>But the <code>i</code> in <code>main</code> hasn’t changed at all, so the effect of modifying <code>i</code> in <code>main</code> hasn’t been achieved.</p>
+<h3 id="Analysis-of-demo4"><a href="#Analysis-of-demo4" class="headerlink" title="Analysis of demo4"></a>Analysis of demo4</h3><p>Let’s look at demo4 again.<br>At the beginning, it’s consistent with demo3. The memory space of i in main is as follows:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +-----------+<br>value   |   i = 1   |<br>        +-----------+<br>address       a<br></code></pre></td></tr></table></figure>
+
+<p>When entering the function, <code>i_ptr</code> is as follows:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +---------------+        +-----------+<br>value   |   i_ptr = a   |----    |   i = 1   |<br>        +---------------+   |    +-----------+<br>address         b           ---------&gt; a<br></code></pre></td></tr></table></figure>
+
+<p>Note that the value of <code>i_ptr</code> (<code>a</code>) is the address of <code>i</code>.</p>
+<p>After <code>*i = 2;</code>, <code>i_ptr</code> didn’t change but <code>i</code> was modified:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +---------------+        +-----------+<br>value   |   i_ptr = a   |----    |   i = 2   |<br>        +---------------+   |    +-----------+<br>address         b           ---------&gt; a<br></code></pre></td></tr></table></figure>
+
+<p>We modified <code>i</code> in <code>main</code> successfully by indirect access of the pointer!</p>
+<h3 id="Analysis-of-demo5"><a href="#Analysis-of-demo5" class="headerlink" title="Analysis of demo5"></a>Analysis of demo5</h3><p>Then look at demo5.</p>
+<p><code>i</code> in <code>main</code> is as follows:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +----------------------+<br>value   |  i_ptr = NULL (0x0)  |<br>        +----------------------+<br>address             a<br></code></pre></td></tr></table></figure>
+
+<p><code>i_ptr_in_func</code> is a copy of <code>i_ptr</code> after entering the function <code>func</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +------------------------------+<br>value   |  i_ptr_in_func = NULL (0x0)  |<br>        +------------------------------+<br>address                 b<br></code></pre></td></tr></table></figure>
+
+<p>After <code>i_ptr_in_func = (int*)malloc(sizeof(int));</code>, it became as follows:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +-----------------------+       +------------+<br>value   |   i_ptr_in_func = c   |----   |   buffer   |<br>        +-----------------------+   |   +------------+<br>address             b               --------&gt;  c (malloc_address)<br></code></pre></td></tr></table></figure>
+
+<p><code>i_ptr_in_func</code> changed but <code>i_ptr</code> kept remains. Therefore, for <code>i_ptr</code> it’s equal to the code as follows:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span>* i_ptr = <span class="hljs-literal">NULL</span>;<br>*i_ptr = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<p>Obviously it’s unavailable.<br>We can find that after passed into a function, the pointer can only modify the value of the pointed object, and it does not make much sense to modify its own value.<br>What if we just want to allocate space for <code>int* i</code> in <code>main</code> in the function <code>func</code>? Check out demo6 below:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// demo6</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">func</span><span class="hljs-params">(<span class="hljs-type">int</span>** i_ptr_ptr)</span> &#123; *i_ptr_ptr = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>)); &#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> &#123;<br>    <span class="hljs-type">int</span>* i_ptr = <span class="hljs-literal">NULL</span>;<br>    func(&amp;i_ptr);<br>    *i_ptr = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;*i_ptr=%d\n&quot;</span>, *i_ptr);<br>    <span class="hljs-built_in">free</span>(i_ptr);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>By analyzing the memory structure from demo1 to demo5, hope you can figure out why demo6 works properly. :)</p>
+<h3 id="Analysis-of-demo6"><a href="#Analysis-of-demo6" class="headerlink" title="Analysis of demo6"></a>Analysis of demo6</h3><div class="note note-info">
+            <p><strong>Tips:</strong><br>Its transformation in memory model is almost entirely indentical to demo4.</p>
+          </div>
+
+<h2 id="Pointer-and-Array"><a href="#Pointer-and-Array" class="headerlink" title="Pointer and Array"></a>Pointer and Array</h2><p>We all know an array is a contiguous amount of memory space. For example, <code>int arr[3];</code> is like this:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">        +---------+---------+---------+<br>value   |   int   |   int   |   int   |<br>        +---------+---------+---------+<br>address     arr      arr+1     arr+2<br></code></pre></td></tr></table></figure>
+
+<p><code>arr</code> is actually an address. Based on it, we’ll quickly think of associating pointers with arrays in this way <code>int* p = arr;</code>. Further on, we can use this pointer <code>p</code> to read or modify a particular value of the array by <code>p[0]</code> <code>p[1]</code> <code>p[2]</code>. If <code>x</code> is an index, <code>p[x]</code> means the value offseting some units from the basic address. It’s equivalent to <code>*(p + x)</code> even <code>*((int*)((char*)p + x * sizeof(int)))</code>. That’s it. An arithmetic offset. No magic.</p>
+<div class="note note-warning">
+            <p>Since <code>p[x]</code> is just the value based on the address accumulated by <code>p</code> and <code>x</code>, <code>x[p]</code> is also available. It’s supported by most compilers, but it’s a heresy, not a best practice. It’s best to know this, but it’s best not to use it. :)</p>
+          </div>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/c/" class="category-chain-item">c</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/">#c</a>
+      
+        <a href="/tags/basic/">#basic</a>
+      
+        <a href="/tags/pointer/">#pointer</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>What is pointer</div>
+      <div>http://wasprime.github.io/Dev/C/What-is-pointer/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>wasPrime</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 30, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>April 8, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Configuration/Cmake/Configure-Cmake/" title="Configure Cmake">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Configure Cmake</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Dev/C++/STL/Introduction-to-C-20-Concepts/" title="Introduction to C++20 Concepts">
+                        <span class="hidden-mobile">Introduction to C++20 Concepts</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
