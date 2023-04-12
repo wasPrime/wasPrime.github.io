@@ -12,12 +12,12 @@ tags:
 ---
 
 {% note info %}
-Difficulty: {% label warning @Medium %}
+Difficulty: {% label warning @medium %}
 {% endnote %}
 
 ## Problem Description
 
-### English
+### English (Longest Common Subsequence)
 
 Given two strings `text1` and `text2`, return *the length of their longest **common subsequence***. If there is no **common subsequence**, return `0`.
 
@@ -52,10 +52,10 @@ Explanation: There is no such common subsequence, so the result is 0.
 
 **Constraints:**
 
-- 1 <= text1.length, text2.length <= 1000
+- `1 <= text1.length, text2.length <= 1000`
 - `text1` and `text2` consist of only lowercase English characters.
 
-### Chinese
+### Chinese (最长公共子序列)
 
 给定两个字符串 `text1` 和 `text2`，返回这两个字符串的最长 公共子序列 的长度。如果不存在 **公共子序列**，返回 `0`。
 
@@ -90,7 +90,7 @@ Explanation: There is no such common subsequence, so the result is 0.
 
 **提示：**
 
-- 1 <= text1.length, text2.length <= 1000
+- `1 <= text1.length, text2.length <= 1000`
 - `text1` 和 `text2` 仅由小写英文字符组成。
 
 ## Solution
