@@ -6,7 +6,7 @@ categories:
 tags:
 - cpp
 - template
-- template-meta-programming
+- template_meta_programming
 - tmp
 ---
 
