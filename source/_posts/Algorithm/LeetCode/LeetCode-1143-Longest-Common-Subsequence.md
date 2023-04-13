@@ -136,3 +136,7 @@ class Solution:
 
         return dp[-1][-1]
 ```
+
+## Advanced
+
+It's available to compress the dp array into one dimension.
