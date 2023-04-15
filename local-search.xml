@@ -32,6 +32,8 @@
       
       <tag>ranges</tag>
       
+      <tag>maybe_unused</tag>
+      
     </tags>
     
   </entry>
@@ -61,9 +63,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
