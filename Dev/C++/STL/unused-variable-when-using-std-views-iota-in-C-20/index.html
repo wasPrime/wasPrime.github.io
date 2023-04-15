@@ -16,26 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="vtable’s concept is familiar to us, as well as type_info. They are different sides of implementation of RTTI - Runtime Type Identification.With them, we can get the real type of an object and call ove">
+    <meta name="description" content="BackgroundIn traditional C++, we used to use an integer to make an iteration as below: 123for (auto i &#x3D; begin; i &lt; end; ++i) &amp;#123;    ...&amp;#125;  However, this way looks verbose. We potentially nee">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vtable, type_info and RTTI">
-<meta property="og:url" content="http://wasprime.github.io/Dev/C++/vtable-type-info-and-RTTI/index.html">
+<meta property="og:title" content="unused variable when using std::views::iota in C++20">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/unused-variable-when-using-std-views-iota-in-C-20/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="vtable’s concept is familiar to us, as well as type_info. They are different sides of implementation of RTTI - Runtime Type Identification.With them, we can get the real type of an object and call ove">
+<meta property="og:description" content="BackgroundIn traditional C++, we used to use an integer to make an iteration as below: 123for (auto i &#x3D; begin; i &lt; end; ++i) &amp;#123;    ...&amp;#125;  However, this way looks verbose. We potentially nee">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-04-04T14:18:55.000Z">
-<meta property="article:modified_time" content="2023-04-07T17:54:10.378Z">
+<meta property="article:published_time" content="2023-04-15T14:55:00.000Z">
+<meta property="article:modified_time" content="2023-04-15T15:21:26.531Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="cpp">
-<meta property="article:tag" content="rtti">
-<meta property="article:tag" content="vtable">
-<meta property="article:tag" content="vfunction">
-<meta property="article:tag" content="type_info">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="cpp20">
+<meta property="article:tag" content="ranges">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>vtable, type_info and RTTI - wasPrime&#39;s Blog</title>
+  <title>unused variable when using std::views::iota in C++20 - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="vtable, type_info and RTTI"></span>
+            <span id="subtitle" data-typed-text="unused variable when using std::views::iota in C++20"></span>
           
         </div>
 
@@ -212,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-04 22:18" pubdate>
-          April 4, 2023 pm
+        <time datetime="2023-04-15 22:55" pubdate>
+          April 15, 2023 pm
         </time>
       </span>
     
@@ -224,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.2k words
+          1.2k words
         
       </span>
     
@@ -235,7 +234,7 @@
         
         
         
-          7 mins
+          3 mins
         
       </span>
     
@@ -286,32 +285,31 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">vtable, type_info and RTTI</h1>
+            <h1 style="display: none">unused variable when using std::views::iota in C++20</h1>
             
             
               <div class="markdown-body">
                 
-                <p>vtable’s concept is familiar to us, as well as <code>type_info</code>. They are different sides of implementation of RTTI - Runtime Type Identification.With them, we can get the real type of an object and call overwritten functions.</p>
-<p>For understanding their memory distribution, let’s go through an example.</p>
-<h2 id="vtable-x2F-type-info-Example"><a href="#vtable-x2F-type-info-Example" class="headerlink" title="vtable&#x2F;type_info Example"></a>vtable&#x2F;type_info Example</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">int</span> i&#123;<span class="hljs-number">1</span>&#125;;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">func1</span><span class="hljs-params">()</span> </span>&#123; std::cout &lt;&lt; <span class="hljs-string">&quot;func1, this: &quot;</span> &lt;&lt; <span class="hljs-keyword">this</span> &lt;&lt; std::endl; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">int</span> <span class="hljs-title">func2</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">auto</span> base = <span class="hljs-keyword">new</span> Base;<br>    base-&gt;<span class="hljs-built_in">func1</span>();<br><br>    <span class="hljs-type">void</span>*** vtable_ptr_addr = (<span class="hljs-type">void</span>***)base;<br>    <span class="hljs-type">void</span>** vtable = *vtable_ptr_addr;<br>    <span class="hljs-type">void</span>* vfunc = vtable[<span class="hljs-number">0</span>];<br><br>    <span class="hljs-keyword">using</span> VFUNC = <span class="hljs-built_in">void</span> (*)(Base*);<br>    VFUNC real_func = (VFUNC)vfunc;<br>    <span class="hljs-built_in">real_func</span>(base);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;base: &quot;</span> &lt;&lt; base &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;vtable_ptr_addr: &quot;</span> &lt;&lt; vtable_ptr_addr &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;vtable: &quot;</span> &lt;&lt; vtable &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;vfunc: &quot;</span> &lt;&lt; vfunc &lt;&lt; std::endl;<br><br>    <span class="hljs-type">const</span> std::type_info&amp; type = <span class="hljs-built_in">typeid</span>(Base);<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;type_info addr: &quot;</span> &lt;&lt; &amp;type &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;type_info size: &quot;</span> &lt;&lt; std::hex &lt;&lt; <span class="hljs-string">&quot;0x&quot;</span> &lt;&lt; <span class="hljs-built_in">sizeof</span>(type) &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+                <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>In traditional C++, we used to use an integer to make an iteration as below:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i = begin; i &lt; end; ++i) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>Here is a result after a run in my machine:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs log">func1, this: 0x139e066e0<br>func1, this: 0x139e066e0<br>base: 0x139e066e0<br>vtable_ptr_addr: 0x139e066e0<br>vtable: 0x1008e8110<br>vfunc: 0x1008e7138<br>type_info addr: 0x1008e80f0<br>type_info size: 0x10<br></code></pre></td></tr></table></figure>
+<p>However, this way looks verbose. We potentially need a simple and convenient way like in Python:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(begin, end):<br>    ...<br></code></pre></td></tr></table></figure>
 
-<h2 id="Memory-Description"><a href="#Memory-Description" class="headerlink" title="Memory Description"></a>Memory Description</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs log">                                                                                                       +-----------------------+<br>                                                                                           0x1008e80f0 |       type_info       |<br>                                                                                                       |                       |<br>                                                                                                       +-----------------------+<br>                                                                                           0x1008e8100 |       gap buffer      |<br>                                                                  Base object                          |                       |<br>+---------------------------------------+                  +------------------------+                  +-----------------------+              func1<br>|  base(vtable_ptr_addr) = 0x139e066e0  |----&gt; 0x139e066e0 |  vtable = 0x1008e8110  |----&gt; 0x1008e8110 |  func1 = 0x1008e7138  |---------&gt; 0x1008e7138<br>+---------------------------------------+                  +------------------------+                  +-----------------------+              func2<br>                base addr                      0x139e066e8 |       i = 1            |      0x1008e8118 |  func2 = 0xdeadbeef0  |---------&gt; 0xdeadbeef0<br>                                                           +------------------------+                  +-----------------------+         <br></code></pre></td></tr></table></figure>
+<h2 id="std-views-iota"><a href="#std-views-iota" class="headerlink" title="std::views::iota"></a><code>std::views::iota</code></h2><p>Fortunately, we can achieve it in C++20 as the below code:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ranges&gt;</span></span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i : std::views::<span class="hljs-built_in">iota</span>(begin, end)) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<blockquote>
-<p>The address of the function <code>func2</code> is mocked.</p>
-</blockquote>
-<p>The address of vtable and type_info are close and they can be calculated from each other by a specific offset.</p>
-<h2 id="type-info-Example"><a href="#type-info-Example" class="headerlink" title="type_info Example"></a><code>type_info</code> Example</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseWithoutRTTI</span> &#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DerivedWithoutRTTI</span> : <span class="hljs-keyword">public</span> BaseWithoutRTTI &#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseWithRTTI</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>&#123;&#125;;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">BaseWithRTTI</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DerivedWithRTTI</span> : <span class="hljs-keyword">public</span> BaseWithRTTI &#123;&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    BaseWithoutRTTI* base_without_RTTI = <span class="hljs-keyword">new</span> DerivedWithoutRTTI;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(base_without_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(*base_without_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br><br>    BaseWithRTTI* base_with_RTTI = <span class="hljs-keyword">new</span> DerivedWithRTTI;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(base_with_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(*base_with_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<div class="note note-info">
+            <p>namespace <code>std::views</code> is an alias to namespace <code>std::ranges::views</code> with <code>namespace views = ranges::views;</code>. Therefore, <code>std::views::iota</code> is an abbreviation of <code>std::ranges::views::iota</code>.</p><p>Actually, their return type is <code>std::ranges::iota_view</code> so it’s also available to use <code>std::ranges::iota_view(begin, end)</code>.</p><p>In conclusion, it’s suggested to use <code>std::views::iota</code> in everywhere for unification.</p>
+          </div>
 
-<p>The output is:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">P15BaseWithoutRTTI<br>15BaseWithoutRTTI<br>P12BaseWithRTTI<br>15DerivedWithRTTI<br></code></pre></td></tr></table></figure>
+<h2 id="unused-variable"><a href="#unused-variable" class="headerlink" title="unused variable"></a>unused variable</h2><p>There is an issue that the compiler would complained there was an unused variable <code>i</code> if it was only for iteration and it wasn’t used in the loop body.</p>
+<p>In previous code, there was no such issue because the iterator <code>i</code> had been not only read but also written.</p>
+<p>We might add attribute <code>[[maybe_unused]]</code> (C++17) to silence that warning:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span> ([[maybe_unused]] <span class="hljs-type">int</span> i : std::views::<span class="hljs-built_in">iota</span>(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>)) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;dummy&quot;</span> &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>We can easily find we can get the real object correctly only if there are virtual functions inside <code>Base</code> class. In other words, <code>vtable</code> and <code>type_info</code> are twins.</p>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.sandordargo.com/blog/2023/03/01/binary-sizes-and-rtti">https://www.sandordargo.com/blog/2023/03/01/binary-sizes-and-rtti</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/70622617/for-loop-counter-gives-an-unused-variable-warning">for-loop counter gives an unused-variable warning</a></li>
 </ul>
 
                 
@@ -339,6 +337,13 @@
   <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
   
   
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
 
   
 
@@ -355,13 +360,11 @@
       
         <a href="/tags/cpp/">#cpp</a>
       
-        <a href="/tags/rtti/">#rtti</a>
+        <a href="/tags/stl/">#stl</a>
       
-        <a href="/tags/vtable/">#vtable</a>
+        <a href="/tags/cpp20/">#cpp20</a>
       
-        <a href="/tags/vfunction/">#vfunction</a>
-      
-        <a href="/tags/type-info/">#type_info</a>
+        <a href="/tags/ranges/">#ranges</a>
       
     </div>
   
@@ -373,8 +376,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>vtable, type_info and RTTI</div>
-      <div>http://wasprime.github.io/Dev/C++/vtable-type-info-and-RTTI/</div>
+      <div>unused variable when using std::views::iota in C++20</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/unused-variable-when-using-std-views-iota-in-C-20/</div>
     </div>
     <div class="license-meta">
       
@@ -386,13 +389,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>April 4, 2023</div>
+          <div>April 15, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 8, 2023</div>
+          <div>April 15, 2023</div>
         </div>
       
       
@@ -423,18 +426,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Dev/C++/STL/promise-async-packaged_task-shared_future/" title="promise/async/packaged_task/shared_future">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">promise/async/packaged_task/shared_future</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Dev/C++/STL/Introduction-to-C-20-jthread/" title="Introduction to C++20 jthread">
-                        <span class="hidden-mobile">Introduction to C++20 jthread</span>
+                      <a href="/Algorithm/LeetCode/LeetCode-23-Merge-k-Sorted-Lists/" title="LeetCode 23 - Merge k Sorted Lists">
+                        <span class="hidden-mobile">LeetCode 23 - Merge k Sorted Lists</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
