@@ -6,7 +6,7 @@ categories:
 tags:
 - cpp
 - cpp11
-- multi-thread
+- multi_thread
 - promise
 - future
 - packaged_task
