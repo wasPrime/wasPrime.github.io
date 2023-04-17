@@ -122,7 +122,7 @@ public:
         }
 
         ListNode* node = it->second;
-        split_node(node);
+        extract_node(node);
         place_node_at_first(node);
 
         return node->value;
@@ -132,7 +132,7 @@ public:
         auto it = m_node_by_key.find(key);
         if (it != m_node_by_key.end()) {  // find it and replace its value
             ListNode* node = it->second;
-            split_node(node);
+            extract_node(node);
             node->value = value;
             place_node_at_first(node);
             return;
@@ -141,7 +141,7 @@ public:
         if (m_size >= m_capacity) {
             // retire the least recently used element
             ListNode* oldest = m_tail->prev;
-            split_node(oldest);
+            extract_node(oldest);
             m_node_by_key.erase(oldest->key);
             delete oldest;
             --m_size;
@@ -157,7 +157,7 @@ public:
     }
 
 private:
-    void split_node(ListNode* node) {
+    void extract_node(ListNode* node) {
         ListNode* prev = node->prev;
         ListNode* next = node->next;
 
