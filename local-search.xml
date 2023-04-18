@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>LeetCode 239 - Sliding Window Maximum</title>
+    <link href="/Algorithm/LeetCode/LeetCode-239-Sliding-Window-Maximum/"/>
+    <url>/Algorithm/LeetCode/LeetCode-239-Sliding-Window-Maximum/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-danger">hard</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Sliding-Window-Maximum"><a href="#English-Sliding-Window-Maximum" class="headerlink" title="English (Sliding Window Maximum)"></a>English (Sliding Window Maximum)</h3><p>You are given an array of integers <code>nums</code>, there is a sliding window of size <code>k</code> which is moving from the very left of the array to the very right. You can only see the <code>k</code> numbers in the window. Each time the sliding window moves right by one position.</p><p>Return <em>the max sliding window</em>.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums = [1,3,-1,-3,5,3,6,7], k = 3<br>Output: [3,3,5,5,6,7]<br>Explanation: <br>Window position                Max<br>---------------               -----<br>[1  3  -1] -3  5  3  6  7       3<br> 1 [3  -1  -3] 5  3  6  7       3<br> 1  3 [-1  -3  5] 3  6  7       5<br> 1  3  -1 [-3  5  3] 6  7       5<br> 1  3  -1  -3 [5  3  6] 7       6<br> 1  3  -1  -3  5 [3  6  7]      7<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums = [1], k = 1<br>Output: [1]<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= nums.length &lt;= 10^5</code></li><li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li><li><code>1 &lt;= k &lt;= nums.length</code></li></ul><h3 id="Chinese-滑动窗口最大值"><a href="#Chinese-滑动窗口最大值" class="headerlink" title="Chinese (滑动窗口最大值)"></a>Chinese (滑动窗口最大值)</h3><p>给你一个整数数组 <code>nums</code>，有一个大小为 <code>k</code> 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 <code>k</code> 个数字。滑动窗口每次只向右移动一位。</p><p>返回 <em>滑动窗口中的最大值</em> 。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums = [1,3,-1,-3,5,3,6,7], k = 3<br>输出：[3,3,5,5,6,7]<br>解释：<br>滑动窗口的位置                  最大值<br>---------------               -----<br>[1  3  -1] -3  5  3  6  7       3<br> 1 [3  -1  -3] 5  3  6  7       3<br> 1  3 [-1  -3  5] 3  6  7       5<br> 1  3  -1 [-3  5  3] 6  7       5<br> 1  3  -1  -3 [5  3  6] 7       6<br> 1  3  -1  -3  5 [3  6  7]      7<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums = [1], k = 1<br>输出：[1]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= nums.length &lt;= 10^5</code></li><li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li><li><code>1 &lt;= k &lt;= nums.length</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">maxSlidingWindow</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        vector&lt;<span class="hljs-type">int</span>&gt; res;<br>        res.<span class="hljs-built_in">reserve</span>(n - k + <span class="hljs-number">1</span>);<br><br>        deque&lt;<span class="hljs-type">int</span>&gt; q;<br>        <span class="hljs-comment">// prepare (k - 1) elements</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; k - <span class="hljs-number">1</span>; ++i) &#123;<br>            <span class="hljs-type">int</span> value = nums[i];<br>            <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>() &amp;&amp; value &gt; q.<span class="hljs-built_in">back</span>()) &#123;<br>                q.<span class="hljs-built_in">pop_back</span>();<br>            &#125;<br>            q.<span class="hljs-built_in">push_back</span>(value);<br>        &#125;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = k - <span class="hljs-number">1</span>; i &lt; n; ++i) &#123;<br>            <span class="hljs-comment">// add an element to construct a window whose size is k</span><br>            <span class="hljs-type">int</span> value = nums[i];<br>            <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>() &amp;&amp; value &gt; q.<span class="hljs-built_in">back</span>()) &#123;<br>                q.<span class="hljs-built_in">pop_back</span>();<br>            &#125;<br>            q.<span class="hljs-built_in">push_back</span>(value);<br><br>            <span class="hljs-comment">// get the max value in the window</span><br>            <span class="hljs-comment">// this procedure will repeat (n - k + 1) times</span><br>            <span class="hljs-type">int</span> max_value = q.<span class="hljs-built_in">front</span>();<br>            res.<span class="hljs-built_in">push_back</span>(max_value);<br><br>            <span class="hljs-comment">// remove the max value if it&#x27;s the front of the window and</span><br>            <span class="hljs-comment">// resume with (k - 1) elements in the window for next iteration</span><br>            <span class="hljs-keyword">if</span> (nums[i - (k - <span class="hljs-number">1</span>)] == max_value) &#123;<br>                q.<span class="hljs-built_in">pop_front</span>();<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">maxSlidingWindow</span>(<span class="hljs-params">self, nums: <span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>], k: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]:<br>        <span class="hljs-keyword">import</span> collections<br><br>        n = <span class="hljs-built_in">len</span>(nums)<br><br>        q = collections.deque()<br>        <span class="hljs-comment"># prepare (k - 1) elements</span><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(k-<span class="hljs-number">1</span>):<br>            value = nums[i]<br>            <span class="hljs-keyword">while</span> q <span class="hljs-keyword">and</span> value &gt; q[-<span class="hljs-number">1</span>]:<br>                q.pop()<br>            q.append(value)<br><br>        res = []<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(k-<span class="hljs-number">1</span>, n):<br>            <span class="hljs-comment"># add an element to construct a window whose size is k</span><br>            value = nums[i]<br>            <span class="hljs-keyword">while</span> q <span class="hljs-keyword">and</span> value &gt; q[-<span class="hljs-number">1</span>]:<br>                q.pop()<br>            q.append(value)<br><br>            <span class="hljs-comment"># get the max value in the window</span><br>            <span class="hljs-comment"># this procedure will repeat (n - k + 1) times</span><br>            max_value = q[<span class="hljs-number">0</span>]<br>            res.append(max_value)<br><br>            <span class="hljs-comment"># remove the max value if it&#x27;s the front of the window and</span><br>            <span class="hljs-comment"># resume with (k - 1) elements in the window for next iteration</span><br>            <span class="hljs-keyword">if</span> nums[i-(k-<span class="hljs-number">1</span>)] == max_value:<br>                q.popleft()<br><br>        <span class="hljs-keyword">return</span> res<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 146 - LRU Cache</title>
     <link href="/Algorithm/LeetCode/LeetCode-146-LRU-Cache/"/>
     <url>/Algorithm/LeetCode/LeetCode-146-LRU-Cache/</url>
@@ -28,9 +61,9 @@
       
       <tag>linked_list</tag>
       
-      <tag>medium</tag>
-      
       <tag>hashmap</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -94,9 +127,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -164,11 +197,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -199,11 +232,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -232,11 +265,11 @@
     
     <tags>
       
+      <tag>basic</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
-      
-      <tag>basic</tag>
       
       <tag>allocator</tag>
       
@@ -329,9 +362,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -504,9 +537,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -539,11 +572,11 @@
     
     <tags>
       
+      <tag>pointer</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
-      
-      <tag>pointer</tag>
       
       <tag>cpp11</tag>
       
@@ -580,11 +613,11 @@
     
     <tags>
       
+      <tag>pointer</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
-      
-      <tag>pointer</tag>
       
       <tag>cpp11</tag>
       
@@ -685,9 +718,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
@@ -731,7 +764,7 @@
     <link href="/TODO/"/>
     <url>/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input disabled="" type="checkbox"> Coroutines<ul><li><input disabled="" type="checkbox"> <code>co_await</code></li><li><input disabled="" type="checkbox"> stackful &amp; stackless</li><li><input disabled="" type="checkbox"> symmetric transfer 对称传输 (Ref: <a href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a>)</li><li><input disabled="" type="checkbox"> 感想：山重水复疑无路，柳暗花明又一村</li></ul></li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><p>The way we write <code>promise_type</code> is an interface compiler specifies. It’s like we can iterate an class as long as it implements <code>begin()</code> and <code>end()</code>. (Ref: <a href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction</a>)</p><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input disabled="" type="checkbox"> Coroutines<ul><li><input disabled="" type="checkbox"> <code>co_await</code></li><li><input disabled="" type="checkbox"> stackful &amp; stackless</li><li><input disabled="" type="checkbox"> symmetric transfer 对称传输 (Ref: <a href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a>)</li><li><input disabled="" type="checkbox"> 感想：山重水复疑无路，柳暗花明又一村</li></ul></li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><p>The way we write <code>promise_type</code> is an interface compiler specifies. It’s like we can iterate an class as long as it implements <code>begin()</code> and <code>end()</code>. (Ref: <a href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction</a>)</p><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
     
     
     
