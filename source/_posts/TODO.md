@@ -46,4 +46,6 @@ The way we write `promise_type` is an interface compiler specifies. It's like we
 
 ## Algorithm
 
+- [ ] pre-order/mid-order/post-order traversal binary trees
+
 ### LeetCode

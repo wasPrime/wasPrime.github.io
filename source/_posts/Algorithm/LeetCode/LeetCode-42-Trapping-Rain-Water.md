@@ -10,6 +10,10 @@ tags:
 - hard
 ---
 
+{% note info %}
+Difficulty: {% label danger @hard %}
+{% endnote %}
+
 ## Problem Description
 
 ### English (Trapping Rain Water)

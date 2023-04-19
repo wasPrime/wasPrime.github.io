@@ -11,6 +11,10 @@ tags:
 - medium
 ---
 
+{% note info %}
+Difficulty: {% label warning @medium %}
+{% endnote %}
+
 ## Problem Description
 
 ### English (LRU Cache)
