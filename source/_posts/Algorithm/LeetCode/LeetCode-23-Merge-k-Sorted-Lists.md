@@ -2,11 +2,15 @@
 title: LeetCode 23 - Merge k Sorted Lists
 date: 2023-04-14 22:03:20
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, linked_list]
+- [algorithm, leetcode, priority_queue]
+- [algorithm, leetcode, heap]
 tags:
 - algorithm
 - leetcode
 - linked_list
+- priority_queue
+- heap
 - hard
 ---
 

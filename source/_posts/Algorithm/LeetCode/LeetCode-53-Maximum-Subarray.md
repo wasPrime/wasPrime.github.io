@@ -2,7 +2,7 @@
 title: LeetCode 53 - Maximum Subarray
 date: 2023-04-19 22:00:00
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, dynamic_programming]
 tags:
 - algorithm
 - leetcode
@@ -95,6 +95,7 @@ Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
+        // Note:
         // If fragment_sum is initialized as `0`,
         // it will return `0` rather than `-1` when `nums = [-1]`
         int fragment_sum = INT_MIN;

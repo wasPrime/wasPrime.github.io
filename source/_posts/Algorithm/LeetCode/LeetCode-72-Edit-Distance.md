@@ -2,7 +2,7 @@
 title: LeetCode 72 - Edit Distance
 date: 2023-04-13 00:00:44
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, dynamic_programming]
 tags:
 - algorithm
 - leetcode

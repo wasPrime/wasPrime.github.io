@@ -2,7 +2,7 @@
 title: LeetCode 239 - Sliding Window Maximum
 date: 2023-04-18 22:00:00
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, sliding_window]
 tags:
 - algorithm
 - leetcode

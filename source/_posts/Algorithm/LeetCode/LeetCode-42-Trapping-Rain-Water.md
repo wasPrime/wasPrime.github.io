@@ -2,7 +2,7 @@
 title: LeetCode 42 - Trapping Rain Water
 date: 2023-04-16 23:03:41
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, greedy_algorithm]
 tags:
 - algorithm
 - leetcode

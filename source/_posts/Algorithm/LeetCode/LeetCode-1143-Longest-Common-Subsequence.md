@@ -2,7 +2,7 @@
 title: LeetCode 1143 - Longest Common Subsequence
 date: 2023-04-12 23:27:47
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, dynamic_programming]
 tags:
 - algorithm
 - leetcode

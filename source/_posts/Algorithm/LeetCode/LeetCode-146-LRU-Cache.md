@@ -2,7 +2,8 @@
 title: LeetCode 146 - LRU Cache
 date: 2023-04-17 22:00:00
 categories:
-- [algorithm, leetcode]
+- [algorithm, leetcode, linked_list]
+- [algorithm, leetcode, hashmap]
 tags:
 - algorithm
 - leetcode
