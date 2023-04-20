@@ -24,7 +24,7 @@
 <meta property="og:description" content="Difficulty: medium             Problem DescriptionEnglish (Maximum Subarray)Given an integer array nums, find the subarray with the largest sum, and return its sum. Example 1: 123Input: n">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-19T14:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-19T16:33:46.711Z">
+<meta property="article:modified_time" content="2023-04-20T15:55:06.941Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="leetcode">
@@ -328,7 +328,7 @@
 <li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li>
 </ul>
 <p><strong>进阶：</strong>如果你已经实现复杂度为 <code>O(n)</code> 的解法，尝试使用更为精妙的 <strong>分治法</strong> 求解。</p>
-<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSubArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-comment">// If fragment_sum is initialized as `0`,</span><br>        <span class="hljs-comment">// it will return `0` rather than `-1` when `nums = [-1]`</span><br>        <span class="hljs-type">int</span> fragment_sum = INT_MIN;<br>        <span class="hljs-type">int</span> max_fragment_sum = INT_MIN;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>            <span class="hljs-keyword">if</span> (fragment_sum &gt; <span class="hljs-number">0</span>) &#123;<br>                fragment_sum += num;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                fragment_sum = num;<br>            &#125;<br><br>            max_fragment_sum = <span class="hljs-built_in">max</span>(max_fragment_sum, fragment_sum);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_fragment_sum;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSubArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-comment">// Note:</span><br>        <span class="hljs-comment">// If fragment_sum is initialized as `0`,</span><br>        <span class="hljs-comment">// it will return `0` rather than `-1` when `nums = [-1]`</span><br>        <span class="hljs-type">int</span> fragment_sum = INT_MIN;<br>        <span class="hljs-type">int</span> max_fragment_sum = INT_MIN;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>            <span class="hljs-keyword">if</span> (fragment_sum &gt; <span class="hljs-number">0</span>) &#123;<br>                fragment_sum += num;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                fragment_sum = num;<br>            &#125;<br><br>            max_fragment_sum = <span class="hljs-built_in">max</span>(max_fragment_sum, fragment_sum);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_fragment_sum;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
 <p>It’s also available to initialize <code>fragment_sum</code> with <code>nums[0]</code> as below code, but I prefer the above way due to the integrated for-range loop. :)</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSubArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> fragment_sum = nums[<span class="hljs-number">0</span>];<br>        <span class="hljs-type">int</span> max_fragment_sum = fragment_sum;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, n = nums.<span class="hljs-built_in">size</span>(); i &lt; n; ++i) &#123;<br>            <span class="hljs-type">int</span> num = nums[i];<br>            <span class="hljs-keyword">if</span> (fragment_sum &gt; <span class="hljs-number">0</span>) &#123;<br>                fragment_sum += num;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                fragment_sum = num;<br>            &#125;<br><br>            max_fragment_sum = <span class="hljs-built_in">max</span>(max_fragment_sum, fragment_sum);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_fragment_sum;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
@@ -357,6 +357,13 @@
     
   <a href="/categories/algorithm/leetcode/" class="category-chain-item">leetcode</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/algorithm/leetcode/dynamic-programming/" class="category-chain-item">dynamic_programming</a>
+  
+  
+
   
 
   
@@ -441,6 +448,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/Algorithm/LeetCode/LeetCode-5-Longest-Palindromic-Substring/" title="LeetCode 5 - Longest Palindromic Substring">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LeetCode 5 - Longest Palindromic Substring</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
