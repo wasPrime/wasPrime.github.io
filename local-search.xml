@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>LeetCode 9 - Palindrome Number</title>
+    <link href="/Algorithm/LeetCode/LeetCode-9-Palindrome-Number/"/>
+    <url>/Algorithm/LeetCode/LeetCode-9-Palindrome-Number/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-success">easy</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Palindrome-Number"><a href="#English-Palindrome-Number" class="headerlink" title="English (Palindrome Number)"></a>English (Palindrome Number)</h3><p>Given an integer <code>x</code>, return <code>true</code> if <code>x</code> is a <strong>palindrome</strong>, and <code>false</code> otherwise.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: x = 121<br>Output: true<br>Explanation: 121 reads as 121 from left to right and from right to left.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: x = -121<br>Output: false<br>Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: x = 10<br>Output: false<br>Explanation: Reads 01 from right to left. Therefore it is not a palindrome.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>-2^31 &lt;= x &lt;= 2^31 - 1</code></li></ul><p><strong>Follow up:</strong> Could you solve it without converting the integer to a string?</p><h3 id="Chinese-最长回文子串"><a href="#Chinese-最长回文子串" class="headerlink" title="Chinese (最长回文子串)"></a>Chinese (最长回文子串)</h3><p>给你一个整数 <code>x</code> ，如果 <code>x</code> 是一个回文整数，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p><p>回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。</p><ul><li>例如，<code>121</code> 是回文，而 <code>123</code> 不是。</li></ul><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：x = 121<br>输出：true<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：x = -121<br>输出：false<br>解释：从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：x = 10<br>输出：false<br>解释：从右向左读, 为 01 。因此它不是一个回文数。<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>-2^31 &lt;= x &lt;= 2^31 - 1</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><div class="note note-warning">            <p><strong>Notice some edge cases:</strong></p><ul><li>negative number</li><li>zero</li><li>multiples of 10</li><li>the number after palindrome is over the threshold of integer</li></ul>          </div><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isPalindrome</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (x &lt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (x == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-comment">// below is the occasion that x &gt; 0</span><br>        <span class="hljs-keyword">if</span> (x % <span class="hljs-number">10</span> == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        <span class="hljs-type">int</span> palindrome_num = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (x &gt; palindrome_num) &#123;<br>            palindrome_num = palindrome_num * <span class="hljs-number">10</span> + x % <span class="hljs-number">10</span>;<br>            x /= <span class="hljs-number">10</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> (palindrome_num == x) || (palindrome_num / <span class="hljs-number">10</span> == x);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>mathematical</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>mathematical</tag>
+      
+      <tag>easy</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 5 - Longest Palindromic Substring</title>
     <link href="/Algorithm/LeetCode/LeetCode-5-Longest-Palindromic-Substring/"/>
     <url>/Algorithm/LeetCode/LeetCode-5-Longest-Palindromic-Substring/</url>
@@ -102,9 +137,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -252,13 +287,13 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>linked_list</tag>
       
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
