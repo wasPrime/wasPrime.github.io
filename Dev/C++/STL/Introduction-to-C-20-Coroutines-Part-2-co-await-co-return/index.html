@@ -16,22 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="List what category of articles would be written.             C++  Deleter in std::shared_ptr  What is enable_shared_from_this  Concepts  jthread  RTTI  std::allocator  std::string_view, s">
+    <meta name="description" content="In the part 1 of the coroutine’s series, we had learned how to write a generator with the keyword co_yield, as well as the schema of the return type and promise_type. In the post, I would like to intr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TODO">
-<meta property="og:url" content="http://wasprime.github.io/TODO/index.html">
+<meta property="og:title" content="Introduction to C++20 Coroutines - Part 2 co_await&#x2F;co_return">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="List what category of articles would be written.             C++  Deleter in std::shared_ptr  What is enable_shared_from_this  Concepts  jthread  RTTI  std::allocator  std::string_view, s">
+<meta property="og:description" content="In the part 1 of the coroutine’s series, we had learned how to write a generator with the keyword co_yield, as well as the schema of the return type and promise_type. In the post, I would like to intr">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-03-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-23T08:56:28.496Z">
+<meta property="article:published_time" content="2023-04-23T14:25:40.000Z">
+<meta property="article:modified_time" content="2023-04-23T16:35:54.974Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="todo">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="cpp20">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="coroutines">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>TODO - wasPrime&#39;s Blog</title>
+  <title>Introduction to C++20 Coroutines - Part 2 co_await/co_return - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -197,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="TODO"></span>
+            <span id="subtitle" data-typed-text="Introduction to C++20 Coroutines - Part 2 co_await/co_return"></span>
           
         </div>
 
@@ -208,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-03-27 00:00" pubdate>
-          March 27, 2023 am
+        <time datetime="2023-04-23 22:25" pubdate>
+          April 23, 2023 pm
         </time>
       </span>
     
@@ -220,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          933 words
+          2.6k words
         
       </span>
     
@@ -231,7 +234,7 @@
         
         
         
-          2 mins
+          6 mins
         
       </span>
     
@@ -282,56 +285,65 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">TODO</h1>
+            <h1 style="display: none">Introduction to C++20 Coroutines - Part 2 co_await/co_return</h1>
             
             
               <div class="markdown-body">
                 
-                <div class="note note-primary">
-            <p>List what category of articles would be written.</p>
+                <p>In the <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1</a> of the coroutine’s series, we had learned how to write a generator with the keyword <code>co_yield</code>, as well as the schema of the return type and <code>promise_type</code>.</p>
+<p>In the post, I would like to introduce other new keywords for coroutines - <code>co_await</code> and <code>co_return</code>.</p>
+<h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a><code>co_await</code></h2><p><code>co_await</code> must be used with something like awaiter. As a called awaiter, it should have the below list functions:</p>
+<ul>
+<li><code>bool await_ready()</code><ul>
+<li>If it returns <code>true</code>, the execution will skip <code>await_suspend</code> and run <code>await_resume</code> directly then resume to the coroutine.</li>
+<li>If it returns <code>false</code>, the execution will run <code>await_suspend</code> and suspend. After resumed, it will run <code>await_resume</code> and really resume.</li>
+</ul>
+</li>
+<li><code>await_suspend</code><ul>
+<li>Available input types: <code>std::coroutine_handle&lt;promise_type&gt;</code> &#x2F; <code>std::coroutine_handle&lt;&gt;</code><blockquote>
+<p><code>std::coroutine_handle&lt;promise_type&gt;</code> can be converted to <code>std::coroutine_handle&lt;&gt;</code> implicitly.</p>
+</blockquote>
+</li>
+<li>Available output types:<ul>
+<li><code>void</code>: suspend and return to the caller.</li>
+<li><code>bool</code><ul>
+<li>If returns <code>true</code>, it will suspend and return to the caller.</li>
+<li>If returns <code>false</code>, it will run <code>await_resume</code> and resume directly.</li>
+</ul>
+</li>
+<li><code>std::coroutine_handle&lt;promise_type&gt;</code> &#x2F; <code>std::coroutine_handle&lt;&gt;</code>: Go to the target corountine.<ul>
+<li>a special case: <code>std::noop_coroutine()</code> provides a shortcut to return to caller.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Actually, we has dealed with the called awaiter before. <code>std::suspend_always</code> and <code>std::suspend_never</code> are both awaiter and they can be callled with <code>co_await</code>.</p>
+<p>We can overload the operator <code>co_await</code> with some specific forms and make it more flexible and more powerful. More code examples will be shown in later posts due to lack of real understandable examples at present. :)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">suspend_always</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(coroutine_handle&lt;&gt;)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">suspend_never</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(coroutine_handle&lt;&gt;)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>There is an interesting point to know. <code>co_yield xx</code> is a syntax sugar of <code>co_await yield_value()</code> as the return type of <code>yield_value</code> is an awaiter. We usually set <code>std::suspend_always</code> as the return type of <code>yield_value</code>.</p>
           </div>
 
-<h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul>
-<li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li>
-<li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li>
-<li><input disabled="" type="checkbox"> std::string_view, std::span</li>
-<li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li>
-<li><input disabled="" type="checkbox"> std::bind</li>
-<li><input disabled="" type="checkbox"> C++ Rule of Five</li>
-<li><input disabled="" type="checkbox"> std::atomic<ul>
-<li>std::memory_order_release</li>
-<li>std::memory_order_acquire</li>
+<h2 id="co-return"><a href="#co-return" class="headerlink" title="co_return"></a><code>co_return</code></h2><p>For any coroutine, the <code>promise_type</code> should conatin a function either as <code>void return_void()</code> or as <code>void return_value(...)</code>. They can’t be declared at the same time. In constast, it’s an undefined behaviour if we declare none of them. In this way, we have to trade them off carefully.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/349710180">https://zhuanlan.zhihu.com/p/349710180</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/355100152">https://zhuanlan.zhihu.com/p/355100152</a><ul>
+<li>multi-thread: <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/coroutines">https://en.cppreference.com/w/cpp/language/coroutines</a></li>
 </ul>
 </li>
-<li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a target="_blank" rel="noopener" href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li>
-<li><input disabled="" type="checkbox"> Coroutines<ul>
-<li><input disabled="" type="checkbox"> <code>co_await</code></li>
-<li><input disabled="" type="checkbox"> stackful &amp; stackless</li>
-<li><input disabled="" type="checkbox"> symmetric transfer 对称传输 (Ref: <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a>)</li>
-<li><input disabled="" type="checkbox"> 感想：山重水复疑无路，柳暗花明又一村</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/356752742">https://zhuanlan.zhihu.com/p/356752742</a></li>
+<li>critical: <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/">https://lewissbaker.github.io/</a><ul>
+<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">https://lewissbaker.github.io/2017/09/25/coroutine-theory</a></li>
 </ul>
 </li>
-<li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li>
-<li><input disabled="" type="checkbox"> Ranges</li>
-<li><input disabled="" type="checkbox"> Modules</li>
-<li><input disabled="" type="checkbox"> muduo</li>
-<li><input disabled="" type="checkbox"> bthread</li>
-<li><input disabled="" type="checkbox"> bvar</li>
-<li><input disabled="" type="checkbox"> bRPC</li>
 </ul>
-<p>The way we write <code>promise_type</code> is an interface compiler specifies. It’s like we can iterate an class as long as it implements <code>begin()</code> and <code>end()</code>. (Ref: <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction</a>)</p>
-<h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul>
-<li><input disabled="" type="checkbox"> goroutines</li>
-<li><input disabled="" type="checkbox"> M:N scheduling models</li>
-</ul>
-<h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul>
-<li><input disabled="" type="checkbox"> pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</li>
-</ul>
-<h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>
+
                 
               </div>
             
@@ -339,11 +351,52 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
   
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/todo/">#todo</a>
+        <a href="/tags/cpp/">#cpp</a>
+      
+        <a href="/tags/cpp20/">#cpp20</a>
+      
+        <a href="/tags/stl/">#stl</a>
+      
+        <a href="/tags/coroutines/">#coroutines</a>
       
     </div>
   
@@ -355,8 +408,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>TODO</div>
-      <div>http://wasprime.github.io/TODO/</div>
+      <div>Introduction to C++20 Coroutines - Part 2 co_await/co_return</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/</div>
     </div>
     <div class="license-meta">
       
@@ -368,13 +421,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>March 27, 2023</div>
+          <div>April 23, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 23, 2023</div>
+          <div>April 24, 2023</div>
         </div>
       
       
@@ -405,15 +458,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Configuration/Vim/Configure-Vim/" title="Configure Vim">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Configure Vim</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/SystemDesign/Negotiate-Reasonable-Groups/" title="Negotiate Reasonable Groups">
+                        <span class="hidden-mobile">Negotiate Reasonable Groups</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
