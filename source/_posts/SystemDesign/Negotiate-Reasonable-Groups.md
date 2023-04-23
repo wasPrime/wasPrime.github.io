@@ -11,6 +11,8 @@ tags:
 
 This problem is from Zhihu <https://www.zhihu.com/question/596919226>
 
+![problem_description](/Negotiate-Reasonable-Groups/img/problem_description.png)
+
 Write a program to find a reasonable answer.
 
 Assume there is a meeting and there are 5 possible studunts as attendees - `A`, `B`, `C`, `D`, and `E`. Distinguish who will attend the meeting according to the below conditions:
