@@ -297,6 +297,24 @@ struct fibonacci_generator {
 };
 ```
 
+The form of `promise_type` is specified by compiler. We can consider it an interface from compiler and we must implement it with its form.
+
+Imagine a simmilar case. If we would like to make an object iterable, we must make it provide some specified functions `begin()`, `end()` and make its iterator provide `operator++()`, `operator!=` and `operator*()`. Only in this way the functionality could be implemented.
+
+```C++
+class Container {
+public:
+    struct Iterator {
+        Iterator& operator++() {...}
+        bool operator!=(const Iterator& other) const {...}
+        auto operator*() {...}
+    };
+
+    Iterator begin() {...}
+    Iterator end() {...}
+};
+```
+
 ### Usage of `fibonacci_generator`
 
 Before we use `fibonacci_generator`, add a member function `operator()` into it to call it like a function calling.

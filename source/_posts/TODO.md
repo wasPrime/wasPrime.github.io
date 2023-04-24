@@ -26,7 +26,7 @@ List what category of articles would be written.
   - std::memory_order_acquire
 - [ ] C++17 CTAD (Ref: <https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/>)
 - [ ] Coroutines
-  - [ ] `co_await`
+  - [x] ~~`co_await``~~
   - [ ] stackful & stackless
   - [ ] symmetric transfer 对称传输 (Ref: <https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer>)
   - [ ] 感想：山重水复疑无路，柳暗花明又一村
@@ -48,5 +48,7 @@ The way we write `promise_type` is an interface compiler specifies. It's like we
 ## Algorithm
 
 - [ ] pre-order/mid-order/post-order traversal binary trees
+- [ ] arithmetic calculator
+- [ ] KMP
 
 ### LeetCode
