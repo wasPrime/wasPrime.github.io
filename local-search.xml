@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Visual Studio freezing (crashing) while loading solution</title>
+    <link href="/Configuration/Environment/Visual-Studio-freezing-crashing-while-loading-solution/"/>
+    <url>/Configuration/Environment/Visual-Studio-freezing-crashing-while-loading-solution/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>When opening a solution, Visual Studio is not responding after displaying “reading the file…”.</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><ol><li>Remove the <code>.vs</code> folder in the folder where the solution file in.</li><li>Try to reopen the solution file.</li></ol><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://stackoverflow.com/questions/39703475/visual-studio-freezing-crashing-while-loading-solution">Stackoverflow - Visual Studio freezing (crashing) while loading solution</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>configuration</category>
+      
+      <category>environment</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>configuration</tag>
+      
+      <tag>environment</tag>
+      
+      <tag>visual_studio</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines</title>
     <link href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/"/>
     <url>/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/</url>
@@ -26,9 +57,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -61,9 +92,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -158,11 +189,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -195,11 +226,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -271,9 +302,9 @@
       
       <tag>linked_list</tag>
       
-      <tag>hashmap</tag>
-      
       <tag>medium</tag>
+      
+      <tag>hashmap</tag>
       
     </tags>
     
@@ -339,9 +370,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -458,11 +489,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -491,9 +522,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>basic</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -588,9 +619,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -763,9 +794,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -798,11 +829,11 @@
     
     <tags>
       
+      <tag>pointer</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
-      
-      <tag>pointer</tag>
       
       <tag>cpp11</tag>
       
@@ -839,11 +870,11 @@
     
     <tags>
       
+      <tag>pointer</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
-      
-      <tag>pointer</tag>
       
       <tag>cpp11</tag>
       
@@ -909,9 +940,9 @@
     
     <tags>
       
-      <tag>basic</tag>
-      
       <tag>c</tag>
+      
+      <tag>basic</tag>
       
       <tag>pointer</tag>
       
@@ -944,9 +975,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
@@ -990,7 +1021,7 @@
     <link href="/TODO/"/>
     <url>/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input disabled="" type="checkbox"> Coroutines<ul><li><input checked="" disabled="" type="checkbox"> <del>&#96;co_await&#96;&#96;</del></li><li><input disabled="" type="checkbox"> stackful &amp; stackless</li><li><input disabled="" type="checkbox"> symmetric transfer 对称传输 (Ref: <a href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a>)</li><li><input disabled="" type="checkbox"> 感想：山重水复疑无路，柳暗花明又一村</li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><p>The way we write <code>promise_type</code> is an interface compiler specifies. It’s like we can iterate an class as long as it implements <code>begin()</code> and <code>end()</code>. (Ref: <a href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction</a>)</p><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input disabled="" type="checkbox"> pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</li><li><input disabled="" type="checkbox"> arithmetic calculator</li><li><input disabled="" type="checkbox"> KMP</li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input disabled="" type="checkbox"> Coroutines<ul><li><input checked="" disabled="" type="checkbox"> <del>&#96;co_await&#96;&#96;</del></li><li><input checked="" disabled="" type="checkbox"> life cycle</li><li><input disabled="" type="checkbox"> stackful &amp; stackless</li><li><input disabled="" type="checkbox"> symmetric transfer 对称传输 (Ref: <a href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a>)</li><li><input disabled="" type="checkbox"> 感想：山重水复疑无路，柳暗花明又一村</li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><p>The way we write <code>promise_type</code> is an interface compiler specifies. It’s like we can iterate an class as long as it implements <code>begin()</code> and <code>end()</code>. (Ref: <a href="https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction">https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction</a>)</p><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input disabled="" type="checkbox"> pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</li><li><input disabled="" type="checkbox"> arithmetic calculator</li><li><input disabled="" type="checkbox"> KMP</li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
     
     
     
