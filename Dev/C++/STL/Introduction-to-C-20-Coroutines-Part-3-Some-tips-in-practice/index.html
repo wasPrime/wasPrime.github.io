@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wasPrime">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="In the part 1 and the part 2 of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in so">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/index.html">
+<meta property="og:site_name" content="wasPrime&#39;s Blog">
+<meta property="og:description" content="In the part 1 and the part 2 of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in so">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-24T14:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-24T17:58:38.154Z">
+<meta property="article:author" content="wasPrime">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="stl">
+<meta property="article:tag" content="cpp20">
+<meta property="article:tag" content="coroutines">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines - wasPrime&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wasprime.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>wasPrime</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-24 22:00" pubdate>
+          April 24, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>In the <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1</a> and the <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return">part 2</a> of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in some traps.</p>
+<h2 id="The-Life-Cycle-of-The-Return-Type"><a href="#The-Life-Cycle-of-The-Return-Type" class="headerlink" title="The Life Cycle of The Return Type"></a>The Life Cycle of The Return Type</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;coroutine&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;exception&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Generator</span> &#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">promise_type</span> &#123;<br>        <span class="hljs-function">Generator <span class="hljs-title">get_return_object</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;std::coroutine_handle&lt;promise_type&gt;::<span class="hljs-built_in">from_promise</span>(*<span class="hljs-keyword">this</span>)&#125;; &#125;<br>        <span class="hljs-function">std::suspend_never <span class="hljs-title">initial_suspend</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>        <span class="hljs-function">std::suspend_always <span class="hljs-title">final_suspend</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>        <span class="hljs-function">std::suspend_always <span class="hljs-title">yield_value</span><span class="hljs-params">(<span class="hljs-type">char</span> ch)</span> </span>&#123;<br>            value = ch;<br>            <span class="hljs-keyword">return</span> &#123;&#125;;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">return_void</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unhandled_exception</span><span class="hljs-params">()</span> </span>&#123; std::<span class="hljs-built_in">terminate</span>(); &#125;<br><br>        <span class="hljs-type">char</span> value;<br>    &#125;;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">done</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> m_coro_handle.<span class="hljs-built_in">done</span>(); &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">char</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-type">char</span> res = m_coro_handle.<span class="hljs-built_in">promise</span>().value;<br>        m_coro_handle.<span class="hljs-built_in">resume</span>();<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br><br>    ~<span class="hljs-built_in">Generator</span>() &#123;<br>        <span class="hljs-keyword">if</span> (m_coro_handle) &#123;<br>            m_coro_handle.<span class="hljs-built_in">destroy</span>();<br>        &#125;<br>    &#125;<br><br>    std::coroutine_handle&lt;promise_type&gt; m_coro_handle;<br>&#125;;<br><br><span class="hljs-function">Generator <span class="hljs-title">tokens</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; str)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : str) &#123;<br>        <span class="hljs-keyword">co_yield</span> ch;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::string str&#123;<span class="hljs-string">&quot;Hello World&quot;</span>&#125;;<br>    Generator g = <span class="hljs-built_in">tokens</span>(str);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>In the above example, the program can run happily. However, there are some potential risks.</p>
+<h3 id="A-Crash-Happens"><a href="#A-Crash-Happens" class="headerlink" title="A Crash Happens"></a>A Crash Happens</h3><p>An issue is reproduced easily with little change as below:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// ...</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Generator g;<br>    std::string str&#123;<span class="hljs-string">&quot;Hello World&quot;</span>&#125;;<br>    g = <span class="hljs-built_in">tokens</span>(str);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>It would <strong>crash</strong>! We would see <code>Bus error</code> if compiling it with <code>gcc</code>. Why?</p>
+<h3 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h3><p>Let’s run it with gdb to observe the stack when it crashes.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gdb">#0  0x0000000aaaaaaac4 in ?? ()<br>#1  0x0000aaaaaaaa0df8 in std::__n4861::coroutine_handle&lt;Generator::promise_type&gt;::resume (this=&lt;synthetic pointer&gt;) at /usr/include/c++/11/coroutine:231<br>#2  Generator::operator() (this=&lt;synthetic pointer&gt;) at /workspaces/CoroutineTutorial/src/life_cycle.cc:36<br>#3  main () at /workspaces/CoroutineTutorial/src/life_cycle.cc:90<br></code></pre></td></tr></table></figure>
+
+<p>We could find that the closest stack about the crash located when the coroutine was resumed. In this way, we have reason to suspect that the coroutine had been destroyed at that time.</p>
+<p>Anyway, it’s definitely related to the normal construction of the <code>Generator g</code> or <code>Generator</code>‘s assignment.</p>
+<p>The program will run without crash if we keep <code>Generator g;</code> but comment out other code. Obviously, the issue source is from the latter of those two conjectures.</p>
+<p><strong>Note that</strong> we didn’t implement any move constructor and any move assignment in the above code. Therefore, at this statement <code>g = tokens(str);</code>, <code>g</code> was copied from a temporary object and the original object was deleted. At the same time, the coroutine was also destroyed! The crash would certainly happen since the coroutine never existed anymore.</p>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>Now, the reason is clear. Based on that, we can fix the crash.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Generator</span> &#123;<br>    <span class="hljs-built_in">Generator</span>() &#123;&#125;<br>    <span class="hljs-built_in">Generator</span>(std::coroutine_handle&lt;promise_type&gt; handle) : <span class="hljs-built_in">m_coro_handle</span>(handle) &#123;&#125;<br>    <span class="hljs-built_in">Generator</span>(Generator&amp;&amp; other) &#123;<br>        m_coro_handle = other.m_coro_handle;<br>        other.m_coro_handle = <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>    Generator&amp; <span class="hljs-keyword">operator</span>=(Generator&amp;&amp; other) &#123;<br>        m_coro_handle = other.m_coro_handle;<br>        other.m_coro_handle = <span class="hljs-literal">nullptr</span>;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br>    <span class="hljs-comment">// Others...</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="The-Life-Cycle-of-The-parameters"><a href="#The-Life-Cycle-of-The-parameters" class="headerlink" title="The Life Cycle of The parameters"></a>The Life Cycle of The parameters</h2><p>Now let’s look at another case with a very simple form:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// ...</span><br><span class="hljs-function">Generator <span class="hljs-title">tokens</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; str)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : str) &#123;<br>        <span class="hljs-keyword">co_yield</span> ch;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::string str&#123;<span class="hljs-string">&quot;Hello World&quot;</span>&#125;;<br>    Generator g = <span class="hljs-built_in">tokens</span>(str);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>It looks pretty fine, and we may have no solution to optimize it anymore.</p>
+<h3 id="Wild-Resources"><a href="#Wild-Resources" class="headerlink" title="Wild Resources"></a>Wild Resources</h3><p>If we just change the form of parameters like this? The difference is the parameters of <code>tokens</code>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// ...</span><br><span class="hljs-function">Generator <span class="hljs-title">tokens</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; str)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : str) &#123;<br>        <span class="hljs-keyword">co_yield</span> ch;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Generator g = <span class="hljs-built_in">tokens</span>(<span class="hljs-string">&quot;Hello World&quot;</span>);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Actually, there is a risk that is not easy to spot - the <code>std::string</code> was cosntructed from the raw string when <code>tokens(&quot;Hello World&quot;)</code> was called but it was deleted as soon as the execution left the scope of <code>tokens(...)</code>. It means after that it associated with a wild resource, and the wild resources we accessed was never valid!</p>
+<h3 id="Customize-to-Make-it-More-Clearly"><a href="#Customize-to-Make-it-More-Clearly" class="headerlink" title="Customize to Make it More Clearly"></a>Customize to Make it More Clearly</h3><p>We can customize the parameters to reflect the life cycle more clearly.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// ...</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyString</span> &#123;<br>    <span class="hljs-built_in">MyString</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* str) : <span class="hljs-built_in">m_str</span>(str) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;MyString&quot;</span> &lt;&lt; std::endl; &#125;<br>    ~<span class="hljs-built_in">MyString</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;~MyString&quot;</span> &lt;&lt; std::endl; &#125;<br><br>    std::string m_str;<br>&#125;;<br><br><span class="hljs-function">Generator <span class="hljs-title">tokens</span><span class="hljs-params">(<span class="hljs-type">const</span> MyString&amp; my_str)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : my_str.m_str) &#123;<br>        <span class="hljs-keyword">co_yield</span> ch;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Generator g = <span class="hljs-built_in">tokens</span>(<span class="hljs-string">&quot;Hello World&quot;</span>);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Output:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs log">MyString<br>~MyString<br>H<br>e<br>l<br>l<br>o<br> <br>W<br>o<br>r<br>l<br>d<br></code></pre></td></tr></table></figure>
+
+<p>My hypothesis gets verified!</p>
+<h3 id="Available-Solutions"><a href="#Available-Solutions" class="headerlink" title="Available Solutions"></a>Available Solutions</h3><p>Therefore, we have 2 possible ways to solve this issue:</p>
+<ul>
+<li>Make sure the life cycle of any parameter covers the coroutine’s.</li>
+<li>Pass value instead of passing short-lived reference or pointer to make resources always valid, even though there is some extra overhead.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// ...</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyString</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">MyString</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* str) : <span class="hljs-built_in">m_str</span>(str) &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;MyString&quot;</span> &lt;&lt; std::endl; &#125;<br>    <span class="hljs-built_in">MyString</span>(MyString&amp;&amp; other) &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;MyString move&quot;</span> &lt;&lt; std::endl;<br>        m_str = std::<span class="hljs-built_in">move</span>(other.m_str);<br>    &#125;<br>    ~<span class="hljs-built_in">MyString</span>() &#123; std::cout &lt;&lt; <span class="hljs-string">&quot;~MyString&quot;</span> &lt;&lt; std::endl; &#125;<br><br>    std::string m_str;<br>&#125;;<br><br><span class="hljs-function">Generator <span class="hljs-title">tokens</span><span class="hljs-params">(MyString my_str)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : my_str.m_str) &#123;<br>        <span class="hljs-keyword">co_yield</span> ch;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Generator g = <span class="hljs-built_in">tokens</span>(<span class="hljs-string">&quot;Hello World&quot;</span>);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Output:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs log">MyString<br>MyString move<br>~MyString<br>H<br>e<br>l<br>l<br>o<br> <br>W<br>o<br>r<br>l<br>d<br>~MyString<br></code></pre></td></tr></table></figure>
+
+<div class="note note-warning">
+            <p><strong>Note:</strong></p><p>Remember to implement the move constructor of parameters. After all, those objects will be transferred to the coroutine, and will be transferred again but to <code>promise_type</code>‘s constructor.</p>
+          </div>
+
+<h2 id="Manage-Life-Cycle-Carefullly"><a href="#Manage-Life-Cycle-Carefullly" class="headerlink" title="Manage Life Cycle Carefullly"></a>Manage Life Cycle Carefullly</h2><p>Coroutine is powerful but it’s also dangerous. Remember to manage every component’s life cycle carefully and more carefully. Good luck. :)</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/cpp/">#cpp</a>
+      
+        <a href="/tags/stl/">#stl</a>
+      
+        <a href="/tags/cpp20/">#cpp20</a>
+      
+        <a href="/tags/coroutines/">#coroutines</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>wasPrime</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>April 24, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>April 25, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/" title="Introduction to C++20 Coroutines - Part 2 co_await/co_return">
+                        <span class="hidden-mobile">Introduction to C++20 Coroutines - Part 2 co_await/co_return</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
