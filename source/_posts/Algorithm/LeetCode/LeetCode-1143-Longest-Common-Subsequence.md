@@ -15,6 +15,10 @@ tags:
 Difficulty: {% label warning @medium %}
 {% endnote %}
 
+{% note warning %}
+Similar problem: [LeetCode 718 - Maximum Length of Repeated Subarray](/Algorithm/LeetCode/LeetCode-718-Maximum-Length-of-Repeated-Subarray)
+{% endnote %}
+
 ## Problem Description
 
 ### English (Longest Common Subsequence)

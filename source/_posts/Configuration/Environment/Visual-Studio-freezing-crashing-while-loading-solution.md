@@ -15,8 +15,9 @@ When opening a solution, Visual Studio is not responding after displaying "readi
 
 ## Solution
 
-1. Remove the `.vs` folder in the folder where the solution file in.
-2. Try to reopen the solution file.
+1. Close the Visual Studio process.
+2. Remove the `.vs` folder in the folder where the solution file in.
+3. Try to reopen the solution file.
 
 ## References
 
