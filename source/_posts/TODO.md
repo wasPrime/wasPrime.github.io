@@ -39,8 +39,6 @@ List what category of articles would be written.
 - [ ] bvar
 - [ ] bRPC
 
-The way we write `promise_type` is an interface compiler specifies. It's like we can iterate an class as long as it implements `begin()` and `end()`. (Ref: <https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await#compiler---library-interaction>)
-
 ## Go
 
 - [ ] goroutines
@@ -48,7 +46,7 @@ The way we write `promise_type` is an interface compiler specifies. It's like we
 
 ## Algorithm
 
-- [ ] pre-order/mid-order/post-order traversal binary trees
+- [x] ~~pre-order/mid-order/post-order traversal binary trees~~
 - [x] ~~four arithmetic calculator~~
 - [ ] KMP
 
