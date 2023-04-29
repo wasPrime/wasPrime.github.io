@@ -26,9 +26,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -61,9 +61,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -232,9 +232,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -267,9 +267,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -545,9 +545,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -697,9 +697,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>basic</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -794,9 +794,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -969,9 +969,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -1004,9 +1004,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>pointer</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1045,9 +1045,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>pointer</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1150,9 +1150,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
@@ -1196,7 +1196,7 @@
     <link href="/TODO/"/>
     <url>/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input disabled="" type="checkbox"> Coroutines<ul><li><input checked="" disabled="" type="checkbox"> <del>&#96;co_await&#96;&#96;</del></li><li><input checked="" disabled="" type="checkbox"> life cycle</li><li><input disabled="" type="checkbox"> stackful &amp; stackless</li><li><input disabled="" type="checkbox"> symmetric transfer 对称传输 (Ref: <a href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a>)</li><li><input disabled="" type="checkbox"> 感想：山重水复疑无路，柳暗花明又一村</li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input disabled="" type="checkbox"> KMP</li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input disabled="" type="checkbox"> KMP</li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
     
     
     
