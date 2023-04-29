@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>Introduction to C++20 Coroutines - Part 4 Some examples about co_await</title>
+    <link href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/"/>
+    <url>/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Coroutine-in-Python"><a href="#Coroutine-in-Python" class="headerlink" title="Coroutine in Python"></a>Coroutine in Python</h2><p>In Python, in addition to passing data out from the coroutine, the outside can also pass information in.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Generator<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">sequence</span>() -&gt; Generator[<span class="hljs-built_in">int</span>, <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>]:<br>    i = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-keyword">yield</span> i<br>        i += <span class="hljs-number">1</span><br><br>g = sequence()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(g))<br></code></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Generator<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">sequence</span>() -&gt; Generator[<span class="hljs-built_in">int</span>, <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>]:<br>    i = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        inside_receive = <span class="hljs-keyword">yield</span> i<br>        i += <span class="hljs-number">1</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;inside receive:&quot;</span>, inside_receive)<br><br><br>g = sequence()<br><span class="hljs-built_in">next</span>(g)<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>):<br>    send_str = <span class="hljs-built_in">chr</span>(<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;a&#x27;</span>)+i)<br>    outside_receive = g.send(send_str)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;outside receive:&quot;</span>, outside_receive)<br></code></pre></td></tr></table></figure><p>Output:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">inside receive: a<br>outside receive: 1<br>inside receive: b<br>outside receive: 2<br>inside receive: c<br>outside receive: 3<br></code></pre></td></tr></table></figure><p>Powerful C++ certainly also can!</p><h2 id="Pass-data-bidirectionally-with-co-await"><a href="#Pass-data-bidirectionally-with-co-await" class="headerlink" title="Pass data bidirectionally with co_await"></a>Pass data bidirectionally with <code>co_await</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;coroutine&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;exception&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Generator</span> &#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">promise_type</span> &#123;<br>        <span class="hljs-function">Generator <span class="hljs-title">get_return_object</span><span class="hljs-params">()</span> </span>&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Generator</span>(std::coroutine_handle&lt;promise_type&gt;::<span class="hljs-built_in">from_promise</span>(*<span class="hljs-keyword">this</span>));<br>        &#125;<br>        <span class="hljs-function">std::suspend_never <span class="hljs-title">initial_suspend</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>        <span class="hljs-function">std::suspend_always <span class="hljs-title">final_suspend</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">return_void</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unhandled_exception</span><span class="hljs-params">()</span> </span>&#123; std::<span class="hljs-built_in">terminate</span>(); &#125;<br><br>        <span class="hljs-type">int</span> in_to_out;<br>        <span class="hljs-type">char</span> out_to_in;<br>    &#125;;<br><br>    <span class="hljs-built_in">Generator</span>(std::coroutine_handle&lt;promise_type&gt; handle) : <span class="hljs-built_in">m_coro_handle</span>(handle) &#123;&#125;<br>    ~<span class="hljs-built_in">Generator</span>() &#123;<br>        <span class="hljs-keyword">if</span> (m_coro_handle) &#123;<br>            m_coro_handle.<span class="hljs-built_in">destroy</span>();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">done</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> m_coro_handle.<span class="hljs-built_in">done</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">char</span> out_to_in)</span> </span>&#123;<br>        <span class="hljs-type">int</span> result = m_coro_handle.<span class="hljs-built_in">promise</span>().in_to_out;<br><br>        m_coro_handle.<span class="hljs-built_in">promise</span>().out_to_in = out_to_in;<br>        m_coro_handle.<span class="hljs-built_in">resume</span>();<br><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    std::coroutine_handle&lt;promise_type&gt; m_coro_handle;<br>&#125;;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Awaiter</span> &#123;<br>    <span class="hljs-built_in">Awaiter</span>(<span class="hljs-type">int</span> val) : <span class="hljs-built_in">m_value</span>(val) &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(std::coroutine_handle&lt;Generator::promise_type&gt; handle)</span> </span>&#123;<br>        m_handle = handle;<br>        m_handle.<span class="hljs-built_in">promise</span>().in_to_out = m_value;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">char</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> m_handle.<span class="hljs-built_in">promise</span>().out_to_in; &#125;<br><br>    std::coroutine_handle&lt;Generator::promise_type&gt; m_handle;<br>    <span class="hljs-type">int</span> m_value;<br>&#125;;<br><br><span class="hljs-function">Generator <span class="hljs-title">sequence</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) &#123;<br>        <span class="hljs-type">char</span> get_from_outside = <span class="hljs-keyword">co_await</span> Awaiter&#123;i&#125;;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;get_from_outside: &quot;</span> &lt;&lt; get_from_outside &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Generator g = <span class="hljs-built_in">sequence</span>();<br>    <span class="hljs-type">char</span> send = <span class="hljs-string">&#x27;a&#x27;</span>;<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        <span class="hljs-type">int</span> receive = <span class="hljs-built_in">g</span>(send++);<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;get_from_inside: &quot;</span> &lt;&lt; receive &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>Output:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">get_from_outside: a<br>get_from_inside: 0<br>get_from_outside: b<br>get_from_inside: 1<br>get_from_outside: c<br>get_from_inside: 2<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+      <category>stl</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>stl</tag>
+      
+      <tag>cpp20</tag>
+      
+      <tag>coroutines</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Traverse Binary Tree</title>
     <link href="/Algorithm/Design/Traverse-Binary-Tree/"/>
     <url>/Algorithm/Design/Traverse-Binary-Tree/</url>
@@ -96,11 +131,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -294,11 +329,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -331,11 +366,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -368,9 +403,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -405,11 +440,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -520,11 +555,11 @@
       
       <tag>linked_list</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -594,11 +629,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
