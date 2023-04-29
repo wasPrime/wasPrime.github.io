@@ -34,7 +34,7 @@ In the post, I would like to introduce other new keywords for coroutines - `co_a
 
 Actually, we has dealed with the called awaiter before. `std::suspend_always` and `std::suspend_never` are both awaiter and they can be callled with `co_await`.
 
-We can overload the operator `co_await` with some specific forms and make it more flexible and more powerful. More code examples will be shown in later posts due to lack of real understandable examples at present. :)
+We can overload the operator `co_await` with some specific forms and make it more flexible and more powerful.
 
 ```C++
 struct suspend_always {
