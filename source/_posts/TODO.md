@@ -25,12 +25,11 @@ List what category of articles would be written.
   - std::memory_order_release
   - std::memory_order_acquire
 - [ ] C++17 CTAD (Ref: <https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/>)
-- [ ] Coroutines
-  - [x] ~~`co_await``~~
-  - [x] life cycle
-  - [ ] stackful & stackless
-  - [ ] symmetric transfer 对称传输 (Ref: <https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer>)
-  - [ ] 感想：山重水复疑无路，柳暗花明又一村
+- [x] ~~Coroutines~~
+  - [x] ~~`co_await`~~
+  - [x] ~~life cycle~~
+  - [x] ~~stackful & stackless~~
+  - [x] ~~symmetric transfer~~
 - [ ] The implementation of coroutine by 云风
 - [ ] Ranges
 - [ ] Modules
