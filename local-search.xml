@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>Introduction to C++20 Coroutines - Part 5 stackful/stackless and Symmetric Transfer</title>
+    <link href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/"/>
+    <url>/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/</url>
+    
+    <content type="html"><![CDATA[<h2 id="stackful-x2F-stackless"><a href="#stackful-x2F-stackless" class="headerlink" title="stackful&#x2F;stackless"></a>stackful&#x2F;stackless</h2><p>Coroutines can be divided into stackful coroutines (such as goroutine in Golang) and stackless coroutines (such as <code>async</code>&#x2F;<code>await</code> in JavaScript).</p><p>What the called stackful and stackless stands for is not whether needing a stack or not when coroutines run. As we all know, coroutines can’t run without a stack space. It means whether coroutines can be suspended in their any nested functions.</p><p>For details, please refer to this blog <a href="https://mthli.xyz/stackful-stackless">https://mthli.xyz/stackful-stackless</a>. I think it’s clear.</p><h2 id="Symmetric-Transfer"><a href="#Symmetric-Transfer" class="headerlink" title="Symmetric Transfer"></a>Symmetric Transfer</h2><h3 id="Crash-Case"><a href="#Crash-Case" class="headerlink" title="Crash Case"></a>Crash Case</h3><p>This case in from this blog <a href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a> that is written by the author of the library <a href="https://github.com/lewissbaker/cppcoro"><code>cppcoro</code></a>.</p><p>I modified the case a little to let it run in function <code>main</code>.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;coroutine&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;exception&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">task</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">promise_type</span>;<br><br>    <span class="hljs-built_in">task</span>(task&amp;&amp; t) <span class="hljs-keyword">noexcept</span> : <span class="hljs-built_in">coro_</span>(std::<span class="hljs-built_in">exchange</span>(t.coro_, &#123;&#125;)) &#123;&#125;<br>    ~<span class="hljs-built_in">task</span>() &#123;<br>        <span class="hljs-keyword">if</span> (coro_) &#123;<br>            coro_.<span class="hljs-built_in">destroy</span>();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">awaiter</span>;<br>    <span class="hljs-function">awaiter <span class="hljs-keyword">operator</span> <span class="hljs-title">co_await</span><span class="hljs-params">()</span> &amp;&amp; <span class="hljs-keyword">noexcept</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resume</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (coro_ &amp;&amp; !coro_.<span class="hljs-built_in">done</span>()) &#123;<br>            coro_.<span class="hljs-built_in">resume</span>();<br>        &#125;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">task</span><span class="hljs-params">(std::coroutine_handle&lt;promise_type&gt; h)</span> <span class="hljs-keyword">noexcept</span> : coro_(h) &#123;</span>&#125;<br><br>    std::coroutine_handle&lt;promise_type&gt; coro_;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">task</span>::promise_type &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">final_awaiter</span> &#123;<br>        <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br><br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(std::coroutine_handle&lt;promise_type&gt; h)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>            <span class="hljs-comment">// The coroutine is now suspended at the final-suspend point.</span><br>            <span class="hljs-comment">// Lookup its continuation in the promise and resume it.</span><br>            <span class="hljs-keyword">if</span> (h.<span class="hljs-built_in">promise</span>().continuation) &#123;<br>                h.<span class="hljs-built_in">promise</span>().continuation.<span class="hljs-built_in">resume</span>();<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>    &#125;;<br><br>    <span class="hljs-function">task <span class="hljs-title">get_return_object</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> task&#123;std::coroutine_handle&lt;promise_type&gt;::<span class="hljs-built_in">from_promise</span>(*<span class="hljs-keyword">this</span>)&#125;;<br>    &#125;<br>    <span class="hljs-function">std::suspend_always <span class="hljs-title">initial_suspend</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>    <span class="hljs-function">final_awaiter <span class="hljs-title">final_suspend</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">return_void</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unhandled_exception</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; std::<span class="hljs-built_in">terminate</span>(); &#125;<br><br>    std::coroutine_handle&lt;&gt; continuation;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">task</span>::awaiter &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(std::coroutine_handle&lt;&gt; continuation)</span> <span class="hljs-keyword">noexcept</span> </span>&#123;<br>        <span class="hljs-comment">// Store the continuation in the task&#x27;s promise so that the final_suspend()</span><br>        <span class="hljs-comment">// knows to resume this coroutine when the task completes.</span><br>        coro_.<span class="hljs-built_in">promise</span>().continuation = continuation;<br><br>        <span class="hljs-comment">// Then we resume the task&#x27;s coroutine, which is currently suspended</span><br>        <span class="hljs-comment">// at the initial-suspend-point (ie. at the open curly brace).</span><br>        coro_.<span class="hljs-built_in">resume</span>();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">awaiter</span><span class="hljs-params">(std::coroutine_handle&lt;task::promise_type&gt; h)</span> <span class="hljs-keyword">noexcept</span> : coro_(h) &#123;</span>&#125;<br><br>    std::coroutine_handle&lt;task::promise_type&gt; coro_;<br>&#125;;<br><br><span class="hljs-function">task::awaiter task::<span class="hljs-keyword">operator</span> <span class="hljs-title">co_await</span><span class="hljs-params">()</span> &amp;&amp; <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> task::awaiter&#123;coro_&#125;; &#125;<br><br><span class="hljs-function">task <span class="hljs-title">completes_synchronously</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">co_return</span>;<br>&#125;<br><br><span class="hljs-function">task <span class="hljs-title">loop_synchronously</span><span class="hljs-params">(<span class="hljs-type">int</span> count)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; count; ++i) &#123;<br>        <span class="hljs-function"><span class="hljs-keyword">co_await</span> <span class="hljs-title">completes_synchronously</span><span class="hljs-params">()</span></span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    task t = <span class="hljs-built_in">loop_synchronously</span>(<span class="hljs-number">1000000</span>);<br>    t.<span class="hljs-built_in">resume</span>();<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>In my machine, it works with <code>loop_synchronously(100000)</code> while it can’t with <code>loop_synchronously(1000000)</code>. It will crash due to segmentation fault, and its call stack is very very deep when viewed in GDB. It’s because this kind of symmetric transfer is called by <code>h.promise().continuation.resume()</code> and <code>coro_.resume()</code> bidirectionally, and the call stack only becomes deeper and never releases. In this way, stack overflow will happen sooner or later as the size of loop is growing. The details of the call stack and the analysis of the crash can be found refer to the above mentioned blog.</p><h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><ol><li><p>Change the <code>task::awaiter::await_suspend</code> method from this:</p> <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">void</span> task::awaiter::<span class="hljs-built_in">await_suspend</span>(std::coroutine_handle&lt;&gt; continuation) <span class="hljs-keyword">noexcept</span> &#123;<br>    <span class="hljs-comment">// Store the continuation in the task&#x27;s promise so that the final_suspend()</span><br>    <span class="hljs-comment">// knows to resume this coroutine when the task completes.</span><br>    coro_.<span class="hljs-built_in">promise</span>().continuation = continuation;<br><br>    <span class="hljs-comment">// Then we resume the task&#x27;s coroutine, which is currently suspended</span><br>    <span class="hljs-comment">// at the initial-suspend-point (ie. at the open curly brace).</span><br>    coro_.<span class="hljs-built_in">resume</span>();<br>&#125;<br></code></pre></td></tr></table></figure><p> to this:</p> <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++">std::coroutine_handle&lt;&gt; task::awaiter::<span class="hljs-built_in">await_suspend</span>(std::coroutine_handle&lt;&gt; continuation) <span class="hljs-keyword">noexcept</span> &#123;<br>    <span class="hljs-comment">// Store the continuation in the task&#x27;s promise so that the final_suspend()</span><br>    <span class="hljs-comment">// knows to resume this coroutine when the task completes.</span><br>    coro_.<span class="hljs-built_in">promise</span>().continuation = continuation;<br><br>    <span class="hljs-comment">// Then we tail-resume the task&#x27;s coroutine, which is currently suspended</span><br>    <span class="hljs-comment">// at the initial-suspend-point (ie. at the open curly brace), by returning</span><br>    <span class="hljs-comment">// its handle from await_suspend().</span><br>    <span class="hljs-keyword">return</span> coro_;<br>&#125;<br></code></pre></td></tr></table></figure></li><li><p>Update the <code>task::promise_type::final_awaiter::await_suspend</code> method from this:</p> <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">void</span> task::promise_type::final_awaiter::<span class="hljs-built_in">await_suspend</span>(std::coroutine_handle&lt;promise_type&gt; h) <span class="hljs-keyword">noexcept</span> &#123;<br>    <span class="hljs-comment">// The coroutine is now suspended at the final-suspend point.</span><br>    <span class="hljs-comment">// Lookup its continuation in the promise and resume it.</span><br>    <span class="hljs-keyword">if</span> (h.<span class="hljs-built_in">promise</span>().continuation) &#123;<br>        h.<span class="hljs-built_in">promise</span>().continuation.<span class="hljs-built_in">resume</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p> to this:</p> <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++">std::coroutine_handle&lt;&gt; task::promise_type::final_awaiter::<span class="hljs-built_in">await_suspend</span>(std::coroutine_handle&lt;promise_type&gt; h) <span class="hljs-keyword">noexcept</span> &#123;<br>    <span class="hljs-comment">// The coroutine is now suspended at the final-suspend point.</span><br>    <span class="hljs-comment">// Lookup its continuation in the promise and resume it symmetrically.</span><br>    <span class="hljs-keyword">return</span> (h.<span class="hljs-built_in">promise</span>().continuation) ? h.<span class="hljs-built_in">promise</span>().continuation : std::<br>&#125;<br></code></pre></td></tr></table></figure></li></ol><p>In this way, stack overflow would never happen.</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+      <category>stl</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>stl</tag>
+      
+      <tag>cpp20</tag>
+      
+      <tag>coroutines</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Introduction to C++20 Coroutines - Part 4 Some examples about co_await</title>
     <link href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/"/>
     <url>/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/</url>
@@ -61,11 +96,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -96,9 +131,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -403,9 +438,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -555,11 +590,11 @@
       
       <tag>linked_list</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -662,9 +697,9 @@
     
     <tags>
       
-      <tag>basic</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>basic</tag>
       
       <tag>stl</tag>
       
@@ -969,9 +1004,9 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>pointer</tag>
       
       <tag>stl</tag>
       
@@ -1010,9 +1045,9 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>pointer</tag>
       
       <tag>stl</tag>
       
