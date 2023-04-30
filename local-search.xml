@@ -4,6 +4,47 @@
   
   
   <entry>
+    <title>LeetCode 28 - Find the Index of the First Occurrence in a String</title>
+    <link href="/Algorithm/LeetCode/LeetCode-28-Find-the-Index-of-the-First-Occurrence-in-a-String/"/>
+    <url>/Algorithm/LeetCode/LeetCode-28-Find-the-Index-of-the-First-Occurrence-in-a-String/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Find-the-Index-of-the-First-Occurrence-in-a-String"><a href="#English-Find-the-Index-of-the-First-Occurrence-in-a-String" class="headerlink" title="English (Find the Index of the First Occurrence in a String)"></a>English (Find the Index of the First Occurrence in a String)</h3><p>Given two strings <code>needle</code> and <code>haystack</code>, return the index of the first occurrence of <code>needle</code> in <code>haystack</code>, or <code>-1</code> if <code>needle</code> is not part of <code>haystack</code>.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: haystack = &quot;sadbutsad&quot;, needle = &quot;sad&quot;<br>Output: 0<br>Explanation: &quot;sad&quot; occurs at index 0 and 6.<br>The first occurrence is at index 0, so we return 0.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: haystack = &quot;leetcode&quot;, needle = &quot;leeto&quot;<br>Output: -1<br>Explanation: &quot;leeto&quot; did not occur in &quot;leetcode&quot;, so we return -1.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= haystack.length, needle.length &lt;= 10^4</code></li><li><code>haystack</code> and <code>needle</code> consist of only lowercase English characters.</li></ul><h3 id="Chinese-找出字符串中第一个匹配项的下标"><a href="#Chinese-找出字符串中第一个匹配项的下标" class="headerlink" title="Chinese (找出字符串中第一个匹配项的下标)"></a>Chinese (找出字符串中第一个匹配项的下标)</h3><p>给你两个字符串 <code>haystack</code> 和 <code>needle</code> ，请你在 <code>haystack</code> 字符串中找出 <code>needle</code> 字符串的第一个匹配项的下标（下标从 0 开始）。如果 <code>needle</code> 不是 <code>haystack</code> 的一部分，则返回 <code>-1</code> 。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：haystack = &quot;sadbutsad&quot;, needle = &quot;sad&quot;<br>输出：0<br>解释：&quot;sad&quot; 在下标 0 和 6 处匹配。<br>第一个匹配项的下标是 0 ，所以返回 0 。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：haystack = &quot;leetcode&quot;, needle = &quot;leeto&quot;<br>输出：-1<br>解释：&quot;leeto&quot; 没有在 &quot;leetcode&quot; 中出现，所以返回 -1 。<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= haystack.length, needle.length &lt;= 10^4</code></li><li><code>haystack</code> 和 <code>needle</code> 仅由小写英文字符组成</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="Brute-Force"><a href="#Brute-Force" class="headerlink" title="Brute-Force"></a>Brute-Force</h3><p>Based on sliding window algorithm.</p><h4 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">strStr</span><span class="hljs-params">(string haystack, string needle)</span> </span>&#123;<br>        <span class="hljs-type">int</span> haystack_size = haystack.<span class="hljs-built_in">size</span>(), needle_size = needle.<span class="hljs-built_in">size</span>();<br><br>        <span class="hljs-keyword">auto</span> equal = [&amp;haystack, &amp;needle](<span class="hljs-type">int</span> haystack_begin, <span class="hljs-type">int</span> needle_begin, <span class="hljs-type">int</span> compared_size) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> compared_index = <span class="hljs-number">0</span>; compared_index &lt; compared_size; ++compared_index) &#123;<br>                <span class="hljs-keyword">if</span> (haystack[haystack_begin + compared_index] != needle[needle_begin + compared_index]) &#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>                &#125;<br>            &#125;<br><br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        &#125;;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> haystack_begin = <span class="hljs-number">0</span>; haystack_begin &lt;= haystack_size - needle_size; ++haystack_begin) &#123;<br>            <span class="hljs-keyword">if</span> (<span class="hljs-built_in">equal</span>(haystack_begin, <span class="hljs-number">0</span>, needle_size)) &#123;<br>                <span class="hljs-keyword">return</span> haystack_begin;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="KMP-Knuth-Morris-Pratt"><a href="#KMP-Knuth-Morris-Pratt" class="headerlink" title="KMP (Knuth-Morris-Pratt)"></a>KMP (Knuth-Morris-Pratt)</h3><p>Maintain an array about <code>next</code> which is from the string <code>needle</code>. Its elements means which index needs to be jumped to when fail in comparison.</p><table><thead><tr><th align="center">needle</th><th align="center">a</th><th align="center">b</th><th align="center">c</th><th align="center">a</th><th align="center">b</th><th align="center">f</th></tr></thead><tbody><tr><td align="center">index</td><td align="center">0</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td></tr><tr><td align="center">next</td><td align="center">0</td><td align="center">0</td><td align="center">0</td><td align="center">1</td><td align="center">2</td><td align="center">0</td></tr></tbody></table><p>Refer to <a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/solution/duo-tu-yu-jing-xiang-jie-kmp-suan-fa-by-w3c9c">https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/solution/duo-tu-yu-jing-xiang-jie-kmp-suan-fa-by-w3c9c</a>.</p><h4 id="C-1"><a href="#C-1" class="headerlink" title="C++"></a>C++</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">strStr</span><span class="hljs-params">(string haystack, string needle)</span> </span>&#123;<br>        vector&lt;<span class="hljs-type">int</span>&gt; next = <span class="hljs-built_in">get_next</span>(needle);<br><br>        <span class="hljs-type">int</span> haystack_size = haystack.<span class="hljs-built_in">size</span>(), needle_size = needle.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>; i &lt; haystack_size; ++i) &#123;<br>            <span class="hljs-keyword">while</span> (j &gt; <span class="hljs-number">0</span> &amp;&amp; haystack[i] != needle[j]) &#123;<br>                j = next[j - <span class="hljs-number">1</span>];<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (haystack[i] == needle[j]) &#123;<br>                ++j;<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (j == needle_size) &#123;<br>                <span class="hljs-keyword">return</span> i - needle_size + <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">get_next</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; needle)</span> </span>&#123;<br>        <span class="hljs-type">int</span> needle_size = needle.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">next</span><span class="hljs-params">(needle_size, <span class="hljs-number">0</span>)</span></span>;<br>        <span class="hljs-comment">// next[0] = 0;</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> right = <span class="hljs-number">1</span>, left = <span class="hljs-number">0</span>; right &lt; needle_size; ++right) &#123;<br>            <span class="hljs-keyword">while</span> (left &gt; <span class="hljs-number">0</span> &amp;&amp; needle[left] != needle[right]) &#123;<br>                left = next[left - <span class="hljs-number">1</span>];<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (needle[left] == needle[right]) &#123;<br>                ++left;<br>            &#125;<br><br>            next[right] = left;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> next;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>two_pointers</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>medium</tag>
+      
+      <tag>sliding_window</tag>
+      
+      <tag>string</tag>
+      
+      <tag>kmp</tag>
+      
+      <tag>two_pointers</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Introduction to C++20 Coroutines - Part 5 stackful/stackless and Symmetric Transfer</title>
     <link href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/"/>
     <url>/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/</url>
@@ -26,9 +67,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -61,9 +102,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -96,11 +137,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -131,9 +172,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -166,11 +207,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -232,9 +273,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -267,9 +308,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -364,11 +405,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -401,11 +442,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -438,9 +479,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -475,11 +516,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -545,9 +586,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -590,11 +631,11 @@
       
       <tag>linked_list</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -627,11 +668,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -664,11 +705,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -794,9 +835,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -969,9 +1010,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -1150,9 +1191,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
