@@ -4,6 +4,45 @@
   
   
   <entry>
+    <title>Introduction to std::string_view/std::span</title>
+    <link href="/Dev/C++/STL/Introduction-to-std-string-view-std-span/"/>
+    <url>/Dev/C++/STL/Introduction-to-std-string-view-std-span/</url>
+    
+    <content type="html"><![CDATA[<h2 id="std-string-view"><a href="#std-string-view" class="headerlink" title="std::string_view"></a><code>std::string_view</code></h2><p><code>std::string_view</code> is imported in C++17.</p><p>It stores the address of a string and its length. In some cases, it can avoid the overhead of copying strings such as in the parameter of function <code>void foo(const std::string&amp;)</code>.</p><p>Note that it can only be used for reading, not writing.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string_view&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::literals;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_string_view</span><span class="hljs-params">(std::string_view sv)</span> </span>&#123;<br>    std::cout &lt;&lt; sv &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">print_string_view</span>(<span class="hljs-string">&quot;Hello\0 World&quot;</span>);<br>    <span class="hljs-built_in">print_string_view</span>(<span class="hljs-string">&quot;Hello\0 World&quot;</span>s);<br>    <span class="hljs-built_in">print_string_view</span>(<span class="hljs-string">&quot;Hello\0 World&quot;</span>sv);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>Output:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Hello<br>Hello World<br>Hello World<br></code></pre></td></tr></table></figure><h2 id="std-span"><a href="#std-span" class="headerlink" title="std::span"></a><code>std::span</code></h2><p><code>std::span</code> is imported in C++20.</p><p>It’s similar to <code>std::string_view</code>, and it describes a continuous sequence of memory. The most important thing is that it can be used instead of an array as a function argument, because when we use an array as a parameter (non-reference), it will degrade to a pointer, so we have to pass the length of the array additionally, which is a hassle.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;span&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_span</span><span class="hljs-params">(std::span&lt;<span class="hljs-type">int</span>&gt; array)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> item : array) &#123;<br>        std::cout &lt;&lt; item &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>    &#125;<br>    std::cout &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">print_array</span><span class="hljs-params">(<span class="hljs-type">int</span>* array, <span class="hljs-type">int</span> length)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length; ++i) &#123;<br>        std::cout &lt;&lt; array[i] &lt;&lt; <span class="hljs-string">&quot; &quot;</span>;<br>    &#125;<br>    std::cout &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> array[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>&#125;;<br>    <span class="hljs-built_in">print_array</span>(array, <span class="hljs-built_in">ARRAY_SIZE</span>(array));<br>    <span class="hljs-built_in">print_span</span>(array);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/589182023">https://zhuanlan.zhihu.com/p/589182023</a></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+      <category>stl</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>stl</tag>
+      
+      <tag>cpp20</tag>
+      
+      <tag>cpp17</tag>
+      
+      <tag>string_view</tag>
+      
+      <tag>span</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 28 - Find the Index of the First Occurrence in a String</title>
     <link href="/Algorithm/LeetCode/LeetCode-28-Find-the-Index-of-the-First-Occurrence-in-a-String/"/>
     <url>/Algorithm/LeetCode/LeetCode-28-Find-the-Index-of-the-First-Occurrence-in-a-String/</url>
@@ -135,11 +174,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -170,9 +209,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -205,11 +244,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -403,11 +442,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -440,11 +479,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -477,9 +516,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -514,11 +553,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -629,11 +668,11 @@
       
       <tag>linked_list</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -666,11 +705,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -703,11 +742,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -736,9 +775,9 @@
     
     <tags>
       
-      <tag>basic</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>basic</tag>
       
       <tag>stl</tag>
       
@@ -1043,9 +1082,9 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>pointer</tag>
       
       <tag>stl</tag>
       
@@ -1084,9 +1123,9 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>pointer</tag>
       
       <tag>stl</tag>
       
@@ -1235,7 +1274,7 @@
     <link href="/TODO/"/>
     <url>/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input disabled="" type="checkbox"> KMP</li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input disabled="" type="checkbox"> std::string_view, std::span</li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input checked="" disabled="" type="checkbox"> <del>KMP</del></li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
     
     
     
