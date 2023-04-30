@@ -17,7 +17,7 @@
       
       <category>leetcode</category>
       
-      <category>two_pointers</category>
+      <category>sliding_window</category>
       
     </categories>
     
@@ -35,8 +35,6 @@
       <tag>string</tag>
       
       <tag>kmp</tag>
-      
-      <tag>two_pointers</tag>
       
     </tags>
     
