@@ -47,6 +47,6 @@ List what category of articles would be written.
 
 - [x] ~~pre-order/mid-order/post-order traversal binary trees~~
 - [x] ~~four arithmetic calculator~~
-- [ ] KMP
+- [x] ~~KMP~~
 
 ### LeetCode
