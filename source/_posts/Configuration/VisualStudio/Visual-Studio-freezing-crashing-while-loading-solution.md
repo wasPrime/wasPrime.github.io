@@ -2,11 +2,11 @@
 title: Visual Studio freezing (crashing) while loading solution
 date: 2023-04-25 02:27:53
 categories:
-- [configuration, environment]
+- [configuration, visual_studio]
 tags:
 - configuration
-- environment
 - visual_studio
+- environment
 ---
 
 ## Problem
