@@ -17,7 +17,7 @@ List what category of articles would be written.
 - [x] ~~jthread~~
 - [x] ~~RTTI~~
 - [x] ~~std::allocator~~
-- [ ] std::string_view, std::span
+- [x] ~~std::string_view, std::span~~
 - [x] ~~promise, future, packaged_task, shared_future~~
 - [ ] std::bind
 - [ ] C++ Rule of Five
@@ -33,6 +33,7 @@ List what category of articles would be written.
 - [ ] The implementation of coroutine by 云风
 - [ ] Ranges
 - [ ] Modules
+- [ ] `std::format`
 - [ ] muduo
 - [ ] bthread
 - [ ] bvar
@@ -50,3 +51,7 @@ List what category of articles would be written.
 - [x] ~~KMP~~
 
 ### LeetCode
+
+## Others
+
+- [ ] clang-format configuration
