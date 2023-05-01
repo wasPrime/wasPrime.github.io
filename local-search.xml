@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Configure clang-format</title>
+    <link href="/Configuration/clang/Configure-clang-format/"/>
+    <url>/Configuration/clang/Configure-clang-format/</url>
+    
+    <content type="html"><![CDATA[<p>A <code>clang-format</code> configuration template I prefer to use.</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># .clang-format</span><br><span class="hljs-comment"># Run manually to reformat a file:</span><br><span class="hljs-comment"># clang-format -i --style=file &lt;file&gt;</span><br><span class="hljs-comment"># find . -iname &#x27;*.cc&#x27; -o -iname &#x27;*.h&#x27; -o -iname &#x27;*.h.in&#x27; | xargs clang-format -i --style=file</span><br><br><span class="hljs-attr">Language:</span> <span class="hljs-string">Cpp</span><br><span class="hljs-attr">BasedOnStyle:</span> <span class="hljs-string">Google</span><br><span class="hljs-comment"># The offset of Access specifier(public/protected/private)</span><br><span class="hljs-attr">AccessModifierOffset:</span> <span class="hljs-number">-4</span><br><span class="hljs-attr">AllowShortBlocksOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">AllowShortFunctionsOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">AllowShortLambdasOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">ColumnLimit:</span> <span class="hljs-number">120</span><br><span class="hljs-attr">DerivePointerAlignment:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">IndentWidth:</span> <span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>configuration</category>
+      
+      <category>clang</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>configuration</tag>
+      
+      <tag>clang</tag>
+      
+      <tag>clang-format</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn coroutine - A asymmetric coroutine library for C</title>
     <link href="/Dev/Library/coroutine/Learn-coroutine-A-asymmetric-coroutine-library-for-C/"/>
     <url>/Dev/Library/coroutine/Learn-coroutine-A-asymmetric-coroutine-library-for-C/</url>
@@ -57,9 +88,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp17</tag>
       
@@ -98,11 +129,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>sliding_window</tag>
+      
       <tag>medium</tag>
       
       <tag>string</tag>
-      
-      <tag>sliding_window</tag>
       
       <tag>kmp</tag>
       
@@ -135,9 +166,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -170,9 +201,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -205,11 +236,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -240,9 +271,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -289,8 +320,8 @@
   
   <entry>
     <title>Visual Studio freezing (crashing) while loading solution</title>
-    <link href="/Configuration/Environment/Visual-Studio-freezing-crashing-while-loading-solution/"/>
-    <url>/Configuration/Environment/Visual-Studio-freezing-crashing-while-loading-solution/</url>
+    <link href="/Configuration/VisualStudio/Visual-Studio-freezing-crashing-while-loading-solution/"/>
+    <url>/Configuration/VisualStudio/Visual-Studio-freezing-crashing-while-loading-solution/</url>
     
     <content type="html"><![CDATA[<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>When opening a solution, Visual Studio is not responding after displaying “reading the file…”.</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><ol><li>Close the Visual Studio process.</li><li>Remove the <code>.vs</code> folder in the folder where the solution file in.</li><li>Try to reopen the solution file.</li></ol><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://stackoverflow.com/questions/39703475/visual-studio-freezing-crashing-while-loading-solution">Stackoverflow - Visual Studio freezing (crashing) while loading solution</a></li></ul>]]></content>
     
@@ -299,7 +330,7 @@
       
       <category>configuration</category>
       
-      <category>environment</category>
+      <category>visual_studio</category>
       
     </categories>
     
@@ -308,9 +339,9 @@
       
       <tag>configuration</tag>
       
-      <tag>environment</tag>
-      
       <tag>visual_studio</tag>
+      
+      <tag>environment</tag>
       
     </tags>
     
@@ -341,9 +372,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -376,9 +407,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -547,9 +578,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -654,9 +685,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -697,13 +728,13 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>linked_list</tag>
       
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -736,11 +767,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -806,9 +837,9 @@
     
     <tags>
       
-      <tag>basic</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>basic</tag>
       
       <tag>stl</tag>
       
@@ -903,9 +934,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -1078,9 +1109,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -1113,9 +1144,9 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>pointer</tag>
       
       <tag>stl</tag>
       
@@ -1154,9 +1185,9 @@
     
     <tags>
       
-      <tag>pointer</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>pointer</tag>
       
       <tag>stl</tag>
       
@@ -1259,9 +1290,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
