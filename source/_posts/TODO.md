@@ -30,7 +30,7 @@ List what category of articles would be written.
   - [x] ~~life cycle~~
   - [x] ~~stackful & stackless~~
   - [x] ~~symmetric transfer~~
-- [ ] The implementation of coroutine by 云风
+- [x] ~~The implementation of coroutine by 云风~~
 - [ ] Ranges
 - [ ] Modules
 - [ ] `std::format`
@@ -51,7 +51,3 @@ List what category of articles would be written.
 - [x] ~~KMP~~
 
 ### LeetCode
-
-## Others
-
-- [ ] clang-format configuration

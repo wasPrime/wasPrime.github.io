@@ -9,7 +9,7 @@ tags:
 - clang-format
 ---
 
-A `clang-format` configuration template I prefer to use.
+A `.clang-format` configuration template I prefer to use.
 
 ```yaml
 # .clang-format
