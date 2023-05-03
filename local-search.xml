@@ -4,11 +4,42 @@
   
   
   <entry>
+    <title>Configure clang-tidy</title>
+    <link href="/Configuration/clang/Configure-clang-tidy/"/>
+    <url>/Configuration/clang/Configure-clang-tidy/</url>
+    
+    <content type="html"><![CDATA[<p>A <code>.clang-tidy</code> configuration template I prefer to use.</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-meta">---</span><br><span class="hljs-attr">Checks:</span>     <span class="hljs-string">&#x27;</span><br><span class="hljs-string">            bugprone-*,</span><br><span class="hljs-string">            -bugprone-exception-escape,</span><br><span class="hljs-string">            -bugprone-easily-swappable-parameters,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            clang-analyzer-*,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            concurrency-*,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            cppcoreguidelines-*,</span><br><span class="hljs-string">            -cppcoreguidelines-macro-usage,</span><br><span class="hljs-string">            -cppcoreguidelines-owning-memory,</span><br><span class="hljs-string">            -cppcoreguidelines-avoid-magic-numbers,</span><br><span class="hljs-string">            -cppcoreguidelines-pro-type-vararg,</span><br><span class="hljs-string">            -cppcoreguidelines-pro-bounds-pointer-arithmetic,</span><br><span class="hljs-string">            -cppcoreguidelines-pro-bounds-array-to-pointer-decay,</span><br><span class="hljs-string">            -cppcoreguidelines-pro-type-reinterpret-cast,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            google-*,</span><br><span class="hljs-string">            -google-readability-casting,</span><br><span class="hljs-string">            -google-readability-todo,</span><br><span class="hljs-string">            -google-runtime-int,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            hicpp-*,</span><br><span class="hljs-string">            -hicpp-vararg,</span><br><span class="hljs-string">            -hicpp-use-auto,</span><br><span class="hljs-string">            -hicpp-no-array-decay,</span><br><span class="hljs-string">            -hicpp-avoid-c-arrays,</span><br><span class="hljs-string">            -hicpp-signed-bitwise,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            modernize-*,</span><br><span class="hljs-string">            -modernize-use-trailing-return-type,</span><br><span class="hljs-string">            -modernize-avoid-bind,</span><br><span class="hljs-string">            -modernize-avoid-c-arrays,</span><br><span class="hljs-string">            -modernize-use-auto,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            performance-*,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            portability-*,</span><br><span class="hljs-string"></span><br><span class="hljs-string">            readability-*,</span><br><span class="hljs-string">            -readability-magic-numbers,</span><br><span class="hljs-string">            -readability-make-member-function-const,</span><br><span class="hljs-string">            -readability-implicit-bool-conversion,</span><br><span class="hljs-string">            -readability-identifier-length,</span><br><span class="hljs-string">            -readability-redundant-access-specifiers,</span><br><span class="hljs-string">            -readability-qualified-auto</span><br><span class="hljs-string">            &#x27;</span><br><span class="hljs-attr">FormatStyle:</span> <span class="hljs-string">google</span><br><span class="hljs-attr">CheckOptions:</span><br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.ClassCase</span>,           <span class="hljs-attr">value:</span> <span class="hljs-string">CamelCase</span>  &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.EnumCase</span>,            <span class="hljs-attr">value:</span> <span class="hljs-string">CamelCase</span>  &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.FunctionCase</span>,        <span class="hljs-attr">value:</span> <span class="hljs-string">lower_case</span>  &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.GlobalConstantCase</span>,  <span class="hljs-attr">value:</span> <span class="hljs-string">UPPER_CASE</span> &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.MemberCase</span>,          <span class="hljs-attr">value:</span> <span class="hljs-string">lower_case</span> &#125;<br>  <span class="hljs-comment"># - &#123; key: readability-identifier-naming.MemberSuffix,        value: _          &#125;</span><br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.NamespaceCase</span>,       <span class="hljs-attr">value:</span> <span class="hljs-string">lower_case</span> &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.StructCase</span>,          <span class="hljs-attr">value:</span> <span class="hljs-string">CamelCase</span>  &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.UnionCase</span>,           <span class="hljs-attr">value:</span> <span class="hljs-string">CamelCase</span>  &#125;<br>  <span class="hljs-bullet">-</span> &#123; <span class="hljs-attr">key:</span> <span class="hljs-string">readability-identifier-naming.VariableCase</span>,        <span class="hljs-attr">value:</span> <span class="hljs-string">lower_case</span> &#125;<br><span class="hljs-attr">WarningsAsErrors:</span> <span class="hljs-string">&#x27;*&#x27;</span><br><span class="hljs-attr">HeaderFilterRegex:</span> <span class="hljs-string">&#x27;/(src|test)/include&#x27;</span><br><span class="hljs-attr">AnalyzeTemporaryDtors:</span> <span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>configuration</category>
+      
+      <category>clang</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>configuration</tag>
+      
+      <tag>clang</tag>
+      
+      <tag>clang-tidy</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Configure clang-format</title>
     <link href="/Configuration/clang/Configure-clang-format/"/>
     <url>/Configuration/clang/Configure-clang-format/</url>
     
-    <content type="html"><![CDATA[<p>A <code>clang-format</code> configuration template I prefer to use.</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># .clang-format</span><br><span class="hljs-comment"># Run manually to reformat a file:</span><br><span class="hljs-comment"># clang-format -i --style=file &lt;file&gt;</span><br><span class="hljs-comment"># find . -iname &#x27;*.cc&#x27; -o -iname &#x27;*.h&#x27; -o -iname &#x27;*.h.in&#x27; | xargs clang-format -i --style=file</span><br><br><span class="hljs-attr">Language:</span> <span class="hljs-string">Cpp</span><br><span class="hljs-attr">BasedOnStyle:</span> <span class="hljs-string">Google</span><br><span class="hljs-comment"># The offset of Access specifier(public/protected/private)</span><br><span class="hljs-attr">AccessModifierOffset:</span> <span class="hljs-number">-4</span><br><span class="hljs-attr">AllowShortBlocksOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">AllowShortFunctionsOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">AllowShortLambdasOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">ColumnLimit:</span> <span class="hljs-number">120</span><br><span class="hljs-attr">DerivePointerAlignment:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">IndentWidth:</span> <span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<p>A <code>.clang-format</code> configuration template I prefer to use.</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># .clang-format</span><br><span class="hljs-comment"># Run manually to reformat a file:</span><br><span class="hljs-comment"># clang-format -i --style=file &lt;file&gt;</span><br><span class="hljs-comment"># find . -iname &#x27;*.cc&#x27; -o -iname &#x27;*.h&#x27; -o -iname &#x27;*.h.in&#x27; | xargs clang-format -i --style=file</span><br><br><span class="hljs-attr">Language:</span> <span class="hljs-string">Cpp</span><br><span class="hljs-attr">BasedOnStyle:</span> <span class="hljs-string">Google</span><br><span class="hljs-comment"># The offset of Access specifier(public/protected/private)</span><br><span class="hljs-attr">AccessModifierOffset:</span> <span class="hljs-number">-4</span><br><span class="hljs-attr">AllowShortBlocksOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">AllowShortFunctionsOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">AllowShortLambdasOnASingleLine:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">ColumnLimit:</span> <span class="hljs-number">120</span><br><span class="hljs-attr">DerivePointerAlignment:</span> <span class="hljs-literal">false</span><br><span class="hljs-attr">IndentWidth:</span> <span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>]]></content>
     
     
     <categories>
@@ -88,9 +119,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>cpp17</tag>
       
@@ -129,9 +160,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>medium</tag>
+      
+      <tag>sliding_window</tag>
       
       <tag>string</tag>
       
@@ -166,9 +197,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -201,9 +232,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -236,11 +267,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -271,9 +302,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -306,11 +337,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -372,9 +403,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -407,9 +438,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -504,11 +535,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -541,11 +572,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -578,9 +609,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -615,11 +646,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -685,9 +716,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -728,13 +759,13 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>linked_list</tag>
       
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -767,11 +798,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -804,11 +835,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -837,9 +868,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>basic</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -934,9 +965,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutines</tag>
       
@@ -1109,9 +1140,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -1144,9 +1175,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>pointer</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1185,9 +1216,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>pointer</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1290,9 +1321,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
@@ -1336,7 +1367,7 @@
     <link href="/TODO/"/>
     <url>/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::string_view, std::span</del></li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input disabled="" type="checkbox"> The implementation of coroutine by 云风</li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> <code>std::format</code></li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input checked="" disabled="" type="checkbox"> <del>KMP</del></li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3><h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><ul><li><input disabled="" type="checkbox"> clang-format configuration</li></ul>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::string_view, std::span</del></li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input disabled="" type="checkbox"> C++ Rule of Five</li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input disabled="" type="checkbox"> C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input checked="" disabled="" type="checkbox"> <del>The implementation of coroutine by 云风</del></li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> <code>std::format</code></li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li><li><input disabled="" type="checkbox"> bRPC</li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input checked="" disabled="" type="checkbox"> <del>KMP</del></li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3>]]></content>
     
     
     
