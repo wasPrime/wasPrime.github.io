@@ -11,7 +11,7 @@ tags:
 
 This problem is from Zhihu <https://www.zhihu.com/question/596919226>
 
-![problem_description](/Negotiate-Reasonable-Groups/img/problem_description.png)
+![problem_description](/resources/Negotiate-Reasonable-Groups/img/problem_description.png)
 
 Write a program to find a reasonable answer.
 

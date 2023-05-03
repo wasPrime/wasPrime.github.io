@@ -33,7 +33,7 @@ sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O 
 
 Open `~/.zhsrc`, set `ZSH_THEME` as `agnoster`.
 
-![theme](/Configure-iTerm2-zsh/img/theme.jpeg)
+![theme](/resources/Configure-iTerm2-zsh/img/theme.jpeg)
 
 {% note info %}
 
@@ -46,7 +46,7 @@ Open `~/.zhsrc`, set `ZSH_THEME` as `agnoster`.
 
 Open iTerm2 and open its `Preferences...` or press `⌘` + `,`, follow the path `Profiles > Open Profiles > Edit Profiles > Colors` and select a color.
 
-![Colors](/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg)
+![Colors](/resources/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg)
 
 ## Install & Set `Powerline` font
 
@@ -62,13 +62,13 @@ cd fonts
 
 From `Profiles > Open Profiles > Edit Profiles > Text` of iTerm2's preferences, set font as `Powerline`.
 
-![iTerm2 font](/Configure-iTerm2-zsh/img/iTerm2_font.jpeg)
+![iTerm2 font](/resources/Configure-iTerm2-zsh/img/iTerm2_font.jpeg)
 
 ## Set Transparency & Background
 
 From `Profiles > Open Profiles > Edit Profiles > Window` of iTerm2's preferences, set transparency and background.
 
-![iTerm2 transparency & background](/Configure-iTerm2-zsh/img/iTerm2_background.jpeg)
+![iTerm2 transparency & background](/resources/Configure-iTerm2-zsh/img/iTerm2_background.jpeg)
 
 ## Install Zsh Extensions
 

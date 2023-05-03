@@ -22,7 +22,7 @@ Given `n` non-negative integers representing an elevation map where the width of
 
 **Example 1:**
 
-![trapping_rain_water](/LeetCode-42-Trapping-Rain-Water/img/trapping_rain_water.png)
+![trapping_rain_water](/resources/LeetCode-42-Trapping-Rain-Water/img/trapping_rain_water.png)
 
 ```log
 Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
@@ -49,7 +49,7 @@ Output: 9
 
 **示例 1：**
 
-![trapping_rain_water](/LeetCode-42-Trapping-Rain-Water/img/trapping_rain_water.png)
+![trapping_rain_water](/resources/LeetCode-42-Trapping-Rain-Water/img/trapping_rain_water.png)
 
 ```log
 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
