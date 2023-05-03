@@ -23,18 +23,18 @@
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
 <meta property="og:description" content="To configure the environments as below:Oh My ZshPowerline fontagnoster themeZsh extensionszsh-syntax-highlightingzsh-autosuggestions             Install Oh My Zsh123sh -c &quot;$(curl -fs">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://wasprime.github.io/Configure-iTerm2-zsh/img/theme.jpeg">
-<meta property="og:image" content="http://wasprime.github.io/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg">
-<meta property="og:image" content="http://wasprime.github.io/Configure-iTerm2-zsh/img/iTerm2_font.jpeg">
-<meta property="og:image" content="http://wasprime.github.io/Configure-iTerm2-zsh/img/iTerm2_background.jpeg">
+<meta property="og:image" content="http://wasprime.github.io/resources/Configure-iTerm2-zsh/img/theme.jpeg">
+<meta property="og:image" content="http://wasprime.github.io/resources/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg">
+<meta property="og:image" content="http://wasprime.github.io/resources/Configure-iTerm2-zsh/img/iTerm2_font.jpeg">
+<meta property="og:image" content="http://wasprime.github.io/resources/Configure-iTerm2-zsh/img/iTerm2_background.jpeg">
 <meta property="article:published_time" content="2023-04-09T14:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-09T16:59:29.513Z">
+<meta property="article:modified_time" content="2023-05-03T14:14:01.770Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="configuration">
 <meta property="article:tag" content="iterm2">
 <meta property="article:tag" content="zsh">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://wasprime.github.io/Configure-iTerm2-zsh/img/theme.jpeg">
+<meta name="twitter:image" content="http://wasprime.github.io/resources/Configure-iTerm2-zsh/img/theme.jpeg">
   
   
   
@@ -301,19 +301,19 @@
 <h2 id="Install-Oh-My-Zsh"><a href="#Install-Oh-My-Zsh" class="headerlink" title="Install Oh My Zsh"></a>Install <code>Oh My Zsh</code></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">sh -c <span class="hljs-string">&quot;<span class="hljs-subst">$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span><br><span class="hljs-comment"># Or</span><br>sh -c <span class="hljs-string">&quot;<span class="hljs-subst">$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)</span>&quot;</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="Set-Theme"><a href="#Set-Theme" class="headerlink" title="Set Theme"></a>Set Theme</h2><p>Open <code>~/.zhsrc</code>, set <code>ZSH_THEME</code> as <code>agnoster</code>.</p>
-<p><img src="/Configure-iTerm2-zsh/img/theme.jpeg" srcset="/img/loading.gif" lazyload alt="theme"></p>
+<p><img src="/resources/Configure-iTerm2-zsh/img/theme.jpeg" srcset="/img/loading.gif" lazyload alt="theme"></p>
 <div class="note note-info">
             <ul><li><strong>Official Website:</strong> <a target="_blank" rel="noopener" href="https://ohmyz.sh/">https://ohmyz.sh/</a></li><li><strong>Github:</strong> <a target="_blank" rel="noopener" href="https://github.com/ohmyzsh/ohmyzsh">https://github.com/ohmyzsh/ohmyzsh</a></li></ul>
           </div>
 
 <h2 id="Set-iTerm2-Colors"><a href="#Set-iTerm2-Colors" class="headerlink" title="Set iTerm2 Colors"></a>Set iTerm2 Colors</h2><p>Open iTerm2 and open its <code>Preferences...</code> or press <code>⌘</code> + <code>,</code>, follow the path <code>Profiles &gt; Open Profiles &gt; Edit Profiles &gt; Colors</code> and select a color.</p>
-<p><img src="/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg" srcset="/img/loading.gif" lazyload alt="Colors"></p>
+<p><img src="/resources/Configure-iTerm2-zsh/img/iTerm2_colors.jpeg" srcset="/img/loading.gif" lazyload alt="Colors"></p>
 <h2 id="Install-amp-Set-Powerline-font"><a href="#Install-amp-Set-Powerline-font" class="headerlink" title="Install &amp; Set Powerline font"></a>Install &amp; Set <code>Powerline</code> font</h2><h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/powerline/fonts.git --depth=1<br><span class="hljs-built_in">cd</span> fonts<br>./install.sh<br></code></pre></td></tr></table></figure>
 
 <h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>From <code>Profiles &gt; Open Profiles &gt; Edit Profiles &gt; Text</code> of iTerm2’s preferences, set font as <code>Powerline</code>.</p>
-<p><img src="/Configure-iTerm2-zsh/img/iTerm2_font.jpeg" srcset="/img/loading.gif" lazyload alt="iTerm2 font"></p>
+<p><img src="/resources/Configure-iTerm2-zsh/img/iTerm2_font.jpeg" srcset="/img/loading.gif" lazyload alt="iTerm2 font"></p>
 <h2 id="Set-Transparency-amp-Background"><a href="#Set-Transparency-amp-Background" class="headerlink" title="Set Transparency &amp; Background"></a>Set Transparency &amp; Background</h2><p>From <code>Profiles &gt; Open Profiles &gt; Edit Profiles &gt; Window</code> of iTerm2’s preferences, set transparency and background.</p>
-<p><img src="/Configure-iTerm2-zsh/img/iTerm2_background.jpeg" srcset="/img/loading.gif" lazyload alt="iTerm2 transparency &amp; background"></p>
+<p><img src="/resources/Configure-iTerm2-zsh/img/iTerm2_background.jpeg" srcset="/img/loading.gif" lazyload alt="iTerm2 transparency &amp; background"></p>
 <h2 id="Install-Zsh-Extensions"><a href="#Install-Zsh-Extensions" class="headerlink" title="Install Zsh Extensions"></a>Install Zsh Extensions</h2><ol>
 <li><p>Install from official website.</p>
  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="hljs-variable">$ZSH_CUSTOM</span>/plugins/zsh-syntax-highlighting<br>git <span class="hljs-built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git <span class="hljs-variable">$ZSH_CUSTOM</span>/plugins/zsh-autosuggestions<br></code></pre></td></tr></table></figure>
@@ -406,7 +406,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 10, 2023</div>
+          <div>May 3, 2023</div>
         </div>
       
       
