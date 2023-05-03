@@ -149,4 +149,4 @@ int main() {
 
 ## References
 
-- <https://zhuanlan.zhihu.com/p/553377822>
+- [C++多线程编程：期望future](https://zhuanlan.zhihu.com/p/553377822)

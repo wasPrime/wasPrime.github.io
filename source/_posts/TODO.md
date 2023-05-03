@@ -30,14 +30,9 @@ List what category of articles would be written.
   - [x] ~~life cycle~~
   - [x] ~~stackful & stackless~~
   - [x] ~~symmetric transfer~~
-- [x] ~~The implementation of coroutine by 云风~~
 - [ ] Ranges
 - [ ] Modules
 - [ ] `std::format`
-- [ ] muduo
-- [ ] bthread
-- [ ] bvar
-- [ ] bRPC
 
 ## Go
 
@@ -51,3 +46,13 @@ List what category of articles would be written.
 - [x] ~~KMP~~
 
 ### LeetCode
+
+## Library
+
+- [x] ~~The implementation of coroutine by 云风~~
+- [ ] muduo
+- [ ] bRPC
+  - [ ] bthread
+  - [ ] bvar
+- [ ] gflags
+- [ ] googletest (gtest)

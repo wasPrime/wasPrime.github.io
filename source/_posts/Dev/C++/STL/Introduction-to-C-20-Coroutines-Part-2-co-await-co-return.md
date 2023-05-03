@@ -62,9 +62,9 @@ For any coroutine, the `promise_type` should conatin a function either as `void 
 
 ## References
 
-- <https://zhuanlan.zhihu.com/p/349710180>
-- <https://zhuanlan.zhihu.com/p/355100152>
+- [C++20 新特性 协程 Coroutines(2)](https://zhuanlan.zhihu.com/p/349710180)
+- [如何编写 C++ 20 协程(Coroutines)](https://zhuanlan.zhihu.com/p/355100152)
   - multi-thread: <https://en.cppreference.com/w/cpp/language/coroutines>
-- <https://zhuanlan.zhihu.com/p/356752742>
+- [C++20 新特性 协程 Coroutines(3)](https://zhuanlan.zhihu.com/p/356752742)
 - critical: <https://lewissbaker.github.io/>
-  - <https://lewissbaker.github.io/2017/09/25/coroutine-theory>
+  - [Coroutine Theory](https://lewissbaker.github.io/2017/09/25/coroutine-theory)

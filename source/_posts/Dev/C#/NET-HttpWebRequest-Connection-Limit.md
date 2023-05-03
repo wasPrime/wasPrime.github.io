@@ -82,5 +82,5 @@ As for `HttpClient` after .NET 4.5, it seems that it doesn't have the connection
 ## References
 
 - [Microsoft .NET Framework 4.8 Documentation](https://learn.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.defaultconnectionlimit?view=netframework-4.8#System_Net_ServicePointManager_DefaultConnectionLimit)
-- <https://blog.csdn.net/PLA12147111/article/details/105496791>
-- <https://blog.csdn.net/defender_/article/details/91949613>
+- [C# 关于HttpWebRequest最大连接数限制,多线程中速度提升解决方案](https://blog.csdn.net/PLA12147111/article/details/105496791)
+- [C#多线程环境下调用 HttpWebRequest 并发连接限制](https://blog.csdn.net/defender_/article/details/91949613)

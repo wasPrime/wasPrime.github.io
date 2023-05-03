@@ -85,4 +85,4 @@ int main() {
 
 ## References
 
-- <https://zhuanlan.zhihu.com/p/589182023>
+- [C++的那些事——std::string_view和std::span](https://zhuanlan.zhihu.com/p/589182023)

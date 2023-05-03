@@ -127,4 +127,4 @@ We can easily find we can get the real object correctly only if there are virtua
 
 ## References
 
-- <https://www.sandordargo.com/blog/2023/03/01/binary-sizes-and-rtti>
+- [Binary sizes and RTTI](https://www.sandordargo.com/blog/2023/03/01/binary-sizes-and-rtti)
