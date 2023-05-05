@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Genetic Algorithm</title>
+    <link href="/SystemDesign/Genetic-Algorithm/"/>
+    <url>/SystemDesign/Genetic-Algorithm/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Code-Example"><a href="#Code-Example" class="headerlink" title="Code Example"></a>Code Example</h2><p>A genetic algorithm for optimizing the minimum value of a function.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> <span class="hljs-type">List</span><br><br><br><span class="hljs-comment"># Define objective function</span><br><span class="hljs-comment"># 定义目标函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">objective_function</span>(<span class="hljs-params">x: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-built_in">int</span>:<br>    <span class="hljs-keyword">return</span> x**<span class="hljs-number">2</span><br><br><br><span class="hljs-comment"># Define genetic algorithm parameters</span><br><span class="hljs-comment"># 定义遗传算法的参数</span><br>population_size = <span class="hljs-number">50</span><br>mutation_rate = <span class="hljs-number">0.1</span><br>generations = <span class="hljs-number">100</span><br><br><br><span class="hljs-comment"># Define population initialization function</span><br><span class="hljs-comment"># 定义种群的初始化函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">initialize_population</span>(<span class="hljs-params">population_size: <span class="hljs-built_in">int</span></span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]:<br>    population = []  <span class="hljs-comment"># size = population_size * 4</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(population_size):<br>        chromosome = [random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>)]<br>        population.append(chromosome)<br><br>    <span class="hljs-keyword">return</span> population<br><br><br><span class="hljs-comment"># Define selection function</span><br><span class="hljs-comment"># 定义选择函数（数量减半）</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">selection</span>(<span class="hljs-params">population: <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]</span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]:<br>    fitness_values = []<br>    <span class="hljs-keyword">for</span> chromosome <span class="hljs-keyword">in</span> population:<br>        x = <span class="hljs-built_in">sum</span>([(chromosome[i] * <span class="hljs-number">2</span>**i)<br>                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>)])  <span class="hljs-comment"># x = random.randint(0, 15)</span><br>        fitness_values.append((chromosome, objective_function(x)))<br>    fitness_values.sort(key=<span class="hljs-keyword">lambda</span> x: x[<span class="hljs-number">1</span>])<br>    selected_population = [x[<span class="hljs-number">0</span>]<br>                           <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> fitness_values[: <span class="hljs-built_in">int</span>(population_size / <span class="hljs-number">2</span>)]]<br>    <span class="hljs-keyword">return</span> selected_population<br><br><br><span class="hljs-comment"># Define crossover function</span><br><span class="hljs-comment"># 定义交叉函数（恢复种群数量）</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">crossover</span>(<span class="hljs-params">selected_population: <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]</span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]:<br>    new_population = []<br><br>    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(population_size):<br>        parent1 = random.choice(selected_population)<br>        parent2 = random.choice(selected_population)<br><br>        child = []<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>            <span class="hljs-keyword">if</span> random.random() &lt; <span class="hljs-number">0.5</span>:<br>                child.append(parent1[j])<br>            <span class="hljs-keyword">else</span>:<br>                child.append(parent2[j])<br>        new_population.append(child)<br><br>    <span class="hljs-keyword">return</span> new_population<br><br><br><span class="hljs-comment"># Define mutation function</span><br><span class="hljs-comment"># 定义突变函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">mutation</span>(<span class="hljs-params">new_population: <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]</span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]]:<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(population_size):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>):<br>            <span class="hljs-keyword">if</span> random.random() &lt; mutation_rate:<br>                new_population[i][j] = <span class="hljs-number">1</span> - new_population[i][j]<br><br>    <span class="hljs-keyword">return</span> new_population<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    <span class="hljs-comment"># Run genetic algorithm</span><br>    <span class="hljs-comment"># 运行遗传算法</span><br>    population = initialize_population(population_size)<br>    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(generations):<br>        selected_population = selection(population)<br>        new_population = crossover(selected_population)<br>        new_population = mutation(new_population)<br>        population = new_population<br><br>    <span class="hljs-comment"># Print final result</span><br>    <span class="hljs-comment"># 打印最终结果</span><br>    fitness_values = []<br>    <span class="hljs-keyword">for</span> chromosome <span class="hljs-keyword">in</span> population:<br>        x = <span class="hljs-built_in">sum</span>([(chromosome[i] * <span class="hljs-number">2</span>**i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">4</span>)])<br>        fitness_values.append(objective_function(x))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;fitness_values:&quot;</span>, fitness_values)<br>    best_fitness_value = <span class="hljs-built_in">min</span>(fitness_values)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Best fitness value:&quot;</span>, best_fitness_value)<br></code></pre></td></tr></table></figure><p>In this example, we use a simple binary string to represent each chromosome, where each gene position can take a value of 0 or 1. Our objective function is $f(x) &#x3D; x^2$, and we attempt to find the minimum value of the function. We use an initialization function to generate an initial population, a selection function to select individuals with higher fitness, a crossover function to create new individuals, and a mutation function to introduce diversity. We run 100 generations and output the best fitness value.</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>system_design</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>system_design</tag>
+      
+      <tag>genetic_algorithm</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>与数学有关的悖论</title>
     <link href="/Math/Paradox/%E4%B8%8E%E6%95%B0%E5%AD%A6%E6%9C%89%E5%85%B3%E7%9A%84%E6%82%96%E8%AE%BA/"/>
     <url>/Math/Paradox/%E4%B8%8E%E6%95%B0%E5%AD%A6%E6%9C%89%E5%85%B3%E7%9A%84%E6%82%96%E8%AE%BA/</url>
@@ -401,11 +428,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -599,11 +626,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -636,11 +663,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -673,9 +700,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -710,11 +737,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -825,11 +852,11 @@
       
       <tag>linked_list</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -862,11 +889,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -899,11 +926,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
