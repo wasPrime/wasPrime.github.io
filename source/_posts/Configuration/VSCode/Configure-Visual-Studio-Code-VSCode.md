@@ -13,6 +13,12 @@ List some extensions I get used to using.
 
 ## General
 
+### Font
+
+[Download FiraCode font](https://github.com/tonsky/FiraCode)
+
+> **font family setting:** 'Fira Code Retina', Monaco, 'Courier New', monospace'
+
 ### Theme
 
 - `One Dark Pro`: An awesome theme!
