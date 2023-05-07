@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>Learn muduo - Part 1 thread_safe Objects Lifecycle Management</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-1-thread-safe-Objects-Lifecycle-Management/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-1-thread-safe-Objects-Lifecycle-Management/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>线程安全的对象生命期管理</p>          </div><h2 id="线程安全的-Counter"><a href="#线程安全的-Counter" class="headerlink" title="线程安全的 Counter"></a>线程安全的 Counter</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cinttypes&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">noncopyable</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">noncopyable</span>(<span class="hljs-type">const</span> noncopyable&amp;) = <span class="hljs-keyword">delete</span>;<br>    <span class="hljs-type">void</span> <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> noncopyable&amp;) = <span class="hljs-keyword">delete</span>;<br><br><span class="hljs-keyword">protected</span>:<br>    <span class="hljs-built_in">noncopyable</span>() = <span class="hljs-keyword">default</span>;<br>    ~<span class="hljs-built_in">noncopyable</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> : <span class="hljs-keyword">public</span> noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Counter</span>() : <span class="hljs-built_in">value_</span>(<span class="hljs-number">0</span>) &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">getAndIncrease</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int64_t</span> value_;<br>    <span class="hljs-keyword">mutable</span> std::mutex mutex_;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">Counter::value</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    <span class="hljs-keyword">return</span> value_;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">Counter::getAndIncrease</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    <span class="hljs-type">int64_t</span> ret = value_++;<br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure><p>此处有一点需要注意，为了使成员函数 <code>Counter::value()</code> 是 const 成员函数，且 <code>mutex_</code> 在语义上不可变，故将其设为 <code>mutable</code> 的。</p><h2 id="对象构造期线程安全"><a href="#对象构造期线程安全" class="headerlink" title="对象构造期线程安全"></a>对象构造期线程安全</h2><p>对象构造要实现线程安全，唯一要求是不要在构造期间泄露 <code>this</code> 指针：</p><ul><li>不要在构造函数中注册回调；</li><li>不要在构造函数中将 <code>this</code> 传给跨线程的对象；</li><li>即便在构造函数最后一行也不行。</li></ul><h3 id="错误"><a href="#错误" class="headerlink" title="错误"></a>错误</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> : <span class="hljs-keyword">public</span> Observer &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>(Observable* s) &#123;<br>        s-&gt;<span class="hljs-built_in">register_</span>(<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span></span>;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="正确"><a href="#正确" class="headerlink" title="正确"></a>正确</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> : <span class="hljs-keyword">public</span> Observer &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>();<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">observer</span><span class="hljs-params">(Observable* s)</span> </span>&#123;<br>        s-&gt;<span class="hljs-built_in">register_</span>(<span class="hljs-keyword">this</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span></span>;<br>&#125;;<br></code></pre></td></tr></table></figure><h2 id="shared-ptr-亮点"><a href="#shared-ptr-亮点" class="headerlink" title="shared_ptr 亮点"></a><code>shared_ptr</code> 亮点</h2><h3 id="析构动作在创建时被捕获"><a href="#析构动作在创建时被捕获" class="headerlink" title="析构动作在创建时被捕获"></a>析构动作在创建时被捕获</h3><p>这意味着：</p><ul><li>虚析构函数不再是必需的（参考：<a href="/Dev/C++/STL/What-is-std-shared-ptr/#Deleter-in-shared-ptr">What is std::shared_ptr</a>）。</li><li><code>std::shared_ptr&lt;void&gt;</code> 可以持有任何对象，而且能安全释放。</li><li>……</li></ul><h2 id="对象池优化过程"><a href="#对象池优化过程" class="headerlink" title="对象池优化过程"></a>对象池优化过程</h2><h3 id="1-std-shared-ptr-lt-Stock-gt-in-map"><a href="#1-std-shared-ptr-lt-Stock-gt-in-map" class="headerlink" title="1. std::shared_ptr&lt;Stock&gt; in map"></a>1. <code>std::shared_ptr&lt;Stock&gt;</code> in <code>map</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Stock</span> &#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : <span class="hljs-keyword">public</span> noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">mutable</span> std::mutex mutex_;<br>    std::map&lt;std::string, std::shared_ptr&lt;Stock&gt;&gt; stocks_;<br>&#125;;<br></code></pre></td></tr></table></figure><p>但是在 <code>StockFactory</code> 销毁前，<code>Stock</code> 对象永远不会销毁，毕竟逻辑上 <code>Stock</code> 本是可以在 <code>StockFactory</code> 销毁前销毁的，此处约等于内存泄漏。</p><h3 id="2-std-weak-ptr-lt-Stock-gt-in-map"><a href="#2-std-weak-ptr-lt-Stock-gt-in-map" class="headerlink" title="2. std::weak_ptr&lt;Stock&gt; in map"></a>2. <code>std::weak_ptr&lt;Stock&gt;</code> in <code>map</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Stock</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Stock</span>(<span class="hljs-type">const</span> std::string&amp; key) : <span class="hljs-built_in">key_</span>(key) &#123;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::string key_;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : <span class="hljs-keyword">public</span> noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">mutable</span> std::mutex mutex_;<br>    std::map&lt;std::string, std::weak_ptr&lt;Stock&gt;&gt; stocks_;<br>&#125;;<br><br><span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    std::weak_ptr&lt;Stock&gt;&amp; wkStock = stocks_[key];<br>    std::shared_ptr&lt;Stock&gt; pStock = wkStock.<span class="hljs-built_in">lock</span>();<br>    <span class="hljs-keyword">if</span> (pStock == <span class="hljs-literal">nullptr</span>) &#123;<br>        pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key));<br>        wkStock = pStock;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pStock;<br>&#125;<br></code></pre></td></tr></table></figure><p><code>stocks_.size</code> 只增不减，可认为有内存泄漏。解决办法是，利用 <code>std::shared_ptr</code> 的定制 deleter 功能。</p><h3 id="3-定制-deleter"><a href="#3-定制-deleter" class="headerlink" title="3. 定制 deleter"></a>3. 定制 deleter</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    std::weak_ptr&lt;Stock&gt;&amp; wkStock = stocks_[key];<br>    std::shared_ptr&lt;Stock&gt; pStock = wkStock.<span class="hljs-built_in">lock</span>();<br>    <span class="hljs-keyword">if</span> (pStock == <span class="hljs-literal">nullptr</span>) &#123;<br>        pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key), [<span class="hljs-keyword">this</span>](Stock* stock) &#123; <span class="hljs-keyword">this</span>-&gt;<span class="hljs-built_in">deleteStock</span>(stock); &#125;);<br>        wkStock = pStock;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pStock;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">StockFactory::deleteStock</span><span class="hljs-params">(Stock* stock)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (stock) &#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>        stocks_.<span class="hljs-built_in">erase</span>(stock-&gt;<span class="hljs-built_in">key</span>());<br>    &#125;<br><br>    <span class="hljs-keyword">delete</span> stock;<br>&#125;<br></code></pre></td></tr></table></figure><p>但是，此处将 <code>StockFactory</code> 的 <code>this</code> 指针交给了 <code>Stock</code> 析构函数。如果 <code>StockFactory</code> 先于 <code>Stock</code> 析构，就会 core dump。</p><h3 id="4-enable-shared-from-this"><a href="#4-enable-shared-from-this" class="headerlink" title="4. enable_shared_from_this"></a>4. <code>enable_shared_from_this</code></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : <span class="hljs-keyword">public</span> std::enable_shared_from_this&lt;StockFactory&gt;, <span class="hljs-keyword">public</span> noncopyable &#123;<br>    ...<br>&#125;;<br><br><span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    std::weak_ptr&lt;Stock&gt;&amp; wkStock = stocks_[key];<br>    std::shared_ptr&lt;Stock&gt; pStock = wkStock.<span class="hljs-built_in">lock</span>();<br>    <span class="hljs-keyword">if</span> (pStock == <span class="hljs-literal">nullptr</span>) &#123;<br>        pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key),<br>                     [shared_this = <span class="hljs-built_in">shared_from_this</span>()](Stock* stock) &#123; shared_this-&gt;<span class="hljs-built_in">deleteStock</span>(stock); &#125;);<br>        wkStock = pStock;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pStock;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">StockFactory::deleteStock</span><span class="hljs-params">(Stock* stock)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (stock) &#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>        stocks_.<span class="hljs-built_in">erase</span>(stock-&gt;<span class="hljs-built_in">key</span>());<br>    &#125;<br><br>    <span class="hljs-keyword">delete</span> stock;<br>&#125;<br></code></pre></td></tr></table></figure><p>但是这样一来，<code>StockFactory</code> 的生命周期被意外延长了。</p><p>我们实际想做的是——如果 <code>StockFactory</code> 还活着，就调用它的成员函数，否则忽略之。</p><h3 id="5-弱引用"><a href="#5-弱引用" class="headerlink" title="5. 弱引用"></a>5. 弱引用</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : <span class="hljs-keyword">public</span> std::enable_shared_from_this&lt;StockFactory&gt;, <span class="hljs-keyword">public</span> noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">weakDeleteStock</span><span class="hljs-params">(<span class="hljs-type">const</span> std::weak_ptr&lt;StockFactory&gt;&amp; wkFactory, Stock* stock)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">removeStock</span><span class="hljs-params">(Stock* stock)</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">mutable</span> std::mutex mutex_;<br>    std::map&lt;std::string, std::weak_ptr&lt;Stock&gt;&gt; stocks_;<br>&#125;;<br><br><span class="hljs-function">std::shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; key)</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    std::weak_ptr&lt;Stock&gt;&amp; wkStock = stocks_[key];<br>    std::shared_ptr&lt;Stock&gt; pStock = wkStock.<span class="hljs-built_in">lock</span>();<br>    <span class="hljs-keyword">if</span> (pStock == <span class="hljs-literal">nullptr</span>) &#123;<br>        pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key), [weak_this = std::<span class="hljs-built_in">weak_ptr</span>&lt;StockFactory&gt;(<span class="hljs-built_in">shared_from_this</span>())](Stock* stock) &#123;<br>            StockFactory::<span class="hljs-built_in">weakDeleteStock</span>(weak_this, stock);<br>        &#125;);<br>        wkStock = pStock;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pStock;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">StockFactory::weakDeleteStock</span><span class="hljs-params">(<span class="hljs-type">const</span> std::weak_ptr&lt;StockFactory&gt;&amp; wkFactory, Stock* stock)</span> </span>&#123;<br>    std::shared_ptr&lt;StockFactory&gt; pFactory = wkFactory.<span class="hljs-built_in">lock</span>();<br>    <span class="hljs-keyword">if</span> (pFactory) &#123;<br>        pFactory-&gt;<span class="hljs-built_in">removeStock</span>(stock);<br>    &#125;<br><br>    <span class="hljs-keyword">delete</span> stock;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">StockFactory::removeStock</span><span class="hljs-params">(Stock* stock)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (stock) &#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>        stocks_.<span class="hljs-built_in">erase</span>(stock-&gt;<span class="hljs-built_in">key</span>());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+      <tag>thread_safe</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Genetic Algorithm</title>
     <link href="/SystemDesign/Genetic-Algorithm/"/>
     <url>/SystemDesign/Genetic-Algorithm/</url>
@@ -210,9 +243,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp17</tag>
       
@@ -253,9 +286,9 @@
       
       <tag>medium</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>string</tag>
+      
+      <tag>sliding_window</tag>
       
       <tag>kmp</tag>
       
@@ -288,9 +321,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -323,9 +356,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -494,9 +527,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -529,9 +562,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -700,9 +733,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -807,9 +840,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -1056,9 +1089,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutines</tag>
       
@@ -1231,9 +1264,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -1412,9 +1445,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
