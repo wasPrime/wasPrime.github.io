@@ -2,13 +2,23 @@
 title: Introduction to C++20 Coroutines - Part 1 Generator
 date: 2023-04-08 21:17:21
 categories:
-- [dev, cpp, stl]
+- [dev, cpp, stl, coroutine]
 tags:
 - cpp
 - cpp20
 - stl
-- coroutines
+- coroutine
 ---
+
+{% note primary %}
+**This series is related to C++20 coroutine.**
+
+**part 1: Generator**
+[part 2: co_await/co_return](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return)
+[part 3: Some tips about life cycle when using coroutines](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice)
+[part 4: Some examples about co_await](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await)
+[part 5: stackful/stackless and Symmetric Transfer](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer)
+{% endnote %}
 
 Why corouties were imported in C++20? In order to explain it, we could begin with some examples about Fibonacci sequences.
 

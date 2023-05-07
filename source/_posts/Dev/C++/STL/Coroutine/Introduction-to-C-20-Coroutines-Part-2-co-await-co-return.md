@@ -2,15 +2,25 @@
 title: Introduction to C++20 Coroutines - Part 2 co_await/co_return
 date: 2023-04-23 22:25:40
 categories:
-- [dev, cpp, stl]
+- [dev, cpp, stl, coroutine]
 tags:
 - cpp
 - cpp20
 - stl
-- coroutines
+- coroutine
 ---
 
-In the [part 1](/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-1-Generator) of the coroutine's series, we had learned how to write a generator with the keyword `co_yield`, as well as the schema of the return type and `promise_type`.
+{% note primary %}
+**This series is related to C++20 coroutine.**
+
+[part 1: Generator](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator)
+**part 2: co_await/co_return**
+[part 3: Some tips about life cycle when using coroutines](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice)
+[part 4: Some examples about co_await](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await)
+[part 5: stackful/stackless and Symmetric Transfer](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer)
+{% endnote %}
+
+In the [part 1](/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator) of the coroutine's series, we had learned how to write a generator with the keyword `co_yield`, as well as the schema of the return type and `promise_type`.
 
 In the post, I would like to introduce other new keywords for coroutines - `co_await` and `co_return`.
 

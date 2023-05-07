@@ -15,7 +15,9 @@ muduo: <https://github.com/chenshuo/muduo>
 {% endnote %}
 
 {% note primary %}
-线程安全的对象生命期管理
+本系列是 [《Linux 多线程服务端编程：使用 muduo C++ 网络库》](https://chenshuo.com/book/) 学习笔记。
+
+**Part 1: 线程安全的对象生命期管理**
 {% endnote %}
 
 ## 线程安全的 Counter
