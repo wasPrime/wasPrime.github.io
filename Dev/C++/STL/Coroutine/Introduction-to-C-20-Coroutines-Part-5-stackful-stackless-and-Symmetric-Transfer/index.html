@@ -16,20 +16,20 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="stackful&#x2F;stacklessCoroutines can be divided into stackful coroutines (such as goroutine in Golang) and stackless coroutines (such as async&#x2F;await in JavaScript). What the called stackful and">
+    <meta name="description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Introduction to C++20 Coroutines - Part 5 stackful&#x2F;stackless and Symmetric Transfer">
-<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/index.html">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="stackful&#x2F;stacklessCoroutines can be divided into stackful coroutines (such as goroutine in Golang) and stackless coroutines (such as async&#x2F;await in JavaScript). What the called stackful and">
+<meta property="og:description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-29T17:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-29T17:18:54.730Z">
+<meta property="article:modified_time" content="2023-05-07T18:47:13.325Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="cpp">
 <meta property="article:tag" content="cpp20">
 <meta property="article:tag" content="stl">
-<meta property="article:tag" content="coroutines">
+<meta property="article:tag" content="coroutine">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.3k words
+          5.6k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          11 mins
+          12 mins
         
       </span>
     
@@ -290,7 +290,11 @@
             
               <div class="markdown-body">
                 
-                <h2 id="stackful-x2F-stackless"><a href="#stackful-x2F-stackless" class="headerlink" title="stackful&#x2F;stackless"></a>stackful&#x2F;stackless</h2><p>Coroutines can be divided into stackful coroutines (such as goroutine in Golang) and stackless coroutines (such as <code>async</code>&#x2F;<code>await</code> in JavaScript).</p>
+                <div class="note note-primary">
+            <p><strong>This series is related to C++20 coroutine.</strong></p><p><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1: Generator</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return">part 2: co_await&#x2F;co_return</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice">part 3: Some tips about life cycle when using coroutines</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await">part 4: Some examples about co_await</a><br><strong>part 5: stackful&#x2F;stackless and Symmetric Transfer</strong></p>
+          </div>
+
+<h2 id="stackful-x2F-stackless"><a href="#stackful-x2F-stackless" class="headerlink" title="stackful&#x2F;stackless"></a>stackful&#x2F;stackless</h2><p>Coroutines can be divided into stackful coroutines (such as goroutine in Golang) and stackless coroutines (such as <code>async</code>&#x2F;<code>await</code> in JavaScript).</p>
 <p>What the called stackful and stackless stands for is not whether needing a stack or not when coroutines run. As we all know, coroutines can’t run without a stack space. It means whether coroutines can be suspended in their any nested functions.</p>
 <p>For details, please refer to this blog <a target="_blank" rel="noopener" href="https://mthli.xyz/stackful-stackless">https://mthli.xyz/stackful-stackless</a>. I think it’s clear.</p>
 <h2 id="Symmetric-Transfer"><a href="#Symmetric-Transfer" class="headerlink" title="Symmetric Transfer"></a>Symmetric Transfer</h2><h3 id="Crash-Case"><a href="#Crash-Case" class="headerlink" title="Crash Case"></a>Crash Case</h3><p>This case in from this blog <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer">https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer</a> that is written by the author of the library <a target="_blank" rel="noopener" href="https://github.com/lewissbaker/cppcoro"><code>cppcoro</code></a>.</p>
@@ -343,6 +347,13 @@
   <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
   
   
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/coroutine/" class="category-chain-item">coroutine</a>
+  
+  
+
+  
 
   
 
@@ -365,7 +376,7 @@
       
         <a href="/tags/stl/">#stl</a>
       
-        <a href="/tags/coroutines/">#coroutines</a>
+        <a href="/tags/coroutine/">#coroutine</a>
       
     </div>
   
@@ -378,7 +389,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Introduction to C++20 Coroutines - Part 5 stackful/stackless and Symmetric Transfer</div>
-      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/</div>
     </div>
     <div class="license-meta">
       
@@ -396,7 +407,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 30, 2023</div>
+          <div>May 8, 2023</div>
         </div>
       
       
@@ -437,7 +448,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/" title="Introduction to C++20 Coroutines - Part 4 Some examples about co_await">
+                      <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/" title="Introduction to C++20 Coroutines - Part 4 Some examples about co_await">
                         <span class="hidden-mobile">Introduction to C++20 Coroutines - Part 4 Some examples about co_await</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>

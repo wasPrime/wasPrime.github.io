@@ -16,20 +16,20 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Coroutine in PythonIn Python, in addition to passing data out from the coroutine, the outside can also pass information in. 1234567891011from typing import Generatordef sequence() -&gt; Generator[int,">
+    <meta name="description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Introduction to C++20 Coroutines - Part 4 Some examples about co_await">
-<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/index.html">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="Coroutine in PythonIn Python, in addition to passing data out from the coroutine, the outside can also pass information in. 1234567891011from typing import Generatordef sequence() -&gt; Generator[int,">
+<meta property="og:description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-29T15:38:26.000Z">
-<meta property="article:modified_time" content="2023-04-29T17:18:54.729Z">
+<meta property="article:modified_time" content="2023-05-07T18:47:09.549Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="cpp">
 <meta property="article:tag" content="cpp20">
 <meta property="article:tag" content="stl">
-<meta property="article:tag" content="coroutines">
+<meta property="article:tag" content="coroutine">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k words
+          2.9k words
         
       </span>
     
@@ -290,7 +290,11 @@
             
               <div class="markdown-body">
                 
-                <h2 id="Coroutine-in-Python"><a href="#Coroutine-in-Python" class="headerlink" title="Coroutine in Python"></a>Coroutine in Python</h2><p>In Python, in addition to passing data out from the coroutine, the outside can also pass information in.</p>
+                <div class="note note-primary">
+            <p><strong>This series is related to C++20 coroutine.</strong></p><p><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1: Generator</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return">part 2: co_await&#x2F;co_return</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice">part 3: Some tips about life cycle when using coroutines</a><br><strong>part 4: Some examples about co_await</strong><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer">part 5: stackful&#x2F;stackless and Symmetric Transfer</a></p>
+          </div>
+
+<h2 id="Coroutine-in-Python"><a href="#Coroutine-in-Python" class="headerlink" title="Coroutine in Python"></a>Coroutine in Python</h2><p>In Python, in addition to passing data out from the coroutine, the outside can also pass information in.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Generator<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">sequence</span>() -&gt; Generator[<span class="hljs-built_in">int</span>, <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>]:<br>    i = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        <span class="hljs-keyword">yield</span> i<br>        i += <span class="hljs-number">1</span><br><br>g = sequence()<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>):<br>    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">next</span>(g))<br></code></pre></td></tr></table></figure>
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Generator<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">sequence</span>() -&gt; Generator[<span class="hljs-built_in">int</span>, <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>]:<br>    i = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        inside_receive = <span class="hljs-keyword">yield</span> i<br>        i += <span class="hljs-number">1</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;inside receive:&quot;</span>, inside_receive)<br><br><br>g = sequence()<br><span class="hljs-built_in">next</span>(g)<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">3</span>):<br>    send_str = <span class="hljs-built_in">chr</span>(<span class="hljs-built_in">ord</span>(<span class="hljs-string">&#x27;a&#x27;</span>)+i)<br>    outside_receive = g.send(send_str)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;outside receive:&quot;</span>, outside_receive)<br></code></pre></td></tr></table></figure>
@@ -334,6 +338,13 @@
   <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
   
   
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/coroutine/" class="category-chain-item">coroutine</a>
+  
+  
+
+  
 
   
 
@@ -356,7 +367,7 @@
       
         <a href="/tags/stl/">#stl</a>
       
-        <a href="/tags/coroutines/">#coroutines</a>
+        <a href="/tags/coroutine/">#coroutine</a>
       
     </div>
   
@@ -369,7 +380,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Introduction to C++20 Coroutines - Part 4 Some examples about co_await</div>
-      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await/</div>
     </div>
     <div class="license-meta">
       
@@ -387,7 +398,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 30, 2023</div>
+          <div>May 8, 2023</div>
         </div>
       
       
@@ -418,7 +429,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/" title="Introduction to C++20 Coroutines - Part 5 stackful/stackless and Symmetric Transfer">
+                      <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer/" title="Introduction to C++20 Coroutines - Part 5 stackful/stackless and Symmetric Transfer">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Introduction to C++20 Coroutines - Part 5 stackful/stackless and Symmetric Transfer</span>
                         <span class="visible-mobile">Previous</span>

@@ -16,20 +16,20 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="In the part 1 and the part 2 of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in so">
+    <meta name="description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines">
-<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/index.html">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="In the part 1 and the part 2 of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in so">
+<meta property="og:description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-24T14:00:00.000Z">
-<meta property="article:modified_time" content="2023-04-29T17:18:54.729Z">
+<meta property="article:modified_time" content="2023-05-07T18:47:06.255Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="cpp">
 <meta property="article:tag" content="cpp20">
 <meta property="article:tag" content="stl">
-<meta property="article:tag" content="coroutines">
+<meta property="article:tag" content="coroutine">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.3k words
+          6.5k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          13 mins
+          14 mins
         
       </span>
     
@@ -290,7 +290,11 @@
             
               <div class="markdown-body">
                 
-                <p>In the <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1</a> and the <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return">part 2</a> of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in some traps.</p>
+                <div class="note note-primary">
+            <p><strong>This series is related to C++20 coroutine.</strong></p><p><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1: Generator</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return">part 2: co_await&#x2F;co_return</a><br><strong>part 3: Some tips about life cycle when using coroutines</strong><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await">part 4: Some examples about co_await</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer">part 5: stackful&#x2F;stackless and Symmetric Transfer</a></p>
+          </div>
+
+<p>In the <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1</a> and the <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return">part 2</a> of the coroutine’s series, we have learned the basic usage of coroutines. In this post, I would like to provide some tips about life cycle to help avoid to get stuck in some traps.</p>
 <h2 id="The-Life-Cycle-of-The-Return-Type"><a href="#The-Life-Cycle-of-The-Return-Type" class="headerlink" title="The Life Cycle of The Return Type"></a>The Life Cycle of The Return Type</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;coroutine&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;exception&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Generator</span> &#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">promise_type</span> &#123;<br>        <span class="hljs-function">Generator <span class="hljs-title">get_return_object</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;std::coroutine_handle&lt;promise_type&gt;::<span class="hljs-built_in">from_promise</span>(*<span class="hljs-keyword">this</span>)&#125;; &#125;<br>        <span class="hljs-function">std::suspend_never <span class="hljs-title">initial_suspend</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>        <span class="hljs-function">std::suspend_always <span class="hljs-title">final_suspend</span><span class="hljs-params">()</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> &#123;&#125;; &#125;<br>        <span class="hljs-function">std::suspend_always <span class="hljs-title">yield_value</span><span class="hljs-params">(<span class="hljs-type">char</span> ch)</span> </span>&#123;<br>            value = ch;<br>            <span class="hljs-keyword">return</span> &#123;&#125;;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">return_void</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>        <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unhandled_exception</span><span class="hljs-params">()</span> </span>&#123; std::<span class="hljs-built_in">terminate</span>(); &#125;<br><br>        <span class="hljs-type">char</span> value;<br>    &#125;;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">done</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> m_coro_handle.<span class="hljs-built_in">done</span>(); &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">char</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-type">char</span> res = m_coro_handle.<span class="hljs-built_in">promise</span>().value;<br>        m_coro_handle.<span class="hljs-built_in">resume</span>();<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br><br>    ~<span class="hljs-built_in">Generator</span>() &#123;<br>        <span class="hljs-keyword">if</span> (m_coro_handle) &#123;<br>            m_coro_handle.<span class="hljs-built_in">destroy</span>();<br>        &#125;<br>    &#125;<br><br>    std::coroutine_handle&lt;promise_type&gt; m_coro_handle;<br>&#125;;<br><br><span class="hljs-function">Generator <span class="hljs-title">tokens</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; str)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> ch : str) &#123;<br>        <span class="hljs-keyword">co_yield</span> ch;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::string str&#123;<span class="hljs-string">&quot;Hello World&quot;</span>&#125;;<br>    Generator g = <span class="hljs-built_in">tokens</span>(str);<br>    <span class="hljs-keyword">while</span> (!g.<span class="hljs-built_in">done</span>()) &#123;<br>        std::cout &lt;&lt; <span class="hljs-built_in">g</span>() &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>In the above example, the program can run happily. However, there are some potential risks.</p>
@@ -369,6 +373,13 @@
   <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
   
   
+    <span>></span>
+    
+  <a href="/categories/dev/cpp/stl/coroutine/" class="category-chain-item">coroutine</a>
+  
+  
+
+  
 
   
 
@@ -391,7 +402,7 @@
       
         <a href="/tags/stl/">#stl</a>
       
-        <a href="/tags/coroutines/">#coroutines</a>
+        <a href="/tags/coroutine/">#coroutine</a>
       
     </div>
   
@@ -404,7 +415,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines</div>
-      <div>http://wasprime.github.io/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/</div>
+      <div>http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/</div>
     </div>
     <div class="license-meta">
       
@@ -422,7 +433,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 30, 2023</div>
+          <div>May 8, 2023</div>
         </div>
       
       
@@ -463,7 +474,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Dev/C++/STL/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/" title="Introduction to C++20 Coroutines - Part 2 co_await/co_return">
+                      <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/" title="Introduction to C++20 Coroutines - Part 2 co_await/co_return">
                         <span class="hidden-mobile">Introduction to C++20 Coroutines - Part 2 co_await/co_return</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
