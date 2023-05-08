@@ -130,7 +130,7 @@ Output:
 
 ## special operator overloads
 
-A usage with overloaded `operator --` and `operator >` that makes it like linked nodes in a line. This skill is inplemented in [the library workflow](https://github.com/sogou/workflow).
+A usage with overloaded `operator --` and `operator >` that makes it like linked nodes in a line. This skill is implemented in [the library workflow](https://github.com/sogou/workflow)'s data structure `WFGraphNode`.
 
 ```C++
 #include <iostream>
