@@ -2,7 +2,7 @@
 title: vtable, type_info and RTTI
 date: 2023-04-04 22:18:55
 categories:
-- [dev, cpp]
+- [dev, cpp, rtti]
 tags:
 - cpp
 - rtti
