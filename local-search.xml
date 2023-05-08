@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>Introduction to some interesting operator  overloads</title>
+    <link href="/Dev/C++/overload/Introduction-to-some-interesting-operator-overloads/"/>
+    <url>/Dev/C++/overload/Introduction-to-some-interesting-operator-overloads/</url>
+    
+    <content type="html"><![CDATA[<h2 id="operator-quot-quot-ms-x2F-operator-quot-quot-sv"><a href="#operator-quot-quot-ms-x2F-operator-quot-quot-sv" class="headerlink" title="operator&quot;&quot;ms &#x2F; operator&quot;&quot;sv"></a><code>operator&quot;&quot;ms</code> &#x2F; <code>operator&quot;&quot;sv</code></h2><p>In general occasions, we use <code>std::chrono::milliseconds(1024)</code> to indicate a duration about milliseconds. Actually, STL provides another convenient way to write it as well as other duration units.</p><p>After C++11 (<code>_LIBCPP_STD_VER &gt; 11</code>), there is a set of operator overloads about chrono. e.g.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::chrono;<br><span class="hljs-number">1024</span>ms;<br></code></pre></td></tr></table></figure><p>Its implementation is as follows:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">constexpr</span> chrono::milliseconds <span class="hljs-keyword">operator</span><span class="hljs-string">&quot;&quot;</span><span class="hljs-built_in">ms</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> __ms) &#123;<br>    <span class="hljs-keyword">return</span> chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-built_in">static_cast</span>&lt;chrono::milliseconds::rep&gt;(__ms));<br>&#125;<br></code></pre></td></tr></table></figure><p>The operator overload <code>operator&quot;&quot;ms</code> looks pretty awesome. Other durations have Similarly overloads such as <code>h</code> <code>min</code> <code>s</code> <code>ms</code> <code>us</code> <code>ns</code>.</p><p>We can also write custom operator overloads like below. Note that the literal operator parameter type must be <code>unsigned long long</code> or <code>long double</code>, otherwise compiler will complain and throw errors even if it’s <code>int</code> or <code>double</code>. It seems like it’s specific form required by compiler.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> data;<br>&#125;;<br><br><span class="hljs-keyword">constexpr</span> Foo <span class="hljs-keyword">operator</span><span class="hljs-string">&quot;&quot;</span> <span class="hljs-built_in">foo</span>(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> i) &#123;<br>    <span class="hljs-keyword">return</span> Foo&#123;i&#125;;<br>&#125;<br><br><span class="hljs-keyword">auto</span> ff = <span class="hljs-number">1024f</span>oo;<br></code></pre></td></tr></table></figure><p>Unfortunately, it can’t pass compiling because user-defined literal suffixes not starting with ‘_’ are reserved and no literal will invoke this operator. In order to achieve our purpose with user-defined literal suffixes, we can fix it like this:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> data;<br>&#125;;<br><br><span class="hljs-keyword">constexpr</span> Foo <span class="hljs-keyword">operator</span><span class="hljs-string">&quot;&quot;</span> _foo(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> i) &#123;<br>    <span class="hljs-keyword">return</span> Foo&#123;i&#125;;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">auto</span> ff = <span class="hljs-number">1024</span>_foo;<br>    std::cout &lt;&lt; ff.data &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>In fact, the familiar <code>sv</code> works the same way.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string_view&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::string_view_literals;<br><br><span class="hljs-string">&quot;abc&quot;</span>sv;<br></code></pre></td></tr></table></figure><p>In the same way, we can rewrite the operator overload <code>_foo</code>.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* data;<br>    <span class="hljs-type">size_t</span> size;<br>&#125;;<br><br><span class="hljs-keyword">constexpr</span> Foo <span class="hljs-keyword">operator</span><span class="hljs-string">&quot;&quot;</span> _foo(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* s, <span class="hljs-type">size_t</span> size) &#123;<br>    <span class="hljs-keyword">return</span> Foo&#123;s, size&#125;;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">auto</span> ff = <span class="hljs-string">&quot;abc&quot;</span>_foo;<br>    std::cout &lt;&lt; ff.data &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="operator"><a href="#operator" class="headerlink" title="operator ,"></a><code>operator ,</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-type">int</span> data;<br>&#125;;<br><br><span class="hljs-keyword">constexpr</span> Foo&amp; <span class="hljs-keyword">operator</span>,(Foo&amp; foo, <span class="hljs-type">int</span> i) &#123;<br>    foo.data += i;<br>    <span class="hljs-keyword">return</span> foo;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Foo foo&#123;&#125;;<br>    std::cout &lt;&lt; foo.data &lt;&lt; std::endl;<br>    foo, <span class="hljs-number">1024</span>;<br>    std::cout &lt;&lt; foo.data &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>Output:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">0<br>1024<br></code></pre></td></tr></table></figure><h2 id="special-operator-overloads"><a href="#special-operator-overloads" class="headerlink" title="special operator overloads"></a>special operator overloads</h2><p>A usage with overloaded <code>operator --</code> and <code>operator &gt;</code> that makes it like linked nodes in a line. This skill is inplemented in <a href="https://github.com/sogou/workflow">the library workflow</a>.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;<br>    <span class="hljs-type">int</span> data;<br><br>    Node&amp; <span class="hljs-keyword">operator</span>--(<span class="hljs-type">int</span>) &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;when --, current data: &quot;</span> &lt;&lt; data &lt;&lt; std::endl;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    Node&amp; <span class="hljs-keyword">operator</span>&gt;(<span class="hljs-type">const</span> Node&amp; other) &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;when &gt;, current data: &quot;</span> &lt;&lt; data &lt;&lt; std::endl;<br>        data += other.data;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Node a&#123;<span class="hljs-number">1</span>&#125;, b&#123;<span class="hljs-number">2</span>&#125;, c&#123;<span class="hljs-number">9</span>&#125;;<br><br>    a--&gt;b--&gt;c;<br><br>    std::cout &lt;&lt; a.data &lt;&lt; std::endl;<br>    std::cout &lt;&lt; b.data &lt;&lt; std::endl;<br>    std::cout &lt;&lt; c.data &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>Output:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs log">when --, current data: 1<br>when --, current data: 2<br>when &gt;, current data: 1<br>when &gt;, current data: 3<br>12<br>2<br>9<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+      <category>overload</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>operator</tag>
+      
+      <tag>overload</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 1 thread_safe Objects Lifecycle Management</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-1-thread-safe-Objects-Lifecycle-Management/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-1-thread-safe-Objects-Lifecycle-Management/</url>
@@ -243,9 +276,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>cpp17</tag>
       
@@ -323,9 +356,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -360,9 +393,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -465,11 +498,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -533,9 +566,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -570,9 +603,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -667,11 +700,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -704,11 +737,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -778,11 +811,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -848,9 +881,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -967,11 +1000,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -1000,9 +1033,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>basic</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1099,9 +1132,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -1218,8 +1251,8 @@
   
   <entry>
     <title>vtable, type_info and RTTI</title>
-    <link href="/Dev/C++/vtable-type-info-and-RTTI/"/>
-    <url>/Dev/C++/vtable-type-info-and-RTTI/</url>
+    <link href="/Dev/C++/RTTI/vtable-type-info-and-RTTI/"/>
+    <url>/Dev/C++/RTTI/vtable-type-info-and-RTTI/</url>
     
     <content type="html"><![CDATA[<p>vtable’s concept is familiar to us, as well as <code>type_info</code>. They are different sides of implementation of RTTI - Runtime Type Identification.With them, we can get the real type of an object and call overwritten functions.</p><p>For understanding their memory distribution, let’s go through an example.</p><h2 id="vtable-x2F-type-info-Example"><a href="#vtable-x2F-type-info-Example" class="headerlink" title="vtable&#x2F;type_info Example"></a>vtable&#x2F;type_info Example</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">int</span> i&#123;<span class="hljs-number">1</span>&#125;;<br><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">func1</span><span class="hljs-params">()</span> </span>&#123; std::cout &lt;&lt; <span class="hljs-string">&quot;func1, this: &quot;</span> &lt;&lt; <span class="hljs-keyword">this</span> &lt;&lt; std::endl; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">int</span> <span class="hljs-title">func2</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">auto</span> base = <span class="hljs-keyword">new</span> Base;<br>    base-&gt;<span class="hljs-built_in">func1</span>();<br><br>    <span class="hljs-type">void</span>*** vtable_ptr_addr = (<span class="hljs-type">void</span>***)base;<br>    <span class="hljs-type">void</span>** vtable = *vtable_ptr_addr;<br>    <span class="hljs-type">void</span>* vfunc = vtable[<span class="hljs-number">0</span>];<br><br>    <span class="hljs-keyword">using</span> VFUNC = <span class="hljs-built_in">void</span> (*)(Base*);<br>    VFUNC real_func = (VFUNC)vfunc;<br>    <span class="hljs-built_in">real_func</span>(base);<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;base: &quot;</span> &lt;&lt; base &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;vtable_ptr_addr: &quot;</span> &lt;&lt; vtable_ptr_addr &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;vtable: &quot;</span> &lt;&lt; vtable &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;vfunc: &quot;</span> &lt;&lt; vfunc &lt;&lt; std::endl;<br><br>    <span class="hljs-type">const</span> std::type_info&amp; type = <span class="hljs-built_in">typeid</span>(Base);<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;type_info addr: &quot;</span> &lt;&lt; &amp;type &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;type_info size: &quot;</span> &lt;&lt; std::hex &lt;&lt; <span class="hljs-string">&quot;0x&quot;</span> &lt;&lt; <span class="hljs-built_in">sizeof</span>(type) &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>Here is a result after a run in my machine:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs log">func1, this: 0x139e066e0<br>func1, this: 0x139e066e0<br>base: 0x139e066e0<br>vtable_ptr_addr: 0x139e066e0<br>vtable: 0x1008e8110<br>vfunc: 0x1008e7138<br>type_info addr: 0x1008e80f0<br>type_info size: 0x10<br></code></pre></td></tr></table></figure><h2 id="Memory-Description"><a href="#Memory-Description" class="headerlink" title="Memory Description"></a>Memory Description</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs log">                                                                                                       +-----------------------+<br>                                                                                           0x1008e80f0 |       type_info       |<br>                                                                                                       |                       |<br>                                                                                                       +-----------------------+<br>                                                                                           0x1008e8100 |       gap buffer      |<br>                                                                  Base object                          |                       |<br>+---------------------------------------+                  +------------------------+                  +-----------------------+              func1<br>|  base(vtable_ptr_addr) = 0x139e066e0  |----&gt; 0x139e066e0 |  vtable = 0x1008e8110  |----&gt; 0x1008e8110 |  func1 = 0x1008e7138  |---------&gt; 0x1008e7138<br>+---------------------------------------+                  +------------------------+                  +-----------------------+              func2<br>                base addr                      0x139e066e8 |       i = 1            |      0x1008e8118 |  func2 = 0xdeadbeef0  |---------&gt; 0xdeadbeef0<br>                                                           +------------------------+                  +-----------------------+         <br></code></pre></td></tr></table></figure><blockquote><p>The address of the function <code>func2</code> is mocked.</p></blockquote><p>The address of vtable and type_info are close and they can be calculated from each other by a specific offset.</p><h2 id="type-info-Example"><a href="#type-info-Example" class="headerlink" title="type_info Example"></a><code>type_info</code> Example</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseWithoutRTTI</span> &#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DerivedWithoutRTTI</span> : <span class="hljs-keyword">public</span> BaseWithoutRTTI &#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseWithRTTI</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span> </span>&#123;&#125;;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">BaseWithRTTI</span>() = <span class="hljs-keyword">default</span>;<br>&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DerivedWithRTTI</span> : <span class="hljs-keyword">public</span> BaseWithRTTI &#123;&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    BaseWithoutRTTI* base_without_RTTI = <span class="hljs-keyword">new</span> DerivedWithoutRTTI;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(base_without_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(*base_without_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br><br>    BaseWithRTTI* base_with_RTTI = <span class="hljs-keyword">new</span> DerivedWithRTTI;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(base_with_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br>    std::cout &lt;&lt; <span class="hljs-built_in">typeid</span>(*base_with_RTTI).<span class="hljs-built_in">name</span>() &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>The output is:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">P15BaseWithoutRTTI<br>15BaseWithoutRTTI<br>P12BaseWithRTTI<br>15DerivedWithRTTI<br></code></pre></td></tr></table></figure><p>We can easily find we can get the real object correctly only if there are virtual functions inside <code>Base</code> class. In other words, <code>vtable</code> and <code>type_info</code> are twins.</p><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://www.sandordargo.com/blog/2023/03/01/binary-sizes-and-rtti">Binary sizes and RTTI</a></li></ul>]]></content>
     
@@ -1229,6 +1262,8 @@
       <category>dev</category>
       
       <category>cpp</category>
+      
+      <category>rtti</category>
       
     </categories>
     
@@ -1274,9 +1309,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -1309,9 +1344,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>pointer</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1350,9 +1385,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>pointer</tag>
+      
+      <tag>cpp</tag>
       
       <tag>stl</tag>
       
@@ -1455,9 +1490,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
