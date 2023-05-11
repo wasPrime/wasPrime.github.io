@@ -24,7 +24,7 @@ List what category of articles would be written.
 - [ ] std::atomic
   - std::memory_order_release
   - std::memory_order_acquire
-- [ ] C++17 CTAD (Ref: <https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/>)
+- [x] ~~C++17 CTAD (Ref: <https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/>)~~
 - [x] ~~Coroutines~~
   - [x] ~~`co_await`~~
   - [x] ~~life cycle~~

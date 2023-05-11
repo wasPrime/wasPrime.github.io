@@ -5,6 +5,7 @@ categories:
 - [dev, cpp, overload]
 tags:
 - cpp
+- cpp11
 - operator
 - overload
 ---

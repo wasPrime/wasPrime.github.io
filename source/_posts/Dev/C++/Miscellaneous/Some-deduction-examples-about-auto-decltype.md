@@ -5,6 +5,7 @@ categories:
 - [dev, cpp]
 tags:
 - cpp
+- cpp11
 - auto
 - decltype
 ---
