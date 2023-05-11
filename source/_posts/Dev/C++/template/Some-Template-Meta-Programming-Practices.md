@@ -71,3 +71,28 @@ int main() {
     return 0;
 }
 ```
+
+## Minimum value
+
+```C++
+#include <iostream>
+
+template <int i, int... args>
+struct Min {
+private:
+    static constexpr int tmp = Min<args...>::value;
+
+public:
+    static constexpr int value = i < tmp ? i : tmp;
+};
+
+template <int i>
+struct Min<i> {
+    static constexpr int value = i;
+};
+
+int main() {
+    std::cout << Min<1, 2, 3>::value << std::endl;
+    return 0;
+}
+```
