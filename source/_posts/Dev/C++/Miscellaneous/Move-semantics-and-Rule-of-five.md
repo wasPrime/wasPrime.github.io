@@ -96,3 +96,7 @@ private:
     char* m_data{nullptr};
 };
 ```
+
+## References
+
+- <https://en.cppreference.com/w/cpp/language/rule_of_three>

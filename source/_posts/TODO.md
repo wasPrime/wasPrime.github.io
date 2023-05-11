@@ -20,7 +20,7 @@ List what category of articles would be written.
 - [x] ~~std::string_view, std::span~~
 - [x] ~~promise, future, packaged_task, shared_future~~
 - [ ] std::bind
-- [ ] C++ Rule of Five
+- [x] ~~C++ Rule of Five~~
 - [ ] std::atomic
   - std::memory_order_release
   - std::memory_order_acquire
