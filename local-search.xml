@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Move semantics and Rule of five</title>
+    <link href="/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/"/>
+    <url>/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Move-semantics"><a href="#Move-semantics" class="headerlink" title="Move semantics"></a>Move semantics</h2><p>The semantics of <code>move</code> is actually to transfer the ownership of resources.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Copy</span><span class="hljs-params">(<span class="hljs-type">char</span>** dst, <span class="hljs-type">char</span>** src, <span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>    *dst = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[size];<br>    <span class="hljs-built_in">memcpy</span>(*dst, src, size);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Move</span><span class="hljs-params">(<span class="hljs-type">char</span>** dst, <span class="hljs-type">char</span>** src)</span> </span>&#123;<br>    <span class="hljs-comment">// normal form</span><br>    <span class="hljs-comment">// *dst = *src;</span><br>    <span class="hljs-comment">// *src = nullptr;</span><br><br>    <span class="hljs-comment">// write it in a line</span><br>    *dst = std::<span class="hljs-built_in">exchange</span>(*src, <span class="hljs-literal">nullptr</span>);<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="Rule-of-five"><a href="#Rule-of-five" class="headerlink" title="Rule of five"></a>Rule of five</h2><p>Any class for which move semantics are desirable, has to declare all five special member functions: destructor, copy-constructor, copy-assignment operator, move constructor and move-assignment operator.</p><p>When move constructor or move-assignment operator are provided, copy-constructor and copy-assignment operator are deleted implicitly.</p><p>Unlike Rule of Three, failing to provide move constructor and move assignment is usually not an error, but a missed optimization opportunity.</p><p>Therefore, the best practice is to provide the five special member functions.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>() = <span class="hljs-keyword">default</span>;<br>    <span class="hljs-built_in">Foo</span>(<span class="hljs-type">const</span> Foo&amp; other) : <span class="hljs-built_in">m_size</span>(other.m_size), <span class="hljs-built_in">m_data</span>(<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[m_size]) &#123;<br>        std::<span class="hljs-built_in">copy_n</span>(other.m_data, m_size, m_data);<br>    &#125;<br>    Foo&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Foo&amp; other) &#123;<br>        <span class="hljs-comment">// Remember to check self assignment</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;other) &#123;<br>            <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// for exception safety</span><br>        <span class="hljs-type">size_t</span> new_size = other.m_size;<br>        <span class="hljs-type">char</span>* new_data = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[m_size];<br>        std::<span class="hljs-built_in">copy_n</span>(other.m_data, new_size, new_data);<br><br>        <span class="hljs-built_in">reset</span>();<br><br>        m_size = new_size;<br>        m_data = new_data;<br><br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    ~<span class="hljs-built_in">Foo</span>() &#123;<br>        <span class="hljs-built_in">reset</span>();<br>    &#125;<br><br>    <span class="hljs-built_in">Foo</span>(Foo&amp;&amp; other) <span class="hljs-keyword">noexcept</span> : <span class="hljs-built_in">m_size</span>(std::<span class="hljs-built_in">exchange</span>(other.m_size, <span class="hljs-number">0</span>)), <span class="hljs-built_in">m_data</span>(std::<span class="hljs-built_in">exchange</span>(other.m_data, <span class="hljs-literal">nullptr</span>)) &#123;<br>    &#125;<br>    Foo&amp; <span class="hljs-keyword">operator</span>=(Foo&amp;&amp; other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;other) &#123;<br>            <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        m_size = std::<span class="hljs-built_in">exchange</span>(other.m_size, <span class="hljs-number">0</span>);<br>        m_data = std::<span class="hljs-built_in">exchange</span>(other.m_data, <span class="hljs-literal">nullptr</span>);<br><br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (m_data != <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">delete</span>[] m_data;<br>            m_size = <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">size_t</span> m_size&#123;<span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-type">char</span>* m_data&#123;<span class="hljs-literal">nullptr</span>&#125;;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>dev</category>
+      
+      <category>cpp</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>cpp11</tag>
+      
+      <tag>move</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Some examples about CTAD</title>
     <link href="/Dev/C++/Miscellaneous/Some-examples-about-CTAD/"/>
     <url>/Dev/C++/Miscellaneous/Some-examples-about-CTAD/</url>
@@ -24,9 +55,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
-      
       <tag>template</tag>
+      
+      <tag>cpp17</tag>
       
       <tag>ctad</tag>
       
@@ -123,11 +154,11 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
       
       <tag>muduo</tag>
+      
+      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -346,9 +377,9 @@
       
       <tag>cpp17</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>string_view</tag>
       
@@ -385,9 +416,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>medium</tag>
       
       <tag>string</tag>
       
@@ -422,13 +453,13 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>coroutine</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp</tag>
       
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
     </tags>
     
@@ -459,13 +490,13 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>coroutine</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp</tag>
       
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
     </tags>
     
@@ -566,11 +597,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -632,13 +663,13 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>coroutine</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp</tag>
       
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
     </tags>
     
@@ -669,13 +700,13 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>coroutine</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp</tag>
       
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
     </tags>
     
@@ -768,11 +799,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -805,11 +836,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -879,11 +910,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -949,9 +980,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -992,9 +1023,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>linked_list</tag>
-      
       <tag>hard</tag>
+      
+      <tag>linked_list</tag>
       
       <tag>priority_queue</tag>
       
@@ -1031,11 +1062,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -1068,11 +1099,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -1198,13 +1229,13 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>coroutine</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp</tag>
       
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
     </tags>
     
@@ -1377,9 +1408,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -1558,9 +1589,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       

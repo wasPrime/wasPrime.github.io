@@ -16,25 +16,24 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
+    <meta name="description" content="Move semanticsThe semantics of move is actually to transfer the ownership of resources. 123456789101112131415#include &lt;utility&gt;void Copy(char** dst, char** src, size_t size) &amp;#123;    *dst &#x3D; new">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Introduction to C++20 Coroutines - Part 2 co_await&#x2F;co_return">
-<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/index.html">
+<meta property="og:title" content="Move semantics and Rule of five">
+<meta property="og:url" content="http://wasprime.github.io/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="This series is related to C++20 coroutine.part 1: Generatorpart 2: co_await&#x2F;co_returnpart 3: Some tips about life cycle when using coroutinespart 4: Some examples about co_awaitpart">
+<meta property="og:description" content="Move semanticsThe semantics of move is actually to transfer the ownership of resources. 123456789101112131415#include &lt;utility&gt;void Copy(char** dst, char** src, size_t size) &amp;#123;    *dst &#x3D; new">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-04-23T14:25:40.000Z">
-<meta property="article:modified_time" content="2023-05-07T18:47:02.517Z">
+<meta property="article:published_time" content="2023-05-13T14:48:04.000Z">
+<meta property="article:modified_time" content="2023-05-11T15:00:59.494Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="coroutine">
 <meta property="article:tag" content="cpp">
-<meta property="article:tag" content="stl">
-<meta property="article:tag" content="cpp20">
+<meta property="article:tag" content="cpp11">
+<meta property="article:tag" content="move">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Introduction to C++20 Coroutines - Part 2 co_await/co_return - wasPrime&#39;s Blog</title>
+  <title>Move semantics and Rule of five - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Introduction to C++20 Coroutines - Part 2 co_await/co_return"></span>
+            <span id="subtitle" data-typed-text="Move semantics and Rule of five"></span>
           
         </div>
 
@@ -211,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-23 22:25" pubdate>
-          April 23, 2023 pm
+        <time datetime="2023-05-13 22:48" pubdate>
+          May 13, 2023 pm
         </time>
       </span>
     
@@ -223,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k words
+          1.9k words
         
       </span>
     
@@ -234,7 +233,7 @@
         
         
         
-          6 mins
+          4 mins
         
       </span>
     
@@ -285,68 +284,19 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Introduction to C++20 Coroutines - Part 2 co_await/co_return</h1>
+            <h1 style="display: none">Move semantics and Rule of five</h1>
             
             
               <div class="markdown-body">
                 
-                <div class="note note-primary">
-            <p><strong>This series is related to C++20 coroutine.</strong></p><p><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1: Generator</a><br><strong>part 2: co_await&#x2F;co_return</strong><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice">part 3: Some tips about life cycle when using coroutines</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-4-Some-examples-about-co-await">part 4: Some examples about co_await</a><br><a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-5-stackful-stackless-and-Symmetric-Transfer">part 5: stackful&#x2F;stackless and Symmetric Transfer</a></p>
-          </div>
+                <h2 id="Move-semantics"><a href="#Move-semantics" class="headerlink" title="Move semantics"></a>Move semantics</h2><p>The semantics of <code>move</code> is actually to transfer the ownership of resources.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Copy</span><span class="hljs-params">(<span class="hljs-type">char</span>** dst, <span class="hljs-type">char</span>** src, <span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>    *dst = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[size];<br>    <span class="hljs-built_in">memcpy</span>(*dst, src, size);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Move</span><span class="hljs-params">(<span class="hljs-type">char</span>** dst, <span class="hljs-type">char</span>** src)</span> </span>&#123;<br>    <span class="hljs-comment">// normal form</span><br>    <span class="hljs-comment">// *dst = *src;</span><br>    <span class="hljs-comment">// *src = nullptr;</span><br><br>    <span class="hljs-comment">// write it in a line</span><br>    *dst = std::<span class="hljs-built_in">exchange</span>(*src, <span class="hljs-literal">nullptr</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>In the <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-1-Generator">part 1</a> of the coroutine’s series, we had learned how to write a generator with the keyword <code>co_yield</code>, as well as the schema of the return type and <code>promise_type</code>.</p>
-<p>In the post, I would like to introduce other new keywords for coroutines - <code>co_await</code> and <code>co_return</code>.</p>
-<h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a><code>co_await</code></h2><p><code>co_await</code> must be used with something like awaiter. As a called awaiter, it should have the below list functions:</p>
-<ul>
-<li><code>bool await_ready()</code><ul>
-<li>If it returns <code>true</code>, the execution will skip <code>await_suspend</code> and run <code>await_resume</code> directly then resume to the coroutine.</li>
-<li>If it returns <code>false</code>, the execution will run <code>await_suspend</code> and suspend. After resumed, it will run <code>await_resume</code> and really resume.</li>
-</ul>
-</li>
-<li><code>await_suspend</code><ul>
-<li>Available input types: <code>std::coroutine_handle&lt;promise_type&gt;</code> &#x2F; <code>std::coroutine_handle&lt;&gt;</code><blockquote>
-<p><code>std::coroutine_handle&lt;promise_type&gt;</code> can be converted to <code>std::coroutine_handle&lt;&gt;</code> implicitly.</p>
-</blockquote>
-</li>
-<li>Available output types:<ul>
-<li><code>void</code>: suspend and return to the caller.</li>
-<li><code>bool</code><ul>
-<li>If returns <code>true</code>, it will suspend and return to the caller.</li>
-<li>If returns <code>false</code>, it will run <code>await_resume</code> and resume directly.</li>
-</ul>
-</li>
-<li><code>std::coroutine_handle&lt;promise_type&gt;</code> &#x2F; <code>std::coroutine_handle&lt;&gt;</code>: Go to the target corountine.<ul>
-<li>a special case: <code>std::noop_coroutine()</code> provides a shortcut to return to caller.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>Actually, we has dealed with the called awaiter before. <code>std::suspend_always</code> and <code>std::suspend_never</code> are both awaiter and they can be callled with <code>co_await</code>.</p>
-<p>We can overload the operator <code>co_await</code> with some specific forms and make it more flexible and more powerful.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">suspend_always</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(coroutine_handle&lt;&gt;)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">suspend_never</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">bool</span> <span class="hljs-title">await_ready</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_suspend</span><span class="hljs-params">(coroutine_handle&lt;&gt;)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">void</span> <span class="hljs-title">await_resume</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>&#123;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<div class="note note-info">
-            <p>There is an interesting point to know. <code>co_yield xx</code> is a syntax sugar of <code>co_await yield_value()</code> as the return type of <code>yield_value</code> is an awaiter. We usually set <code>std::suspend_always</code> as the return type of <code>yield_value</code>.</p>
-          </div>
-
-<h2 id="co-return"><a href="#co-return" class="headerlink" title="co_return"></a><code>co_return</code></h2><p>For any coroutine, the <code>promise_type</code> should conatin a function either as <code>void return_void()</code> or as <code>void return_value(...)</code>. They can’t be declared at the same time. In constast, it’s an undefined behaviour if we declare none of them. In this way, we have to trade them off carefully.</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/349710180">C++20 新特性 协程 Coroutines(2)</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/355100152">如何编写 C++ 20 协程(Coroutines)</a><ul>
-<li>multi-thread: <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/coroutines">https://en.cppreference.com/w/cpp/language/coroutines</a></li>
-</ul>
-</li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/356752742">C++20 新特性 协程 Coroutines(3)</a></li>
-<li>critical: <a target="_blank" rel="noopener" href="https://lewissbaker.github.io/">https://lewissbaker.github.io/</a><ul>
-<li><a target="_blank" rel="noopener" href="https://lewissbaker.github.io/2017/09/25/coroutine-theory">Coroutine Theory</a></li>
-</ul>
-</li>
-</ul>
+<h2 id="Rule-of-five"><a href="#Rule-of-five" class="headerlink" title="Rule of five"></a>Rule of five</h2><p>Any class for which move semantics are desirable, has to declare all five special member functions: destructor, copy-constructor, copy-assignment operator, move constructor and move-assignment operator.</p>
+<p>When move constructor or move-assignment operator are provided, copy-constructor and copy-assignment operator are deleted implicitly.</p>
+<p>Unlike Rule of Three, failing to provide move constructor and move assignment is usually not an error, but a missed optimization opportunity.</p>
+<p>Therefore, the best practice is to provide the five special member functions.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>() = <span class="hljs-keyword">default</span>;<br>    <span class="hljs-built_in">Foo</span>(<span class="hljs-type">const</span> Foo&amp; other) : <span class="hljs-built_in">m_size</span>(other.m_size), <span class="hljs-built_in">m_data</span>(<span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[m_size]) &#123;<br>        std::<span class="hljs-built_in">copy_n</span>(other.m_data, m_size, m_data);<br>    &#125;<br>    Foo&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Foo&amp; other) &#123;<br>        <span class="hljs-comment">// Remember to check self assignment</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;other) &#123;<br>            <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        <span class="hljs-comment">// for exception safety</span><br>        <span class="hljs-type">size_t</span> new_size = other.m_size;<br>        <span class="hljs-type">char</span>* new_data = <span class="hljs-keyword">new</span> <span class="hljs-type">char</span>[m_size];<br>        std::<span class="hljs-built_in">copy_n</span>(other.m_data, new_size, new_data);<br><br>        <span class="hljs-built_in">reset</span>();<br><br>        m_size = new_size;<br>        m_data = new_data;<br><br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br>    ~<span class="hljs-built_in">Foo</span>() &#123;<br>        <span class="hljs-built_in">reset</span>();<br>    &#125;<br><br>    <span class="hljs-built_in">Foo</span>(Foo&amp;&amp; other) <span class="hljs-keyword">noexcept</span> : <span class="hljs-built_in">m_size</span>(std::<span class="hljs-built_in">exchange</span>(other.m_size, <span class="hljs-number">0</span>)), <span class="hljs-built_in">m_data</span>(std::<span class="hljs-built_in">exchange</span>(other.m_data, <span class="hljs-literal">nullptr</span>)) &#123;<br>    &#125;<br>    Foo&amp; <span class="hljs-keyword">operator</span>=(Foo&amp;&amp; other) <span class="hljs-keyword">noexcept</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;other) &#123;<br>            <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>        &#125;<br><br>        m_size = std::<span class="hljs-built_in">exchange</span>(other.m_size, <span class="hljs-number">0</span>);<br>        m_data = std::<span class="hljs-built_in">exchange</span>(other.m_data, <span class="hljs-literal">nullptr</span>);<br><br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (m_data != <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">delete</span>[] m_data;<br>            m_size = <span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-type">size_t</span> m_size&#123;<span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-type">char</span>* m_data&#123;<span class="hljs-literal">nullptr</span>&#125;;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -373,20 +323,6 @@
   <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
   
   
-    <span>></span>
-    
-  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/dev/cpp/stl/coroutine/" class="category-chain-item">coroutine</a>
-  
-  
-
-  
-
-  
 
   
 
@@ -401,13 +337,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/coroutine/">#coroutine</a>
-      
         <a href="/tags/cpp/">#cpp</a>
       
-        <a href="/tags/stl/">#stl</a>
+        <a href="/tags/cpp11/">#cpp11</a>
       
-        <a href="/tags/cpp20/">#cpp20</a>
+        <a href="/tags/move/">#move</a>
       
     </div>
   
@@ -419,8 +353,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Introduction to C++20 Coroutines - Part 2 co_await/co_return</div>
-      <div>http://wasprime.github.io/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-2-co-await-co-return/</div>
+      <div>Move semantics and Rule of five</div>
+      <div>http://wasprime.github.io/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/</div>
     </div>
     <div class="license-meta">
       
@@ -432,13 +366,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>April 23, 2023</div>
+          <div>May 13, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>May 8, 2023</div>
+          <div>May 11, 2023</div>
         </div>
       
       
@@ -469,18 +403,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Dev/C++/STL/Coroutine/Introduction-to-C-20-Coroutines-Part-3-Some-tips-in-practice/" title="Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Introduction to C++20 Coroutines - Part 3 Some tips about life cycle when using coroutines</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/SystemDesign/Negotiate-Reasonable-Groups/" title="Negotiate Reasonable Groups">
-                        <span class="hidden-mobile">Negotiate Reasonable Groups</span>
+                      <a href="/Dev/C++/Miscellaneous/Some-examples-about-CTAD/" title="Some examples about CTAD">
+                        <span class="hidden-mobile">Some examples about CTAD</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
