@@ -16,15 +16,15 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 2: 线程同步精要             只使用非递归的 mutex1234567891011121314151617181920class">
+    <meta name="description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 3: 多线程服务器的适用场合与常用编程模型             单线程服务器的常用编程模型使用最广泛的是 “non-blocking + I">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learn muduo - Part 2 Thread Synchronization">
-<meta property="og:url" content="http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/index.html">
+<meta property="og:title" content="Learn muduo - Part 3 Multi-Thread Server">
+<meta property="og:url" content="http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-3-Multi-Thread-Server/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 2: 线程同步精要             只使用非递归的 mutex1234567891011121314151617181920class">
+<meta property="og:description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 3: 多线程服务器的适用场合与常用编程模型             单线程服务器的常用编程模型使用最广泛的是 “non-blocking + I">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-05-14T15:13:55.000Z">
-<meta property="article:modified_time" content="2023-05-12T15:34:47.631Z">
+<meta property="article:published_time" content="2023-05-15T15:44:04.000Z">
+<meta property="article:modified_time" content="2023-05-12T16:43:45.560Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="cpp">
 <meta property="article:tag" content="library">
@@ -34,7 +34,7 @@
   
   
   
-  <title>Learn muduo - Part 2 Thread Synchronization - wasPrime&#39;s Blog</title>
+  <title>Learn muduo - Part 3 Multi-Thread Server - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -200,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Learn muduo - Part 2 Thread Synchronization"></span>
+            <span id="subtitle" data-typed-text="Learn muduo - Part 3 Multi-Thread Server"></span>
           
         </div>
 
@@ -211,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-05-14 23:13" pubdate>
-          May 14, 2023 pm
+        <time datetime="2023-05-15 23:44" pubdate>
+          May 15, 2023 pm
         </time>
       </span>
     
@@ -223,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k words
+          1k words
         
       </span>
     
@@ -234,7 +234,7 @@
         
         
         
-          6 mins
+          3 mins
         
       </span>
     
@@ -285,7 +285,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Learn muduo - Part 2 Thread Synchronization</h1>
+            <h1 style="display: none">Learn muduo - Part 3 Multi-Thread Server</h1>
             
             
               <div class="markdown-body">
@@ -295,16 +295,31 @@
           </div>
 
 <div class="note note-primary">
-            <p>本系列是 <a target="_blank" rel="noopener" href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 2: 线程同步精要</strong></p>
+            <p>本系列是 <a target="_blank" rel="noopener" href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 3: 多线程服务器的适用场合与常用编程模型</strong></p>
           </div>
 
-<h2 id="只使用非递归的-mutex"><a href="#只使用非递归的-mutex" class="headerlink" title="只使用非递归的 mutex"></a>只使用非递归的 mutex</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> Foo&amp; foo)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;<br>        foos.<span class="hljs-built_in">push_back</span>(foo);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">traverse</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> it = foos.<span class="hljs-built_in">begin</span>(); it != foos.<span class="hljs-built_in">end</span>(); ++it) &#123;<br>            <span class="hljs-built_in">post</span>(*it);<br>        &#125;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::mutex mutex;<br>    std::vector&lt;Foo&gt; foos;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="单线程服务器的常用编程模型"><a href="#单线程服务器的常用编程模型" class="headerlink" title="单线程服务器的常用编程模型"></a>单线程服务器的常用编程模型</h2><p>使用最广泛的是 “non-blocking + IO multiplexing” 模型，即 Reactor 模式，比如：</p>
+<ul>
+<li>lighttpd（Nginx 与之相似，每个工作进程有一个 event loop）</li>
+<li>libevent, libev</li>
+<li>Java NIO，包括 Apache Mina 和 Netty</li>
+</ul>
+<p><code>lighttpd</code> 内部的 <code>fdevent</code> 结构十分精妙，值得学习。</p>
+<h2 id="多线程服务器的常用编程模型"><a href="#多线程服务器的常用编程模型" class="headerlink" title="多线程服务器的常用编程模型"></a>多线程服务器的常用编程模型</h2><ol>
+<li>为每个请求创建一个线程，使用阻塞式 IO。</li>
+<li>使用线程池，同样使用阻塞式 IO。相比第 1 种性能有提升。</li>
+<li>使用 non-blocking + IO multiplexing。</li>
+<li>Leader &#x2F;Follower。</li>
+</ol>
+<h3 id="1-one-loop-per-thread"><a href="#1-one-loop-per-thread" class="headerlink" title="1. one loop per thread"></a>1. one loop per thread</h3><p>一个线程一个 event loop，但对于没有 IO 而光有计算任务的线程，使用 event loop 哟对岸浪费。</p>
+<h3 id="2-线程池"><a href="#2-线程池" class="headerlink" title="2. 线程池"></a>2. 线程池</h3><p>用 blocking queue 实现任务队列（TaskQueue）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">using</span> Functor = std::function&lt;<span class="hljs-built_in">void</span>()&gt;;<br>BlockingQueue&lt;Functor&gt; taskQueue; <span class="hljs-comment">// A thread-safe blocking queue</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">workerThread</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span> (running) &#123;<br>        Functor task = taskQueue.<span class="hljs-built_in">take</span>(); <span class="hljs-comment">// block here</span><br>        <span class="hljs-built_in">task</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>    std::vector&lt;std::thread&gt; threads;<br>    threads.<span class="hljs-built_in">reserve</span>(N);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i) &#123;<br>        threads.<span class="hljs-built_in">emplace_back</span>(&amp;workerThread);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>递归的 <code>mutex</code> 有可能掩盖掉迭代器失效的 bug，只会偶尔 crash，还不如用非递归的 <code>mutex</code>，直接由死锁讲逻辑上的问题暴露出来。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>抽取出不含加锁的函数即可。</p>
-<h2 id="借-std-shared-ptr-实现-copy-on-write"><a href="#借-std-shared-ptr-实现-copy-on-write" class="headerlink" title="借 std::shared_ptr 实现 copy-on-write"></a>借 <code>std::shared_ptr</code> 实现 copy-on-write</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cassert&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doit</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> FooList = std::vector&lt;Foo&gt;;<br>    <span class="hljs-keyword">using</span> FooListPtr = std::shared_ptr&lt;FooList&gt;;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> Foo&amp; foo)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;<br>        <span class="hljs-keyword">if</span> (!m_foos.<span class="hljs-built_in">unique</span>()) &#123;<br>            m_foos = std::<span class="hljs-built_in">make_shared</span>&lt;FooList&gt;(*m_foos);<br>        &#125;<br>        <span class="hljs-built_in">assert</span>(m_foos.<span class="hljs-built_in">unique</span>());<br>        m_foos-&gt;<span class="hljs-built_in">push_back</span>(foo);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">traverse</span><span class="hljs-params">()</span> </span>&#123;<br>        FooListPtr foos;<br>        &#123;<br>            <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;<br>            foos = m_foos;<br>            <span class="hljs-built_in">assert</span>(!m_foos.<span class="hljs-built_in">unique</span>());<br>        &#125;<br>        <span class="hljs-comment">// assert(!m_foos.unique());  // This assert can&#x27;t make sense</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; foo : *foos) &#123;<br>            foo.<span class="hljs-built_in">doit</span>();<br>        &#125;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::mutex m_mutex;<br>    FooListPtr m_foos;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<h2 id="读多写少-case-（用-mutex-替换读写锁）"><a href="#读多写少-case-（用-mutex-替换读写锁）" class="headerlink" title="读多写少 case （用 mutex 替换读写锁）"></a>读多写少 case （用 <code>mutex</code> 替换读写锁）</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomData</span> : noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">CustomData</span>() : m_data&#123;std::<span class="hljs-built_in">make_shared</span>&lt;Map&gt;()&#125; &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> std::string&amp; stock)</span> <span class="hljs-type">const</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">using</span> Entry = std::pair&lt;std::string, <span class="hljs-type">int</span>&gt;;<br>    <span class="hljs-keyword">using</span> EntryList = std::vector&lt;Entry&gt;;<br>    <span class="hljs-keyword">using</span> Map = std::map&lt;std::string, EntryList&gt;;<br>    <span class="hljs-keyword">using</span> MapPtr = std::shared_ptr&lt;Map&gt;;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> EntryList&amp; entries)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">findEntry</span><span class="hljs-params">(<span class="hljs-type">const</span> EntryList&amp; entries, <span class="hljs-type">const</span> std::string&amp; stock)</span></span>;<br><br>    <span class="hljs-function">MapPtr <span class="hljs-title">getData</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;<br>        <span class="hljs-keyword">return</span> m_data;<br>    &#125;<br><br>    <span class="hljs-keyword">mutable</span> std::mutex m_mutex;<br>    MapPtr m_data;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">CustomData::query</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> std::string&amp; stock)</span> <span class="hljs-type">const</span> </span>&#123;<br>    MapPtr data = <span class="hljs-built_in">getData</span>();<br>    <span class="hljs-comment">// Once the data is gotten, the lock isn&#x27;t needed anymore</span><br>    <span class="hljs-keyword">auto</span> entries = data-&gt;<span class="hljs-built_in">find</span>(customer);<br>    <span class="hljs-keyword">if</span> (entries == data-&gt;<span class="hljs-built_in">end</span>()) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">findEntry</span>(entries-&gt;second, stock);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CustomData::update</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> EntryList&amp; entries)</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;  <span class="hljs-comment">// must leverage the lock in the whole time</span><br>    <span class="hljs-keyword">if</span> (!m_data.<span class="hljs-built_in">unique</span>()) &#123;                     <span class="hljs-comment">// distinguish if it&#x27;s been reading</span><br>        MapPtr newData = std::<span class="hljs-built_in">make_shared</span>&lt;Map&gt;(*m_data);<br>        m_data.<span class="hljs-built_in">swap</span>(newData);<br>    &#125;<br>    <span class="hljs-built_in">assert</span>(m_data.<span class="hljs-built_in">unique</span>());<br>    (*m_data)[customer] = entries;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="3-推荐模式"><a href="#3-推荐模式" class="headerlink" title="3. 推荐模式"></a>3. 推荐模式</h3><p>推荐 one(event) loop per thread + thread pool。</p>
+<ul>
+<li>event loop （也叫 IO loop）用作 IO multiplexing，配合 non-blocking IO 和定时器</li>
+<li>thread pool 用来做计算，具体可以是任务队列或生产者消费者队列。</li>
+</ul>
 
                 
               </div>
@@ -363,8 +378,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Learn muduo - Part 2 Thread Synchronization</div>
-      <div>http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/</div>
+      <div>Learn muduo - Part 3 Multi-Thread Server</div>
+      <div>http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-3-Multi-Thread-Server/</div>
     </div>
     <div class="license-meta">
       
@@ -376,13 +391,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>May 14, 2023</div>
+          <div>May 15, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>May 12, 2023</div>
+          <div>May 13, 2023</div>
         </div>
       
       
@@ -413,18 +428,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Dev/Library/muduo/Learn-muduo-Part-3-Multi-Thread-Server/" title="Learn muduo - Part 3 Multi-Thread Server">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Learn muduo - Part 3 Multi-Thread Server</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/" title="Move semantics and Rule of five">
-                        <span class="hidden-mobile">Move semantics and Rule of five</span>
+                      <a href="/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/" title="Learn muduo - Part 2 Thread Synchronization">
+                        <span class="hidden-mobile">Learn muduo - Part 2 Thread Synchronization</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

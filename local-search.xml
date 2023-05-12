@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>Learn muduo - Part 3 Multi-Thread Server</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-3-Multi-Thread-Server/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-3-Multi-Thread-Server/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 3: 多线程服务器的适用场合与常用编程模型</strong></p>          </div><h2 id="单线程服务器的常用编程模型"><a href="#单线程服务器的常用编程模型" class="headerlink" title="单线程服务器的常用编程模型"></a>单线程服务器的常用编程模型</h2><p>使用最广泛的是 “non-blocking + IO multiplexing” 模型，即 Reactor 模式，比如：</p><ul><li>lighttpd（Nginx 与之相似，每个工作进程有一个 event loop）</li><li>libevent, libev</li><li>Java NIO，包括 Apache Mina 和 Netty</li></ul><p><code>lighttpd</code> 内部的 <code>fdevent</code> 结构十分精妙，值得学习。</p><h2 id="多线程服务器的常用编程模型"><a href="#多线程服务器的常用编程模型" class="headerlink" title="多线程服务器的常用编程模型"></a>多线程服务器的常用编程模型</h2><ol><li>为每个请求创建一个线程，使用阻塞式 IO。</li><li>使用线程池，同样使用阻塞式 IO。相比第 1 种性能有提升。</li><li>使用 non-blocking + IO multiplexing。</li><li>Leader &#x2F;Follower。</li></ol><h3 id="1-one-loop-per-thread"><a href="#1-one-loop-per-thread" class="headerlink" title="1. one loop per thread"></a>1. one loop per thread</h3><p>一个线程一个 event loop，但对于没有 IO 而光有计算任务的线程，使用 event loop 哟对岸浪费。</p><h3 id="2-线程池"><a href="#2-线程池" class="headerlink" title="2. 线程池"></a>2. 线程池</h3><p>用 blocking queue 实现任务队列（TaskQueue）。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">using</span> Functor = std::function&lt;<span class="hljs-built_in">void</span>()&gt;;<br>BlockingQueue&lt;Functor&gt; taskQueue; <span class="hljs-comment">// A thread-safe blocking queue</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">workerThread</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span> (running) &#123;<br>        Functor task = taskQueue.<span class="hljs-built_in">take</span>(); <span class="hljs-comment">// block here</span><br>        <span class="hljs-built_in">task</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>    std::vector&lt;std::thread&gt; threads;<br>    threads.<span class="hljs-built_in">reserve</span>(N);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i) &#123;<br>        threads.<span class="hljs-built_in">emplace_back</span>(&amp;workerThread);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h3 id="3-推荐模式"><a href="#3-推荐模式" class="headerlink" title="3. 推荐模式"></a>3. 推荐模式</h3><p>推荐 one(event) loop per thread + thread pool。</p><ul><li>event loop （也叫 IO loop）用作 IO multiplexing，配合 non-blocking IO 和定时器</li><li>thread pool 用来做计算，具体可以是任务队列或生产者消费者队列。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+      <tag>thread_safe</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 2 Thread Synchronization</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/</url>
