@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>Learn muduo - Part 2 Thread Synchronization</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-2-Thread-Synchronization/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 2: 线程同步精要</strong></p>          </div><h2 id="只使用非递归的-mutex"><a href="#只使用非递归的-mutex" class="headerlink" title="只使用非递归的 mutex"></a>只使用非递归的 mutex</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> Foo&amp; foo)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;<br>        foos.<span class="hljs-built_in">push_back</span>(foo);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">traverse</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> it = foos.<span class="hljs-built_in">begin</span>(); it != foos.<span class="hljs-built_in">end</span>(); ++it) &#123;<br>            <span class="hljs-built_in">post</span>(*it);<br>        &#125;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::mutex mutex;<br>    std::vector&lt;Foo&gt; foos;<br>&#125;;<br></code></pre></td></tr></table></figure><p>递归的 <code>mutex</code> 有可能掩盖掉迭代器失效的 bug，只会偶尔 crash，还不如用非递归的 <code>mutex</code>，直接由死锁讲逻辑上的问题暴露出来。</p><h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>抽取出不含加锁的函数即可。</p><h2 id="借-std-shared-ptr-实现-copy-on-write"><a href="#借-std-shared-ptr-实现-copy-on-write" class="headerlink" title="借 std::shared_ptr 实现 copy-on-write"></a>借 <code>std::shared_ptr</code> 实现 copy-on-write</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cassert&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doit</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> FooList = std::vector&lt;Foo&gt;;<br>    <span class="hljs-keyword">using</span> FooListPtr = std::shared_ptr&lt;FooList&gt;;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">post</span><span class="hljs-params">(<span class="hljs-type">const</span> Foo&amp; foo)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;<br>        <span class="hljs-keyword">if</span> (!m_foos.<span class="hljs-built_in">unique</span>()) &#123;<br>            m_foos = std::<span class="hljs-built_in">make_shared</span>&lt;FooList&gt;(*m_foos);<br>        &#125;<br>        <span class="hljs-built_in">assert</span>(m_foos.<span class="hljs-built_in">unique</span>());<br>        m_foos-&gt;<span class="hljs-built_in">push_back</span>(foo);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">traverse</span><span class="hljs-params">()</span> </span>&#123;<br>        FooListPtr foos;<br>        &#123;<br>            <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;<br>            foos = m_foos;<br>            <span class="hljs-built_in">assert</span>(!m_foos.<span class="hljs-built_in">unique</span>());<br>        &#125;<br>        <span class="hljs-comment">// assert(!m_foos.unique());  // This assert can&#x27;t make sense</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; foo : *foos) &#123;<br>            foo.<span class="hljs-built_in">doit</span>();<br>        &#125;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    std::mutex m_mutex;<br>    FooListPtr m_foos;<br>&#125;;<br></code></pre></td></tr></table></figure><h2 id="读多写少-case-（用-mutex-替换读写锁）"><a href="#读多写少-case-（用-mutex-替换读写锁）" class="headerlink" title="读多写少 case （用 mutex 替换读写锁）"></a>读多写少 case （用 <code>mutex</code> 替换读写锁）</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CustomData</span> : noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">CustomData</span>() : m_data&#123;std::<span class="hljs-built_in">make_shared</span>&lt;Map&gt;()&#125; &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> std::string&amp; stock)</span> <span class="hljs-type">const</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">using</span> Entry = std::pair&lt;std::string, <span class="hljs-type">int</span>&gt;;<br>    <span class="hljs-keyword">using</span> EntryList = std::vector&lt;Entry&gt;;<br>    <span class="hljs-keyword">using</span> Map = std::map&lt;std::string, EntryList&gt;;<br>    <span class="hljs-keyword">using</span> MapPtr = std::shared_ptr&lt;Map&gt;;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> EntryList&amp; entries)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">findEntry</span><span class="hljs-params">(<span class="hljs-type">const</span> EntryList&amp; entries, <span class="hljs-type">const</span> std::string&amp; stock)</span></span>;<br><br>    <span class="hljs-function">MapPtr <span class="hljs-title">getData</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;<br>        <span class="hljs-keyword">return</span> m_data;<br>    &#125;<br><br>    <span class="hljs-keyword">mutable</span> std::mutex m_mutex;<br>    MapPtr m_data;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">CustomData::query</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> std::string&amp; stock)</span> <span class="hljs-type">const</span> </span>&#123;<br>    MapPtr data = <span class="hljs-built_in">getData</span>();<br>    <span class="hljs-comment">// Once the data is gotten, the lock isn&#x27;t needed anymore</span><br>    <span class="hljs-keyword">auto</span> entries = data-&gt;<span class="hljs-built_in">find</span>(customer);<br>    <span class="hljs-keyword">if</span> (entries == data-&gt;<span class="hljs-built_in">end</span>()) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">findEntry</span>(entries-&gt;second, stock);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CustomData::update</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; customer, <span class="hljs-type">const</span> EntryList&amp; entries)</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_mutex)</span></span>;  <span class="hljs-comment">// must leverage the lock in the whole time</span><br>    <span class="hljs-keyword">if</span> (!m_data.<span class="hljs-built_in">unique</span>()) &#123;                     <span class="hljs-comment">// distinguish if it&#x27;s been reading</span><br>        MapPtr newData = std::<span class="hljs-built_in">make_shared</span>&lt;Map&gt;(*m_data);<br>        m_data.<span class="hljs-built_in">swap</span>(newData);<br>    &#125;<br>    <span class="hljs-built_in">assert</span>(m_data.<span class="hljs-built_in">unique</span>());<br>    (*m_data)[customer] = entries;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+      <tag>thread_safe</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Move semantics and Rule of five</title>
     <link href="/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/"/>
     <url>/Dev/C++/Miscellaneous/Move-semantics-and-Rule-of-five/</url>
@@ -55,9 +88,9 @@
       
       <tag>cpp</tag>
       
-      <tag>template</tag>
-      
       <tag>cpp17</tag>
+      
+      <tag>template</tag>
       
       <tag>ctad</tag>
       
@@ -154,11 +187,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -416,9 +449,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>medium</tag>
+      
+      <tag>sliding_window</tag>
       
       <tag>string</tag>
       
@@ -453,13 +486,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -490,13 +523,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -527,11 +560,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -562,9 +595,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -663,13 +696,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -700,13 +733,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -873,9 +906,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -1023,13 +1056,13 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>linked_list</tag>
       
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -1062,11 +1095,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -1229,13 +1262,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
