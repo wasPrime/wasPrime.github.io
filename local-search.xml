@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>Learn muduo - Part 5 Multi-Thread Logging with High Performance</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-5-Multi-Thread-Logging-with-High-Performance/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-5-Multi-Thread-Logging-with-High-Performance/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 5: 高效的多线程日志</strong></p>          </div><h2 id="线程安全的多线程异步日志"><a href="#线程安全的多线程异步日志" class="headerlink" title="线程安全的多线程异步日志"></a>线程安全的多线程异步日志</h2><p>需要一个队列来讲日志前端的数据传送到后端（日志线程），但这个队列不必是现成的 <code>BlockingQueue&lt;std::string&gt;</code>，因为不用每次产生一条日志消息都通知接收方。</p><p>muduo 日志库采用的是双缓冲（double buffering）技术。</p><p>基本思路：</p><ul><li>准备两块 buffer；</li><li>前端负责往 buffer A 填数据（日志消息）；</li><li>后端负责将 buffer B 的数据写入文件；</li><li>当 buffer A 写满后，交换 A 和 B；</li><li>后端将 buffer A 的数据写入文件；</li><li>而前端则往 buffer B 填入心得日志消息；</li><li>循环往复……</li></ul><h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><blockquote><p>代码位置：muduo&#x2F;base&#x2F;AsyncLogging.cc</p></blockquote><h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AsyncLogging::append</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* logline, <span class="hljs-type">int</span> len)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-function">muduo::MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>  <span class="hljs-keyword">if</span> (currentBuffer_-&gt;<span class="hljs-built_in">avail</span>() &gt; len)<br>  &#123;<br>    currentBuffer_-&gt;<span class="hljs-built_in">append</span>(logline, len);<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123;<br>    buffers_.<span class="hljs-built_in">push_back</span>(std::<span class="hljs-built_in">move</span>(currentBuffer_));<br><br>    <span class="hljs-keyword">if</span> (nextBuffer_)<br>    &#123;<br>      currentBuffer_ = std::<span class="hljs-built_in">move</span>(nextBuffer_);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>      currentBuffer_.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> Buffer); <span class="hljs-comment">// Rarely happens</span><br>    &#125;<br>    currentBuffer_-&gt;<span class="hljs-built_in">append</span>(logline, len);<br>    cond_.<span class="hljs-built_in">notify</span>();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h3 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AsyncLogging::threadFunc</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-built_in">assert</span>(running_ == <span class="hljs-literal">true</span>);<br>  latch_.<span class="hljs-built_in">countDown</span>();<br>  <span class="hljs-function">LogFile <span class="hljs-title">output</span><span class="hljs-params">(basename_, rollSize_, <span class="hljs-literal">false</span>)</span></span>;<br>  <span class="hljs-function">BufferPtr <span class="hljs-title">newBuffer1</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Buffer)</span></span>;<br>  <span class="hljs-function">BufferPtr <span class="hljs-title">newBuffer2</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Buffer)</span></span>;<br>  newBuffer1-&gt;<span class="hljs-built_in">bzero</span>();<br>  newBuffer2-&gt;<span class="hljs-built_in">bzero</span>();<br>  BufferVector buffersToWrite;<br>  buffersToWrite.<span class="hljs-built_in">reserve</span>(<span class="hljs-number">16</span>);<br>  <span class="hljs-keyword">while</span> (running_)<br>  &#123;<br>    <span class="hljs-built_in">assert</span>(newBuffer1 &amp;&amp; newBuffer1-&gt;<span class="hljs-built_in">length</span>() == <span class="hljs-number">0</span>);<br>    <span class="hljs-built_in">assert</span>(newBuffer2 &amp;&amp; newBuffer2-&gt;<span class="hljs-built_in">length</span>() == <span class="hljs-number">0</span>);<br>    <span class="hljs-built_in">assert</span>(buffersToWrite.<span class="hljs-built_in">empty</span>());<br><br>    &#123;<br>      <span class="hljs-function">muduo::MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>      <span class="hljs-keyword">if</span> (buffers_.<span class="hljs-built_in">empty</span>())  <span class="hljs-comment">// unusual usage!</span><br>      &#123;<br>        cond_.<span class="hljs-built_in">waitForSeconds</span>(flushInterval_);<br>      &#125;<br>      buffers_.<span class="hljs-built_in">push_back</span>(std::<span class="hljs-built_in">move</span>(currentBuffer_));<br>      currentBuffer_ = std::<span class="hljs-built_in">move</span>(newBuffer1);<br>      buffersToWrite.<span class="hljs-built_in">swap</span>(buffers_);<br>      <span class="hljs-keyword">if</span> (!nextBuffer_)<br>      &#123;<br>        nextBuffer_ = std::<span class="hljs-built_in">move</span>(newBuffer2);<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-built_in">assert</span>(!buffersToWrite.<span class="hljs-built_in">empty</span>());<br><br>    <span class="hljs-keyword">if</span> (buffersToWrite.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">25</span>)<br>    &#123;<br>      <span class="hljs-type">char</span> buf[<span class="hljs-number">256</span>];<br>      <span class="hljs-built_in">snprintf</span>(buf, <span class="hljs-keyword">sizeof</span> buf, <span class="hljs-string">&quot;Dropped log messages at %s, %zd larger buffers\n&quot;</span>,<br>               Timestamp::<span class="hljs-built_in">now</span>().<span class="hljs-built_in">toFormattedString</span>().<span class="hljs-built_in">c_str</span>(),<br>               buffersToWrite.<span class="hljs-built_in">size</span>()<span class="hljs-number">-2</span>);<br>      <span class="hljs-built_in">fputs</span>(buf, stderr);<br>      output.<span class="hljs-built_in">append</span>(buf, <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-built_in">strlen</span>(buf)));<br>      buffersToWrite.<span class="hljs-built_in">erase</span>(buffersToWrite.<span class="hljs-built_in">begin</span>()+<span class="hljs-number">2</span>, buffersToWrite.<span class="hljs-built_in">end</span>());<br>    &#125;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; buffer : buffersToWrite)<br>    &#123;<br>      <span class="hljs-comment">// <span class="hljs-doctag">FIXME:</span> use unbuffered stdio FILE ? or use ::writev ?</span><br>      output.<span class="hljs-built_in">append</span>(buffer-&gt;<span class="hljs-built_in">data</span>(), buffer-&gt;<span class="hljs-built_in">length</span>());<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (buffersToWrite.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">2</span>)<br>    &#123;<br>      <span class="hljs-comment">// drop non-bzero-ed buffers, avoid trashing</span><br>      buffersToWrite.<span class="hljs-built_in">resize</span>(<span class="hljs-number">2</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (!newBuffer1)<br>    &#123;<br>      <span class="hljs-built_in">assert</span>(!buffersToWrite.<span class="hljs-built_in">empty</span>());<br>      newBuffer1 = std::<span class="hljs-built_in">move</span>(buffersToWrite.<span class="hljs-built_in">back</span>());<br>      buffersToWrite.<span class="hljs-built_in">pop_back</span>();<br>      newBuffer1-&gt;<span class="hljs-built_in">reset</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (!newBuffer2)<br>    &#123;<br>      <span class="hljs-built_in">assert</span>(!buffersToWrite.<span class="hljs-built_in">empty</span>());<br>      newBuffer2 = std::<span class="hljs-built_in">move</span>(buffersToWrite.<span class="hljs-built_in">back</span>());<br>      buffersToWrite.<span class="hljs-built_in">pop_back</span>();<br>      newBuffer2-&gt;<span class="hljs-built_in">reset</span>();<br>    &#125;<br><br>    buffersToWrite.<span class="hljs-built_in">clear</span>();<br>    output.<span class="hljs-built_in">flush</span>();<br>  &#125;<br>  output.<span class="hljs-built_in">flush</span>();<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="改进空间"><a href="#改进空间" class="headerlink" title="改进空间"></a>改进空间</h2><p>目前我们一共准备了 4 块缓冲：<code>currentBuffer_</code> <code>nextBuffer_</code> <code>newBuffer1</code> <code>newBuffer2</code> 以及缓冲队列 <code>buffers_</code>。</p><p>如需进一步增加 buffer 数目，可以改用下面的数据结构：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++">BufferPtr       currentBuffer_; <span class="hljs-comment">// 当前缓冲</span><br>BufferVector    emptyBuffers_;  <span class="hljs-comment">// 空闲缓冲</span><br>BufferVector    fullBuffers_;   <span class="hljs-comment">// 已写满的缓冲</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+      <tag>thread_safe</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 4 Multi-Thread System Programming</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-4-Multi-Thread-System-Programming/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-4-Multi-Thread-System-Programming/</url>
@@ -474,11 +507,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
-      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -626,11 +659,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -661,9 +694,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1546,9 +1579,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -1587,9 +1620,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
