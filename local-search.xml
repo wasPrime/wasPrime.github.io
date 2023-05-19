@@ -4,6 +4,68 @@
   
   
   <entry>
+    <title>Learn muduo - Part 7 Programming Demo with muduo</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-7-Programming-Demo-with-muduo/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-7-Programming-Demo-with-muduo/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 7: muduo 编程示例</strong></p>          </div><h2 id="shutdown-和-close-区别"><a href="#shutdown-和-close-区别" class="headerlink" title="shutdown 和 close 区别"></a>shutdown 和 close 区别</h2><p>TCP 协议是全双工协议，同一文件描述符即可读又可写。</p><ul><li><code>::shutdown(sockfd, SHUT_WR)</code> 关闭了写连接，保留读连接。</li><li><code>::close(sockfd)</code> 就不能读写了。</li></ul><h2 id="Protobuf-反射"><a href="#Protobuf-反射" class="headerlink" title="Protobuf 反射"></a>Protobuf 反射</h2><p>根据 class name new object：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;google/protobuf/descriptor.h&gt;</span></span><br><br>google::<span class="hljs-function">protobuf::Message* <span class="hljs-title">ProtobufCodec::createMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; typeName)</span> </span>&#123;<br>    google::protobuf::Message* message = <span class="hljs-literal">NULL</span>;<br>    <span class="hljs-type">const</span> google::protobuf::Descriptor* descriptor = google::protobuf::DescriptorPool::<span class="hljs-built_in">generated_pool</span>()-&gt;<span class="hljs-built_in">FindMessageTypeByName</span>(typeName);<br>    <span class="hljs-keyword">if</span> (descriptor) &#123;<br>        <span class="hljs-type">const</span> google::protobuf::Message* prototype = google::protobuf::MessageFactory::<span class="hljs-built_in">generated_factory</span>()-&gt;<span class="hljs-built_in">GetPrototype</span>(descriptor);<br>        <span class="hljs-keyword">if</span> (prototype) &#123;<br>            message = prototype-&gt;<span class="hljs-built_in">New</span>();<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> message;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="用-timing-wheel-踢掉空闲连接"><a href="#用-timing-wheel-踢掉空闲连接" class="headerlink" title="用 timing wheel 踢掉空闲连接"></a>用 timing wheel 踢掉空闲连接</h2><p>简单理解：<code>std::vector&lt;std::unordered_set&lt;std::weak_ptr&lt;Connection&gt;&gt; wheel</code></p><ul><li><code>wheel.size</code> 为指定的断开空闲连接的超时时间。</li><li>每过 1s 踢掉 <code>wheel[i]</code> 里的 Connection，然后 i 递增，实际为 <code>i = (i + 1) % wheel.size()</code>。</li><li>踢掉连接操作：<code>connection.lock()</code> 先尝试升级为 <code>std::shared_ptr&lt;Connection&gt;</code>，升级成功再 <code>close()</code>，否则忽略。此举是为了避免在 <code>wheel</code> 中保存 <code>std::shared_ptr&lt;Connection&gt;</code> 而延长本应直接 close 的连接。</li><li>假如某个连接产生数据交互，将其从 wheel 原格子中取出并放入最新时间对应的格子。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>library</tag>
+      
+      <tag>cpp</tag>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Learn muduo - Part 6 Simple Introduction to muduo Network Library</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-6-Simple-Introduction-to-muduo-Network-Library/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-6-Simple-Introduction-to-muduo-Network-Library/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 6: muduo 网络库简介</strong></p>          </div><h2 id="常见的并发网络服务程序设计方案"><a href="#常见的并发网络服务程序设计方案" class="headerlink" title="常见的并发网络服务程序设计方案"></a>常见的并发网络服务程序设计方案</h2><table><thead><tr><th align="center">方案</th><th align="left">并发模型</th><th align="center">阻塞 IO</th><th align="center">IO 复用</th><th align="center">长连接</th><th align="center">并发性</th><th align="left">特点</th></tr></thead><tbody><tr><td align="center">0</td><td align="left">accept + reaf&#x2F;write</td><td align="center">是</td><td align="center">否</td><td align="center">否</td><td align="center">无</td><td align="left">一次服务一个客户</td></tr><tr><td align="center">1</td><td align="left">accept + fork</td><td align="center">是</td><td align="center">否</td><td align="center">是</td><td align="center">低</td><td align="left">process-per-connection</td></tr><tr><td align="center">2</td><td align="left">accept + thread</td><td align="center">是</td><td align="center">否</td><td align="center">是</td><td align="center">中</td><td align="left">thread-per-connection</td></tr><tr><td align="center">3</td><td align="left">prefork</td><td align="center">是</td><td align="center">否</td><td align="center">是</td><td align="center">低</td><td align="left"></td></tr><tr><td align="center">4</td><td align="left">pre threaded</td><td align="center">是</td><td align="center">否</td><td align="center">是</td><td align="center">中</td><td align="left"></td></tr><tr><td align="center">5</td><td align="left">poll (reactor)</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">高</td><td align="left">单线程 reactor</td></tr><tr><td align="center">6</td><td align="left">reactor + thread-per-task</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">中</td><td align="left">thread-per-request</td></tr><tr><td align="center">7</td><td align="left">reactor + worker thread</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">中</td><td align="left">worker-thread-per-connection</td></tr><tr><td align="center">8</td><td align="left">reactor + thread poll</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">高</td><td align="left">主线程 IO，工作线程计算</td></tr><tr><td align="center">9</td><td align="left">reactors in threads</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">高</td><td align="left">one loop per thread</td></tr><tr><td align="center">10</td><td align="left">reactors in processes</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">高</td><td align="left">Nginx</td></tr><tr><td align="center">11</td><td align="left">reactor + thread pool</td><td align="center">否</td><td align="center">是</td><td align="center">是</td><td align="center">高</td><td align="left">最灵活的 IO 与 CPU 配置</td></tr></tbody></table>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>library</tag>
+      
+      <tag>cpp</tag>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 5 Multi-Thread Logging with High Performance</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-5-Multi-Thread-Logging-with-High-Performance/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-5-Multi-Thread-Logging-with-High-Performance/</url>
@@ -22,9 +84,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -55,9 +117,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -88,9 +150,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -121,9 +183,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -187,9 +249,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
-      
       <tag>template</tag>
+      
+      <tag>cpp17</tag>
       
       <tag>ctad</tag>
       
@@ -286,9 +348,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -507,11 +569,11 @@
       
       <tag>cpp</tag>
       
+      <tag>cpp17</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -585,13 +647,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -622,13 +684,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -659,11 +721,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -694,9 +756,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -795,13 +857,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -832,13 +894,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1361,13 +1423,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1579,9 +1641,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -1620,9 +1682,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
