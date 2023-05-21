@@ -4,6 +4,68 @@
   
   
   <entry>
+    <title>Learn muduo - Part 9 Distributed Systems Engineering Practice</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-9-Distributed-Systems-Engineering-Practice/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-9-Distributed-Systems-Engineering-Practice/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 9: 分布式系统工程实践</strong></p>          </div><h2 id="险恶的分布式问题"><a href="#险恶的分布式问题" class="headerlink" title="险恶的分布式问题"></a>险恶的分布式问题</h2><p>消息传递的延时性不固定，时间与事件顺序违反直觉。</p><h3 id="Case-1"><a href="#Case-1" class="headerlink" title="Case 1"></a>Case 1</h3><pre><code class=" mermaid">graph TDShop --&quot;a:ack&quot;--&gt; CustomerShop --&quot;c:confirm&quot;--&gt; CustomerCustomer -.&quot;0:order&quot;.-&gt; ShopShop --&quot;b:ship&quot;--&gt; WarehouseWarehouse --&quot;d:deliver&quot;--&gt; Customer</code></pre><p>Customer 收到的 3 条消息有 3 种可能的顺序</p><ol><li>a, c, d</li><li>a, d, c</li><li>d, a, c</li></ol><h3 id="Case-2"><a href="#Case-2" class="headerlink" title="Case 2"></a>Case 2</h3><pre><code class=" mermaid">graph TDClient --&quot;1:request&quot;--&gt; MasterMaster --&quot;2:response&quot;--&gt; ClientMaster --&quot;3:assign&quot;--&gt; WorkerWorker --&quot;4:result&quot;--&gt; Client</code></pre><p><code>&quot;4:result&quot;</code> 完全有可能先于 <code>&quot;2:response&quot;</code> 到达客户端。</p><h2 id="分布式系统中心跳协议的设计"><a href="#分布式系统中心跳协议的设计" class="headerlink" title="分布式系统中心跳协议的设计"></a>分布式系统中心跳协议的设计</h2><p>有两个关键点：</p><ol><li>要在工作线程发送，不要单独起一个“心跳线程”。<br>原因：防止工作线程死锁或阻塞时还在继续发心跳。</li><li>与业务消息用同一个连接，不要单独用“心跳连接”。<br>原因：验证本连接网络畅通，以及本连接实际没有被防火墙切断。</li></ol><h2 id="分布式系统中的进程标识"><a href="#分布式系统中的进程标识" class="headerlink" title="分布式系统中的进程标识"></a>分布式系统中的进程标识</h2><h3 id="错误做法"><a href="#错误做法" class="headerlink" title="错误做法"></a>错误做法</h3><h4 id="ip-port"><a href="#ip-port" class="headerlink" title="ip:port"></a><code>ip:port</code></h4><p>对于无状态服务没问题，但对于有状态服务来说无法区分状态。</p><h4 id="host-pid"><a href="#host-pid" class="headerlink" title="host:pid"></a><code>host:pid</code></h4><p><code>pid</code> 的状态空间很小，重启后获得与“前世”相同 pid 的概率为 1&#x2F;32768，存在相同的可能，存在风险。</p><h3 id="正确做法"><a href="#正确做法" class="headerlink" title="正确做法"></a>正确做法</h3><p>采用 <code>ip:port:start_time:pid</code>。</p><p>好处：</p><ul><li>容易保证唯一性。如果程序短时间内重启，那么前后两个进程的 pid 必定不重复（就算每秒创建 1000 个进程，也要 30 多秒才会轮回，而以这么高的速度创建进程的话，服务器基本瘫痪了）。如果程序运行了相当长的一段时间再重启，那么两次启动的 start_time 必定不重复。</li><li>产生这种 gpid（全局描述符） 的成本很低，只有几次低成本系统调用。</li><li>gpid 本身有意义。有 ip（机器位置）、port（什么进程）、start_time（启动时间）、pid（在 <code>/prod</code> 目录中的位置 <code>/prod/pid</code>） 各种信息。</li><li>gpid 具有历史意义，便于将来追溯。比如进程 crash，可以根据 gpid 去历史记录中查询它 crash 之前的 CPU 和内存负载有多大。</li></ul><h2 id="一种自动化的回归测试方案"><a href="#一种自动化的回归测试方案" class="headerlink" title="一种自动化的回归测试方案"></a>一种自动化的回归测试方案</h2><p>对于分布式系统的两个模块 A 和 B。</p><ul><li>mock B 验证测试 A 正常和异常的情况。</li><li>mock A 验证测试 B 正常和异常的情况。</li></ul><p>使得被观察的 A、B 像是缸中之脑。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Learn muduo - Part 8 The Implementation and Design of the muduo Network Library</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-8-The-Implementation-and-Design-of-the-muduo-Network-Library/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-8-The-Implementation-and-Design-of-the-muduo-Network-Library/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 8: muduo 网络库设计与实现</strong></p>          </div>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 7 Programming Demo with muduo</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-7-Programming-Demo-with-muduo/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-7-Programming-Demo-with-muduo/</url>
@@ -22,9 +84,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -53,9 +115,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -84,9 +146,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -117,9 +179,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -150,9 +212,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -183,9 +245,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -249,9 +311,9 @@
       
       <tag>cpp</tag>
       
-      <tag>template</tag>
-      
       <tag>cpp17</tag>
+      
+      <tag>template</tag>
       
       <tag>ctad</tag>
       
@@ -348,9 +410,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -569,11 +631,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
-      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -647,13 +709,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -684,13 +746,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -857,13 +919,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -894,13 +956,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1423,13 +1485,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1641,9 +1703,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -1682,9 +1744,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
