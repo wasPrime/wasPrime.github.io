@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>Learn muduo - Part 10 C++ Compiler Link Model Essentials</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-10-C-Compiler-Link-Model-Essentials/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-10-C-Compiler-Link-Model-Essentials/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 10: C++ 编译链接模型精要</strong></p>          </div><h2 id="重载决议小例子"><a href="#重载决议小例子" class="headerlink" title="重载决议小例子"></a>重载决议小例子</h2><p>C&#x2F;C++ 可以看做采用 one pass 编译，解析语义时只能基于前面已经解析出的语义。比如：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std::literals;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;int&quot;</span> &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bar</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">foo</span>(<span class="hljs-string">&#x27;a&#x27;</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">(<span class="hljs-type">char</span> i)</span> </span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;char&quot;</span> &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">bar</span>();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>结果输出 <code>int</code> 而不是 <code>char</code>。</p><h2 id="检查头文件引入小技巧"><a href="#检查头文件引入小技巧" class="headerlink" title="检查头文件引入小技巧"></a>检查头文件引入小技巧</h2><p>头文件 include 具有传染性。</p><p>假如有这样的例子：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::string s = <span class="hljs-string">&quot;Hello World&quot;</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>头文件 <code>&lt;string&gt;</code> 并未被直接 include，但仍能编译通过。有个小技巧可以检查其是如何被 include 进来的，原理是在当前目录创建一个 <code>string</code> 文件，故意制造编译错误。</p><p>步骤如下：</p><ol><li><p>创建一个指示编译失败的 <code>string</code> 文件。</p> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">cat</span> &gt; string<br><span class="hljs-comment">#error error</span><br>^D<br></code></pre></td></tr></table></figure></li><li><p>编译</p> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ g++ -M -I . test.cc<br>In file included from test.cc:1:<br>In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream:37:<br>In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/ios:214:<br>In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale:15:<br>./string:1:2: error: error<br><span class="hljs-comment">#error error</span><br></code></pre></td></tr></table></figure></li></ol><p>可见头文件 <code>&lt;string&gt;</code> 是在 <code>/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale:15</code> 处被 include 的。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 9 Distributed Systems Engineering Practice</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-9-Distributed-Systems-Engineering-Practice/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-9-Distributed-Systems-Engineering-Practice/</url>
@@ -22,9 +35,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -53,9 +66,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -84,9 +97,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -115,9 +128,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -146,9 +159,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -179,9 +192,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -212,9 +225,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -245,9 +258,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -410,9 +423,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -631,11 +644,11 @@
       
       <tag>cpp</tag>
       
+      <tag>cpp17</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -709,13 +722,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -746,13 +759,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -783,11 +796,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -818,9 +831,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -919,13 +932,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -956,13 +969,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1485,13 +1498,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1703,9 +1716,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -1744,9 +1757,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
