@@ -54,4 +54,3 @@ google::protobuf::Message* ProtobufCodec::createMessage(const std::string& typeN
 - 每过 1s 踢掉 `wheel[i]` 里的 Connection，然后 i 递增，实际为 `i = (i + 1) % wheel.size()`。
 - 踢掉连接操作：`connection.lock()` 先尝试升级为 `std::shared_ptr<Connection>`，升级成功再 `close()`，否则忽略。此举是为了避免在 `wheel` 中保存 `std::shared_ptr<Connection>` 而延长本应直接 close 的连接。
 - 假如某个连接产生数据交互，将其从 wheel 原格子中取出并放入最新时间对应的格子。
-
