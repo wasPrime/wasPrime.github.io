@@ -1,7 +1,12 @@
 ---
 title: Learn muduo - Part 10 C++ Compiler Link Model Essentials
 date: 2023-05-22 21:52:26
+categories:
+- [library, muduo]
 tags:
+- library
+- muduo
+- cpp
 ---
 
 {% note success %}
