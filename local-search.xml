@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Learn muduo - Part 12 C++ Experience Talk</title>
+    <link href="/Dev/Library/muduo/Learn-muduo-Part-12-C-Experience-Talk/"/>
+    <url>/Dev/Library/muduo/Learn-muduo-Part-12-C-Experience-Talk/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-success">            <p>muduo: <a href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>          </div><div class="note note-primary">            <p>本系列是 <a href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 12: C++ 经验谈</strong></p>          </div><h2 id="一种特别的-itoa-实现"><a href="#一种特别的-itoa-实现" class="headerlink" title="一种特别的 itoa 实现"></a>一种特别的 <code>itoa</code> 实现</h2><h3 id="一般实现"><a href="#一般实现" class="headerlink" title="一般实现"></a>一般实现</h3><p>一般我们想实现 <code>int</code> 转 <code>char*</code>，往往采用下面的形式。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">itoa</span><span class="hljs-params">(<span class="hljs-type">char</span> buf[], <span class="hljs-type">int</span> value)</span> </span>&#123;<br>    <span class="hljs-type">bool</span> negative = value &lt; <span class="hljs-number">0</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> abs_value = value &gt;= <span class="hljs-number">0</span> ? value : -value;<br><br>    <span class="hljs-type">char</span>* p = buf;<br>    <span class="hljs-keyword">do</span> &#123;<br>        <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> lsd = abs_value % <span class="hljs-number">10</span>;<br>        abs_value /= <span class="hljs-number">10</span>;<br>        *p++ = <span class="hljs-built_in">char</span>(<span class="hljs-string">&#x27;0&#x27;</span> + lsd);<br>    &#125; <span class="hljs-keyword">while</span> (abs_value &gt; <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (negative) &#123;<br>        *p++ = <span class="hljs-string">&#x27;-&#x27;</span>;<br>    &#125;<br>    *p = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    std::<span class="hljs-built_in">reverse</span>(buf, p);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> </span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">1024</span>];<br>    <span class="hljs-built_in">memset</span>(buf, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(buf));<br><br>    <span class="hljs-built_in">itoa</span>(buf, i);<br>    std::cout &lt;&lt; buf &lt;&lt; std::endl;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">f</span>(<span class="hljs-number">0</span>);        <span class="hljs-comment">// 0</span><br>    <span class="hljs-built_in">f</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 1</span><br>    <span class="hljs-built_in">f</span>(<span class="hljs-number">-1</span>);       <span class="hljs-comment">// -1</span><br>    <span class="hljs-built_in">f</span>(INT_MAX);  <span class="hljs-comment">// 2147483647</span><br>    <span class="hljs-built_in">f</span>(INT_MIN);  <span class="hljs-comment">// -2147483648</span><br>&#125;<br></code></pre></td></tr></table></figure><h3 id="特别实现"><a href="#特别实现" class="headerlink" title="特别实现"></a>特别实现</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">itoa</span><span class="hljs-params">(<span class="hljs-type">char</span> buf[], <span class="hljs-type">int</span> value)</span> </span>&#123;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span> digits[] = &#123;<span class="hljs-string">&#x27;9&#x27;</span>, <span class="hljs-string">&#x27;8&#x27;</span>, <span class="hljs-string">&#x27;7&#x27;</span>, <span class="hljs-string">&#x27;6&#x27;</span>, <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;2&#x27;</span>, <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;0&#x27;</span>,<br>                                  <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-string">&#x27;2&#x27;</span>, <span class="hljs-string">&#x27;3&#x27;</span>, <span class="hljs-string">&#x27;4&#x27;</span>, <span class="hljs-string">&#x27;5&#x27;</span>, <span class="hljs-string">&#x27;6&#x27;</span>, <span class="hljs-string">&#x27;7&#x27;</span>, <span class="hljs-string">&#x27;8&#x27;</span>, <span class="hljs-string">&#x27;9&#x27;</span>&#125;;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* zero = digits + <span class="hljs-number">9</span>;<br><br>    <span class="hljs-type">int</span> i = value;<br>    <span class="hljs-type">char</span>* p = buf;<br>    <span class="hljs-keyword">do</span> &#123;<br>        <span class="hljs-type">int</span> lsd = i % <span class="hljs-number">10</span>;<br>        i /= <span class="hljs-number">10</span>;<br>        *p++ = zero[lsd];<br>    &#125; <span class="hljs-keyword">while</span> (i != <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0</span>) &#123;<br>        *p++ = <span class="hljs-string">&#x27;-&#x27;</span>;<br>    &#125;<br>    *p = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    std::<span class="hljs-built_in">reverse</span>(buf, p);<br>&#125;<br></code></pre></td></tr></table></figure><p>此算法基于 <code>(-1) / 10 = 0</code> <code>(-1) % 10 = -1</code> 的规则。（C99 和 C++11 都规定商向 0 取整）</p><h2 id="再探-std-string"><a href="#再探-std-string" class="headerlink" title="再探 std::string"></a>再探 <code>std::string</code></h2><h3 id="直接拷贝（eager-copy）"><a href="#直接拷贝（eager-copy）" class="headerlink" title="直接拷贝（eager copy）"></a>直接拷贝（eager copy）</h3><h4 id="实现-1"><a href="#实现-1" class="headerlink" title="实现 1"></a>实现 1</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">string</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">const_pointer <span class="hljs-title">data</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>  </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">begin</span><span class="hljs-params">()</span>            </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">end</span><span class="hljs-params">()</span>              </span>&#123; <span class="hljs-keyword">return</span> finish; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>      </span>&#123; <span class="hljs-keyword">return</span> finish - start; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>  </span>&#123; <span class="hljs-keyword">return</span> end_of_storage - start; &#125;<br><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">char</span>* finish;<br>    <span class="hljs-type">char</span>* end_of_storage;<br>&#125;;<br></code></pre></td></tr></table></figure><h4 id="实现-2"><a href="#实现-2" class="headerlink" title="实现 2"></a>实现 2</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">string</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">const_pointer <span class="hljs-title">data</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>  </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">begin</span><span class="hljs-params">()</span>            </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">end</span><span class="hljs-params">()</span>              </span>&#123; <span class="hljs-keyword">return</span> start + size_; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>      </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span>  </span>&#123; <span class="hljs-keyword">return</span> capacity_; &#125;<br><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">size_t</span> size_;<br>    <span class="hljs-type">size_t</span> capacity_;<br>&#125;;<br></code></pre></td></tr></table></figure><p>由于 <code>sizeof(char*) == sizeof(size_t)</code>，所以在空间占用上，<code>std::string</code> 实现 2 与实现 1 没有多大的改变。但是单个字符串往往不到几百兆字节，在 64-bit 下可以将 <code>size_t</code> 改成 <code>uint32_t</code> 从而减小对象的大小，由 24 字节减小为 16 字节。</p><h3 id="写时复制（copy-on-write）"><a href="#写时复制（copy-on-write）" class="headerlink" title="写时复制（copy-on-write）"></a>写时复制（copy-on-write）</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">cow_string</span> &#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rep</span> &#123;<br>        <span class="hljs-type">size_t</span> size;<br>        <span class="hljs-type">size_t</span> capacity;<br>        <span class="hljs-type">size_t</span> refcount;<br>        <span class="hljs-type">char</span>*  data[<span class="hljs-number">1</span>];<br>    &#125;;<br>    <span class="hljs-type">char</span>* start;<br>&#125;;<br></code></pre></td></tr></table></figure><p><code>start = data[0]</code></p><p>COW 时间复杂度不一定符合直觉，它拷贝字符串是 <code>O(1)</code> 时间，但拷贝之后第一次 <code>operator[]</code> 有可能是 <code>O(N)</code> 时间。</p><h3 id="段字符串优化（SSO）"><a href="#段字符串优化（SSO）" class="headerlink" title="段字符串优化（SSO）"></a>段字符串优化（SSO）</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">sso_string</span> &#123;<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">size_t</span> size;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> kLocalSize = <span class="hljs-number">15</span>;<br>    <span class="hljs-keyword">union</span> &#123;<br>        <span class="hljs-type">char</span> buffer[kLocalSize + <span class="hljs-number">1</span>];<br>        <span class="hljs-type">size_t</span> capacity;<br>    &#125; data;<br>&#125;;<br></code></pre></td></tr></table></figure><p>短字符串（size &lt;&#x3D; 15）放在栈上，长字符串放在堆上。</p><p>SSO string 在 64-bits 中有个小小的优化空间：如果允许字符串 <code>max_size()</code> 不大于 4GiB 的话，可以用 <code>uint32_t</code> 来表示长度和容量，这样同样是 32 字节的 string 对象，local buffer 可以增大至 19 字节。</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">sso_string</span> &#123;<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">uint32_t</span> size;<br><br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> kLocalSize = <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">void</span>*) == <span class="hljs-number">8</span> ? <span class="hljs-number">19</span> : <span class="hljs-number">15</span>;<br><br>    <span class="hljs-keyword">union</span> &#123;<br>        <span class="hljs-type">char</span> buffer[kLocalSize + <span class="hljs-number">1</span>];<br>        <span class="hljs-type">uint32_t</span> capacity;<br>    &#125; data;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>建议针对不同的应用负载选用不同的 string：</p><ul><li>对于短字符串，用 SSO string；</li><li>对于中等长度的字符串，用 eager copy；</li><li>对于长字符串，用 COW。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>library</category>
+      
+      <category>muduo</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>cpp</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Learn muduo - Part 11 Rethinking C++ Object Orientation and Virtual Functions</title>
     <link href="/Dev/Library/muduo/Learn-muduo-Part-11-Rethinking-C-Object-Orientation-and-Virtual-Functions/"/>
     <url>/Dev/Library/muduo/Learn-muduo-Part-11-Rethinking-C-Object-Orientation-and-Virtual-Functions/</url>
@@ -695,9 +726,9 @@
       
       <tag>cpp17</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>string_view</tag>
       
@@ -736,9 +767,9 @@
       
       <tag>medium</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>string</tag>
+      
+      <tag>sliding_window</tag>
       
       <tag>kmp</tag>
       
@@ -773,11 +804,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
       <tag>cpp20</tag>
       
-      <tag>coroutine</tag>
+      <tag>stl</tag>
       
     </tags>
     
@@ -810,11 +841,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
       <tag>cpp20</tag>
       
-      <tag>coroutine</tag>
+      <tag>stl</tag>
       
     </tags>
     
@@ -845,11 +876,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -880,9 +911,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -983,11 +1014,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
       <tag>cpp20</tag>
       
-      <tag>coroutine</tag>
+      <tag>stl</tag>
       
     </tags>
     
@@ -1020,11 +1051,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
       <tag>cpp20</tag>
       
-      <tag>coroutine</tag>
+      <tag>stl</tag>
       
     </tags>
     
@@ -1191,9 +1222,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -1298,9 +1329,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -1549,11 +1580,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
       <tag>cpp20</tag>
       
-      <tag>coroutine</tag>
+      <tag>stl</tag>
       
     </tags>
     
@@ -1726,9 +1757,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -1907,9 +1938,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
@@ -1953,7 +1984,7 @@
     <link href="/TODO/"/>
     <url>/TODO/</url>
     
-    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::string_view, std::span</del></li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input checked="" disabled="" type="checkbox"> <del>C++ Rule of Five</del></li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input checked="" disabled="" type="checkbox"> <del>C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</del></li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> <code>std::format</code></li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input checked="" disabled="" type="checkbox"> <del>KMP</del></li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3><h2 id="Library"><a href="#Library" class="headerlink" title="Library"></a>Library</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>The implementation of coroutine by 云风</del></li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bRPC<ul><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li></ul></li><li><input disabled="" type="checkbox"> gflags</li><li><input disabled="" type="checkbox"> googletest (gtest)</li></ul>]]></content>
+    <content type="html"><![CDATA[<div class="note note-primary">            <p>List what category of articles would be written.</p>          </div><h2 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>Deleter in <code>std::shared_ptr</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>What is <code>enable_shared_from_this</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>Concepts</del></li><li><input checked="" disabled="" type="checkbox"> <del>jthread</del></li><li><input checked="" disabled="" type="checkbox"> <del>RTTI</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::allocator</del></li><li><input checked="" disabled="" type="checkbox"> <del>std::string_view, std::span</del></li><li><input checked="" disabled="" type="checkbox"> <del>promise, future, packaged_task, shared_future</del></li><li><input disabled="" type="checkbox"> std::bind</li><li><input checked="" disabled="" type="checkbox"> <del>C++ Rule of Five</del></li><li><input disabled="" type="checkbox"> std::atomic<ul><li>std::memory_order_release</li><li>std::memory_order_acquire</li></ul></li><li><input checked="" disabled="" type="checkbox"> <del>C++17 CTAD (Ref: <a href="https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/">https://andreasfertig.blog/2022/11/cpp17s-ctad-a-sometimes-underrated-feature/</a>)</del></li><li><input checked="" disabled="" type="checkbox"> <del>Coroutines</del><ul><li><input checked="" disabled="" type="checkbox"> <del><code>co_await</code></del></li><li><input checked="" disabled="" type="checkbox"> <del>life cycle</del></li><li><input checked="" disabled="" type="checkbox"> <del>stackful &amp; stackless</del></li><li><input checked="" disabled="" type="checkbox"> <del>symmetric transfer</del></li></ul></li><li><input disabled="" type="checkbox"> Ranges</li><li><input disabled="" type="checkbox"> Modules</li><li><input disabled="" type="checkbox"> <code>std::format</code></li></ul><h2 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h2><ul><li><input disabled="" type="checkbox"> goroutines</li><li><input disabled="" type="checkbox"> M:N scheduling models</li></ul><h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>pre-order&#x2F;mid-order&#x2F;post-order traversal binary trees</del></li><li><input checked="" disabled="" type="checkbox"> <del>four arithmetic calculator</del></li><li><input checked="" disabled="" type="checkbox"> <del>KMP</del></li></ul><h3 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a>LeetCode</h3><h2 id="Library"><a href="#Library" class="headerlink" title="Library"></a>Library</h2><ul><li><input checked="" disabled="" type="checkbox"> <del>The implementation of coroutine by 云风</del></li><li><input disabled="" type="checkbox"> muduo</li><li><input disabled="" type="checkbox"> bRPC<ul><li><input disabled="" type="checkbox"> bthread</li><li><input disabled="" type="checkbox"> bvar</li></ul></li><li><input disabled="" type="checkbox"> gflags</li><li><input disabled="" type="checkbox"> googletest (gtest)</li><li><input disabled="" type="checkbox"> tcmalloc&#x2F;jemalloc</li></ul>]]></content>
     
     
     
