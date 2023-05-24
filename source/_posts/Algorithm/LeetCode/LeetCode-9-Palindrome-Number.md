@@ -46,7 +46,7 @@ Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
 
 **Constraints:**
 
-- `-2^31 <= x <= 2^31 - 1`
+- `-2^31 <= x <= 2^31 - 1`
 
 **Follow up:** Could you solve it without converting the integer to a string?
 
@@ -65,7 +65,7 @@ Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
 输出：true
 ```
 
-**示例 2：**
+**示例 2：**
 
 ```log
 输入：x = -121
@@ -83,7 +83,7 @@ Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
 
 **提示：**
 
-- `-2^31 <= x <= 2^31 - 1`
+- `-2^31 <= x <= 2^31 - 1`
 
 ## Solution
 

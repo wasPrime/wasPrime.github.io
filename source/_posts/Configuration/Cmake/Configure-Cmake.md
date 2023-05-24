@@ -22,10 +22,10 @@ Help to quickly start a project.
 ├── CMakeLists.txt
 ├── src
 │   ├── CMakeLists.txt
-│   ├── Implementation.cc
-│   └── include
-│       ├── Header1.h
-│       └── Header2.h
+│   ├── Implementation.cc
+│   └── include
+│       ├── Header1.h
+│       └── Header2.h
 └── test
     ├── CMakeLists.txt
     └── Test.cc
