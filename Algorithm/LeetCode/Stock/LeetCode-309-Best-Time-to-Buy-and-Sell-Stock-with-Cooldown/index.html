@@ -16,24 +16,27 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 8: muduo 网络库设计与实现">
+    <meta name="description" content="Difficulty: medium                          Stock Series:part 1: LeetCode 121 - Best Time to Buy and Sell Stockpart 2: LeetCode 122 - Best Time to Buy and Sell Stock IIpart 3: LeetCode 12">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learn muduo - Part 8 The Implementation and Design of the muduo Network Library">
-<meta property="og:url" content="http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-8-The-Implementation-and-Design-of-the-muduo-Network-Library/index.html">
+<meta property="og:title" content="LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/Stock/LeetCode-309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 8: muduo 网络库设计与实现">
+<meta property="og:description" content="Difficulty: medium                          Stock Series:part 1: LeetCode 121 - Best Time to Buy and Sell Stockpart 2: LeetCode 122 - Best Time to Buy and Sell Stock IIpart 3: LeetCode 12">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-05-20T10:11:55.000Z">
-<meta property="article:modified_time" content="2023-05-21T10:13:02.734Z">
+<meta property="article:published_time" content="2023-05-28T16:14:48.000Z">
+<meta property="article:modified_time" content="2023-05-25T16:39:23.972Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="library">
-<meta property="article:tag" content="muduo">
-<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="dynamic_programming">
+<meta property="article:tag" content="dp">
+<meta property="article:tag" content="medium">
+<meta property="article:tag" content="greedy_algorithm">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Learn muduo - Part 8 The Implementation and Design of the muduo Network Library - wasPrime&#39;s Blog</title>
+  <title>LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -199,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Learn muduo - Part 8 The Implementation and Design of the muduo Network Library"></span>
+            <span id="subtitle" data-typed-text="LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown"></span>
           
         </div>
 
@@ -210,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-05-20 18:11" pubdate>
-          May 20, 2023 pm
+        <time datetime="2023-05-29 00:14" pubdate>
+          May 29, 2023 am
         </time>
       </span>
     
@@ -222,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          96 words
+          1.7k words
         
       </span>
     
@@ -233,7 +236,7 @@
         
         
         
-          1 mins
+          4 mins
         
       </span>
     
@@ -284,18 +287,54 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Learn muduo - Part 8 The Implementation and Design of the muduo Network Library</h1>
+            <h1 style="display: none">LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown</h1>
             
             
               <div class="markdown-body">
                 
-                <div class="note note-success">
-            <p>muduo: <a target="_blank" rel="noopener" href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>
+                <div class="note note-info">
+            <p>Difficulty: <span class="label label-warning">medium</span></p>
           </div>
 
 <div class="note note-primary">
-            <p>本系列是 <a target="_blank" rel="noopener" href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 8: muduo 网络库设计与实现</strong></p>
+            <p><strong>Stock Series:</strong></p><p><a href="/Algorithm/LeetCode/Stock/LeetCode-121-Best-Time-to-Buy-and-Sell-Stock">part 1: LeetCode 121 - Best Time to Buy and Sell Stock</a><br><a href="/Algorithm/LeetCode/Stock/LeetCode-122-Best-Time-to-Buy-and-Sell-Stock-II">part 2: LeetCode 122 - Best Time to Buy and Sell Stock II</a><br><a href="/Algorithm/LeetCode/Stock/LeetCode-123-Best-Time-to-Buy-and-Sell-Stock-III">part 3: LeetCode 123 - Best Time to Buy and Sell Stock III</a><br><a href="/Algorithm/LeetCode/Stock/LeetCode-188-Best-Time-to-Buy-and-Sell-Stock-IV">part 4: LeetCode 188 - Best Time to Buy and Sell Stock IV</a><br><strong>part 5: LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown</strong></p>
           </div>
+
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown"><a href="#English-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown" class="headerlink" title="English (Best Time to Buy and Sell Stock with Cooldown)"></a>English (Best Time to Buy and Sell Stock with Cooldown)</h3><p>You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the $i^{th}$ day.</p>
+<p>Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times) with the following restrictions:</p>
+<ul>
+<li>After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).</li>
+</ul>
+<p><strong>Note:</strong> You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: prices = [1,2,3,0,2]<br>Output: 3<br>Explanation: transactions = [buy, sell, cooldown, buy, sell]<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: prices = [1]<br>Output: 0<br></code></pre></td></tr></table></figure>
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= prices.length &lt;= 5000</code></li>
+<li><code>0 &lt;= prices[i] &lt;= 1000</code></li>
+</ul>
+<h3 id="Chinese-最佳买卖股票时机含冷冻期"><a href="#Chinese-最佳买卖股票时机含冷冻期" class="headerlink" title="Chinese (最佳买卖股票时机含冷冻期)"></a>Chinese (最佳买卖股票时机含冷冻期)</h3><p>给定一个整数数组 <code>prices</code>，其中第 <code>prices[i]</code> 表示第 <code>i</code> 天的股票价格 。​</p>
+<p>设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:</p>
+<ul>
+<li>卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。</li>
+</ul>
+<p><strong>注意：</strong> 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入: prices = [1,2,3,0,2]<br>输出: 3<br>解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入: prices = [1]<br>输出: 0<br></code></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= prices.length &lt;= 5000</code></li>
+<li><code>0 &lt;= prices[i] &lt;= 1000</code></li>
+</ul>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxProfit</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; prices)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = prices.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br><br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">has</span><span class="hljs-params">(n)</span>, <span class="hljs-title">not_has</span><span class="hljs-params">(n)</span></span>;<br>        has[<span class="hljs-number">0</span>] = -prices[<span class="hljs-number">0</span>];<br><br>        <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> COLD_DAYS = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; ++i) &#123;<br>            <span class="hljs-type">int</span> price = prices[i];<br><br>            has[i] = (i &gt; COLD_DAYS) ? <span class="hljs-built_in">max</span>(has[i - <span class="hljs-number">1</span>], not_has[i - COLD_DAYS - <span class="hljs-number">1</span>] - price) : <span class="hljs-built_in">max</span>(has[i - <span class="hljs-number">1</span>], -price);<br>            not_has[i] = <span class="hljs-built_in">max</span>(not_has[i - <span class="hljs-number">1</span>], has[i - <span class="hljs-number">1</span>] + price);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> not_has[n - <span class="hljs-number">1</span>];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -314,13 +353,27 @@
     
       <span class="category-chain">
         
-  <a href="/categories/library/" class="category-chain-item">library</a>
+  <a href="/categories/algorithm/" class="category-chain-item">algorithm</a>
   
   
     <span>></span>
     
-  <a href="/categories/library/muduo/" class="category-chain-item">muduo</a>
+  <a href="/categories/algorithm/leetcode/" class="category-chain-item">leetcode</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/algorithm/leetcode/dynamic-programming/" class="category-chain-item">dynamic_programming</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/algorithm/leetcode/dynamic-programming/stock/" class="category-chain-item">stock</a>
+  
+  
+
+  
+
   
 
   
@@ -336,11 +389,17 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/library/">#library</a>
+        <a href="/tags/algorithm/">#algorithm</a>
       
-        <a href="/tags/muduo/">#muduo</a>
+        <a href="/tags/leetcode/">#leetcode</a>
       
-        <a href="/tags/cpp/">#cpp</a>
+        <a href="/tags/dynamic-programming/">#dynamic_programming</a>
+      
+        <a href="/tags/dp/">#dp</a>
+      
+        <a href="/tags/medium/">#medium</a>
+      
+        <a href="/tags/greedy-algorithm/">#greedy_algorithm</a>
       
     </div>
   
@@ -352,8 +411,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Learn muduo - Part 8 The Implementation and Design of the muduo Network Library</div>
-      <div>http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-8-The-Implementation-and-Design-of-the-muduo-Network-Library/</div>
+      <div>LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/Stock/LeetCode-309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown/</div>
     </div>
     <div class="license-meta">
       
@@ -365,13 +424,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>May 20, 2023</div>
+          <div>May 29, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>May 21, 2023</div>
+          <div>May 26, 2023</div>
         </div>
       
       
@@ -402,18 +461,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Dev/Library/muduo/Learn-muduo-Part-9-Distributed-Systems-Engineering-Practice/" title="Learn muduo - Part 9 Distributed Systems Engineering Practice">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Learn muduo - Part 9 Distributed Systems Engineering Practice</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Dev/Library/muduo/Learn-muduo-Part-7-Programming-Demo-with-muduo/" title="Learn muduo - Part 7 Programming Demo with muduo">
-                        <span class="hidden-mobile">Learn muduo - Part 7 Programming Demo with muduo</span>
+                      <a href="/Algorithm/LeetCode/Stock/LeetCode-188-Best-Time-to-Buy-and-Sell-Stock-IV/" title="LeetCode 188 - Best Time to Buy and Sell Stock IV">
+                        <span class="hidden-mobile">LeetCode 188 - Best Time to Buy and Sell Stock IV</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -457,6 +510,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -650,6 +709,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
