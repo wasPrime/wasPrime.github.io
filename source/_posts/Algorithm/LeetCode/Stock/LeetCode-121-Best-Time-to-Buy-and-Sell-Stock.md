@@ -9,6 +9,7 @@ tags:
 - leetcode
 - dynamic_programming
 - dp
+- greedy_algorithm
 - easy
 ---
 
@@ -21,6 +22,7 @@ Difficulty: {% label success @easy %}
 
 **part 1: LeetCode 121 - Best Time to Buy and Sell Stock**
 [part 2: LeetCode 122 - Best Time to Buy and Sell Stock II](/Algorithm/LeetCode/Stock/LeetCode-122-Best-Time-to-Buy-and-Sell-Stock-II)
+[part 3: LeetCode 123 - Best Time to Buy and Sell Stock III](/Algorithm/LeetCode/Stock/LeetCode-122-Best-Time-to-Buy-and-Sell-Stock-III)
 {% endnote %}
 
 ## Problem Description
@@ -97,7 +99,7 @@ public:
 
         int min_price = INT_MAX;
         for (int price : prices) {
-            max_profit = max(max_profit, price -  min_price);
+            max_profit = max(max_profit, price - min_price);
             min_price = min(min_price, price);
         }
 
