@@ -20,10 +20,11 @@ Difficulty: {% label warning @medium %}
 {% note primary %}
 **Stock Series:**
 
-[part 1: LeetCode 121 - Best Time to Buy and Sell Stock](/Algorithm/LeetCode/Stock/LeetCode-122-Best-Time-to-Buy-and-Sell-Stock)
+[part 1: LeetCode 121 - Best Time to Buy and Sell Stock](/Algorithm/LeetCode/Stock/LeetCode-121-Best-Time-to-Buy-and-Sell-Stock)
 **part 2: LeetCode 122 - Best Time to Buy and Sell Stock II**
+[part 3: LeetCode 123 - Best Time to Buy and Sell Stock III](/Algorithm/LeetCode/Stock/LeetCode-123-Best-Time-to-Buy-and-Sell-Stock-III)
+[part 4: LeetCode 188 - Best Time to Buy and Sell Stock IV](/Algorithm/LeetCode/Stock/LeetCode-188-Best-Time-to-Buy-and-Sell-Stock-IV)
 {% endnote %}
-[part 3: LeetCode 123 - Best Time to Buy and Sell Stock III](/Algorithm/LeetCode/Stock/LeetCode-122-Best-Time-to-Buy-and-Sell-Stock-III)
 
 ## Problem Description
 
@@ -67,7 +68,7 @@ Explanation: There is no way to make a positive profit, so we never buy the stoc
 - `1 <= prices.length <= 3 * 10^4`
 - `0 <= prices[i] <= 10^4`
 
-### Chinese (买卖股票的最佳时机)
+### Chinese (买卖股票的最佳时机 II)
 
 给你一个整数数组 `prices` ，其中 `prices[i]` 表示某支股票第 `i` 天的价格。
 
