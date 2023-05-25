@@ -25,6 +25,7 @@ Difficulty: {% label warning @medium %}
 [part 3: LeetCode 123 - Best Time to Buy and Sell Stock III](/Algorithm/LeetCode/Stock/LeetCode-123-Best-Time-to-Buy-and-Sell-Stock-III)
 [part 4: LeetCode 188 - Best Time to Buy and Sell Stock IV](/Algorithm/LeetCode/Stock/LeetCode-188-Best-Time-to-Buy-and-Sell-Stock-IV)
 [part 5: LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown](/Algorithm/LeetCode/Stock/LeetCode-309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown)
+[part 6: LeetCode 714 - Best Time to Buy and Sell Stock with Transaction Fee](/Algorithm/LeetCode/Stock/LeetCode-714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee)
 {% endnote %}
 
 ## Problem Description
