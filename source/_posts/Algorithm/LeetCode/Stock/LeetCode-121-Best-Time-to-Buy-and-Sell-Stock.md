@@ -16,6 +16,13 @@ tags:
 Difficulty: {% label success @easy %}
 {% endnote %}
 
+{% note primary %}
+**Stock Series:**
+
+**part 1: LeetCode 121 - Best Time to Buy and Sell Stock**
+[part 2: LeetCode 122 - Best Time to Buy and Sell Stock II](/Algorithm/LeetCode/Stock/LeetCode-122-Best-Time-to-Buy-and-Sell-Stock-II)
+{% endnote %}
+
 ## Problem Description
 
 ### English (Best Time to Buy and Sell Stock)
