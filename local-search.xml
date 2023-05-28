@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>LeetCode 901 - Online Stock Span</title>
+    <link href="/Algorithm/LeetCode/LeetCode-901-Online-Stock-Span/"/>
+    <url>/Algorithm/LeetCode/LeetCode-901-Online-Stock-Span/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Online-Stock-Span"><a href="#English-Online-Stock-Span" class="headerlink" title="English (Online Stock Span)"></a>English (Online Stock Span)</h3><p>Design an algorithm that collects daily price quotes for some stock and returns <strong>the span</strong> of that stock’s price for the current day.</p><p>The <strong>span</strong> of the stock’s price in one day is the maximum number of consecutive days (starting from that day and going backward) for which the stock price was less than or equal to the price of that day.</p><ul><li>For example, if the prices of the stock in the last four days is <code>[7,2,1,2]</code> and the price of the stock today is <code>2</code>, then the span of today is 4 because starting from today, the price of the stock was less than or equal <code>2</code> for <code>4</code> consecutive days.</li><li>Also, if the prices of the stock in the last four days is <code>[7,34,1,2]</code> and the price of the stock today is <code>8</code>, then the span of today is <code>3</code> because starting from today, the price of the stock was less than or equal <code>8</code> for <code>3</code> consecutive days.</li></ul><p>Implement the <code>StockSpanner</code> class:</p><ul><li><code>StockSpanner()</code> Initializes the object of the class.</li><li><code>int next(int price)</code> Returns the <strong>span</strong> of the stock’s price given that today’s price is <code>price</code>.</li></ul><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs log">Input<br>[&quot;StockSpanner&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;]<br>[[], [100], [80], [60], [70], [60], [75], [85]]<br>Output<br>[null, 1, 1, 1, 2, 1, 4, 6]<br><br>Explanation<br>StockSpanner stockSpanner = new StockSpanner();<br>stockSpanner.next(100); // return 1<br>stockSpanner.next(80);  // return 1<br>stockSpanner.next(60);  // return 1<br>stockSpanner.next(70);  // return 2<br>stockSpanner.next(60);  // return 1<br>stockSpanner.next(75);  // return 4, because the last 4 prices (including today&#x27;s price of 75) were less than or equal to today&#x27;s price.<br>stockSpanner.next(85);  // return 6<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= price &lt;= 10^5</code></li><li>At most <code>10^4</code> calls will be made to <code>next</code>.</li></ul><h3 id="Chinese-股票价格跨度"><a href="#Chinese-股票价格跨度" class="headerlink" title="Chinese (股票价格跨度)"></a>Chinese (股票价格跨度)</h3><p>设计一个算法收集某些股票的每日报价，并返回该股票当日价格的 <strong>跨度</strong> 。</p><p>当日股票价格的 <strong>跨度</strong> 被定义为股票价格小于或等于今天价格的最大连续日数（从今天开始往回数，包括今天）。</p><p>例如，如果未来 7 天股票的价格是 <code>[100,80,60,70,60,75,85]</code>，那么股票跨度将是 <code>[1,1,1,2,1,4,6]</code> 。</p><p>实现 <code>StockSpanner</code> 类：</p><p><code>StockSpanner()</code> 初始化类对象。<br><code>int next(int price)</code> 给出今天的股价 <code>price</code> ，返回该股票当日价格的 <strong>跨度</strong> 。</p><p><strong>示例：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：<br>[&quot;StockSpanner&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;]<br>[[], [100], [80], [60], [70], [60], [75], [85]]<br>输出：<br>[null, 1, 1, 1, 2, 1, 4, 6]<br><br>解释：<br>StockSpanner stockSpanner = new StockSpanner();<br>stockSpanner.next(100); // 返回 1<br>stockSpanner.next(80);  // 返回 1<br>stockSpanner.next(60);  // 返回 1<br>stockSpanner.next(70);  // 返回 2<br>stockSpanner.next(60);  // 返回 1<br>stockSpanner.next(75);  // 返回 4 ，因为截至今天的最后 4 个股价 (包括今天的股价 75) 都小于或等于今天的股价。<br>stockSpanner.next(85);  // 返回 6<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= price &lt;= 10^5</code></li><li>最多调用 <code>next</code> 方法 <code>10^4</code> 次</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockSpanner</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">StockSpanner</span>() &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-type">int</span> price)</span> </span>&#123;<br>        <span class="hljs-type">int</span> res = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">while</span> (!s.<span class="hljs-built_in">empty</span>() &amp;&amp; price &gt;= s.<span class="hljs-built_in">top</span>().price) &#123;<br>            res += s.<span class="hljs-built_in">top</span>().window_sum;<br>            s.<span class="hljs-built_in">pop</span>();<br>        &#125;<br><br>        s.<span class="hljs-built_in">push</span>(&#123;price, res&#125;);<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">PriceInfo</span> &#123;<br>        <span class="hljs-type">int</span> price;<br>        <span class="hljs-type">int</span> window_sum;<br>    &#125;;<br><br>    stack&lt;PriceInfo&gt; s;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>monotonic_stack</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>stack</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>medium</tag>
+      
+      <tag>monotonic_stack</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 502 - IPO</title>
     <link href="/Algorithm/LeetCode/LeetCode-502-IPO/"/>
     <url>/Algorithm/LeetCode/LeetCode-502-IPO/</url>
@@ -30,11 +67,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -153,11 +190,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -194,11 +231,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -309,11 +346,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
     </tags>
     
@@ -340,15 +377,15 @@
     
     <tags>
       
-      <tag>library</tag>
-      
-      <tag>muduo</tag>
-      
       <tag>cpp</tag>
       
       <tag>vtable</tag>
       
       <tag>vfunction</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
       
     </tags>
     
@@ -375,11 +412,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
     </tags>
     
@@ -406,11 +443,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
     </tags>
     
@@ -437,11 +474,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
     </tags>
     
@@ -468,11 +505,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
     </tags>
     
@@ -499,11 +536,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
     </tags>
     
@@ -530,11 +567,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -563,11 +600,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -596,11 +633,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -629,11 +666,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -695,9 +732,9 @@
       
       <tag>cpp</tag>
       
-      <tag>template</tag>
-      
       <tag>cpp17</tag>
+      
+      <tag>template</tag>
       
       <tag>ctad</tag>
       
@@ -794,11 +831,11 @@
     
     <tags>
       
+      <tag>cpp</tag>
+      
       <tag>library</tag>
       
       <tag>muduo</tag>
-      
-      <tag>cpp</tag>
       
       <tag>thread_safe</tag>
       
@@ -1015,11 +1052,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
+      <tag>cpp17</tag>
       
       <tag>cpp20</tag>
       
-      <tag>cpp17</tag>
+      <tag>stl</tag>
       
       <tag>string_view</tag>
       
@@ -1093,13 +1130,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1130,13 +1167,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1303,13 +1340,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1340,13 +1377,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1513,9 +1550,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -1550,9 +1587,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
       <tag>hashmap</tag>
       
@@ -1620,9 +1657,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -1648,9 +1685,9 @@
       
       <category>leetcode</category>
       
-      <category>linked_list</category>
-      
       <category>priority_queue</category>
+      
+      <category>linked_list</category>
       
       <category>heap</category>
       
@@ -1665,11 +1702,11 @@
       
       <tag>linked_list</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -1702,11 +1739,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -1869,13 +1906,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -2011,11 +2048,11 @@
       
       <tag>cpp</tag>
       
+      <tag>rtti</tag>
+      
       <tag>vtable</tag>
       
       <tag>vfunction</tag>
-      
-      <tag>rtti</tag>
       
       <tag>type_info</tag>
       
@@ -2048,9 +2085,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -2229,9 +2266,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
