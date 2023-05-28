@@ -7,6 +7,8 @@ tags:
 - library
 - muduo
 - cpp
+- vtable
+- vfunction
 ---
 
 {% note success %}

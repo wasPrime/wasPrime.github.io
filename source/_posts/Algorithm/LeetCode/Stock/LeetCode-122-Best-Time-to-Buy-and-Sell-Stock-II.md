@@ -20,12 +20,12 @@ Difficulty: {% label warning @medium %}
 {% note primary %}
 **Stock Series:**
 
-[part 1: LeetCode 121 - Best Time to Buy and Sell Stock](/Algorithm/LeetCode/Stock/LeetCode-121-Best-Time-to-Buy-and-Sell-Stock)
-**part 2: LeetCode 122 - Best Time to Buy and Sell Stock II**
-[part 3: LeetCode 123 - Best Time to Buy and Sell Stock III](/Algorithm/LeetCode/Stock/LeetCode-123-Best-Time-to-Buy-and-Sell-Stock-III)
-[part 4: LeetCode 188 - Best Time to Buy and Sell Stock IV](/Algorithm/LeetCode/Stock/LeetCode-188-Best-Time-to-Buy-and-Sell-Stock-IV)
-[part 5: LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown](/Algorithm/LeetCode/Stock/LeetCode-309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown)
-[part 6: LeetCode 714 - Best Time to Buy and Sell Stock with Transaction Fee](/Algorithm/LeetCode/Stock/LeetCode-714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee)
+[Part 1: LeetCode 121 - Best Time to Buy and Sell Stock](/Algorithm/LeetCode/Stock/LeetCode-121-Best-Time-to-Buy-and-Sell-Stock)
+**Part 2: LeetCode 122 - Best Time to Buy and Sell Stock II**
+[Part 3: LeetCode 123 - Best Time to Buy and Sell Stock III](/Algorithm/LeetCode/Stock/LeetCode-123-Best-Time-to-Buy-and-Sell-Stock-III)
+[Part 4: LeetCode 188 - Best Time to Buy and Sell Stock IV](/Algorithm/LeetCode/Stock/LeetCode-188-Best-Time-to-Buy-and-Sell-Stock-IV)
+[Part 5: LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown](/Algorithm/LeetCode/Stock/LeetCode-309-Best-Time-to-Buy-and-Sell-Stock-with-Cooldown)
+[Part 6: LeetCode 714 - Best Time to Buy and Sell Stock with Transaction Fee](/Algorithm/LeetCode/Stock/LeetCode-714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee)
 {% endnote %}
 
 ## Problem Description
