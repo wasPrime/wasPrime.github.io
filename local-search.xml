@@ -1120,9 +1120,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp17</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp20</tag>
       
@@ -1163,9 +1163,9 @@
       
       <tag>medium</tag>
       
-      <tag>string</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>string</tag>
       
       <tag>kmp</tag>
       
@@ -1200,11 +1200,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1237,11 +1237,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1410,11 +1410,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1447,11 +1447,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1976,11 +1976,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -2192,9 +2192,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2233,9 +2233,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       

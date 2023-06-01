@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://wasprime.github.io/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/example_1.png">
 <meta property="og:image" content="http://wasprime.github.io/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/example_2.png">
 <meta property="article:published_time" content="2023-06-03T13:42:19.000Z">
-<meta property="article:modified_time" content="2023-06-01T14:00:38.427Z">
+<meta property="article:modified_time" content="2023-06-01T14:09:09.231Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="leetcode">
@@ -494,6 +494,12 @@
   
 
 
+  
+  
+
+
+
+
 
 
 
@@ -685,6 +691,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
