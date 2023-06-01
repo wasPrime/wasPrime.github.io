@@ -4,9 +4,40 @@
   
   
   <entry>
+    <title>LeetCode 2280 - Minimum Lines to Represent a Line Chart</title>
+    <link href="/Algorithm/LeetCode/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/"/>
+    <url>/Algorithm/LeetCode/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Minimum-Lines-to-Represent-a-Line-Chart"><a href="#English-Minimum-Lines-to-Represent-a-Line-Chart" class="headerlink" title="English (Minimum Lines to Represent a Line Chart)"></a>English (Minimum Lines to Represent a Line Chart)</h3><p>You are given a 2D integer array <code>stockPrices</code> where <code>stockPrices[i] = [dayi, pricei]</code> indicates the price of the stock on day $day_i$ is $price_i$. A <strong>line chart</strong> is created from the array by plotting the points on an XY plane with the X-axis representing the day and the Y-axis representing the price and connecting adjacent points. One such example is shown below:</p><p><img src="/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/overall.png" alt="overall"></p><p>Return <em>the <strong>minimum number of lines</strong> needed to represent the line chart</em>.</p><p><strong>Example 1:</strong></p><p><img src="/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/example_1.png" alt="example_1"></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: stockPrices = [[1,7],[2,6],[3,5],[4,4],[5,4],[6,3],[7,2],[8,1]]<br>Output: 3<br>Explanation:<br>The diagram above represents the input, with the X-axis representing the day and Y-axis representing the price.<br>The following 3 lines can be drawn to represent the line chart:<br>- Line 1 (in red) from (1,7) to (4,4) passing through (1,7), (2,6), (3,5), and (4,4).<br>- Line 2 (in blue) from (4,4) to (5,4).<br>- Line 3 (in green) from (5,4) to (8,1) passing through (5,4), (6,3), (7,2), and (8,1).<br>It can be shown that it is not possible to represent the line chart using less than 3 lines.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><p><img src="/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/example_2.png" alt="example_2"></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: stockPrices = [[3,4],[1,2],[7,8],[2,3]]<br>Output: 1<br>Explanation:<br>As shown in the diagram above, the line chart can be represented with a single line.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= stockPrices.length &lt;= 10^5</code></li><li><code>stockPrices[i].length == 2</code></li><li><code>1 &lt;= dayi, pricei &lt;= 10^9</code></li><li>All $day_i$ are <strong>distinct</strong>.</li></ul><h3 id="Chinese-表示一个折线图的最少线段数"><a href="#Chinese-表示一个折线图的最少线段数" class="headerlink" title="Chinese (表示一个折线图的最少线段数)"></a>Chinese (表示一个折线图的最少线段数)</h3><p>给你一个二维整数数组 <code>stockPrices</code> ，其中 <code>stockPrices[i] = [dayi, pricei]</code> 表示股票在 $day_i$ 的价格为 $price_i$ 。<strong>折线图</strong> 是一个二维平面上的若干个点组成的图，横坐标表示日期，纵坐标表示价格，折线图由相邻的点连接而成。比方说下图是一个例子：</p><p><img src="/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/overall.png" alt="overall"></p><p>请你返回要表示一个折线图所需要的 <strong>最少线段数</strong> 。</p><p><strong>示例 1：</strong></p><p><img src="/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/example_1.png" alt="example_1"></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：stockPrices = [[1,7],[2,6],[3,5],[4,4],[5,4],[6,3],[7,2],[8,1]]<br>输出：3<br>解释：<br>上图为输入对应的图，横坐标表示日期，纵坐标表示价格。<br>以下 3 个线段可以表示折线图：<br>- 线段 1 （红色）从 (1,7) 到 (4,4) ，经过 (1,7) ，(2,6) ，(3,5) 和 (4,4) 。<br>- 线段 2 （蓝色）从 (4,4) 到 (5,4) 。<br>- 线段 3 （绿色）从 (5,4) 到 (8,1) ，经过 (5,4) ，(6,3) ，(7,2) 和 (8,1) 。<br>可以证明，无法用少于 3 条线段表示这个折线图。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><p><img src="/resources/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/img/example_2.png" alt="example_2"></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：stockPrices = [[3,4],[1,2],[7,8],[2,3]]<br>输出：1<br>解释：<br>如上图所示，折线图可以用一条线段表示。<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= stockPrices.length &lt;= 10^5</code></li><li><code>stockPrices[i].length == 2</code></li><li><code>1 &lt;= dayi, pricei &lt;= 10^9</code></li><li>所有 $day_i$ <strong>互不相同</strong> 。</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minimumLines</span><span class="hljs-params">(vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; stockPrices)</span> </span>&#123;<br>        <span class="hljs-built_in">sort</span>(stockPrices.<span class="hljs-built_in">begin</span>(), stockPrices.<span class="hljs-built_in">end</span>(), [](<span class="hljs-type">const</span> vector&lt;<span class="hljs-type">int</span>&gt;&amp; lhs, <span class="hljs-type">const</span> vector&lt;<span class="hljs-type">int</span>&gt;&amp; rhs)&#123;<br>            <span class="hljs-keyword">return</span> lhs[<span class="hljs-number">0</span>] &lt; rhs[<span class="hljs-number">0</span>];<br>        &#125;);<br><br>        <span class="hljs-type">int</span> n = stockPrices.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-keyword">return</span> n - <span class="hljs-number">1</span>;<br>        &#125;<br><br>        <span class="hljs-type">int</span> res = <span class="hljs-number">1</span>;<br>        <span class="hljs-type">long</span> <span class="hljs-type">double</span> pre_k = (stockPrices[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] - stockPrices[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>]) / (stockPrices[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] - stockPrices[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt; n; ++i) &#123;<br>            <span class="hljs-type">long</span> <span class="hljs-type">long</span> x0 = stockPrices[i - <span class="hljs-number">2</span>][<span class="hljs-number">0</span>], y0 = stockPrices[i - <span class="hljs-number">2</span>][<span class="hljs-number">1</span>];<br>            <span class="hljs-type">long</span> <span class="hljs-type">long</span> x1 = stockPrices[i - <span class="hljs-number">1</span>][<span class="hljs-number">0</span>], y1 = stockPrices[i - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];<br>            <span class="hljs-type">long</span> <span class="hljs-type">long</span> x2 = stockPrices[i][<span class="hljs-number">0</span>], y2 = stockPrices[i][<span class="hljs-number">1</span>];<br>            <span class="hljs-comment">// (y2-y1)/(x2-x1) == (y1-y0)/(x1-x0)</span><br>            <span class="hljs-keyword">if</span> ((y2 - y1) * (x1 - x0) != (y1 - y0) * (x2 - x1)) &#123;<br>                ++res;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>medium</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 2110 - Number of Smooth Descent Periods of a Stock</title>
-    <link href="/Algorithm/LeetCode/LeetCode-2110-Number-of-Smooth-Descent-Periods-of-a-Stock/"/>
-    <url>/Algorithm/LeetCode/LeetCode-2110-Number-of-Smooth-Descent-Periods-of-a-Stock/</url>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-2110-Number-of-Smooth-Descent-Periods-of-a-Stock/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-2110-Number-of-Smooth-Descent-Periods-of-a-Stock/</url>
     
     <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Number-of-Smooth-Descent-Periods-of-a-Stock"><a href="#English-Number-of-Smooth-Descent-Periods-of-a-Stock" class="headerlink" title="English (Number of Smooth Descent Periods of a Stock)"></a>English (Number of Smooth Descent Periods of a Stock)</h3><p>You are given an integer array <code>prices</code> representing the daily price history of a stock, where <code>prices[i]</code> is the stock price on the $i^{th}$ day.</p><p>A <strong>smooth descent period</strong> of a stock consists of <strong>one or more</strong> contiguous days such that the price on each day is <strong>lower</strong> than the price on the <strong>preceding day</strong> by <strong>exactly</strong> <code>1</code>. The first day of the period is exempted from this rule.</p><p>Return <em>the number of <strong>smooth descent periods</strong></em>.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: prices = [3,2,1,4]<br>Output: 7<br>Explanation: There are 7 smooth descent periods:<br>[3], [2], [1], [4], [3,2], [2,1], and [3,2,1]<br>Note that a period with one day is a smooth descent period by the definition.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: prices = [8,6,7,7]<br>Output: 4<br>Explanation: There are 4 smooth descent periods: [8], [6], [7], and [7]<br>Note that [8,6] is not a smooth descent period as 8 - 6 ≠ 1.<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: prices = [1]<br>Output: 1<br>Explanation: There is 1 smooth descent period: [1]<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= prices.length &lt;= 10^5</code></li><li><code>1 &lt;= prices[i] &lt;= 10^5</code></li></ul><h3 id="Chinese-股票平滑下跌阶段的数目"><a href="#Chinese-股票平滑下跌阶段的数目" class="headerlink" title="Chinese (股票平滑下跌阶段的数目)"></a>Chinese (股票平滑下跌阶段的数目)</h3><p>给你一个整数数组 <code>prices</code> ，表示一支股票的历史每日股价，其中 <code>prices[i]</code> 是这支股票第 <code>i</code> 天的价格。</p><p>一个 <strong>平滑下降的阶段</strong> 定义为：对于 <strong>连续一天或者多天</strong> ，每日股价都比 <strong>前一日股价恰好少</strong> <code>1</code> ，这个阶段第一天的股价没有限制。</p><p>请你返回 <strong>平滑下降阶段</strong> 的数目。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：prices = [3,2,1,4]<br>输出：7<br>解释：总共有 7 个平滑下降阶段：<br>[3], [2], [1], [4], [3,2], [2,1] 和 [3,2,1]<br>注意，仅一天按照定义也是平滑下降阶段。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：prices = [8,6,7,7]<br>输出：4<br>解释：总共有 4 个连续平滑下降阶段：[8], [6], [7] 和 [7]<br>由于 8 - 6 ≠ 1 ，所以 [8,6] 不是平滑下降阶段。<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：prices = [1]<br>输出：1<br>解释：总共有 1 个平滑下降阶段：[1]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= prices.length &lt;= 10^5</code></li><li><code>1 &lt;= prices[i] &lt;= 10^5</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title">getDescentPeriods</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; prices)</span> </span>&#123;<br>        <span class="hljs-type">long</span> <span class="hljs-type">long</span> res = <span class="hljs-number">1</span>;<br><br>        <span class="hljs-type">int</span> pre = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, n = prices.<span class="hljs-built_in">size</span>(); i &lt; n; ++i) &#123;<br>            <span class="hljs-keyword">if</span> (prices[i] == prices[i - <span class="hljs-number">1</span>] - <span class="hljs-number">1</span>) &#123;<br>                res += pre + <span class="hljs-number">1</span>;<br>                ++pre;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                ++res;<br>                pre = <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
     
@@ -28,11 +59,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -104,13 +135,13 @@
       
       <tag>leetcode</tag>
       
-      <tag>priority_queue</tag>
-      
-      <tag>heap</tag>
-      
       <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
+      
+      <tag>priority_queue</tag>
+      
+      <tag>heap</tag>
       
     </tags>
     
@@ -145,11 +176,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -186,11 +217,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -309,11 +340,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -1132,9 +1163,9 @@
       
       <tag>medium</tag>
       
-      <tag>string</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>string</tag>
       
       <tag>kmp</tag>
       
@@ -1169,11 +1200,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1206,11 +1237,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1241,11 +1272,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -1276,9 +1307,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1288,8 +1319,8 @@
   
   <entry>
     <title>LeetCode 718 - Maximum Length of Repeated Subarray</title>
-    <link href="/Algorithm/LeetCode/LeetCode-718-Maximum-Length-of-Repeated-Subarray/"/>
-    <url>/Algorithm/LeetCode/LeetCode-718-Maximum-Length-of-Repeated-Subarray/</url>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-718-Maximum-Length-of-Repeated-Subarray/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-718-Maximum-Length-of-Repeated-Subarray/</url>
     
     <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><div class="note note-warning">            <p>Similar problem: <a href="/Algorithm/LeetCode/LeetCode-1143-Longest-Common-Subsequence">LeetCode 1143 - Longest Common Subsequence</a></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Maximum-Length-of-Repeated-Subarray"><a href="#English-Maximum-Length-of-Repeated-Subarray" class="headerlink" title="English (Maximum Length of Repeated Subarray)"></a>English (Maximum Length of Repeated Subarray)</h3><p>Given two integer arrays <code>nums1</code> and <code>nums2</code>, return <em>the maximum length of a subarray that appears in <strong>both</strong> arrays</em>.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]<br>Output: 3<br>Explanation: The repeated subarray with maximum length is [3,2,1].<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums1 = [0,0,0,0,0], nums2 = [0,0,0,0,0]<br>Output: 5<br>Explanation: The repeated subarray with maximum length is [0,0,0,0,0].<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= nums1.length, nums2.length &lt;= 1000</code></li><li><code>0 &lt;= nums1[i], nums2[i] &lt;= 100</code></li></ul><h3 id="Chinese-最长重复子数组"><a href="#Chinese-最长重复子数组" class="headerlink" title="Chinese (最长重复子数组)"></a>Chinese (最长重复子数组)</h3><p>给两个整数数组 <code>nums1</code> 和 <code>nums2</code> ，<em>返回 两个数组中 <strong>公共的</strong> 、长度最长的子数组的长度</em> 。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]<br>输出：3<br>解释：长度最长的公共子数组是 [3,2,1] 。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums1 = [0,0,0,0,0], nums2 = [0,0,0,0,0]<br>输出：5<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= nums1.length, nums2.length &lt;= 1000</code></li><li><code>0 &lt;= nums1[i], nums2[i] &lt;= 100</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>It’s a typical problem about dynamic programming.</p><ul><li><code>dp[0][0]</code> means the maximun length of repeated subarray between two empty strings. Obviously, it’s <code>0</code>.</li><li><code>dp[i+1][j+1]</code> means the maximun length of repeated subarray between two strings, one of them ends with <code>nums1[i]</code> while the other ends with <code>nums2[j]</code>.</li></ul><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">findLength</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums1, vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums2)</span> </span>&#123;<br>        <span class="hljs-type">int</span> nums1_size = nums1.<span class="hljs-built_in">size</span>(), nums2_size = nums2.<span class="hljs-built_in">size</span>();<br><br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">dp</span>(nums1_size + <span class="hljs-number">1</span>, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(nums2_size + <span class="hljs-number">1</span>));<br>        <span class="hljs-type">int</span> max_repeated_subarray_size = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums1_size; ++i) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; nums2_size; ++j) &#123;<br>                <span class="hljs-keyword">if</span> (nums1[i] == nums2[j]) &#123;<br>                    dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>] = dp[i][j] + <span class="hljs-number">1</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>] = <span class="hljs-number">0</span>;<br>                &#125;<br><br>                max_repeated_subarray_size = <span class="hljs-built_in">max</span>(max_repeated_subarray_size, dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>]);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_repeated_subarray_size;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">findLength</span>(<span class="hljs-params">self, nums1: <span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>], nums2: <span class="hljs-type">List</span>[<span class="hljs-built_in">int</span>]</span>) -&gt; <span class="hljs-built_in">int</span>:<br>        nums1_len, nums2_len = <span class="hljs-built_in">len</span>(nums1), <span class="hljs-built_in">len</span>(nums2)<br><br>        dp = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nums2_len+<span class="hljs-number">1</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nums1_len+<span class="hljs-number">1</span>)]<br>        max_repeated_subarray_len = <span class="hljs-number">0</span><br><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nums1_len):<br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(nums2_len):<br>                <span class="hljs-keyword">if</span> nums1[i] == nums2[j]:<br>                    dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>] = dp[i][j] + <span class="hljs-number">1</span><br>                <span class="hljs-keyword">else</span>:<br>                    dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>] = <span class="hljs-number">0</span><br><br>                max_repeated_subarray_len = <span class="hljs-built_in">max</span>(max_repeated_subarray_len, dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>])<br><br>        <span class="hljs-keyword">return</span> max_repeated_subarray_len<br></code></pre></td></tr></table></figure>]]></content>
     
@@ -1311,11 +1342,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -1379,11 +1410,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1416,11 +1447,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1490,8 +1521,8 @@
   
   <entry>
     <title>LeetCode 5 - Longest Palindromic Substring</title>
-    <link href="/Algorithm/LeetCode/LeetCode-5-Longest-Palindromic-Substring/"/>
-    <url>/Algorithm/LeetCode/LeetCode-5-Longest-Palindromic-Substring/</url>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-5-Longest-Palindromic-Substring/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-5-Longest-Palindromic-Substring/</url>
     
     <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Longest-Palindromic-Substring"><a href="#English-Longest-Palindromic-Substring" class="headerlink" title="English (Longest Palindromic Substring)"></a>English (Longest Palindromic Substring)</h3><p>Given a string <code>s</code>, return <em>the longest palindromic substring</em> in <code>s</code>.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: s = &quot;babad&quot;<br>Output: &quot;bab&quot;<br>Explanation: &quot;aba&quot; is also a valid answer.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: s = &quot;cbbd&quot;<br>Output: &quot;bb&quot;<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= s.length &lt;= 1000</code></li><li><code>s</code> consist of only digits and English letters.</li></ul><h3 id="Chinese-最长回文子串"><a href="#Chinese-最长回文子串" class="headerlink" title="Chinese (最长回文子串)"></a>Chinese (最长回文子串)</h3><p>给你一个字符串 <code>s</code>，找到 <code>s</code> 中最长的回文子串。</p><p>如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：s = &quot;babad&quot;<br>输出：&quot;bab&quot;<br>解释：&quot;aba&quot; 同样是符合题意的答案。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：s = &quot;cbbd&quot;<br>输出：&quot;bb&quot;<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= s.length &lt;= 1000</code></li><li><code>s</code> 仅由数字和英文字母组成</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">longestPalindrome</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = s.<span class="hljs-built_in">size</span>();<br>        vector&lt;vector&lt;<span class="hljs-type">bool</span>&gt;&gt; <span class="hljs-built_in">is_palindrome</span>(n, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">bool</span>&gt;(n, <span class="hljs-literal">false</span>));<br><br>        <span class="hljs-comment">// a single character must be a palindrome</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>            is_palindrome[i][i] = <span class="hljs-literal">true</span>;<br>        &#125;<br>        <span class="hljs-type">int</span> max_palindrome_size = <span class="hljs-number">1</span>;<br>        string max_palindrome = s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);<br><br>        <span class="hljs-comment">// verify any continious two characters are a palindrome</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n - <span class="hljs-number">1</span>; ++i) &#123;<br>            <span class="hljs-keyword">if</span> (s[i] == s[i + <span class="hljs-number">1</span>]) &#123;<br>                is_palindrome[i][i + <span class="hljs-number">1</span>] = <span class="hljs-literal">true</span>;<br><br>                max_palindrome_size = <span class="hljs-number">2</span>;<br>                max_palindrome = s.<span class="hljs-built_in">substr</span>(i, <span class="hljs-number">2</span>);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// verify any continious string whose length is larger than or equal to 3.</span><br>        <span class="hljs-comment">// its state is related to 2 factors - its boundary characters, and its substring without the boundary characters</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> sub_size = <span class="hljs-number">3</span>; sub_size &lt;= n; ++sub_size) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> begin_index = <span class="hljs-number">0</span>; begin_index &lt;= n - sub_size; ++begin_index) &#123;<br>                <span class="hljs-type">int</span> end_index = begin_index + sub_size - <span class="hljs-number">1</span>;<br>                <span class="hljs-keyword">if</span> (s[begin_index] == s[end_index] &amp;&amp; is_palindrome[begin_index + <span class="hljs-number">1</span>][end_index - <span class="hljs-number">1</span>]) &#123;<br>                    is_palindrome[begin_index][end_index] = <span class="hljs-literal">true</span>;<br><br>                    <span class="hljs-keyword">if</span> (sub_size &gt; max_palindrome_size) &#123;<br>                        max_palindrome_size = sub_size;<br>                        max_palindrome = s.<span class="hljs-built_in">substr</span>(begin_index, sub_size);<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_palindrome;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
     
@@ -1513,11 +1544,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -1527,8 +1558,8 @@
   
   <entry>
     <title>LeetCode 53 - Maximum Subarray</title>
-    <link href="/Algorithm/LeetCode/LeetCode-53-Maximum-Subarray/"/>
-    <url>/Algorithm/LeetCode/LeetCode-53-Maximum-Subarray/</url>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-53-Maximum-Subarray/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-53-Maximum-Subarray/</url>
     
     <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Maximum-Subarray"><a href="#English-Maximum-Subarray" class="headerlink" title="English (Maximum Subarray)"></a>English (Maximum Subarray)</h3><p>Given an integer array <code>nums</code>, find the subarray with the largest sum, and return its sum.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums = [-2,1,-3,4,-1,2,1,-5,4]<br>Output: 6<br>Explanation: The subarray [4,-1,2,1] has the largest sum 6.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums = [1]<br>Output: 1<br>Explanation: The subarray [1] has the largest sum 1.<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: nums = [5,4,-1,7,8]<br>Output: 23<br>Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= nums.length &lt;= 10^5</code></li><li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li></ul><p><strong>Follow up:</strong> If you have figured out the <code>O(n)</code> solution, try coding another solution using the <strong>divide and conquer</strong> approach, which is more subtle.</p><h3 id="Chinese-最大子数组和"><a href="#Chinese-最大子数组和" class="headerlink" title="Chinese (最大子数组和)"></a>Chinese (最大子数组和)</h3><p>给你一个整数数组 <code>nums</code> ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p><p><strong>子数组</strong> 是数组中的一个连续部分。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums = [-2,1,-3,4,-1,2,1,-5,4]<br>输出：6<br>解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums = [1]<br>输出：1<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：nums = [5,4,-1,7,8]<br>输出：23<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= nums.length &lt;= 10^5</code></li><li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li></ul><p><strong>进阶：</strong>如果你已经实现复杂度为 <code>O(n)</code> 的解法，尝试使用更为精妙的 <strong>分治法</strong> 求解。</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSubArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-comment">// Note:</span><br>        <span class="hljs-comment">// If fragment_sum is initialized as `0`,</span><br>        <span class="hljs-comment">// it will return `0` rather than `-1` when `nums = [-1]`</span><br>        <span class="hljs-type">int</span> fragment_sum = INT_MIN;<br>        <span class="hljs-type">int</span> max_fragment_sum = INT_MIN;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>            <span class="hljs-keyword">if</span> (fragment_sum &gt; <span class="hljs-number">0</span>) &#123;<br>                fragment_sum += num;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                fragment_sum = num;<br>            &#125;<br><br>            max_fragment_sum = <span class="hljs-built_in">max</span>(max_fragment_sum, fragment_sum);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_fragment_sum;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><p>It’s also available to initialize <code>fragment_sum</code> with <code>nums[0]</code> as below code, but I prefer the above way due to the integrated for-range loop. :)</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSubArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> fragment_sum = nums[<span class="hljs-number">0</span>];<br>        <span class="hljs-type">int</span> max_fragment_sum = fragment_sum;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, n = nums.<span class="hljs-built_in">size</span>(); i &lt; n; ++i) &#123;<br>            <span class="hljs-type">int</span> num = nums[i];<br>            <span class="hljs-keyword">if</span> (fragment_sum &gt; <span class="hljs-number">0</span>) &#123;<br>                fragment_sum += num;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                fragment_sum = num;<br>            &#125;<br><br>            max_fragment_sum = <span class="hljs-built_in">max</span>(max_fragment_sum, fragment_sum);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> max_fragment_sum;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
     
@@ -1550,11 +1581,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -1587,9 +1618,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -1624,11 +1655,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -1739,11 +1770,11 @@
       
       <tag>linked_list</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -1753,8 +1784,8 @@
   
   <entry>
     <title>LeetCode 72 - Edit Distance</title>
-    <link href="/Algorithm/LeetCode/LeetCode-72-Edit-Distance/"/>
-    <url>/Algorithm/LeetCode/LeetCode-72-Edit-Distance/</url>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-72-Edit-Distance/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-72-Edit-Distance/</url>
     
     <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-danger">hard</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Edit-Distance"><a href="#English-Edit-Distance" class="headerlink" title="English (Edit Distance)"></a>English (Edit Distance)</h3><p>Given two strings <code>word1</code> and <code>word2</code>, return <em>the minimum number of operations required to convert <code>word1</code> to <code>word2</code></em>.</p><p>You have the following three operations permitted on a word:</p><ul><li>Insert a character</li><li>Delete a character</li><li>Replace a character</li></ul><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: word1 = &quot;horse&quot;, word2 = &quot;ros&quot;<br>Output: 3<br>Explanation:<br>horse -&gt; rorse (replace &#x27;h&#x27; with &#x27;r&#x27;)<br>rorse -&gt; rose (remove &#x27;r&#x27;)<br>rose -&gt; ros (remove &#x27;e&#x27;)<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: word1 = &quot;intention&quot;, word2 = &quot;execution&quot;<br>Output: 5<br>Explanation:<br>intention -&gt; inention (remove &#x27;t&#x27;)<br>inention -&gt; enention (replace &#x27;i&#x27; with &#x27;e&#x27;)<br>enention -&gt; exention (replace &#x27;n&#x27; with &#x27;x&#x27;)<br>exention -&gt; exection (replace &#x27;n&#x27; with &#x27;c&#x27;)<br>exection -&gt; execution (insert &#x27;u&#x27;)<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li>0 &lt;&#x3D; word1.length, word2.length &lt;&#x3D; 500</li><li><code>word1</code> and <code>word2</code> consist of lowercase English letters.</li></ul><h3 id="Chinese-编辑距离"><a href="#Chinese-编辑距离" class="headerlink" title="Chinese (编辑距离)"></a>Chinese (编辑距离)</h3><p>给你两个单词 <code>word1</code> 和 <code>word2</code>，请返回 <em>将 <code>word1</code> 转换成 <code>word2</code> 所使用的最少操作数</em>。</p><p>你可以对一个单词进行如下三种操作：</p><ul><li>插入一个字符</li><li>删除一个字符</li><li>替换一个字符</li></ul><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：word1 = &quot;horse&quot;, word2 = &quot;ros&quot;<br>输出：3<br>解释：<br>horse -&gt; rorse (将 &#x27;h&#x27; 替换为 &#x27;r&#x27;)<br>rorse -&gt; rose (删除 &#x27;r&#x27;)<br>rose -&gt; ros (删除 &#x27;e&#x27;)<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：word1 = &quot;intention&quot;, word2 = &quot;execution&quot;<br>输出：5<br>解释：<br>intention -&gt; inention (删除 &#x27;t&#x27;)<br>inention -&gt; enention (将 &#x27;i&#x27; 替换为 &#x27;e&#x27;)<br>enention -&gt; exention (将 &#x27;n&#x27; 替换为 &#x27;x&#x27;)<br>exention -&gt; exection (将 &#x27;n&#x27; 替换为 &#x27;c&#x27;)<br>exection -&gt; execution (插入 &#x27;u&#x27;)<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>0 &lt;= word1.length, word2.length &lt;= 500</code></li><li><code>word1</code> 和 <code>word2</code> 由小写英文字母组成</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">minDistance</span><span class="hljs-params">(string word1, string word2)</span> </span>&#123;<br>        <span class="hljs-type">int</span> word1_size = word1.<span class="hljs-built_in">size</span>(), word2_size = word2.<span class="hljs-built_in">size</span>();<br><br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">dp</span>(word1_size + <span class="hljs-number">1</span>, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(word2_size + <span class="hljs-number">1</span>));<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= word1_size; ++i) &#123;<br>            dp[i][<span class="hljs-number">0</span>] = i;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= word2_size; ++j) &#123;<br>            dp[<span class="hljs-number">0</span>][j] = j;<br>        &#125;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; word1_size; ++i) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; word2_size; ++j) &#123;<br>                <span class="hljs-keyword">if</span> (word1[i] == word2[j]) &#123;<br>                    dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>] = dp[i][j];<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>] = <span class="hljs-built_in">min</span>(dp[i][j], <span class="hljs-built_in">min</span>(dp[i][j + <span class="hljs-number">1</span>], dp[i + <span class="hljs-number">1</span>][j])) + <span class="hljs-number">1</span>;<br>                &#125;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> dp[word1_size][word2_size];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">minDistance</span>(<span class="hljs-params">self, word1: <span class="hljs-built_in">str</span>, word2: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">int</span>:<br>        word1_len, word2_len = <span class="hljs-built_in">len</span>(word1), <span class="hljs-built_in">len</span>(word2)<br><br>        dp = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(word2_len+<span class="hljs-number">1</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(word1_len+<span class="hljs-number">1</span>)]<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, word1_len+<span class="hljs-number">1</span>):<br>            dp[i][<span class="hljs-number">0</span>] = i<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, word2_len+<span class="hljs-number">1</span>):<br>            dp[<span class="hljs-number">0</span>][j] = j<br><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(word1_len):<br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(word2_len):<br>                <span class="hljs-keyword">if</span> word1[i] == word2[j]:<br>                    dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>] = dp[i][j]<br>                <span class="hljs-keyword">else</span>:<br>                    dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>] = <span class="hljs-built_in">min</span>([dp[i][j], dp[i][j+<span class="hljs-number">1</span>], dp[i+<span class="hljs-number">1</span>][j]]) + <span class="hljs-number">1</span><br><br>        <span class="hljs-keyword">return</span> dp[-<span class="hljs-number">1</span>][-<span class="hljs-number">1</span>]<br></code></pre></td></tr></table></figure><h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><p>It’s available to compress the dp array into one dimension.</p>]]></content>
     
@@ -1790,8 +1821,8 @@
   
   <entry>
     <title>LeetCode 1143 - Longest Common Subsequence</title>
-    <link href="/Algorithm/LeetCode/LeetCode-1143-Longest-Common-Subsequence/"/>
-    <url>/Algorithm/LeetCode/LeetCode-1143-Longest-Common-Subsequence/</url>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-1143-Longest-Common-Subsequence/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-1143-Longest-Common-Subsequence/</url>
     
     <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><div class="note note-warning">            <p>Similar problem: <a href="/Algorithm/LeetCode/LeetCode-718-Maximum-Length-of-Repeated-Subarray">LeetCode 718 - Maximum Length of Repeated Subarray</a></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Longest-Common-Subsequence"><a href="#English-Longest-Common-Subsequence" class="headerlink" title="English (Longest Common Subsequence)"></a>English (Longest Common Subsequence)</h3><p>Given two strings <code>text1</code> and <code>text2</code>, return <em>the length of their longest <strong>common subsequence</strong></em>. If there is no <strong>common subsequence</strong>, return <code>0</code>.</p><p>A <strong>subsequence</strong> of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.</p><ul><li>For example, <code>&quot;ace&quot;</code> is a subsequence of <code>&quot;abcde&quot;</code>.<br>A <strong>common subsequence</strong> of two strings is a subsequence that is common to both strings.</li></ul><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: text1 = &quot;abcde&quot;, text2 = &quot;ace&quot;<br>Output: 3<br>Explanation: The longest common subsequence is &quot;ace&quot; and its length is 3.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: text1 = &quot;abc&quot;, text2 = &quot;abc&quot;<br>Output: 3<br>Explanation: The longest common subsequence is &quot;abc&quot; and its length is 3.<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: text1 = &quot;abc&quot;, text2 = &quot;def&quot;<br>Output: 0<br>Explanation: There is no such common subsequence, so the result is 0.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>1 &lt;= text1.length, text2.length &lt;= 1000</code></li><li><code>text1</code> and <code>text2</code> consist of only lowercase English characters.</li></ul><h3 id="Chinese-最长公共子序列"><a href="#Chinese-最长公共子序列" class="headerlink" title="Chinese (最长公共子序列)"></a>Chinese (最长公共子序列)</h3><p>给定两个字符串 <code>text1</code> 和 <code>text2</code>，返回这两个字符串的最长 公共子序列 的长度。如果不存在 <strong>公共子序列</strong>，返回 <code>0</code>。</p><p>一个字符串的 <strong>子序列</strong> 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。</p><p>例如，<code>&quot;ace&quot;</code> 是 <code>&quot;abcde&quot;</code> 的子序列，但 <code>&quot;aec&quot;</code> 不是 <code>&quot;abcde&quot;</code> 的子序列。<br>两个字符串的 <strong>公共子序列</strong> 是这两个字符串所共同拥有的子序列。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：text1 = &quot;abcde&quot;, text2 = &quot;ace&quot;<br>输出：3<br>解释：最长公共子序列是 &quot;ace&quot; ，它的长度为 3 。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：text1 = &quot;abc&quot;, text2 = &quot;abc&quot;<br>输出：3<br>解释：最长公共子序列是 &quot;abc&quot; ，它的长度为 3 。<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：text1 = &quot;abc&quot;, text2 = &quot;def&quot;<br>输出：0<br>解释：两个字符串没有公共子序列，返回 0 。<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>1 &lt;= text1.length, text2.length &lt;= 1000</code></li><li><code>text1</code> 和 <code>text2</code> 仅由小写英文字符组成。</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">longestCommonSubsequence</span><span class="hljs-params">(string text1, string text2)</span> </span>&#123;<br>        <span class="hljs-type">int</span> text1_size = text1.<span class="hljs-built_in">size</span>(), text2_size = text2.<span class="hljs-built_in">size</span>();<br><br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">dp</span>(text1_size + <span class="hljs-number">1</span>, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(text2_size + <span class="hljs-number">1</span>));<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; text1_size; ++i) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; text2_size; ++j) &#123;<br>                <span class="hljs-keyword">if</span> (text1[i] == text2[j]) &#123;<br>                    dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>] = dp[i][j] + <span class="hljs-number">1</span>;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    dp[i + <span class="hljs-number">1</span>][j + <span class="hljs-number">1</span>] = <span class="hljs-built_in">max</span>(dp[i][j + <span class="hljs-number">1</span>], dp[i + <span class="hljs-number">1</span>][j]);<br>                &#125;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> dp[text1_size][text2_size];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">longestCommonSubsequence</span>(<span class="hljs-params">self, text1: <span class="hljs-built_in">str</span>, text2: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">int</span>:<br>        text1_len, text2_len = <span class="hljs-built_in">len</span>(text1), <span class="hljs-built_in">len</span>(text2)<br><br>        dp = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(text2_len+<span class="hljs-number">1</span>)] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(text1_len+<span class="hljs-number">1</span>)]<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(text1_len):<br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(text2_len):<br>                <span class="hljs-keyword">if</span> text1[i] == text2[j]:<br>                    dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>] = dp[i][j] + <span class="hljs-number">1</span><br>                <span class="hljs-keyword">else</span>:<br>                    dp[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>] = <span class="hljs-built_in">max</span>(dp[i][j+<span class="hljs-number">1</span>], dp[i+<span class="hljs-number">1</span>][j])<br><br>        <span class="hljs-keyword">return</span> dp[-<span class="hljs-number">1</span>][-<span class="hljs-number">1</span>]<br></code></pre></td></tr></table></figure><h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><p>It’s available to compress the dp array into one dimension.</p>]]></content>
     
@@ -1813,11 +1844,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>dynamic_programming</tag>
       
       <tag>dp</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -1945,11 +1976,11 @@
       
       <tag>cpp</tag>
       
+      <tag>coroutine</tag>
+      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
