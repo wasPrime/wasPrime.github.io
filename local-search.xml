@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>LeetCode 338 - Counting Bits</title>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-338-Counting-Bits/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-338-Counting-Bits/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-success">easy</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Counting-Bits"><a href="#English-Counting-Bits" class="headerlink" title="English (Counting Bits)"></a>English (Counting Bits)</h3><p>Given an integer <code>n</code>, return an array <code>ans</code> of length <code>n + 1</code> such that for each <code>i</code> (<code>0 &lt;= i &lt;= n</code>), <code>ans[i]</code> is the <strong>number</strong> of <code>1</code><strong>‘s</strong> in the binary representation of <code>i</code>.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: n = 2<br>Output: [0,1,1]<br>Explanation:<br>0 --&gt; 0<br>1 --&gt; 1<br>2 --&gt; 10<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: n = 5<br>Output: [0,1,1,2,1,2]<br>Explanation:<br>0 --&gt; 0<br>1 --&gt; 1<br>2 --&gt; 10<br>3 --&gt; 11<br>4 --&gt; 100<br>5 --&gt; 101<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>0 &lt;= n &lt;= 10^5</code></li></ul><p><strong>Follow up:</strong></p><ul><li>It is very easy to come up with a solution with a runtime of <code>O(n log n)</code>. Can you do it in linear time <code>O(n)</code> and possibly in a single pass?</li><li>Can you do it without using any built-in function (i.e., like <code>__builtin_popcount</code> in C++)?</li></ul><h3 id="Chinese-比特位计数"><a href="#Chinese-比特位计数" class="headerlink" title="Chinese (比特位计数)"></a>Chinese (比特位计数)</h3><p>给你一个整数 <code>n</code> ，对于 <code>0 &lt;= i &lt;= n</code> 中的每个 <code>i</code> ，计算其二进制表示中 <code>1</code> <strong>的个数</strong> ，返回一个长度为 <code>n + 1</code> 的数组 <code>ans</code> 作为答案。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：n = 2<br>输出：[0,1,1]<br>解释：<br>0 --&gt; 0<br>1 --&gt; 1<br>2 --&gt; 10<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：n = 5<br>输出：[0,1,1,2,1,2]<br>解释：<br>0 --&gt; 0<br>1 --&gt; 1<br>2 --&gt; 10<br>3 --&gt; 11<br>4 --&gt; 100<br>5 --&gt; 101<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>0 &lt;= n &lt;= 10^5</code></li></ul><p><strong>进阶：</strong></p><ul><li>很容易就能实现时间复杂度为 <code>O(n log n)</code> 的解决方案，你可以在线性时间复杂度 <code>O(n)</code> 内用一趟扫描解决此问题吗？</li><li>你能不使用任何内置函数解决此问题吗？（如，C++ 中的 <code>__builtin_popcount</code> ）</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">countBits</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">res</span><span class="hljs-params">(n + <span class="hljs-number">1</span>)</span></span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i) &#123;<br>            res[i] = res[i &gt;&gt; <span class="hljs-number">1</span>] + (i &amp; <span class="hljs-number">1</span>);<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h3 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">countBits</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">res</span><span class="hljs-params">(n + <span class="hljs-number">1</span>)</span></span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i) &#123;<br>            res[i] = res[i &amp; (i - <span class="hljs-number">1</span>)] + <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>dynamic_programming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>easy</tag>
+      
+      <tag>dynamic_programming</tag>
+      
+      <tag>dp</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 2280 - Minimum Lines to Represent a Line Chart</title>
     <link href="/Algorithm/LeetCode/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/"/>
     <url>/Algorithm/LeetCode/LeetCode-2280-Minimum-Lines-to-Represent-a-Line-Chart/</url>
@@ -94,11 +131,11 @@
       
       <tag>algorithm</tag>
       
-      <tag>stack</tag>
-      
       <tag>leetcode</tag>
       
       <tag>medium</tag>
+      
+      <tag>stack</tag>
       
       <tag>monotonic_stack</tag>
       
@@ -135,11 +172,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -800,9 +837,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
-      
       <tag>template</tag>
+      
+      <tag>cpp17</tag>
       
       <tag>ctad</tag>
       
@@ -1120,11 +1157,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -1200,11 +1237,11 @@
       
       <tag>cpp</tag>
       
-      <tag>coroutine</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1237,11 +1274,11 @@
       
       <tag>cpp</tag>
       
-      <tag>coroutine</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1270,9 +1307,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>design</tag>
-      
       <tag>stack</tag>
+      
+      <tag>design</tag>
       
       <tag>binary_tree</tag>
       
@@ -1305,11 +1342,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>stack</tag>
+      
       <tag>design</tag>
       
       <tag>calculator</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -1410,11 +1447,11 @@
       
       <tag>cpp</tag>
       
-      <tag>coroutine</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1447,11 +1484,11 @@
       
       <tag>cpp</tag>
       
-      <tag>coroutine</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1618,9 +1655,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -1725,9 +1762,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -1770,11 +1807,11 @@
       
       <tag>linked_list</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -1976,11 +2013,11 @@
       
       <tag>cpp</tag>
       
-      <tag>coroutine</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -2153,9 +2190,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -2192,9 +2229,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2233,9 +2270,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2334,9 +2371,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
