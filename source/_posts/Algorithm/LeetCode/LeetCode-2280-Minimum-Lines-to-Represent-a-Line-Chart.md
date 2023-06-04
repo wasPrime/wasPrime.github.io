@@ -1,7 +1,7 @@
 ---
 title: LeetCode 2280 - Minimum Lines to Represent a Line Chart
 date: 2023-06-03 21:42:19
-# math: true
+math: true
 categories:
 - [algorithm, leetcode]
 tags:
