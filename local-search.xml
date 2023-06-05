@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>A Simple Implementation of Thread Pool</title>
+    <link href="/SystemDesign/A-Simple-Implementation-of-Thread-Pool/"/>
+    <url>/SystemDesign/A-Simple-Implementation-of-Thread-Pool/</url>
+    
+    <content type="html"><![CDATA[<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;atomic&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;condition_variable&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;exception&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;future&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;utility&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreadPool</span> <span class="hljs-keyword">final</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">ThreadPool</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span></span>;<br>    ~<span class="hljs-built_in">ThreadPool</span>() <span class="hljs-keyword">noexcept</span>;<br><br>    <span class="hljs-built_in">ThreadPool</span>(<span class="hljs-type">const</span> ThreadPool&amp;) = <span class="hljs-keyword">delete</span>;<br>    ThreadPool&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> ThreadPool&amp;) = <span class="hljs-keyword">delete</span>;<br>    <span class="hljs-built_in">ThreadPool</span>(ThreadPool&amp;&amp;) <span class="hljs-keyword">noexcept</span> = <span class="hljs-keyword">delete</span>;<br>    ThreadPool&amp; <span class="hljs-keyword">operator</span>=(ThreadPool&amp;&amp;) <span class="hljs-keyword">noexcept</span> = <span class="hljs-keyword">delete</span>;<br><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Callable, <span class="hljs-keyword">typename</span>... Args&gt;<br>    <span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">commit</span><span class="hljs-params">(Callable&amp;&amp; f, Args... args)</span> -&gt; std::future&lt;<span class="hljs-title">decltype</span><span class="hljs-params">(f(args...))</span>&gt;</span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add_thread</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">using</span> Task = std::function&lt;<span class="hljs-built_in">void</span>()&gt;;<br><br>    <span class="hljs-type">size_t</span> m_size;  <span class="hljs-comment">// the size of thread pool</span><br>    std::vector&lt;std::thread&gt; m_threads;<br><br>    std::queue&lt;Task&gt; m_tasks;           <span class="hljs-comment">// task queue</span><br>    std::mutex m_task_mutex;            <span class="hljs-comment">// mutex for task queue</span><br>    std::condition_variable m_task_cv;  <span class="hljs-comment">// condition variable for task queue</span><br><br>    std::atomic_bool m_running&#123;<span class="hljs-literal">true</span>&#125;;<br>&#125;;<br><br>ThreadPool::<span class="hljs-built_in">ThreadPool</span>(<span class="hljs-type">size_t</span> size) : <span class="hljs-built_in">m_size</span>(size) &#123;<br>    m_threads.<span class="hljs-built_in">reserve</span>(m_size);<br>    <span class="hljs-built_in">add_thread</span>(m_size);<br>&#125;<br><br>ThreadPool::~<span class="hljs-built_in">ThreadPool</span>() <span class="hljs-keyword">noexcept</span> &#123;<br>    m_running = <span class="hljs-literal">false</span>;<br><br>    m_task_cv.<span class="hljs-built_in">notify_all</span>();<br>    <span class="hljs-keyword">for</span> (std::thread&amp; thread : m_threads) &#123;<br>        <span class="hljs-keyword">if</span> (thread.<span class="hljs-built_in">joinable</span>()) &#123;<br>            thread.<span class="hljs-built_in">join</span>();<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Callable, <span class="hljs-keyword">typename</span>... Args&gt;<br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">ThreadPool::commit</span><span class="hljs-params">(Callable&amp;&amp; f, Args... args)</span> -&gt; std::future&lt;<span class="hljs-title">decltype</span><span class="hljs-params">(f(args...))</span>&gt; </span>&#123;<br>    <span class="hljs-keyword">if</span> (!m_running) &#123;<br>        std::<span class="hljs-built_in">terminate</span>();  <span class="hljs-comment">// terminate directly since it&#x27;s out of the lifetime of thread pool</span><br>    &#125;<br><br>    <span class="hljs-keyword">using</span> RetType = <span class="hljs-keyword">decltype</span>(<span class="hljs-built_in">f</span>(args...));<br>    <span class="hljs-keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="hljs-built_in">RetType</span>()&gt;&gt;(<br>        std::<span class="hljs-built_in">bind</span>(std::forward&lt;Callable&gt;(f), std::forward&lt;Args&gt;(args)...));<br>    std::future&lt;RetType&gt; future = task-&gt;<span class="hljs-built_in">get_future</span>();<br>    &#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_task_mutex)</span></span>;<br>        m_tasks.<span class="hljs-built_in">emplace</span>([task] &#123;<br>            (*task)();<br>        &#125;);<br>    &#125;<br>    m_task_cv.<span class="hljs-built_in">notify_one</span>();<br><br>    <span class="hljs-keyword">return</span> future;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ThreadPool::add_thread</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span> </span>&#123;<br>    <span class="hljs-keyword">auto</span> execute = [<span class="hljs-keyword">this</span>]() -&gt; <span class="hljs-type">void</span> &#123;<br>        <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;<br>            Task task;<br>            &#123;<br>                <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m_task_mutex)</span></span>;<br>                m_task_cv.<span class="hljs-built_in">wait</span>(lock, [<span class="hljs-keyword">this</span>]() -&gt; <span class="hljs-type">bool</span> &#123;<br>                    <span class="hljs-keyword">return</span> !m_running || !m_tasks.<span class="hljs-built_in">empty</span>();<br>                &#125;);<br>                <span class="hljs-keyword">if</span> (!m_running &amp;&amp; m_tasks.<span class="hljs-built_in">empty</span>()) &#123;<br>                    <span class="hljs-keyword">return</span>;<br>                &#125;<br>                task = std::<span class="hljs-built_in">move</span>(m_tasks.<span class="hljs-built_in">front</span>());<br>                m_tasks.<span class="hljs-built_in">pop</span>();<br>            &#125;<br><br>            <span class="hljs-built_in">task</span>();<br>        &#125;<br>    &#125;;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; size; ++i) &#123;<br>        m_threads.<span class="hljs-built_in">emplace_back</span>(execute);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><ul><li>Support to adjust the size of the thread pool.</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>system_design</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>system_design</tag>
+      
+      <tag>thread_pool</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 338 - Counting Bits</title>
     <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-338-Counting-Bits/"/>
     <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-338-Counting-Bits/</url>
@@ -131,11 +158,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>stack</tag>
+      
       <tag>leetcode</tag>
       
       <tag>medium</tag>
-      
-      <tag>stack</tag>
       
       <tag>monotonic_stack</tag>
       
@@ -172,11 +199,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -837,9 +864,9 @@
       
       <tag>cpp</tag>
       
-      <tag>template</tag>
-      
       <tag>cpp17</tag>
+      
+      <tag>template</tag>
       
       <tag>ctad</tag>
       
@@ -1157,11 +1184,11 @@
       
       <tag>cpp</tag>
       
+      <tag>cpp17</tag>
+      
       <tag>cpp20</tag>
       
       <tag>stl</tag>
-      
-      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -1307,9 +1334,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>stack</tag>
-      
       <tag>design</tag>
+      
+      <tag>stack</tag>
       
       <tag>binary_tree</tag>
       
@@ -1342,11 +1369,11 @@
       
       <tag>algorithm</tag>
       
-      <tag>stack</tag>
-      
       <tag>design</tag>
       
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1655,9 +1682,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -1790,9 +1817,9 @@
       
       <category>leetcode</category>
       
-      <category>priority_queue</category>
-      
       <category>linked_list</category>
+      
+      <category>priority_queue</category>
       
       <category>heap</category>
       
@@ -1807,11 +1834,11 @@
       
       <tag>linked_list</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -2229,9 +2256,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2270,9 +2297,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
