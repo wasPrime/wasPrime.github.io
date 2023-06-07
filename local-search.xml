@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>A Solution for Collection by Unique Elements with Custom Tolerance</title>
+    <link href="/SystemDesign/A-Solution-for-Collection-by-Unique-Elements-with-Custom-Tolerance/"/>
+    <url>/SystemDesign/A-Solution-for-Collection-by-Unique-Elements-with-Custom-Tolerance/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><p>Suppose there were such a scenario - we need to put mutiple points into a collection which contains unique points. The form of point is its coordinates <code>(x, y)</code>. The type of coordinate is <code>double</code>.</p><p>Note that we treat two points whose coordinates are close to each other as the same point. Coordinate close means within a certain tolerance. In different cases, we need to support custom tolerance which means that <strong>it’s a run-time value rather than compile-time value</strong>.</p><p>For example, with a tolerance of <code>1e-7</code>, we consider a point <code>(1.0000000000, 2.0000000000)</code> and another point <code>(1.0000000001, 2.0000000001)</code> to be the same point. If they were added separately to the collection, the size of the collection would be <code>1</code>.</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="std-unordered-set"><a href="#std-unordered-set" class="headerlink" title="std::unordered_set?"></a><code>std::unordered_set</code>?</h3><p>Imagine we use <code>std::unordered_set&lt;Point&gt;</code> to handle this problem. How to implement the hash function for the data structure <code>Point</code>? No matter how small the difference between double values, their hash values can be very different. It’s not easy to ensure that close double values have consistent hash values.</p><h3 id="std-set"><a href="#std-set" class="headerlink" title="std::set?"></a><code>std::set</code>?</h3><p>Imagine we use <code>std::set&lt;Point&gt;</code> to handle this problem. How to write a comparator for <code>Point</code> in <code>std::set</code>?</p><p>Don’t forget that we also need to support custom tolerance.</p><p>Template with double can be considered, but it’s a C++20 feature and more importantly it only supports compile-time values.</p><p>There is an elegant solution - that is lambda as comparator with capturing tolerance as follows:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;set&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span> &#123;<br>    <span class="hljs-type">double</span> a;<br>    <span class="hljs-type">double</span> b;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">double</span> tolerance = <span class="hljs-number">1e-7</span>;<br>    <span class="hljs-keyword">auto</span> point_cmp = [tolerance](<span class="hljs-type">const</span> Point&amp; lhs, <span class="hljs-type">const</span> Point&amp; rhs) -&gt; <span class="hljs-type">bool</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">abs</span>(lhs.a - rhs.a) &lt; tolerance &amp;&amp; <span class="hljs-built_in">abs</span>(lhs.b - rhs.b) &lt; tolerance) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> lhs.a &lt; rhs.a &amp;&amp; lhs.b &lt; rhs.b;<br>    &#125;;<br><br>    <span class="hljs-function">std::set&lt;Point, <span class="hljs-title">decltype</span><span class="hljs-params">(point_cmp)</span>&gt; <span class="hljs-title">s</span><span class="hljs-params">(point_cmp)</span></span>;<br>    s.<span class="hljs-built_in">insert</span>(Point&#123;<span class="hljs-number">1.0000000000</span>, <span class="hljs-number">2.0000000000</span>&#125;);<br>    s.<span class="hljs-built_in">insert</span>(Point&#123;<span class="hljs-number">1.0000000001</span>, <span class="hljs-number">2.0000000001</span>&#125;);<br>    std::cout &lt;&lt; s.<span class="hljs-built_in">size</span>() &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p><code>std::set/map</code> requires that comparators should be with weak strict ordering. For two value <code>x</code> and <code>y</code>, if <code>!(x &lt; y) &amp;&amp; !(y &lt; x) == true</code>, we can consider them equal.<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[容器比较器的严格弱序约束](https://zhuanlan.zhihu.com/p/378294506)">[1]</span></a></sup></p><p>If their difference are within tolerance, the comparator should return false directly.</p><section class="footnotes"><h2>References</h2><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span><a href="https://zhuanlan.zhihu.com/p/378294506">容器比较器的严格弱序约束</a><a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>]]></content>
+    
+    
+    <categories>
+      
+      <category>system_design</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>system_design</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 131 - Palindrome Partitioning</title>
     <link href="/Algorithm/LeetCode/Backtracking/LeetCode-131-Palindrome-Partitioning/"/>
     <url>/Algorithm/LeetCode/Backtracking/LeetCode-131-Palindrome-Partitioning/</url>
@@ -513,9 +538,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -544,15 +569,15 @@
     
     <tags>
       
+      <tag>library</tag>
+      
       <tag>cpp</tag>
+      
+      <tag>muduo</tag>
       
       <tag>vtable</tag>
       
       <tag>vfunction</tag>
-      
-      <tag>library</tag>
-      
-      <tag>muduo</tag>
       
     </tags>
     
@@ -579,9 +604,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -610,9 +635,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -641,9 +666,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -672,9 +697,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -703,9 +728,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -734,9 +759,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -767,9 +792,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -800,9 +825,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -833,9 +858,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -998,9 +1023,9 @@
     
     <tags>
       
-      <tag>cpp</tag>
-      
       <tag>library</tag>
+      
+      <tag>cpp</tag>
       
       <tag>muduo</tag>
       
@@ -1297,13 +1322,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
       
       <tag>stl</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1334,13 +1359,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
       
       <tag>stl</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1371,11 +1396,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1406,9 +1431,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -1507,13 +1532,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
       
       <tag>stl</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1544,13 +1569,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
       
       <tag>stl</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
@@ -1756,9 +1781,9 @@
       
       <tag>linked_list</tag>
       
-      <tag>hashmap</tag>
-      
       <tag>medium</tag>
+      
+      <tag>hashmap</tag>
       
     </tags>
     
@@ -2073,13 +2098,13 @@
     
     <tags>
       
+      <tag>coroutine</tag>
+      
       <tag>cpp</tag>
       
       <tag>cpp20</tag>
       
       <tag>stl</tag>
-      
-      <tag>coroutine</tag>
       
     </tags>
     
