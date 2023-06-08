@@ -4,11 +4,50 @@
   
   
   <entry>
+    <title>LeetCode 1402 - Reducing Dishes</title>
+    <link href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-1402-Reducing-Dishes/"/>
+    <url>/Algorithm/LeetCode/DynamicProgramming/LeetCode-1402-Reducing-Dishes/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-danger">hard</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Reducing-Dishes"><a href="#English-Reducing-Dishes" class="headerlink" title="English (Reducing Dishes)"></a>English (Reducing Dishes)</h3><p>A chef has collected data on the <code>satisfaction</code> level of his <code>n</code> dishes. Chef can cook any dish in 1 unit of time.</p><p><strong>Like-time coefficient</strong> of a dish is defined as the time taken to cook that dish including previous dishes multiplied by its satisfaction level i.e. <code>time[i] * satisfaction[i]</code>.</p><p>Return <em>the maximum sum of <strong>like-time coefficient</strong> that the chef can obtain after dishes preparation</em>.</p><p>Dishes can be prepared in <strong>any</strong> order and the chef can discard some dishes to get this maximum value.</p><p><strong>Example 1:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: satisfaction = [-1,-8,0,5,-9]<br>Output: 14<br>Explanation: After Removing the second and last dish, the maximum total like-time coefficient will be equal to (-1*1 + 0*2 + 5*3 = 14).<br>Each dish is prepared in one unit of time.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: satisfaction = [4,3,2]<br>Output: 20<br>Explanation: Dishes can be prepared in any order, (2*1 + 3*2 + 4*3 = 20)<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: satisfaction = [-1,-4,-5]<br>Output: 0<br>Explanation: People do not like the dishes. No dish is prepared.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li><code>n == satisfaction.length</code></li><li><code>1 &lt;= n &lt;= 500</code></li><li><code>-1000 &lt;= satisfaction[i] &lt;= 1000</code></li></ul><h3 id="Chinese-做菜顺序"><a href="#Chinese-做菜顺序" class="headerlink" title="Chinese (做菜顺序)"></a>Chinese (做菜顺序)</h3><p>一个厨师收集了他 <code>n</code> 道菜的满意程度 <code>satisfaction</code> ，这个厨师做出每道菜的时间都是 1 单位时间。</p><p>一道菜的 「喜爱时间」系数定义为烹饪这道菜以及之前每道菜所花费的时间乘以这道菜的满意程度，也就是 <code>time[i]*satisfaction[i]</code> 。</p><p>请你返回做完所有菜 「喜爱时间」总和的最大值为多少。</p><p>你可以按 <strong>任意</strong> 顺序安排做菜的顺序，你也可以选择放弃做某些菜来获得更大的总和。</p><p><strong>示例 1：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：satisfaction = [-1,-8,0,5,-9]<br>输出：14<br>解释：去掉第二道和最后一道菜，最大的喜爱时间系数和为 (-1*1 + 0*2 + 5*3 = 14) 。每道菜都需要花费 1 单位时间完成。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：satisfaction = [4,3,2]<br>输出：20<br>解释：按照原来顺序相反的时间做菜 (2*1 + 3*2 + 4*3 = 20)<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：satisfaction = [-1,-4,-5]<br>输出：0<br>解释：大家都不喜欢这些菜，所以不做任何菜可以获得最大的喜爱时间系数。<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li><code>n == satisfaction.length</code></li><li><code>1 &lt;= n &lt;= 500</code></li><li><code>-1000 &lt;= satisfaction[i] &lt;= 1000</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="Greedy-Algorithm-x2F-Dynamic-Programming"><a href="#Greedy-Algorithm-x2F-Dynamic-Programming" class="headerlink" title="Greedy Algorithm &#x2F; Dynamic Programming(?)"></a>Greedy Algorithm &#x2F; Dynamic Programming(?)</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSatisfaction</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; satisfactions)</span> </span>&#123;<br>        <span class="hljs-built_in">sort</span>(satisfactions.<span class="hljs-built_in">begin</span>(), satisfactions.<span class="hljs-built_in">end</span>(), <span class="hljs-built_in">greater</span>&lt;<span class="hljs-type">int</span>&gt;());  <span class="hljs-comment">// from larger to less</span><br><br>        <span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> satisfaction : satisfactions) &#123;<br>            sum += satisfaction;<br>            <span class="hljs-keyword">if</span> (sum &lt;= <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>            res += sum;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>dynamic_programming</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>hard</tag>
+      
+      <tag>greedy_algorithm</tag>
+      
+      <tag>dynamic_programming</tag>
+      
+      <tag>dp</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>A Solution for Collection by Unique Elements with Custom Tolerance</title>
     <link href="/SystemDesign/A-Solution-for-Collection-by-Unique-Elements-with-Custom-Tolerance/"/>
     <url>/SystemDesign/A-Solution-for-Collection-by-Unique-Elements-with-Custom-Tolerance/</url>
     
-    <content type="html"><![CDATA[<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><p>Suppose there were such a scenario - we need to put mutiple points into a collection which contains unique points. The form of point is its coordinates <code>(x, y)</code>. The type of coordinate is <code>double</code>.</p><p>Note that we treat two points whose coordinates are close to each other as the same point. Coordinate close means within a certain tolerance. In different cases, we need to support custom tolerance which means that <strong>it’s a run-time value rather than compile-time value</strong>.</p><p>For example, with a tolerance of <code>1e-7</code>, we consider a point <code>(1.0000000000, 2.0000000000)</code> and another point <code>(1.0000000001, 2.0000000001)</code> to be the same point. If they were added separately to the collection, the size of the collection would be <code>1</code>.</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="std-unordered-set"><a href="#std-unordered-set" class="headerlink" title="std::unordered_set?"></a><code>std::unordered_set</code>?</h3><p>Imagine we use <code>std::unordered_set&lt;Point&gt;</code> to handle this problem. How to implement the hash function for the data structure <code>Point</code>? No matter how small the difference between double values, their hash values can be very different. It’s not easy to ensure that close double values have consistent hash values.</p><h3 id="std-set"><a href="#std-set" class="headerlink" title="std::set?"></a><code>std::set</code>?</h3><p>Imagine we use <code>std::set&lt;Point&gt;</code> to handle this problem. How to write a comparator for <code>Point</code> in <code>std::set</code>?</p><p>Don’t forget that we also need to support custom tolerance.</p><p>Template with double can be considered, but it’s a C++20 feature and more importantly it only supports compile-time values.</p><p>There is an elegant solution - that is lambda as comparator with capturing tolerance as follows:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;set&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span> &#123;<br>    <span class="hljs-type">double</span> a;<br>    <span class="hljs-type">double</span> b;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">double</span> tolerance = <span class="hljs-number">1e-7</span>;<br>    <span class="hljs-keyword">auto</span> point_cmp = [tolerance](<span class="hljs-type">const</span> Point&amp; lhs, <span class="hljs-type">const</span> Point&amp; rhs) -&gt; <span class="hljs-type">bool</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">abs</span>(lhs.a - rhs.a) &lt; tolerance &amp;&amp; <span class="hljs-built_in">abs</span>(lhs.b - rhs.b) &lt; tolerance) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> lhs.a &lt; rhs.a &amp;&amp; lhs.b &lt; rhs.b;<br>    &#125;;<br><br>    <span class="hljs-function">std::set&lt;Point, <span class="hljs-title">decltype</span><span class="hljs-params">(point_cmp)</span>&gt; <span class="hljs-title">s</span><span class="hljs-params">(point_cmp)</span></span>;<br>    s.<span class="hljs-built_in">insert</span>(Point&#123;<span class="hljs-number">1.0000000000</span>, <span class="hljs-number">2.0000000000</span>&#125;);<br>    s.<span class="hljs-built_in">insert</span>(Point&#123;<span class="hljs-number">1.0000000001</span>, <span class="hljs-number">2.0000000001</span>&#125;);<br>    std::cout &lt;&lt; s.<span class="hljs-built_in">size</span>() &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p><code>std::set/map</code> requires that comparators should be with weak strict ordering. For two value <code>x</code> and <code>y</code>, if <code>!(x &lt; y) &amp;&amp; !(y &lt; x) == true</code>, we can consider them equal.<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[容器比较器的严格弱序约束](https://zhuanlan.zhihu.com/p/378294506)">[1]</span></a></sup></p><p>If their difference are within tolerance, the comparator should return false directly.</p><section class="footnotes"><h2>References</h2><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span><a href="https://zhuanlan.zhihu.com/p/378294506">容器比较器的严格弱序约束</a><a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>]]></content>
+    <content type="html"><![CDATA[<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><p>Suppose there were such a scenario - we need to put mutiple points into a collection which contains unique points. The form of point is its coordinates <code>(x, y)</code>. The type of coordinate is <code>double</code>.</p><p>Note that we treat two points whose coordinates are close to each other as the same point. Coordinate close means within a certain tolerance. In different cases, we need to support custom tolerance which means that <strong>it’s a run-time value rather than compile-time value</strong>.</p><p>For example, with a tolerance of <code>1e-7</code>, we consider a point <code>(1.0000000000, 2.0000000000)</code> and another point <code>(1.0000000001, 2.0000000001)</code> to be the same point. If they were added separately to the collection, the size of the collection would be <code>1</code>.</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="std-unordered-set"><a href="#std-unordered-set" class="headerlink" title="std::unordered_set?"></a><code>std::unordered_set</code>?</h3><p>Imagine we use <code>std::unordered_set&lt;Point&gt;</code> to handle this problem. How to implement the hash function for the data structure <code>Point</code>? No matter how small the difference between double values, their hash values can be very different. It’s not easy to ensure that close double values have consistent hash values.</p><h3 id="std-set"><a href="#std-set" class="headerlink" title="std::set?"></a><code>std::set</code>?</h3><p>Imagine we use <code>std::set&lt;Point&gt;</code> to handle this problem. How to write a comparator for <code>Point</code> in <code>std::set</code>?</p><p>Don’t forget that we also need to support custom tolerance.</p><p>Template with double can be considered, but it’s a C++20 feature and more importantly it only supports compile-time values.</p><p>There is an elegant solution - that is lambda as comparator with capturing tolerance as follows:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;set&gt;</span></span><br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span> &#123;<br>    <span class="hljs-type">double</span> a;<br>    <span class="hljs-type">double</span> b;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">double</span> tolerance = <span class="hljs-number">1e-7</span>;<br>    <span class="hljs-keyword">auto</span> point_cmp = [tolerance](<span class="hljs-type">const</span> Point&amp; lhs, <span class="hljs-type">const</span> Point&amp; rhs) -&gt; <span class="hljs-type">bool</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">abs</span>(lhs.a - rhs.a) &lt; tolerance &amp;&amp; <span class="hljs-built_in">abs</span>(lhs.b - rhs.b) &lt; tolerance) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> lhs.a &lt; rhs.a &amp;&amp; lhs.b &lt; rhs.b;<br>    &#125;;<br><br>    <span class="hljs-function">std::set&lt;Point, <span class="hljs-title">decltype</span><span class="hljs-params">(point_cmp)</span>&gt; <span class="hljs-title">s</span><span class="hljs-params">(point_cmp)</span></span>;<br>    s.<span class="hljs-built_in">insert</span>(Point&#123;<span class="hljs-number">1.0000000000</span>, <span class="hljs-number">2.0000000000</span>&#125;);<br>    s.<span class="hljs-built_in">insert</span>(Point&#123;<span class="hljs-number">1.0000000001</span>, <span class="hljs-number">2.0000000001</span>&#125;);<br>    std::cout &lt;&lt; s.<span class="hljs-built_in">size</span>() &lt;&lt; std::endl;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p><code>std::set/map</code> requires that comparators should be with weak strict ordering. For two value <code>x</code> and <code>y</code>, if <code>!(x &lt; y) &amp;&amp; !(y &lt; x) == true</code>, we can consider them equal.<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="[容器比较器的严格弱序约束](https://zhuanlan.zhihu.com/p/378294506)">[1]</span></a></sup></p><p>If their difference are within tolerance, the comparator should return false directly.</p><h3 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h3><p>However, how to transfer such sets of such type to a function?</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pass_set</span><span class="hljs-params">(<span class="hljs-type">const</span> std::set&lt;Point, ???&gt;&amp; point_set)</span> </span>&#123;&#125;<br></code></pre></td></tr></table></figure><p>After all, we can’t spell the real type of a lambda function.</p><p>Of course, we can use <code>auto</code> to run:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pass_set</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; s)</span> </span>&#123;&#125;<br></code></pre></td></tr></table></figure><p>But its readability is bad and <code>auto</code> has no constraint. We can’t clarify what we actually is a <code>std::set&lt;Point, ...&gt;</code>. If we use <em>concept</em>, it seems that we take lots of efforts away from our work.</p><p>The solution to fix it is very simple. We all know lambda is just a anonymous functor that overloads the <code>operator()</code> function. And we have no idea to spell such anonymous functor. Therefore, the direction is clear - that is to make it a named functor. :)</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">PointCMP</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">PointCMP</span><span class="hljs-params">(<span class="hljs-type">double</span> tolerance)</span> : m_tolerance(tolerance) &#123;</span>&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">const</span> Point&amp; lhs, <span class="hljs-type">const</span> Point&amp; rhs)</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">abs</span>(lhs.a - rhs.a) &lt; m_tolerance &amp;&amp; <span class="hljs-built_in">abs</span>(lhs.b - rhs.b) &lt; m_tolerance) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> lhs.a &lt; rhs.a &amp;&amp; lhs.b &lt; rhs.b;<br>    &#125;;<br><br>    <span class="hljs-type">double</span> m_tolerance;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pass_set</span><span class="hljs-params">(<span class="hljs-type">const</span> std::set&lt;Point, PointCMP&gt;&amp; point_set)</span> </span>&#123;&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">double</span> tolerance_1 = <span class="hljs-number">1e-7</span>;<br>    PointCMP point_cmp&#123;tolerance_1&#125;;<br>    <span class="hljs-function">std::set&lt;Point, PointCMP&gt; <span class="hljs-title">s</span><span class="hljs-params">(point_cmp)</span></span>;<br>    <span class="hljs-built_in">pass_set</span>(s);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>Actually, it also supports to change the tolerance for the same set within the the process of use. It not only implements the functionality of comparator but also supports variable custom tolerance.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">double</span> tolerance_1 = <span class="hljs-number">1e-7</span>;<br>    PointCMP cmp_1&#123;tolerance_1&#125;;<br>    <span class="hljs-function">std::set&lt;Point, PointCMP&gt; <span class="hljs-title">s</span><span class="hljs-params">(cmp_1)</span></span>;<br><br>    <span class="hljs-comment">// processing</span><br><br>    <span class="hljs-type">double</span> tolerance_2 = <span class="hljs-number">1e-5</span>;<br>    PointCMP cmp_2&#123;tolerance_2&#125;;<br>    s = std::<span class="hljs-built_in">set</span>&lt;Point, PointCMP&gt;(cmp_2);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure><section class="footnotes"><h2>References</h2><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span><a href="https://zhuanlan.zhihu.com/p/378294506">容器比较器的严格弱序约束</a><a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>]]></content>
     
     
     <categories>
@@ -538,9 +577,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -569,15 +608,15 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
-      
-      <tag>muduo</tag>
       
       <tag>vtable</tag>
       
       <tag>vfunction</tag>
+      
+      <tag>library</tag>
+      
+      <tag>muduo</tag>
       
     </tags>
     
@@ -604,9 +643,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -635,9 +674,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -666,9 +705,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -697,9 +736,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -728,9 +767,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -759,9 +798,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -792,9 +831,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -825,9 +864,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -858,9 +897,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -1023,9 +1062,9 @@
     
     <tags>
       
-      <tag>library</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -1244,11 +1283,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp17</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp17</tag>
+      <tag>cpp20</tag>
       
       <tag>string_view</tag>
       
@@ -1287,9 +1326,9 @@
       
       <tag>medium</tag>
       
-      <tag>string</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>string</tag>
       
       <tag>kmp</tag>
       
@@ -1322,13 +1361,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp20</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1359,13 +1398,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp20</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1396,11 +1435,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -1431,9 +1470,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1532,13 +1571,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp20</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1569,13 +1608,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp20</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -1781,9 +1820,9 @@
       
       <tag>linked_list</tag>
       
-      <tag>medium</tag>
-      
       <tag>hashmap</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -1849,9 +1888,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -2098,13 +2137,13 @@
     
     <tags>
       
-      <tag>coroutine</tag>
-      
       <tag>cpp</tag>
+      
+      <tag>stl</tag>
       
       <tag>cpp20</tag>
       
-      <tag>stl</tag>
+      <tag>coroutine</tag>
       
     </tags>
     
@@ -2114,8 +2153,8 @@
   
   <entry>
     <title>.NET HttpWebRequest Connection Limit</title>
-    <link href="/Dev/C#/NET-HttpWebRequest-Connection-Limit/"/>
-    <url>/Dev/C#/NET-HttpWebRequest-Connection-Limit/</url>
+    <link href="/Dev/CSharp/NET-HttpWebRequest-Connection-Limit/"/>
+    <url>/Dev/CSharp/NET-HttpWebRequest-Connection-Limit/</url>
     
     <content type="html"><![CDATA[<h2 id="Trap"><a href="#Trap" class="headerlink" title="Trap"></a>Trap</h2><p>Recently I stuck in a trap. There is a performance issue in the project I’m taking responsibility for. There is an interface in the project. As a .NET client, it would send quite a few keys to server and would receive the resources corresponding to the keys one by one.</p><p>Some customers gave us some feedback that the resources fetching costed very long time and it affected customers’ productivity unacceptably. Unfortunately, we’re not able to gain the actual quantity of keys in customers’ usage environment, but fortunately we found a way to reproduce the issue and recorded it by Windows Performance Recorder(WPR) though it costed at least 10 minutes.</p><p>The keys have been separated into multiple groups by every 200 keys as a group. Every group would be sent to server parallelly. From this perspective, the performance issue are beyond our expectations.</p><h2 id="Profiling-Call-Stack"><a href="#Profiling-Call-Stack" class="headerlink" title="Profiling Call Stack"></a>Profiling Call Stack</h2><p>After profiling in Windows Performance Analyzer(WPA), the call stack within threads showed some clues. Many threads’ wait time are pretty long. It means that they are blocked by IO or lock. With further inquiry, in most cases they are blocked inside <code>SendRequest</code> but before the actual request sending. We have to throw a question - what block these threads and make them waiting? Luckily, WPA shows the call stack of the ready thread(s) next to every blocked thread. Every ready thread is recorded at the socket <code>read</code> stage, and they are also blocked at <code>SendRequest</code> by other threads in <code>read</code> shown in the WPA call stack.</p><p>Based on it, I conjectured that the thread leverages a lock and releases the lock in <code>read</code>. After that, the waiting thread would gets the lock and then does sending its request. I have to mention that those threads follow one by one and they construct a dependent chain.</p><p>I suspected there is a thread pool inside the .NET network framework, after all there is a function named <code>WaitOne</code> about thread. However, I couldn’t find any keyword about thread pool by reviewing the code context through the call stack.</p><p>In the end, I noticed the type of request is <code>HttpWebRequest</code> and tried to search it in the Internet. Fortunately, there is another village in the dark.</p><h2 id="HttpWebRequest-Connection-limitation"><a href="#HttpWebRequest-Connection-limitation" class="headerlink" title="HttpWebRequest Connection limitation"></a>HttpWebRequest Connection limitation</h2><p><strong>For <code>HttpWebRequest</code>, it has a concurrent connection limit that is <code>2</code> by default.</strong> It approximates no concurrency! No wonder the pool threads were blocked one by one…</p><p>The solution to fix it isn’t hard. We just need to increase the connection limit to a reasonable value such as <code>512</code>.Actually we have 2 ways to achieve it:</p><h3 id="Adjust-in-Configuration"><a href="#Adjust-in-Configuration" class="headerlink" title="Adjust in Configuration"></a>Adjust in Configuration</h3><ol><li><p>Open the configuration file <code>App.config</code> in the project.</p></li><li><p>The original configuration might be like this:</p> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs XML"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span> ?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">startup</span>&gt;</span> <br>        <span class="hljs-tag">&lt;<span class="hljs-name">supportedRuntime</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;v4.0&quot;</span> <span class="hljs-attr">sku</span>=<span class="hljs-string">&quot;.NETFramework,Version=v4.6&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">startup</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure></li><li><p>Add a field scope named <code>connectionManagement</code> and add a value about <code>maxconnection</code>.</p> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs XML"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span> ?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">startup</span>&gt;</span> <br>        <span class="hljs-tag">&lt;<span class="hljs-name">supportedRuntime</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;v4.0&quot;</span> <span class="hljs-attr">sku</span>=<span class="hljs-string">&quot;.NETFramework,Version=v4.6&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">startup</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">system.net</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">defaultProxy</span> <span class="hljs-attr">enabled</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">proxy</span>/&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">bypasslist</span>/&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">module</span>/&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">defaultProxy</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">connectionManagement</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">add</span> <span class="hljs-attr">address</span>=<span class="hljs-string">&quot;*&quot;</span> <span class="hljs-attr">maxconnection</span>=<span class="hljs-string">&quot;512&quot;</span>/&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">connectionManagement</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">system.net</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br></code></pre></td></tr></table></figure></li></ol><h3 id="Adjust-in-Program"><a href="#Adjust-in-Program" class="headerlink" title="Adjust in Program"></a>Adjust in Program</h3><p>Add a line in code like below:</p><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C#">System.Net.ServicePointManager.DefaultConnectionLimit = <span class="hljs-number">512</span>;<br></code></pre></td></tr></table></figure><h2 id="Other-Informations"><a href="#Other-Informations" class="headerlink" title="Other Informations"></a>Other Informations</h2><p>As for <code>HttpClient</code> after .NET 4.5, it seems that it doesn’t have the connection limit. <strong>Note that</strong> it’s different to <code>HttpWebRequest</code>.</p><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul><li><a href="https://learn.microsoft.com/en-us/dotnet/api/system.net.servicepointmanager.defaultconnectionlimit?view=netframework-4.8#System_Net_ServicePointManager_DefaultConnectionLimit">Microsoft .NET Framework 4.8 Documentation</a></li><li><a href="https://blog.csdn.net/PLA12147111/article/details/105496791">C# 关于HttpWebRequest最大连接数限制,多线程中速度提升解决方案</a></li><li><a href="https://blog.csdn.net/defender_/article/details/91949613">C#多线程环境下调用 HttpWebRequest 并发连接限制</a></li></ul>]]></content>
     
@@ -2277,9 +2316,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -2316,9 +2355,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2357,9 +2396,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2458,9 +2497,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
