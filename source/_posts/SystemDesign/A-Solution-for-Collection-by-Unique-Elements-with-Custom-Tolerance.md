@@ -63,4 +63,69 @@ int main() {
 
 If their difference are within tolerance, the comparator should return false directly.
 
+### Advanced
+
+However, how to transfer such sets of such type to a function?
+
+```C++
+void pass_set(const std::set<Point, ???>& point_set) {}
+```
+
+After all, we can't spell the real type of a lambda function.
+
+Of course, we can use `auto` to run:
+
+```C++
+void pass_set(const auto& s) {}
+```
+
+But its readability is bad and `auto` has no constraint. We can't clarify what we actually is a `std::set<Point, ...>`. If we use *concept*, it seems that we take lots of efforts away from our work.
+
+The solution to fix it is very simple. We all know lambda is just a anonymous functor that overloads the `operator()` function. And we have no idea to spell such anonymous functor. Therefore, the direction is clear - that is to make it a named functor. :)
+
+```C++
+struct PointCMP {
+    explicit PointCMP(double tolerance) : m_tolerance(tolerance) {}
+
+    bool operator()(const Point& lhs, const Point& rhs) const {
+        if (abs(lhs.a - rhs.a) < m_tolerance && abs(lhs.b - rhs.b) < m_tolerance) {
+            return false;
+        }
+
+        return lhs.a < rhs.a && lhs.b < rhs.b;
+    };
+
+    double m_tolerance;
+};
+
+void pass_set(const std::set<Point, PointCMP>& point_set) {}
+
+int main() {
+    double tolerance_1 = 1e-7;
+    PointCMP point_cmp{tolerance_1};
+    std::set<Point, PointCMP> s(point_cmp);
+    pass_set(s);
+
+    return 0;
+}
+```
+
+Actually, it also supports to change the tolerance for the same set within the the process of use. It not only implements the functionality of comparator but also supports variable custom tolerance.
+
+```C++
+int main() {
+    double tolerance_1 = 1e-7;
+    PointCMP cmp_1{tolerance_1};
+    std::set<Point, PointCMP> s(cmp_1);
+
+    // processing
+
+    double tolerance_2 = 1e-5;
+    PointCMP cmp_2{tolerance_2};
+    s = std::set<Point, PointCMP>(cmp_2);
+
+    return 0;
+}
+```
+
 [^1]: [容器比较器的严格弱序约束](https://zhuanlan.zhihu.com/p/378294506)
