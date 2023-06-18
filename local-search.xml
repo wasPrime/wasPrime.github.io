@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>LeetCode 24 - Swap Nodes in Pairs</title>
+    <link href="/Algorithm/LeetCode/LinkedList/LeetCode-24-Swap-Nodes-in-Pairs/"/>
+    <url>/Algorithm/LeetCode/LinkedList/LeetCode-24-Swap-Nodes-in-Pairs/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Swap-Nodes-in-Pairs"><a href="#English-Swap-Nodes-in-Pairs" class="headerlink" title="English (Swap Nodes in Pairs)"></a>English (Swap Nodes in Pairs)</h3><p>Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list’s nodes (i.e., only nodes themselves may be changed.)</p><p><strong>Example 1:</strong></p><pre><code class=" mermaid">graph LRnode11((1))node12((2))node13((3))node14((4))node11 ---&gt; node12 ---&gt; node13 ---&gt; node14node21((2))node22((1))node23((4))node25((3))node21 ---&gt; node22 ---&gt; node23 ---&gt; node25</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2,3,4]<br>Output: [2,1,4,3]<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = []<br>Output: []<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1]<br>Output: [1]<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li>The number of nodes in the list is in the range <code>[0, 100]</code>.</li><li><code>0 &lt;= Node.val &lt;= 100</code></li></ul><h3 id="Chinese-两两交换链表中的节点"><a href="#Chinese-两两交换链表中的节点" class="headerlink" title="Chinese (两两交换链表中的节点)"></a>Chinese (两两交换链表中的节点)</h3><p>给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。</p><p><strong>示例 1：</strong></p><pre><code class=" mermaid">graph LRnode11((1))node12((2))node13((3))node14((4))node11 ---&gt; node12 ---&gt; node13 ---&gt; node14node21((2))node22((1))node23((4))node25((3))node21 ---&gt; node22 ---&gt; node23 ---&gt; node25</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2,3,4]<br>输出：[2,1,4,3]<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = []<br>输出：[]<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1]<br>输出：[1]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li>链表中节点的数目在范围 <code>[0, 100]</code> 内</li><li><code>0 &lt;= Node.val &lt;= 100</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">swapPairs</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>, head);<br><br>        ListNode* curr = dummy;<br>        <span class="hljs-keyword">while</span> (curr-&gt;next != <span class="hljs-literal">nullptr</span> &amp;&amp; curr-&gt;next-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>            ListNode* first = curr-&gt;next;<br>            ListNode* second = curr-&gt;next-&gt;next;<br>            ListNode* next_pair = curr-&gt;next-&gt;next-&gt;next;<br><br>            curr-&gt;next = second;<br>            second-&gt;next = first;<br>            first-&gt;next = next_pair;<br><br>            curr = first;<br>        &#125;<br><br>        head = dummy-&gt;next;<br>        <span class="hljs-keyword">delete</span> dummy;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>linked_list</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>linked_list</tag>
+      
+      <tag>medium</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 141 - Linked List Cycle</title>
     <link href="/Algorithm/LeetCode/LinkedList/LeetCode-141-Linked-List-Cycle/"/>
     <url>/Algorithm/LeetCode/LinkedList/LeetCode-141-Linked-List-Cycle/</url>
@@ -100,9 +135,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -170,9 +205,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -787,13 +822,13 @@
       
       <tag>cpp</tag>
       
-      <tag>vtable</tag>
-      
-      <tag>vfunction</tag>
-      
       <tag>library</tag>
       
       <tag>muduo</tag>
+      
+      <tag>vtable</tag>
+      
+      <tag>vfunction</tag>
       
     </tags>
     
@@ -1460,11 +1495,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
-      
       <tag>stl</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -1612,11 +1647,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1647,9 +1682,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -1995,11 +2030,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -2532,9 +2567,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2573,9 +2608,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
