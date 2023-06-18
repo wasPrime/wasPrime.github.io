@@ -16,27 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Difficulty: hard             Problem DescriptionEnglish (Reducing Dishes)A chef has collected data on the satisfaction level of his n dishes. Chef can cook any dish in 1 unit of time. Lik">
+    <meta name="description" content="Difficulty: medium             Problem DescriptionEnglish (Add Two Numbers)You are given two non-empty linked lists representing two non-negative integers. The digits are stored in revers">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode 1402 - Reducing Dishes">
-<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/DynamicProgramming/LeetCode-1402-Reducing-Dishes/index.html">
+<meta property="og:title" content="LeetCode 2 - Add Two Numbers">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-2-Add-Two-Numbers/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="Difficulty: hard             Problem DescriptionEnglish (Reducing Dishes)A chef has collected data on the satisfaction level of his n dishes. Chef can cook any dish in 1 unit of time. Lik">
+<meta property="og:description" content="Difficulty: medium             Problem DescriptionEnglish (Add Two Numbers)You are given two non-empty linked lists representing two non-negative integers. The digits are stored in revers">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-06-08T14:49:25.000Z">
-<meta property="article:modified_time" content="2023-06-08T15:08:31.141Z">
+<meta property="article:published_time" content="2023-06-09T13:21:49.000Z">
+<meta property="article:modified_time" content="2023-06-18T13:48:11.782Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="leetcode">
-<meta property="article:tag" content="hard">
-<meta property="article:tag" content="greedy_algorithm">
-<meta property="article:tag" content="dynamic_programming">
-<meta property="article:tag" content="dp">
+<meta property="article:tag" content="linked_list">
+<meta property="article:tag" content="medium">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>LeetCode 1402 - Reducing Dishes - wasPrime&#39;s Blog</title>
+  <title>LeetCode 2 - Add Two Numbers - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="LeetCode 1402 - Reducing Dishes"></span>
+            <span id="subtitle" data-typed-text="LeetCode 2 - Add Two Numbers"></span>
           
         </div>
 
@@ -213,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-06-08 22:49" pubdate>
-          June 8, 2023 pm
+        <time datetime="2023-06-09 21:21" pubdate>
+          June 9, 2023 pm
         </time>
       </span>
     
@@ -225,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k words
+          2.4k words
         
       </span>
     
@@ -236,7 +234,7 @@
         
         
         
-          4 mins
+          5 mins
         
       </span>
     
@@ -287,54 +285,87 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">LeetCode 1402 - Reducing Dishes</h1>
+            <h1 style="display: none">LeetCode 2 - Add Two Numbers</h1>
             
             
               <div class="markdown-body">
                 
                 <div class="note note-info">
-            <p>Difficulty: <span class="label label-danger">hard</span></p>
+            <p>Difficulty: <span class="label label-warning">medium</span></p>
           </div>
 
-<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Reducing-Dishes"><a href="#English-Reducing-Dishes" class="headerlink" title="English (Reducing Dishes)"></a>English (Reducing Dishes)</h3><p>A chef has collected data on the <code>satisfaction</code> level of his <code>n</code> dishes. Chef can cook any dish in 1 unit of time.</p>
-<p><strong>Like-time coefficient</strong> of a dish is defined as the time taken to cook that dish including previous dishes multiplied by its satisfaction level i.e. <code>time[i] * satisfaction[i]</code>.</p>
-<p>Return <em>the maximum sum of <strong>like-time coefficient</strong> that the chef can obtain after dishes preparation</em>.</p>
-<p>Dishes can be prepared in <strong>any</strong> order and the chef can discard some dishes to get this maximum value.</p>
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Add-Two-Numbers"><a href="#English-Add-Two-Numbers" class="headerlink" title="English (Add Two Numbers)"></a>English (Add Two Numbers)</h3><p>You are given two <strong>non-empty</strong> linked lists representing two non-negative integers. The digits are stored in <strong>reverse order</strong>, and each of their nodes contains a single digit. Add the two numbers and return the sumas a linked list.</p>
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: satisfaction = [-1,-8,0,5,-9]<br>Output: 14<br>Explanation: After Removing the second and last dish, the maximum total like-time coefficient will be equal to (-1*1 + 0*2 + 5*3 = 14).<br>Each dish is prepared in one unit of time.<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node11((2))
+node12((4))
+node13((3))
+node11 ---&gt; node12 ---&gt; node13
+
+node21((5))
+node22((6))
+node23((4))
+node21 ---&gt; node22 ---&gt; node23
+
+node31((7))
+node32((0))
+node33((8))
+node31 ---&gt; node32 ---&gt; node33
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: l1 = [2,4,3], l2 = [5,6,4]<br>Output: [7,0,8]<br>Explanation: 342 + 465 = 807.<br></code></pre></td></tr></table></figure>
 
 <p><strong>Example 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: satisfaction = [4,3,2]<br>Output: 20<br>Explanation: Dishes can be prepared in any order, (2*1 + 3*2 + 4*3 = 20)<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: l1 = [0], l2 = [0]<br>Output: [0]<br></code></pre></td></tr></table></figure>
 
 <p><strong>Example 3:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: satisfaction = [-1,-4,-5]<br>Output: 0<br>Explanation: People do not like the dishes. No dish is prepared.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]<br>Output: [8,9,9,9,0,0,0,1]<br></code></pre></td></tr></table></figure>
 
 <p><strong>Constraints:</strong></p>
 <ul>
-<li><code>n == satisfaction.length</code></li>
-<li><code>1 &lt;= n &lt;= 500</code></li>
-<li><code>-1000 &lt;= satisfaction[i] &lt;= 1000</code></li>
+<li>The number of nodes in each linked list is in the range <code>[1, 100]</code>.</li>
+<li><code>0 &lt;= Node.val &lt;= 9</code></li>
+<li>It is guaranteed that the list represents a number that does not have leading zeros.</li>
 </ul>
-<h3 id="Chinese-做菜顺序"><a href="#Chinese-做菜顺序" class="headerlink" title="Chinese (做菜顺序)"></a>Chinese (做菜顺序)</h3><p>一个厨师收集了他 <code>n</code> 道菜的满意程度 <code>satisfaction</code> ，这个厨师做出每道菜的时间都是 1 单位时间。</p>
-<p>一道菜的 「喜爱时间」系数定义为烹饪这道菜以及之前每道菜所花费的时间乘以这道菜的满意程度，也就是 <code>time[i]*satisfaction[i]</code> 。</p>
-<p>请你返回做完所有菜 「喜爱时间」总和的最大值为多少。</p>
-<p>你可以按 <strong>任意</strong> 顺序安排做菜的顺序，你也可以选择放弃做某些菜来获得更大的总和。</p>
+<h3 id="Chinese-两数相加"><a href="#Chinese-两数相加" class="headerlink" title="Chinese (两数相加)"></a>Chinese (两数相加)</h3><p>给你两个 <strong>非空</strong> 的链表，表示两个非负的整数。它们每位数字都是按照 <strong>逆序</strong> 的方式存储的，并且每个节点只能存储 <strong>一位</strong> 数字。</p>
+<p>请你将两个数相加，并以相同形式返回一个表示和的链表。</p>
+<p>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
 <p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：satisfaction = [-1,-8,0,5,-9]<br>输出：14<br>解释：去掉第二道和最后一道菜，最大的喜爱时间系数和为 (-1*1 + 0*2 + 5*3 = 14) 。每道菜都需要花费 1 单位时间完成。<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node11((2))
+node12((4))
+node13((3))
+node11 ---&gt; node12 ---&gt; node13
+
+node21((5))
+node22((6))
+node23((4))
+node21 ---&gt; node22 ---&gt; node23
+
+node31((7))
+node32((0))
+node33((8))
+node31 ---&gt; node32 ---&gt; node33
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：l1 = [2,4,3], l2 = [5,6,4]<br>输出：[7,0,8]<br>解释：342 + 465 = 807.<br></code></pre></td></tr></table></figure>
 
 <p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：satisfaction = [4,3,2]<br>输出：20<br>解释：按照原来顺序相反的时间做菜 (2*1 + 3*2 + 4*3 = 20)<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：l1 = [0], l2 = [0]<br>输出：[0]<br></code></pre></td></tr></table></figure>
 
 <p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：satisfaction = [-1,-4,-5]<br>输出：0<br>解释：大家都不喜欢这些菜，所以不做任何菜可以获得最大的喜爱时间系数。<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]<br>输出：[8,9,9,9,0,0,0,1]<br></code></pre></td></tr></table></figure>
 
 <p><strong>提示：</strong></p>
 <ul>
-<li><code>n == satisfaction.length</code></li>
-<li><code>1 &lt;= n &lt;= 500</code></li>
-<li><code>-1000 &lt;= satisfaction[i] &lt;= 1000</code></li>
+<li>每个链表中的节点数在范围 <code>[1, 100]</code> 内</li>
+<li><code>0 &lt;= Node.val &lt;= 9</code></li>
+<li>题目数据保证列表表示的数字不含前导零</li>
 </ul>
-<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="Greedy-Algorithm-x2F-Dynamic-Programming"><a href="#Greedy-Algorithm-x2F-Dynamic-Programming" class="headerlink" title="Greedy Algorithm &#x2F; Dynamic Programming(?)"></a>Greedy Algorithm &#x2F; Dynamic Programming(?)</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">maxSatisfaction</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; satisfactions)</span> </span>&#123;<br>        <span class="hljs-built_in">sort</span>(satisfactions.<span class="hljs-built_in">begin</span>(), satisfactions.<span class="hljs-built_in">end</span>(), <span class="hljs-built_in">greater</span>&lt;<span class="hljs-type">int</span>&gt;());  <span class="hljs-comment">// from larger to less</span><br><br>        <span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> satisfaction : satisfactions) &#123;<br>            sum += satisfaction;<br>            <span class="hljs-keyword">if</span> (sum &lt;= <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>            res += sum;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">addTwoNumbers</span><span class="hljs-params">(ListNode* l1, ListNode* l2)</span> </span>&#123;<br>        ListNode* dummy = <span class="hljs-keyword">new</span> ListNode;<br>        ListNode* last = dummy;<br>        <span class="hljs-type">int</span> carry = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">while</span> (l1 &amp;&amp; l2) &#123;<br>            <span class="hljs-type">int</span> sum = l1-&gt;val + l2-&gt;val + carry;<br>            last-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(sum % <span class="hljs-number">10</span>);<br>            carry = sum / <span class="hljs-number">10</span>;<br><br>            l1 = l1-&gt;next;<br>            l2 = l2-&gt;next;<br>            last = last-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">while</span> (l1) &#123;<br>            <span class="hljs-type">int</span> sum = l1-&gt;val + carry;<br>            last-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(sum % <span class="hljs-number">10</span>);<br>            carry = sum / <span class="hljs-number">10</span>;<br><br>            l1 = l1-&gt;next;<br>            last = last-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">while</span> (l2) &#123;<br>            <span class="hljs-type">int</span> sum = l2-&gt;val + carry;<br>            last-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(sum % <span class="hljs-number">10</span>);<br>            carry = sum / <span class="hljs-number">10</span>;<br><br>            l2 = l2-&gt;next;<br>            last = last-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (carry) &#123;<br>            last-&gt;next = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(carry);<br>            last = last-&gt;next;<br>        &#125;<br><br>        ListNode* head = dummy-&gt;next;<br>        <span class="hljs-keyword">delete</span> dummy;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -363,7 +394,7 @@
   
     <span>></span>
     
-  <a href="/categories/algorithm/leetcode/dynamic-programming/" class="category-chain-item">dynamic_programming</a>
+  <a href="/categories/algorithm/leetcode/linked-list/" class="category-chain-item">linked_list</a>
   
   
 
@@ -386,13 +417,9 @@
       
         <a href="/tags/leetcode/">#leetcode</a>
       
-        <a href="/tags/hard/">#hard</a>
+        <a href="/tags/linked-list/">#linked_list</a>
       
-        <a href="/tags/greedy-algorithm/">#greedy_algorithm</a>
-      
-        <a href="/tags/dynamic-programming/">#dynamic_programming</a>
-      
-        <a href="/tags/dp/">#dp</a>
+        <a href="/tags/medium/">#medium</a>
       
     </div>
   
@@ -404,8 +431,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>LeetCode 1402 - Reducing Dishes</div>
-      <div>http://wasprime.github.io/Algorithm/LeetCode/DynamicProgramming/LeetCode-1402-Reducing-Dishes/</div>
+      <div>LeetCode 2 - Add Two Numbers</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-2-Add-Two-Numbers/</div>
     </div>
     <div class="license-meta">
       
@@ -417,13 +444,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 8, 2023</div>
+          <div>June 9, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>June 8, 2023</div>
+          <div>June 18, 2023</div>
         </div>
       
       
@@ -454,18 +481,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-2-Add-Two-Numbers/" title="LeetCode 2 - Add Two Numbers">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">LeetCode 2 - Add Two Numbers</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/SystemDesign/A-Solution-for-Collection-by-Unique-Elements-with-Custom-Tolerance/" title="A Solution for Collection by Unique Elements with Custom Tolerance">
-                        <span class="hidden-mobile">A Solution for Collection by Unique Elements with Custom Tolerance</span>
+                      <a href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-1402-Reducing-Dishes/" title="LeetCode 1402 - Reducing Dishes">
+                        <span class="hidden-mobile">LeetCode 1402 - Reducing Dishes</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -510,6 +531,19 @@
 
   
 
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
 
 
 
