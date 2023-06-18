@@ -16,26 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="BackgroundIn traditional C++, we used to use an integer to make an iteration as below: 123for (auto i &#x3D; begin; i &lt; end; ++i) &amp;#123;    ...&amp;#125;  However, this way looks verbose. We potentially nee">
+    <meta name="description" content="Difficulty: medium             Problem DescriptionEnglish (Remove Nth Node From End of List)Given the head of a linked list, remove the nth node from the end of the list and return its he">
 <meta property="og:type" content="article">
-<meta property="og:title" content="unused variable when using std::views::iota in C++20">
-<meta property="og:url" content="http://wasprime.github.io/Dev/C++/STL/unused-variable-when-using-std-views-iota-in-C-20/index.html">
+<meta property="og:title" content="LeetCode 19 - Remove Nth Node From End of List">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-19-Remove-Nth-Node-From-End-of-List/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="BackgroundIn traditional C++, we used to use an integer to make an iteration as below: 123for (auto i &#x3D; begin; i &lt; end; ++i) &amp;#123;    ...&amp;#125;  However, this way looks verbose. We potentially nee">
+<meta property="og:description" content="Difficulty: medium             Problem DescriptionEnglish (Remove Nth Node From End of List)Given the head of a linked list, remove the nth node from the end of the list and return its he">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-04-15T14:55:00.000Z">
-<meta property="article:modified_time" content="2023-04-15T15:26:02.754Z">
+<meta property="article:published_time" content="2023-06-11T14:10:53.000Z">
+<meta property="article:modified_time" content="2023-06-18T14:22:32.522Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="cpp">
-<meta property="article:tag" content="cpp20">
-<meta property="article:tag" content="stl">
-<meta property="article:tag" content="ranges">
-<meta property="article:tag" content="maybe_unused">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="linked_list">
+<meta property="article:tag" content="medium">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>unused variable when using std::views::iota in C++20 - wasPrime&#39;s Blog</title>
+  <title>LeetCode 19 - Remove Nth Node From End of List - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="unused variable when using std::views::iota in C++20"></span>
+            <span id="subtitle" data-typed-text="LeetCode 19 - Remove Nth Node From End of List"></span>
           
         </div>
 
@@ -212,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-15 22:55" pubdate>
-          April 15, 2023 pm
+        <time datetime="2023-06-11 22:10" pubdate>
+          June 11, 2023 pm
         </time>
       </span>
     
@@ -224,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k words
+          1.8k words
         
       </span>
     
@@ -235,7 +234,7 @@
         
         
         
-          3 mins
+          4 mins
         
       </span>
     
@@ -286,32 +285,84 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">unused variable when using std::views::iota in C++20</h1>
+            <h1 style="display: none">LeetCode 19 - Remove Nth Node From End of List</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>In traditional C++, we used to use an integer to make an iteration as below:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i = begin; i &lt; end; ++i) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>However, this way looks verbose. We potentially need a simple and convenient way like in Python:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(begin, end):<br>    ...<br></code></pre></td></tr></table></figure>
-
-<h2 id="std-views-iota"><a href="#std-views-iota" class="headerlink" title="std::views::iota"></a><code>std::views::iota</code></h2><p>Fortunately, we can achieve it in C++20 as the below code:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ranges&gt;</span></span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i : std::views::<span class="hljs-built_in">iota</span>(begin, end)) &#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<div class="note note-info">
-            <p>namespace <code>std::views</code> is an alias to namespace <code>std::ranges::views</code> with <code>namespace views = ranges::views;</code>. Therefore, <code>std::views::iota</code> is an abbreviation of <code>std::ranges::views::iota</code>.</p><p>Actually, their return type is <code>std::ranges::iota_view</code> so it’s also available to use <code>std::ranges::iota_view(begin, end)</code>.</p><p>In conclusion, it’s suggested to use <code>std::views::iota</code> in everywhere for unification.</p>
+                <div class="note note-info">
+            <p>Difficulty: <span class="label label-warning">medium</span></p>
           </div>
 
-<h2 id="unused-variable"><a href="#unused-variable" class="headerlink" title="unused variable"></a>unused variable</h2><p>There is an issue that the compiler would complained there was an unused variable <code>i</code> if it was only for iteration and it wasn’t used in the loop body.</p>
-<p>In previous code, there was no such issue because the iterator <code>i</code> had been not only read but also written.</p>
-<p>We might add attribute <code>[[maybe_unused]]</code> (C++17) to silence that warning:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span> ([[maybe_unused]] <span class="hljs-type">int</span> i : std::views::<span class="hljs-built_in">iota</span>(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>)) &#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;dummy&quot;</span> &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Remove-Nth-Node-From-End-of-List"><a href="#English-Remove-Nth-Node-From-End-of-List" class="headerlink" title="English (Remove Nth Node From End of List)"></a>English (Remove Nth Node From End of List)</h3><p>Given the <code>head</code> of a linked list, remove the <code>nth</code> node from the end of the list and return its head.</p>
+<p><strong>Example 1:</strong></p>
+<pre><code class=" mermaid">graph LR
 
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/70622617/for-loop-counter-gives-an-unused-variable-warning">for-loop counter gives an unused-variable warning</a></li>
+node11((1))
+node12((2))
+node13((3))
+node14((4))
+node15((5))
+node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15
+
+node21((1))
+node22((2))
+node23((3))
+node25((5))
+node21 ---&gt; node22 ---&gt; node23 -----&gt; node25
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2,3,4,5], n = 2<br>Output: [1,2,3,5]<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1], n = 1<br>Output: []<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2], n = 1<br>Output: [1]<br></code></pre></td></tr></table></figure>
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li>The number of nodes in the list is <code>sz</code>.</li>
+<li><code>1 &lt;= sz &lt;= 30</code></li>
+<li><code>0 &lt;= Node.val &lt;= 100</code></li>
+<li><code>1 &lt;= n &lt;= sz</code></li>
 </ul>
+<p><strong>Follow up:</strong> Could you do this in one pass?</p>
+<h3 id="Chinese-删除链表的倒数第-N-个结点"><a href="#Chinese-删除链表的倒数第-N-个结点" class="headerlink" title="Chinese (删除链表的倒数第 N 个结点)"></a>Chinese (删除链表的倒数第 N 个结点)</h3><p>给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node11((1))
+node12((2))
+node13((3))
+node14((4))
+node15((5))
+node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15
+
+node21((1))
+node22((2))
+node23((3))
+node25((5))
+node21 ---&gt; node22 ---&gt; node23 -----&gt; node25
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2,3,4,5], n = 2<br>输出：[1,2,3,5]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1], n = 1<br>输出：[]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2], n = 1<br>输出：[1]<br></code></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li>链表中结点的数目为 <code>sz</code></li>
+<li><code>1 &lt;= sz &lt;= 30</code></li>
+<li><code>0 &lt;= Node.val &lt;= 100</code></li>
+<li><code>1 &lt;= n &lt;= sz</code></li>
+</ul>
+<p><strong>进阶：</strong> 你能尝试使用一趟扫描实现吗？</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">removeNthFromEnd</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>        ListNode* last = head;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>            last = last-&gt;next;<br>        &#125;<br><br>        ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>, head);<br>        ListNode* prev = dummy;<br>        ListNode* curr = head;<br>        <span class="hljs-keyword">while</span> (last) &#123;<br>            prev = prev-&gt;next;<br>            curr = curr-&gt;next;<br>            last = last-&gt;next;<br>        &#125;<br><br>        prev-&gt;next = curr-&gt;next;<br>        <span class="hljs-keyword">delete</span> curr;<br><br>        head = dummy-&gt;next;<br>        <span class="hljs-keyword">delete</span> dummy;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -330,17 +381,17 @@
     
       <span class="category-chain">
         
-  <a href="/categories/dev/" class="category-chain-item">dev</a>
+  <a href="/categories/algorithm/" class="category-chain-item">algorithm</a>
   
   
     <span>></span>
     
-  <a href="/categories/dev/cpp/" class="category-chain-item">cpp</a>
+  <a href="/categories/algorithm/leetcode/" class="category-chain-item">leetcode</a>
   
   
     <span>></span>
     
-  <a href="/categories/dev/cpp/stl/" class="category-chain-item">stl</a>
+  <a href="/categories/algorithm/leetcode/linked-list/" class="category-chain-item">linked_list</a>
   
   
 
@@ -359,15 +410,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/cpp/">#cpp</a>
+        <a href="/tags/algorithm/">#algorithm</a>
       
-        <a href="/tags/cpp20/">#cpp20</a>
+        <a href="/tags/leetcode/">#leetcode</a>
       
-        <a href="/tags/stl/">#stl</a>
+        <a href="/tags/linked-list/">#linked_list</a>
       
-        <a href="/tags/ranges/">#ranges</a>
-      
-        <a href="/tags/maybe-unused/">#maybe_unused</a>
+        <a href="/tags/medium/">#medium</a>
       
     </div>
   
@@ -379,8 +428,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>unused variable when using std::views::iota in C++20</div>
-      <div>http://wasprime.github.io/Dev/C++/STL/unused-variable-when-using-std-views-iota-in-C-20/</div>
+      <div>LeetCode 19 - Remove Nth Node From End of List</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-19-Remove-Nth-Node-From-End-of-List/</div>
     </div>
     <div class="license-meta">
       
@@ -392,13 +441,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>April 15, 2023</div>
+          <div>June 11, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>April 15, 2023</div>
+          <div>June 18, 2023</div>
         </div>
       
       
@@ -429,18 +478,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LeetCode-42-Trapping-Rain-Water/" title="LeetCode 42 - Trapping Rain Water">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">LeetCode 42 - Trapping Rain Water</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LeetCode-23-Merge-k-Sorted-Lists/" title="LeetCode 23 - Merge k Sorted Lists">
-                        <span class="hidden-mobile">LeetCode 23 - Merge k Sorted Lists</span>
+                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-206-Reverse-Linked-List/" title="LeetCode 206 - Reverse Linked List">
+                        <span class="hidden-mobile">LeetCode 206 - Reverse Linked List</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -485,6 +528,19 @@
 
   
 
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
 
 
 
