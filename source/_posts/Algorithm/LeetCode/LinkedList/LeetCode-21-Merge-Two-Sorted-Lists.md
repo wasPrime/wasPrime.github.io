@@ -147,7 +147,7 @@ public:
         ListNode* dummy = new ListNode;
 
         ListNode* last = dummy;
-        while (list1 && list2) {
+        while (list1 != nullptr && list2 != nullptr) {
             if (list1->val <= list2->val) {
                 last->next = list1;
                 list1 = list1->next;
@@ -159,10 +159,10 @@ public:
             last = last->next;
         }
 
-        if (list1) {
+        if (list1 != nullptr) {
             last->next = list1;
         }
-        if (list2) {
+        if (list2 != nullptr) {
             last->next = list2;
         }
 

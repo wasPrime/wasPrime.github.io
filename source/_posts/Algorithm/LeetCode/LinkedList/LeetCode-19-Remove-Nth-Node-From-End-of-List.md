@@ -144,7 +144,7 @@ public:
         ListNode* dummy = new ListNode(0, head);
         ListNode* prev = dummy;
         ListNode* curr = head;
-        while (last) {
+        while (last != nullptr) {
             prev = prev->next;
             curr = curr->next;
             last = last->next;

@@ -148,7 +148,7 @@ public:
         ListNode* last = dummy;
         int carry = 0;
 
-        while (l1 && l2) {
+        while (l1 != nullptr && l2 != nullptr) {
             int sum = l1->val + l2->val + carry;
             last->next = new ListNode(sum % 10);
             carry = sum / 10;
@@ -158,7 +158,7 @@ public:
             last = last->next;
         }
 
-        while (l1) {
+        while (l1 != nullptr) {
             int sum = l1->val + carry;
             last->next = new ListNode(sum % 10);
             carry = sum / 10;
@@ -167,7 +167,7 @@ public:
             last = last->next;
         }
 
-        while (l2) {
+        while (l2 != nullptr) {
             int sum = l2->val + carry;
             last->next = new ListNode(sum % 10);
             carry = sum / 10;
@@ -176,7 +176,7 @@ public:
             last = last->next;
         }
 
-        if (carry) {
+        if (carry > 0) {
             last->next = new ListNode(carry);
             last = last->next;
         }
