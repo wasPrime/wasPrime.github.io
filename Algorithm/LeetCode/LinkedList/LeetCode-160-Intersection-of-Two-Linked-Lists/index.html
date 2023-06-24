@@ -16,26 +16,26 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Difficulty: medium             Problem DescriptionEnglish (Linked List Cycle II)Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.">
+    <meta name="description" content="Difficulty: easy             Problem DescriptionEnglish (Intersection of Two Linked Lists)Given the heads of two singly linked-lists headA and headB, return the node at which the two list">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode 142 - Linked List Cycle II">
-<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/index.html">
+<meta property="og:title" content="LeetCode 160 - Intersection of Two Linked Lists">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-160-Intersection-of-Two-Linked-Lists/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="Difficulty: medium             Problem DescriptionEnglish (Linked List Cycle II)Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.">
+<meta property="og:description" content="Difficulty: easy             Problem DescriptionEnglish (Intersection of Two Linked Lists)Given the heads of two singly linked-lists headA and headB, return the node at which the two list">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-06-16T03:57:06.000Z">
-<meta property="article:modified_time" content="2023-06-24T04:06:44.713Z">
+<meta property="article:published_time" content="2023-06-17T04:14:52.000Z">
+<meta property="article:modified_time" content="2023-06-24T04:30:08.356Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="leetcode">
 <meta property="article:tag" content="linked_list">
-<meta property="article:tag" content="medium">
+<meta property="article:tag" content="easy">
 <meta property="article:tag" content="two_pointers">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>LeetCode 142 - Linked List Cycle II - wasPrime&#39;s Blog</title>
+  <title>LeetCode 160 - Intersection of Two Linked Lists - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="LeetCode 142 - Linked List Cycle II"></span>
+            <span id="subtitle" data-typed-text="LeetCode 160 - Intersection of Two Linked Lists"></span>
           
         </div>
 
@@ -212,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-06-16 11:57" pubdate>
-          June 16, 2023 am
+        <time datetime="2023-06-17 12:14" pubdate>
+          June 17, 2023 pm
         </time>
       </span>
     
@@ -224,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k words
+          6.2k words
         
       </span>
     
@@ -235,7 +235,7 @@
         
         
         
-          6 mins
+          13 mins
         
       </span>
     
@@ -286,104 +286,240 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">LeetCode 142 - Linked List Cycle II</h1>
+            <h1 style="display: none">LeetCode 160 - Intersection of Two Linked Lists</h1>
             
             
               <div class="markdown-body">
                 
                 <div class="note note-info">
-            <p>Difficulty: <span class="label label-warning">medium</span></p>
+            <p>Difficulty: <span class="label label-success">easy</span></p>
           </div>
 
-<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Linked-List-Cycle-II"><a href="#English-Linked-List-Cycle-II" class="headerlink" title="English (Linked List Cycle II)"></a>English (Linked List Cycle II)</h3><p>Given the <code>head</code> of a linked list, return <em>the node where the cycle begins. If there is no cycle, return <code>null</code></em>.</p>
-<p>There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the <code>next</code> pointer. Internally, <code>pos</code> is used to denote the index of the node that tail’s <code>next</code> pointer is connected to <strong>(0-indexed)</strong>. It is <code>-1</code> if there is no cycle. <strong>Note that <code>pos</code> is not passed as a parameter</strong>.</p>
-<p><strong>Do not modify</strong> the linked list.</p>
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Intersection-of-Two-Linked-Lists"><a href="#English-Intersection-of-Two-Linked-Lists" class="headerlink" title="English (Intersection of Two Linked Lists)"></a>English (Intersection of Two Linked Lists)</h3><p>Given the heads of two singly linked-lists <code>headA</code> and <code>headB</code>, return <em>the node at which the two lists intersect</em>. If the two linked lists have no intersection at all, return <code>null</code>.</p>
+<p>For example, the following two linked lists begin to intersect at node <code>c1</code>:</p>
+<pre><code class=" mermaid">graph LR
+
+node_a1((&quot;a1&quot;))
+node_a2((&quot;a2&quot;))
+
+node_b1((&quot;b1&quot;))
+node_b2((&quot;b2&quot;))
+node_b3((&quot;b3&quot;))
+
+node_c1((&quot;c1&quot;))
+node_c2((&quot;c2&quot;))
+node_c3((&quot;c3&quot;))
+
+node_a1 ---&gt; node_a2
+node_b1 ---&gt; node_b2 ---&gt; node_b3
+
+node_a2 ---&gt; node_c1
+node_b3 ---&gt; node_c1
+
+node_c1 ---&gt; node_c2 ---&gt; node_c3
+</code></pre>
+
+<p>The test cases are generated such that there are no cycles anywhere in the entire linked structure.</p>
+<p><strong>Note</strong> that the linked lists must <strong>retain their original structure</strong> after the function returns.</p>
+<p><strong>Custom Judge:</strong></p>
+<p>The inputs to the <strong>judge</strong> are given as follows (your program is <strong>not</strong> given these inputs):</p>
+<ul>
+<li><code>intersectVal</code> - The value of the node where the intersection occurs. This is <code>0</code> if there is no intersected node.</li>
+<li><code>listA</code> - The first linked list.</li>
+<li><code>listB</code> - The second linked list.</li>
+<li><code>skipA</code> - The number of nodes to skip ahead in <code>listA</code> (starting from the head) to get to the intersected node.</li>
+<li><code>skipB</code> - The number of nodes to skip ahead in <code>listB</code> (starting from the head) to get to the intersected node.</li>
+</ul>
+<p>The judge will then create the linked structure based on these inputs and pass the two heads, <code>headA</code> and <code>headB</code> to your program. If you correctly return the intersected node, then your solution will be <strong>accepted</strong>.</p>
 <p><strong>Example 1:</strong></p>
 <pre><code class=" mermaid">graph LR
 
-node1((3))
-node2((2))
-node3((0))
-node4((&quot;-4&quot;))
+node_a1((4))
+node_a2((1))
 
-node1 ---&gt; node2 ---&gt; node3 ---&gt; node4
-node4 ---&gt; node2
+node_b1((5))
+node_b2((6))
+node_b3((1))
+
+node_c1((8))
+node_c2((4))
+node_c3((5))
+
+node_a1 ---&gt; node_a2
+node_b1 ---&gt; node_b2 ---&gt; node_b3
+
+node_a2 ---&gt; node_c1
+node_b3 ---&gt; node_c1
+
+node_c1 ---&gt; node_c2 ---&gt; node_c3
 </code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [3,2,0,-4], pos = 1<br>Output: tail connects to node index 1<br>Explanation: There is a cycle in the linked list, where tail connects to the second node.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3<br>Output: Intersected at &#x27;8&#x27;<br>Explanation: The intersected node&#x27;s value is 8 (note that this must not be 0 if the two lists intersect).<br>From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,6,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.<br>- Note that the intersected node&#x27;s value is not 1 because the nodes with value 1 in A and B (2nd node in A and 3rd node in B) are different node references. In other words, they point to two different locations in memory, while the nodes with value 8 in A and B (3rd node in A and 4th node in B) point to the same location in memory.<br></code></pre></td></tr></table></figure>
 
 <p><strong>Example 2:</strong></p>
 <pre><code class=" mermaid">graph LR
 
-node1((1))
-node2((2))
+node_a1((1))
+node_a2((9))
+node_a3((1))
 
-node1 ---&gt; node2
-node2 ---&gt; node1
+node_b1((3))
+
+node_c1((2))
+node_c2((4))
+
+node_a1 ---&gt; node_a2 ---&gt; node_a3
+node_b1
+
+node_a3 ---&gt; node_c1
+node_b1 ---&gt; node_c1
+
+node_c1 ---&gt; node_c2
 </code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2], pos = 0<br>Output: tail connects to node index 0<br>Explanation: There is a cycle in the linked list, where tail connects to the first node.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1<br>Output: Intersected at &#x27;2&#x27;<br>Explanation: The intersected node&#x27;s value is 2 (note that this must not be 0 if the two lists intersect).<br>From the head of A, it reads as [1,9,1,2,4]. From the head of B, it reads as [3,2,4]. There are 3 nodes before the intersected node in A; There are 1 node before the intersected node in B.<br></code></pre></td></tr></table></figure>
 
 <p><strong>Example 3:</strong></p>
 <pre><code class=" mermaid">graph LR
 
-node1((1))
+node_a1((2))
+node_a2((6))
+node_a3((4))
+
+node_b1((1))
+node_b2((5))
+
+node_a1 ---&gt; node_a2 ---&gt; node_a3
+node_b1 ---&gt; node_b2
 </code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1], pos = -1<br>Output: no cycle<br>Explanation: There is no cycle in the linked list.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2<br>Output: No intersection<br>Explanation: From the head of A, it reads as [2,6,4]. From the head of B, it reads as [1,5]. Since the two lists do not intersect, intersectVal must be 0, while skipA and skipB can be arbitrary values.<br>Explanation: The two lists do not intersect, so return null.<br></code></pre></td></tr></table></figure>
 
 <p><strong>Constraints:</strong></p>
 <ul>
-<li>The number of the nodes in the list is in the range <code>[0, 10^4]</code>.</li>
-<li><code>-10^5 &lt;= Node.val &lt;= 10^5</code></li>
-<li><code>pos</code> is <code>-1</code> or a <strong>valid index</strong> in the linked-list.</li>
+<li>The number of nodes of <code>listA</code> is in the <code>m</code>.</li>
+<li>The number of nodes of <code>listB</code> is in the <code>n</code>.</li>
+<li><code>1 &lt;= m, n &lt;= 3 * 10^4</code></li>
+<li><code>1 &lt;= Node.val &lt;= 10^5</code></li>
+<li><code>0 &lt;= skipA &lt; m</code></li>
+<li><code>0 &lt;= skipB &lt; n</code></li>
+<li><code>intersectVal</code> is <code>0</code> if <code>listA</code> and <code>listB</code> do not intersect.</li>
+<li><code>intersectVal == listA[skipA] == listB[skipB]</code> if <code>listA</code> and <code>listB</code> intersect.</li>
 </ul>
-<p><strong>Follow up:</strong> Can you solve it using <code>O(1)</code> (i.e. constant) memory?</p>
-<h3 id="Chinese-环形链表-II"><a href="#Chinese-环形链表-II" class="headerlink" title="Chinese (环形链表 II)"></a>Chinese (环形链表 II)</h3><p>给定一个链表的头节点 <code>head</code> ，返回链表开始入环的第一个节点。 <em>如果链表无环，则返回 <code>null</code>。</em></p>
-<p>如果链表中有某个节点，可以通过连续跟踪 <code>next</code> 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（<strong>索引从 0 开始</strong>）。如果 <code>pos</code> 是 <code>-1</code>，则在该链表中没有环。<strong>注意：<code>pos</code> 不作为参数进行传递</strong>，仅仅是为了标识链表的实际情况。</p>
-<p><strong>不允许修改</strong> 链表。</p>
+<p><strong>Follow up:</strong> Could you write a solution that runs in <code>O(m + n)</code> time and use only <code>O(1)</code> memory?</p>
+<h3 id="Chinese-相交链表"><a href="#Chinese-相交链表" class="headerlink" title="Chinese (相交链表)"></a>Chinese (相交链表)</h3><p>给你两个单链表的头节点 <code>headA</code> 和 <code>headB</code> ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 <code>null</code> 。</p>
+<p>图示两个链表在节点 <code>c1</code> 开始相交：</p>
+<pre><code class=" mermaid">graph LR
+
+node_a1((&quot;a1&quot;))
+node_a2((&quot;a2&quot;))
+
+node_b1((&quot;b1&quot;))
+node_b2((&quot;b2&quot;))
+node_b3((&quot;b3&quot;))
+
+node_c1((&quot;c1&quot;))
+node_c2((&quot;c2&quot;))
+node_c3((&quot;c3&quot;))
+
+node_a1 ---&gt; node_a2
+node_b1 ---&gt; node_b2 ---&gt; node_b3
+
+node_a2 ---&gt; node_c1
+node_b3 ---&gt; node_c1
+
+node_c1 ---&gt; node_c2 ---&gt; node_c3
+</code></pre>
+
+<p>题目数据 <strong>保证</strong> 整个链式结构中不存在环。</p>
+<p><strong>注意，</strong> 函数返回结果后，链表必须 <strong>保持其原始结构</strong> 。</p>
+<p><strong>自定义评测：</strong></p>
+<p><strong>评测系统</strong> 的输入如下（你设计的程序 <strong>不适用</strong> 此输入）：</p>
+<ul>
+<li><code>intersectVal</code> - 相交的起始节点的值。如果不存在相交节点，这一值为 0</li>
+<li><code>listA</code> - 第一个链表</li>
+<li><code>listB</code> - 第二个链表</li>
+<li><code>skipA</code> - 在 <code>listA</code> 中（从头节点开始）跳到交叉节点的节点数</li>
+<li><code>skipB</code> - 在 <code>listB</code> 中（从头节点开始）跳到交叉节点的节点数</li>
+</ul>
+<p>评测系统将根据这些输入创建链式数据结构，并将两个头节点 <code>headA</code> 和 <code>headB</code> 传递给你的程序。如果程序能够正确返回相交节点，那么你的解决方案将被 <strong>视作正确答案</strong> 。</p>
 <p><strong>示例 1：</strong></p>
 <pre><code class=" mermaid">graph LR
 
-node1((3))
-node2((2))
-node3((0))
-node4((&quot;-4&quot;))
+node_a1((4))
+node_a2((1))
 
-node1 ---&gt; node2 ---&gt; node3 ---&gt; node4
-node4 ---&gt; node2
+node_b1((5))
+node_b2((6))
+node_b3((1))
+
+node_c1((8))
+node_c2((4))
+node_c3((5))
+
+node_a1 ---&gt; node_a2
+node_b1 ---&gt; node_b2 ---&gt; node_b3
+
+node_a2 ---&gt; node_c1
+node_b3 ---&gt; node_c1
+
+node_c1 ---&gt; node_c2 ---&gt; node_c3
 </code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [3,2,0,-4], pos = 1<br>输出：返回索引为 1 的链表节点<br>解释：链表中有一个环，其尾部连接到第二个节点。<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3<br>输出：Intersected at &#x27;8&#x27;<br>解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。<br>从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。<br>在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。<br>— 请注意相交节点的值不为 1，因为在链表 A 和链表 B 之中值为 1 的节点 (A 中第二个节点和 B 中第三个节点) 是不同的节点。换句话说，它们在内存中指向两个不同的位置，而链表 A 和链表 B 中值为 8 的节点 (A 中第三个节点，B 中第四个节点) 在内存中指向相同的位置。<br></code></pre></td></tr></table></figure>
 
 <p><strong>示例 2：</strong></p>
 <pre><code class=" mermaid">graph LR
 
-node1((1))
-node2((2))
+node_a1((1))
+node_a2((9))
+node_a3((1))
 
-node1 ---&gt; node2
-node2 ---&gt; node1
+node_b1((3))
+
+node_c1((2))
+node_c2((4))
+
+node_a1 ---&gt; node_a2 ---&gt; node_a3
+node_b1
+
+node_a3 ---&gt; node_c1
+node_b1 ---&gt; node_c1
+
+node_c1 ---&gt; node_c2
 </code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2], pos = 0<br>输出：返回索引为 0 的链表节点<br>解释：链表中有一个环，其尾部连接到第一个节点。<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：intersectVal = 2, listA = [1,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1<br>输出：Intersected at &#x27;2&#x27;<br>解释：相交节点的值为 2 （注意，如果两个链表相交则不能为 0）。<br>从各自的表头开始算起，链表 A 为 [1,9,1,2,4]，链表 B 为 [3,2,4]。<br>在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。<br></code></pre></td></tr></table></figure>
 
 <p><strong>示例 3：</strong></p>
 <pre><code class=" mermaid">graph LR
 
-node1((1))
+node_a1((2))
+node_a2((6))
+node_a3((4))
+
+node_b1((1))
+node_b2((5))
+
+node_a1 ---&gt; node_a2 ---&gt; node_a3
+node_b1 ---&gt; node_b2
 </code></pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1], pos = -1<br>输出：返回 null<br>解释：链表中没有环。<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2<br>输出：null<br>解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。<br>由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。<br>这两个链表不相交，因此返回 null 。<br></code></pre></td></tr></table></figure>
 
 <p><strong>提示：</strong></p>
 <ul>
-<li>链表中节点的数目范围在范围 <code>[0, 10^4]</code> 内</li>
-<li><code>-10^5 &lt;= Node.val &lt;= 10^5</code></li>
-<li><code>pos</code> 的值为 <code>-1</code> 或者链表中的一个有效索引</li>
+<li><code>listA</code> 中节点数目为 <code>m</code></li>
+<li><code>listB</code> 中节点数目为 <code>n</code></li>
+<li><code>1 &lt;= m, n &lt;= 3 * 10^4</code></li>
+<li><code>1 &lt;= Node.val &lt;= 10^5</code></li>
+<li><code>0 &lt;= skipA &lt;= m</code></li>
+<li><code>0 &lt;= skipB &lt;= n</code></li>
+<li>如果 <code>listA</code> 和 <code>listB</code> <code>没有交点，intersectVal</code> 为 <code>0</code></li>
+<li>如果 <code>listA</code> 和 <code>listB</code> 有交点，<code>intersectVal == listA[skipA] == listB[skipB]</code></li>
 </ul>
-<p><strong>进阶：</strong> 你是否可以使用 <code>O(1)</code> 空间解决此题？</p>
-<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">NULL</span>) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* cycle_node = <span class="hljs-built_in">nodeInCycle</span>(head);<br>        <span class="hljs-keyword">if</span> (cycle_node == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        &#125;<br><br>        ListNode* curr = head;<br>        <span class="hljs-keyword">while</span> (curr != cycle_node) &#123;<br>            curr = curr-&gt;next;<br>            cycle_node = cycle_node-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> curr;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">nodeInCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* fast = head;<br>        ListNode* slow = head;<br><br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br><br>            <span class="hljs-keyword">if</span> (slow == fast) &#123;<br>                <span class="hljs-keyword">return</span> fast;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><strong>进阶：</strong> 你能否设计一个时间复杂度 <code>O(m + n)</code> 、仅用 <code>O(1)</code> 内存的解决方案？</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">NULL</span>) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">getIntersectionNode</span><span class="hljs-params">(ListNode* headA, ListNode* headB)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (headA == <span class="hljs-literal">nullptr</span> || headB == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        &#125;<br><br>        ListNode *currA = headA, *currB = headB;<br>        <span class="hljs-keyword">while</span> (currA != currB) &#123;<br>            currA = (currA != <span class="hljs-literal">nullptr</span>) ? currA-&gt;next : headB;<br>            currB = (currB != <span class="hljs-literal">nullptr</span>) ? currB-&gt;next : headA;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> currA;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -437,7 +573,7 @@ node1((1))
       
         <a href="/tags/linked-list/">#linked_list</a>
       
-        <a href="/tags/medium/">#medium</a>
+        <a href="/tags/easy/">#easy</a>
       
         <a href="/tags/two-pointers/">#two_pointers</a>
       
@@ -451,8 +587,8 @@ node1((1))
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>LeetCode 142 - Linked List Cycle II</div>
-      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/</div>
+      <div>LeetCode 160 - Intersection of Two Linked Lists</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-160-Intersection-of-Two-Linked-Lists/</div>
     </div>
     <div class="license-meta">
       
@@ -464,7 +600,7 @@ node1((1))
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 16, 2023</div>
+          <div>June 17, 2023</div>
         </div>
       
       
@@ -501,18 +637,12 @@ node1((1))
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-160-Intersection-of-Two-Linked-Lists/" title="LeetCode 160 - Intersection of Two Linked Lists">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">LeetCode 160 - Intersection of Two Linked Lists</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-25-Reverse-Nodes-in-k-Group/" title="LeetCode 25 - Reverse Nodes in k-Group">
-                        <span class="hidden-mobile">LeetCode 25 - Reverse Nodes in k-Group</span>
+                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/" title="LeetCode 142 - Linked List Cycle II">
+                        <span class="hidden-mobile">LeetCode 142 - Linked List Cycle II</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
