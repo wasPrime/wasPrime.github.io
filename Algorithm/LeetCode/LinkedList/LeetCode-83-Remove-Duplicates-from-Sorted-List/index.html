@@ -16,27 +16,26 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Difficulty: hard             Problem DescriptionEnglish (IPO)Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like">
+    <meta name="description" content="Difficulty: easy             Problem DescriptionEnglish (Remove Duplicates from Sorted List)Given the head of a sorted linked list, delete all duplicates such that each element appears on">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode 502 - IPO">
-<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LeetCode-502-IPO/index.html">
+<meta property="og:title" content="LeetCode 83 - Remove Duplicates from Sorted List">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-83-Remove-Duplicates-from-Sorted-List/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="Difficulty: hard             Problem DescriptionEnglish (IPO)Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like">
+<meta property="og:description" content="Difficulty: easy             Problem DescriptionEnglish (Remove Duplicates from Sorted List)Given the head of a sorted linked list, delete all duplicates such that each element appears on">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-05-30T17:02:58.000Z">
-<meta property="article:modified_time" content="2023-05-28T14:53:27.891Z">
+<meta property="article:published_time" content="2023-06-19T05:01:16.000Z">
+<meta property="article:modified_time" content="2023-06-24T05:08:32.577Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="leetcode">
-<meta property="article:tag" content="hard">
-<meta property="article:tag" content="priority_queue">
-<meta property="article:tag" content="heap">
-<meta property="article:tag" content="greedy_algorithm">
+<meta property="article:tag" content="linked_list">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="two_pointers">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>LeetCode 502 - IPO - wasPrime&#39;s Blog</title>
+  <title>LeetCode 83 - Remove Duplicates from Sorted List - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="LeetCode 502 - IPO"></span>
+            <span id="subtitle" data-typed-text="LeetCode 83 - Remove Duplicates from Sorted List"></span>
           
         </div>
 
@@ -213,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-05-31 01:02" pubdate>
-          May 31, 2023 am
+        <time datetime="2023-06-19 13:01" pubdate>
+          June 19, 2023 pm
         </time>
       </span>
     
@@ -225,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k words
+          1.9k words
         
       </span>
     
@@ -236,7 +235,7 @@
         
         
         
-          7 mins
+          4 mins
         
       </span>
     
@@ -287,58 +286,100 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">LeetCode 502 - IPO</h1>
+            <h1 style="display: none">LeetCode 83 - Remove Duplicates from Sorted List</h1>
             
             
               <div class="markdown-body">
                 
                 <div class="note note-info">
-            <p>Difficulty: <span class="label label-danger">hard</span></p>
+            <p>Difficulty: <span class="label label-success">easy</span></p>
           </div>
 
-<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-IPO"><a href="#English-IPO" class="headerlink" title="English (IPO)"></a>English (IPO)</h3><p>Suppose LeetCode will start its <strong>IPO</strong> soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the <strong>IPO</strong>. Since it has limited resources, it can only finish at most <code>k</code> distinct projects before the <strong>IPO</strong>. Help LeetCode design the best way to maximize its total capital after finishing at most <code>k</code> distinct projects.</p>
-<p>You are given <code>n</code> projects where the $i^{th}$ project has a pure profit <code>profits[i]</code> and a minimum capital of <code>capital[i]</code> is needed to start it.</p>
-<p>Initially, you have <code>w</code> capital. When you finish a project, you will obtain its pure profit and the profit will be added to your total capital.</p>
-<p>Pick a list of <strong>at most</strong> <code>k</code> distinct projects from given projects to <strong>maximize your final capital</strong>, and return <em>the final maximized capital</em>.</p>
-<p>The answer is guaranteed to fit in a 32-bit signed integer.</p>
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Remove-Duplicates-from-Sorted-List"><a href="#English-Remove-Duplicates-from-Sorted-List" class="headerlink" title="English (Remove Duplicates from Sorted List)"></a>English (Remove Duplicates from Sorted List)</h3><p>Given the <code>head</code> of a sorted linked list, <em>delete all duplicates such that each element appears only once</em>. Return <em>the linked list <strong>sorted</strong> as well</em>.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: k = 2, w = 0, profits = [1,2,3], capital = [0,1,1]<br>Output: 4<br>Explanation: Since your initial capital is 0, you can only start the project indexed 0.<br>After finishing it you will obtain profit 1 and your capital becomes 1.<br>With capital 1, you can either start the project indexed 1 or the project indexed 2.<br>Since you can choose at most 2 projects, you need to finish the project indexed 2 to get the maximum capital.<br>Therefore, output the final maximized capital, which is 0 + 1 + 3 = 4.<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node_11((1))
+node_12((1))
+node_13((2))
+
+node_21((1))
+node_23((2))
+
+node_11 ---&gt; node_12 ---&gt; node_13
+node_21 ---&gt; node_23
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,1,2]<br>Output: [1,2]<br></code></pre></td></tr></table></figure>
 
 <p><strong>Example 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: k = 3, w = 0, profits = [1,2,3], capital = [0,1,2]<br>Output: 6<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node_11((1))
+node_12((1))
+node_13((2))
+node_14((3))
+node_15((3))
+
+node_21((1))
+node_23((2))
+node_24((3))
+
+node_11 ---&gt; node_12 ---&gt; node_13 ---&gt; node_14 ---&gt; node_15
+node_21 ---&gt; node_23 ---&gt; node_24
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,1,2,3,3]<br>Output: [1,2,3]<br></code></pre></td></tr></table></figure>
 
 <p><strong>Constraints:</strong></p>
 <ul>
-<li><code>1 &lt;= k &lt;= 10^5</code></li>
-<li><code>0 &lt;= w &lt;= 10^9</code></li>
-<li><code>n == profits.length</code></li>
-<li><code>n == capital.length</code></li>
-<li><code>1 &lt;= n &lt;= 10^5</code></li>
-<li><code>0 &lt;= profits[i] &lt;= 10^4</code></li>
-<li><code>0 &lt;= capital[i] &lt;= 10^9</code></li>
+<li>The number of nodes in the list is in the range <code>[0, 300]</code>.</li>
+<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+<li>The list is guaranteed to be <strong>sorted</strong> in ascending order.</li>
 </ul>
-<h3 id="Chinese-IPO"><a href="#Chinese-IPO" class="headerlink" title="Chinese (IPO)"></a>Chinese (IPO)</h3><p>假设 力扣（LeetCode）即将开始 <strong>IPO</strong> 。为了以更高的价格将股票卖给风险投资公司，力扣 希望在 <strong>IPO</strong> 之前开展一些项目以增加其资本。 由于资源有限，它只能在 <strong>IPO</strong> 之前完成最多 <code>k</code> 个不同的项目。帮助 力扣 设计完成最多 <code>k</code> 个不同项目后得到最大总资本的方式。</p>
-<p>给你 <code>n</code> 个项目。对于每个项目 <code>i</code> ，它都有一个纯利润 <code>profits[i]</code> ，和启动该项目需要的最小资本 <code>capital[i]</code> 。</p>
-<p>最初，你的资本为 <code>w</code> 。当你完成一个项目时，你将获得纯利润，且利润将被添加到你的总资本中。</p>
-<p>总而言之，从给定项目中选择 <strong>最多</strong> <code>k</code> 个不同项目的列表，以 <strong>最大化最终资本</strong> ，并输出最终可获得的最多资本。</p>
-<p>答案保证在 32 位有符号整数范围内。</p>
+<h3 id="Chinese-删除排序链表中的重复元素"><a href="#Chinese-删除排序链表中的重复元素" class="headerlink" title="Chinese (删除排序链表中的重复元素)"></a>Chinese (删除排序链表中的重复元素)</h3><p>给定一个已排序的链表的头 <code>head</code> ， <em>删除所有重复的元素，使每个元素只出现一次</em> 。返回 <em>已排序的链表</em> 。</p>
 <p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：k = 2, w = 0, profits = [1,2,3], capital = [0,1,1]<br>输出：4<br>解释：<br>由于你的初始资本为 0，你仅可以从 0 号项目开始。<br>在完成后，你将获得 1 的利润，你的总资本将变为 1。<br>此时你可以选择开始 1 号或 2 号项目。<br>由于你最多可以选择两个项目，所以你需要完成 2 号项目以获得最大的资本。<br>因此，输出最后最大化的资本，为 0 + 1 + 3 = 4。<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node_11((1))
+node_12((1))
+node_13((2))
+
+node_21((1))
+node_23((2))
+
+node_11 ---&gt; node_12 ---&gt; node_13
+node_21 ---&gt; node_23
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,1,2]<br>输出：[1,2]<br></code></pre></td></tr></table></figure>
 
 <p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：k = 3, w = 0, profits = [1,2,3], capital = [0,1,2]<br>输出：6<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node_11((1))
+node_12((1))
+node_13((2))
+node_14((3))
+node_15((3))
+
+node_21((1))
+node_23((2))
+node_24((3))
+
+node_11 ---&gt; node_12 ---&gt; node_13 ---&gt; node_14 ---&gt; node_15
+node_21 ---&gt; node_23 ---&gt; node_24
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,1,2,3,3]<br>输出：[1,2,3]<br></code></pre></td></tr></table></figure>
 
 <p><strong>提示：</strong></p>
 <ul>
-<li><code>1 &lt;= k &lt;= 10^5</code></li>
-<li><code>0 &lt;= w &lt;= 10^9</code></li>
-<li><code>n == profits.length</code></li>
-<li><code>n == capital.length</code></li>
-<li><code>1 &lt;= n &lt;= 10^5</code></li>
-<li><code>0 &lt;= profits[i] &lt;= 10^4</code></li>
-<li><code>0 &lt;= capital[i] &lt;= 10^9</code></li>
+<li>链表中节点数目在范围 <code>[0, 300]</code> 内</li>
+<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+<li>题目数据保证链表已经按 <strong>升序</strong> 排列</li>
 </ul>
-<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">findMaximizedCapital</span><span class="hljs-params">(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> w, vector&lt;<span class="hljs-type">int</span>&gt;&amp; profits, vector&lt;<span class="hljs-type">int</span>&gt;&amp; capitals)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = profits.<span class="hljs-built_in">size</span>();<br>        vector&lt;ProjectInfo&gt; project_infos;<br>        project_infos.<span class="hljs-built_in">reserve</span>(n);<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>            project_infos.<span class="hljs-built_in">emplace_back</span>(profits[i], capitals[i]);<br>        &#125;<br>        <span class="hljs-built_in">sort</span>(project_infos.<span class="hljs-built_in">begin</span>(), project_infos.<span class="hljs-built_in">end</span>());<br><br>        priority_queue&lt;<span class="hljs-type">int</span>&gt; max_profits;<br>        <span class="hljs-type">int</span> has_capital_index = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (k-- &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">while</span> (has_capital_index &lt; n &amp;&amp; project_infos[has_capital_index].capital &lt;= w) &#123;<br>                max_profits.<span class="hljs-built_in">push</span>(project_infos[has_capital_index].profit);<br>                ++has_capital_index;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (max_profits.<span class="hljs-built_in">empty</span>()) &#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br><br>            w += max_profits.<span class="hljs-built_in">top</span>();<br>            max_profits.<span class="hljs-built_in">pop</span>();<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> w;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">ProjectInfo</span> &#123;<br>        <span class="hljs-built_in">ProjectInfo</span>(<span class="hljs-type">int</span> p, <span class="hljs-type">int</span> c) : <span class="hljs-built_in">profit</span>(p), <span class="hljs-built_in">capital</span>(c) &#123;&#125;<br><br>        <span class="hljs-type">int</span> profit&#123;&#125;;<br>        <span class="hljs-type">int</span> capital&#123;&#125;;<br><br>        <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> ProjectInfo&amp; other) <span class="hljs-type">const</span> &#123;<br>            <span class="hljs-keyword">return</span> capital &lt; other.capital;<br>        &#125;<br>    &#125;;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">deleteDuplicates</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        &#125;<br><br>        ListNode* prev = head;<br>        ListNode* curr = head-&gt;next;<br>        <span class="hljs-keyword">while</span> (curr != <span class="hljs-literal">nullptr</span>) &#123;<br>            ListNode* next = curr-&gt;next;<br><br>            <span class="hljs-keyword">if</span> (prev-&gt;val == curr-&gt;val) &#123;<br>                prev-&gt;next = next;<br>                <span class="hljs-keyword">delete</span> curr;<br>                curr = next;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                prev = curr;<br>                curr = next;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -367,7 +408,7 @@
   
     <span>></span>
     
-  <a href="/categories/algorithm/leetcode/priority-queue/" class="category-chain-item">priority_queue</a>
+  <a href="/categories/algorithm/leetcode/linked-list/" class="category-chain-item">linked_list</a>
   
   
 
@@ -390,13 +431,11 @@
       
         <a href="/tags/leetcode/">#leetcode</a>
       
-        <a href="/tags/hard/">#hard</a>
+        <a href="/tags/linked-list/">#linked_list</a>
       
-        <a href="/tags/priority-queue/">#priority_queue</a>
+        <a href="/tags/easy/">#easy</a>
       
-        <a href="/tags/heap/">#heap</a>
-      
-        <a href="/tags/greedy-algorithm/">#greedy_algorithm</a>
+        <a href="/tags/two-pointers/">#two_pointers</a>
       
     </div>
   
@@ -408,8 +447,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>LeetCode 502 - IPO</div>
-      <div>http://wasprime.github.io/Algorithm/LeetCode/LeetCode-502-IPO/</div>
+      <div>LeetCode 83 - Remove Duplicates from Sorted List</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-83-Remove-Duplicates-from-Sorted-List/</div>
     </div>
     <div class="license-meta">
       
@@ -421,13 +460,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>May 31, 2023</div>
+          <div>June 19, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>May 28, 2023</div>
+          <div>June 24, 2023</div>
         </div>
       
       
@@ -458,18 +497,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LeetCode-901-Online-Stock-Span/" title="LeetCode 901 - Online Stock Span">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">LeetCode 901 - Online Stock Span</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/Stock/LeetCode-714-Best-Time-to-Buy-and-Sell-Stock-with-Transaction-Fee/" title="LeetCode 714 - Best Time to Buy and Sell Stock with Transaction Fee">
-                        <span class="hidden-mobile">LeetCode 714 - Best Time to Buy and Sell Stock with Transaction Fee</span>
+                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-92-Reverse-Linked-List-II/" title="LeetCode 92 - Reverse Linked List II">
+                        <span class="hidden-mobile">LeetCode 92 - Reverse Linked List II</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -515,11 +548,18 @@
   
 
 
-  
-  
 
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
 
-
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
 
 
 
@@ -712,49 +752,6 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

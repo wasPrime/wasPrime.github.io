@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>LeetCode 83 - Remove Duplicates from Sorted List</title>
+    <link href="/Algorithm/LeetCode/LinkedList/LeetCode-83-Remove-Duplicates-from-Sorted-List/"/>
+    <url>/Algorithm/LeetCode/LinkedList/LeetCode-83-Remove-Duplicates-from-Sorted-List/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-success">easy</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Remove-Duplicates-from-Sorted-List"><a href="#English-Remove-Duplicates-from-Sorted-List" class="headerlink" title="English (Remove Duplicates from Sorted List)"></a>English (Remove Duplicates from Sorted List)</h3><p>Given the <code>head</code> of a sorted linked list, <em>delete all duplicates such that each element appears only once</em>. Return <em>the linked list <strong>sorted</strong> as well</em>.</p><p><strong>Example 1:</strong></p><pre><code class=" mermaid">graph LRnode_11((1))node_12((1))node_13((2))node_21((1))node_23((2))node_11 ---&gt; node_12 ---&gt; node_13node_21 ---&gt; node_23</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,1,2]<br>Output: [1,2]<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><pre><code class=" mermaid">graph LRnode_11((1))node_12((1))node_13((2))node_14((3))node_15((3))node_21((1))node_23((2))node_24((3))node_11 ---&gt; node_12 ---&gt; node_13 ---&gt; node_14 ---&gt; node_15node_21 ---&gt; node_23 ---&gt; node_24</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,1,2,3,3]<br>Output: [1,2,3]<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li>The number of nodes in the list is in the range <code>[0, 300]</code>.</li><li><code>-100 &lt;= Node.val &lt;= 100</code></li><li>The list is guaranteed to be <strong>sorted</strong> in ascending order.</li></ul><h3 id="Chinese-删除排序链表中的重复元素"><a href="#Chinese-删除排序链表中的重复元素" class="headerlink" title="Chinese (删除排序链表中的重复元素)"></a>Chinese (删除排序链表中的重复元素)</h3><p>给定一个已排序的链表的头 <code>head</code> ， <em>删除所有重复的元素，使每个元素只出现一次</em> 。返回 <em>已排序的链表</em> 。</p><p><strong>示例 1：</strong></p><pre><code class=" mermaid">graph LRnode_11((1))node_12((1))node_13((2))node_21((1))node_23((2))node_11 ---&gt; node_12 ---&gt; node_13node_21 ---&gt; node_23</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,1,2]<br>输出：[1,2]<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><pre><code class=" mermaid">graph LRnode_11((1))node_12((1))node_13((2))node_14((3))node_15((3))node_21((1))node_23((2))node_24((3))node_11 ---&gt; node_12 ---&gt; node_13 ---&gt; node_14 ---&gt; node_15node_21 ---&gt; node_23 ---&gt; node_24</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,1,2,3,3]<br>输出：[1,2,3]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li>链表中节点数目在范围 <code>[0, 300]</code> 内</li><li><code>-100 &lt;= Node.val &lt;= 100</code></li><li>题目数据保证链表已经按 <strong>升序</strong> 排列</li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">deleteDuplicates</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (head == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        &#125;<br><br>        ListNode* prev = head;<br>        ListNode* curr = head-&gt;next;<br>        <span class="hljs-keyword">while</span> (curr != <span class="hljs-literal">nullptr</span>) &#123;<br>            ListNode* next = curr-&gt;next;<br><br>            <span class="hljs-keyword">if</span> (prev-&gt;val == curr-&gt;val) &#123;<br>                prev-&gt;next = next;<br>                <span class="hljs-keyword">delete</span> curr;<br>                curr = next;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                prev = curr;<br>                curr = next;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>linked_list</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>linked_list</tag>
+      
+      <tag>easy</tag>
+      
+      <tag>two_pointers</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 92 - Reverse Linked List II</title>
     <link href="/Algorithm/LeetCode/LinkedList/LeetCode-92-Reverse-Linked-List-II/"/>
     <url>/Algorithm/LeetCode/LinkedList/LeetCode-92-Reverse-Linked-List-II/</url>
@@ -28,9 +65,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>linked_list</tag>
-      
       <tag>medium</tag>
+      
+      <tag>linked_list</tag>
       
       <tag>two_pointers</tag>
       
@@ -102,9 +139,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>linked_list</tag>
-      
       <tag>medium</tag>
+      
+      <tag>linked_list</tag>
       
       <tag>two_pointers</tag>
       
@@ -174,9 +211,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>linked_list</tag>
-      
       <tag>medium</tag>
+      
+      <tag>linked_list</tag>
       
     </tags>
     
@@ -281,9 +318,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>linked_list</tag>
-      
       <tag>medium</tag>
+      
+      <tag>linked_list</tag>
       
     </tags>
     
@@ -351,9 +388,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>linked_list</tag>
-      
       <tag>medium</tag>
+      
+      <tag>linked_list</tag>
       
     </tags>
     
@@ -656,11 +693,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
       <tag>greedy_algorithm</tag>
       
@@ -968,11 +1005,11 @@
       
       <tag>cpp</tag>
       
+      <tag>library</tag>
+      
       <tag>vtable</tag>
       
       <tag>vfunction</tag>
-      
-      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -1641,11 +1678,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp17</tag>
+      <tag>cpp20</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp17</tag>
       
       <tag>string_view</tag>
       
@@ -1684,9 +1721,9 @@
       
       <tag>medium</tag>
       
-      <tag>string</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>string</tag>
       
       <tag>kmp</tag>
       
@@ -1721,9 +1758,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1758,9 +1795,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1793,11 +1830,11 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1828,9 +1865,9 @@
       
       <tag>design</tag>
       
-      <tag>calculator</tag>
-      
       <tag>stack</tag>
+      
+      <tag>calculator</tag>
       
     </tags>
     
@@ -1931,9 +1968,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1968,9 +2005,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2139,9 +2176,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>hard</tag>
-      
       <tag>sliding_window</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -2176,11 +2213,11 @@
       
       <tag>leetcode</tag>
       
+      <tag>medium</tag>
+      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
-      
-      <tag>medium</tag>
       
     </tags>
     
@@ -2246,9 +2283,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -2291,11 +2328,11 @@
       
       <tag>linked_list</tag>
       
+      <tag>hard</tag>
+      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
-      
-      <tag>hard</tag>
       
     </tags>
     
@@ -2497,9 +2534,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2674,9 +2711,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -2713,9 +2750,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2754,9 +2791,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp11</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp11</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2855,9 +2892,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
