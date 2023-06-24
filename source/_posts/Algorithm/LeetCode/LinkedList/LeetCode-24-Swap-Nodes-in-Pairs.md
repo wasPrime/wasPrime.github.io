@@ -35,8 +35,8 @@ node11 ---> node12 ---> node13 ---> node14
 node21((2))
 node22((1))
 node23((4))
-node25((3))
-node21 ---> node22 ---> node23 ---> node25
+node24((3))
+node21 ---> node22 ---> node23 ---> node24
 ```
 
 ```log
@@ -81,8 +81,8 @@ node11 ---> node12 ---> node13 ---> node14
 node21((2))
 node22((1))
 node23((4))
-node25((3))
-node21 ---> node22 ---> node23 ---> node25
+node24((3))
+node21 ---> node22 ---> node23 ---> node24
 ```
 
 ```log
