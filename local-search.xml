@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>LeetCode 92 - Reverse Linked List II</title>
+    <link href="/Algorithm/LeetCode/LinkedList/LeetCode-92-Reverse-Linked-List-II/"/>
+    <url>/Algorithm/LeetCode/LinkedList/LeetCode-92-Reverse-Linked-List-II/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Reverse-Linked-List-II"><a href="#English-Reverse-Linked-List-II" class="headerlink" title="English (Reverse Linked List II)"></a>English (Reverse Linked List II)</h3><p>Given the <code>head</code> of a singly linked list and two integers <code>left</code> and <code>right</code> where <code>left &lt;= right</code>, reverse the nodes of the list from position <code>left</code> to position <code>right</code>, and return the reversed list.</p><p><strong>Example 1:</strong></p><pre><code class=" mermaid">graph LRnode11((1))node12((2))node13((3))node14((4))node15((5))node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15node21((1))node22((4))node23((3))node24((2))node25((5))node21 ---&gt; node22 ---&gt; node23 ---&gt; node24 ---&gt; node25</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2,3,4,5], left = 2, right = 4<br>Output: [1,4,3,2,5]<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [5], left = 1, right = 1<br>Output: [5]<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li>The number of nodes in the list is <code>n</code>.</li><li><code>1 &lt;= n &lt;= 500</code></li><li><code>-500 &lt;= Node.val &lt;= 500</code></li><li><code>1 &lt;= left &lt;= right &lt;= n</code></li></ul><p><strong>Follow up:</strong> Could you do it in one pass?</p><h3 id="Chinese-环形链表-II"><a href="#Chinese-环形链表-II" class="headerlink" title="Chinese (环形链表 II)"></a>Chinese (环形链表 II)</h3><p>给你单链表的头指针 <code>head</code> 和两个整数 <code>left</code> 和 <code>right</code> ，其中 <code>left &lt;= right</code> 。请你反转从位置 <code>left</code> 到位置 <code>right</code> 的链表节点，返回 反转后的链表 。</p><p><strong>示例 1：</strong></p><pre><code class=" mermaid">graph LRnode11((1))node12((2))node13((3))node14((4))node15((5))node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15node21((1))node22((4))node23((3))node24((2))node25((5))node21 ---&gt; node22 ---&gt; node23 ---&gt; node24 ---&gt; node25</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2,3,4,5], left = 2, right = 4<br>输出：[1,4,3,2,5]<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [5], left = 1, right = 1<br>输出：[5]<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li>链表中节点数目为 <code>n</code></li><li><code>1 &lt;= n &lt;= 500</code></li><li><code>-500 &lt;= Node.val &lt;= 500</code></li><li><code>1 &lt;= left &lt;= right &lt;= n</code></li></ul><p><strong>进阶：</strong> 你可以使用一趟扫描完成反转吗？</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">reverseBetween</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>        ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>, head);<br><br>        ListNode* lastNodeInPreviousGroup = <span class="hljs-built_in">moveDistance</span>(dummy, left - <span class="hljs-number">1</span>);<br>        ListNode* leftNode = lastNodeInPreviousGroup-&gt;next;<br>        ListNode* rightNode = <span class="hljs-built_in">moveDistance</span>(dummy, right);<br>        ListNode* firstNodeInNextGroup = rightNode-&gt;next;<br><br>        <span class="hljs-comment">// break out the connections with the previous/next group</span><br>        lastNodeInPreviousGroup-&gt;next = <span class="hljs-literal">nullptr</span>;<br>        rightNode-&gt;next = <span class="hljs-literal">nullptr</span>;<br><br>        <span class="hljs-comment">// reverse in group</span><br>        rightNode = leftNode;<br>        leftNode = <span class="hljs-built_in">reverseList</span>(leftNode);<br><br>        <span class="hljs-comment">// resume the connections with the previous/next group</span><br>        lastNodeInPreviousGroup-&gt;next = leftNode;<br>        rightNode-&gt;next = firstNodeInNextGroup;<br><br>        head = dummy-&gt;next;<br>        <span class="hljs-keyword">delete</span> dummy;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">moveDistance</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> distance)</span> </span>&#123;<br>        ListNode* curr = head;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; distance &amp;&amp; curr != <span class="hljs-literal">nullptr</span>; ++i) &#123;<br>            curr = curr-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">return</span> curr;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">reverseList</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* prev = <span class="hljs-literal">nullptr</span>;<br>        ListNode* curr = head;<br>        <span class="hljs-keyword">while</span> (curr != <span class="hljs-literal">nullptr</span>) &#123;<br>            ListNode* next = curr-&gt;next;<br>            curr-&gt;next = prev;<br><br>            prev = curr;<br>            curr = next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> prev;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>linked_list</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>linked_list</tag>
+      
+      <tag>medium</tag>
+      
+      <tag>two_pointers</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 160 - Intersection of Two Linked Lists</title>
     <link href="/Algorithm/LeetCode/LinkedList/LeetCode-160-Intersection-of-Two-Linked-Lists/"/>
     <url>/Algorithm/LeetCode/LinkedList/LeetCode-160-Intersection-of-Two-Linked-Lists/</url>
@@ -2237,9 +2274,9 @@
       
       <category>leetcode</category>
       
-      <category>priority_queue</category>
-      
       <category>linked_list</category>
+      
+      <category>priority_queue</category>
       
       <category>heap</category>
       
