@@ -16,26 +16,26 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Difficulty: medium             Problem DescriptionEnglish (Online Stock Span)Design an algorithm that collects daily price quotes for some stock and returns the span of that stock’s price">
+    <meta name="description" content="Difficulty: medium             Problem DescriptionEnglish (Linked List Cycle II)Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode 901 - Online Stock Span">
-<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LeetCode-901-Online-Stock-Span/index.html">
+<meta property="og:title" content="LeetCode 142 - Linked List Cycle II">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="Difficulty: medium             Problem DescriptionEnglish (Online Stock Span)Design an algorithm that collects daily price quotes for some stock and returns the span of that stock’s price">
+<meta property="og:description" content="Difficulty: medium             Problem DescriptionEnglish (Linked List Cycle II)Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-06-01T15:35:51.000Z">
-<meta property="article:modified_time" content="2023-05-28T15:42:24.644Z">
+<meta property="article:published_time" content="2023-06-16T03:57:06.000Z">
+<meta property="article:modified_time" content="2023-06-24T04:06:44.713Z">
 <meta property="article:author" content="wasPrime">
 <meta property="article:tag" content="algorithm">
 <meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="linked_list">
 <meta property="article:tag" content="medium">
-<meta property="article:tag" content="stack">
-<meta property="article:tag" content="monotonic_stack">
+<meta property="article:tag" content="two_pointers">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>LeetCode 901 - Online Stock Span - wasPrime&#39;s Blog</title>
+  <title>LeetCode 142 - Linked List Cycle II - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="LeetCode 901 - Online Stock Span"></span>
+            <span id="subtitle" data-typed-text="LeetCode 142 - Linked List Cycle II"></span>
           
         </div>
 
@@ -212,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-06-01 23:35" pubdate>
-          June 1, 2023 pm
+        <time datetime="2023-06-16 11:57" pubdate>
+          June 16, 2023 am
         </time>
       </span>
     
@@ -224,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k words
+          2.6k words
         
       </span>
     
@@ -286,7 +286,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">LeetCode 901 - Online Stock Span</h1>
+            <h1 style="display: none">LeetCode 142 - Linked List Cycle II</h1>
             
             
               <div class="markdown-body">
@@ -295,39 +295,95 @@
             <p>Difficulty: <span class="label label-warning">medium</span></p>
           </div>
 
-<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Online-Stock-Span"><a href="#English-Online-Stock-Span" class="headerlink" title="English (Online Stock Span)"></a>English (Online Stock Span)</h3><p>Design an algorithm that collects daily price quotes for some stock and returns <strong>the span</strong> of that stock’s price for the current day.</p>
-<p>The <strong>span</strong> of the stock’s price in one day is the maximum number of consecutive days (starting from that day and going backward) for which the stock price was less than or equal to the price of that day.</p>
-<ul>
-<li>For example, if the prices of the stock in the last four days is <code>[7,2,1,2]</code> and the price of the stock today is <code>2</code>, then the span of today is 4 because starting from today, the price of the stock was less than or equal <code>2</code> for <code>4</code> consecutive days.</li>
-<li>Also, if the prices of the stock in the last four days is <code>[7,34,1,2]</code> and the price of the stock today is <code>8</code>, then the span of today is <code>3</code> because starting from today, the price of the stock was less than or equal <code>8</code> for <code>3</code> consecutive days.</li>
-</ul>
-<p>Implement the <code>StockSpanner</code> class:</p>
-<ul>
-<li><code>StockSpanner()</code> Initializes the object of the class.</li>
-<li><code>int next(int price)</code> Returns the <strong>span</strong> of the stock’s price given that today’s price is <code>price</code>.</li>
-</ul>
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Linked-List-Cycle-II"><a href="#English-Linked-List-Cycle-II" class="headerlink" title="English (Linked List Cycle II)"></a>English (Linked List Cycle II)</h3><p>Given the <code>head</code> of a linked list, return <em>the node where the cycle begins. If there is no cycle, return <code>null</code></em>.</p>
+<p>There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the <code>next</code> pointer. Internally, <code>pos</code> is used to denote the index of the node that tail’s <code>next</code> pointer is connected to <strong>(0-indexed)</strong>. It is <code>-1</code> if there is no cycle. <strong>Note that <code>pos</code> is not passed as a parameter</strong>.</p>
+<p><strong>Do not modify</strong> the linked list.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs log">Input<br>[&quot;StockSpanner&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;]<br>[[], [100], [80], [60], [70], [60], [75], [85]]<br>Output<br>[null, 1, 1, 1, 2, 1, 4, 6]<br><br>Explanation<br>StockSpanner stockSpanner = new StockSpanner();<br>stockSpanner.next(100); // return 1<br>stockSpanner.next(80);  // return 1<br>stockSpanner.next(60);  // return 1<br>stockSpanner.next(70);  // return 2<br>stockSpanner.next(60);  // return 1<br>stockSpanner.next(75);  // return 4, because the last 4 prices (including today&#x27;s price of 75) were less than or equal to today&#x27;s price.<br>stockSpanner.next(85);  // return 6<br></code></pre></td></tr></table></figure>
+<pre><code class=" mermaid">graph LR
+
+node1((3))
+node2((2))
+node3((0))
+node4((&quot;-4&quot;))
+
+node1 ---&gt; node2 ---&gt; node3 ---&gt; node4
+node4 ---&gt; node2
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [3,2,0,-4], pos = 1<br>Output: tail connects to node index 1<br>Explanation: There is a cycle in the linked list, where tail connects to the second node.<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node1((1))
+node2((2))
+
+node1 ---&gt; node2
+node2 ---&gt; node1
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2], pos = 0<br>Output: tail connects to node index 0<br>Explanation: There is a cycle in the linked list, where tail connects to the first node.<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 3:</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node1((1))
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1], pos = -1<br>Output: no cycle<br>Explanation: There is no cycle in the linked list.<br></code></pre></td></tr></table></figure>
 
 <p><strong>Constraints:</strong></p>
 <ul>
-<li><code>1 &lt;= price &lt;= 10^5</code></li>
-<li>At most <code>10^4</code> calls will be made to <code>next</code>.</li>
+<li>The number of the nodes in the list is in the range <code>[0, 10^4]</code>.</li>
+<li><code>-10^5 &lt;= Node.val &lt;= 10^5</code></li>
+<li><code>pos</code> is <code>-1</code> or a <strong>valid index</strong> in the linked-list.</li>
 </ul>
-<h3 id="Chinese-股票价格跨度"><a href="#Chinese-股票价格跨度" class="headerlink" title="Chinese (股票价格跨度)"></a>Chinese (股票价格跨度)</h3><p>设计一个算法收集某些股票的每日报价，并返回该股票当日价格的 <strong>跨度</strong> 。</p>
-<p>当日股票价格的 <strong>跨度</strong> 被定义为股票价格小于或等于今天价格的最大连续日数（从今天开始往回数，包括今天）。</p>
-<p>例如，如果未来 7 天股票的价格是 <code>[100,80,60,70,60,75,85]</code>，那么股票跨度将是 <code>[1,1,1,2,1,4,6]</code> 。</p>
-<p>实现 <code>StockSpanner</code> 类：</p>
-<p><code>StockSpanner()</code> 初始化类对象。<br><code>int next(int price)</code> 给出今天的股价 <code>price</code> ，返回该股票当日价格的 <strong>跨度</strong> 。</p>
-<p><strong>示例：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：<br>[&quot;StockSpanner&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;, &quot;next&quot;]<br>[[], [100], [80], [60], [70], [60], [75], [85]]<br>输出：<br>[null, 1, 1, 1, 2, 1, 4, 6]<br><br>解释：<br>StockSpanner stockSpanner = new StockSpanner();<br>stockSpanner.next(100); // 返回 1<br>stockSpanner.next(80);  // 返回 1<br>stockSpanner.next(60);  // 返回 1<br>stockSpanner.next(70);  // 返回 2<br>stockSpanner.next(60);  // 返回 1<br>stockSpanner.next(75);  // 返回 4 ，因为截至今天的最后 4 个股价 (包括今天的股价 75) 都小于或等于今天的股价。<br>stockSpanner.next(85);  // 返回 6<br></code></pre></td></tr></table></figure>
+<p><strong>Follow up:</strong> Can you solve it using <code>O(1)</code> (i.e. constant) memory?</p>
+<h3 id="Chinese-环形链表-II"><a href="#Chinese-环形链表-II" class="headerlink" title="Chinese (环形链表 II)"></a>Chinese (环形链表 II)</h3><p>给定一个链表的头节点 <code>head</code> ，返回链表开始入环的第一个节点。 <em>如果链表无环，则返回 <code>null</code>。</em></p>
+<p>如果链表中有某个节点，可以通过连续跟踪 <code>next</code> 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（<strong>索引从 0 开始</strong>）。如果 <code>pos</code> 是 <code>-1</code>，则在该链表中没有环。<strong>注意：<code>pos</code> 不作为参数进行传递</strong>，仅仅是为了标识链表的实际情况。</p>
+<p><strong>不允许修改</strong> 链表。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node1((3))
+node2((2))
+node3((0))
+node4((&quot;-4&quot;))
+
+node1 ---&gt; node2 ---&gt; node3 ---&gt; node4
+node4 ---&gt; node2
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [3,2,0,-4], pos = 1<br>输出：返回索引为 1 的链表节点<br>解释：链表中有一个环，其尾部连接到第二个节点。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node1((1))
+node2((2))
+
+node1 ---&gt; node2
+node2 ---&gt; node1
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2], pos = 0<br>输出：返回索引为 0 的链表节点<br>解释：链表中有一个环，其尾部连接到第一个节点。<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node1((1))
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1], pos = -1<br>输出：返回 null<br>解释：链表中没有环。<br></code></pre></td></tr></table></figure>
 
 <p><strong>提示：</strong></p>
 <ul>
-<li><code>1 &lt;= price &lt;= 10^5</code></li>
-<li>最多调用 <code>next</code> 方法 <code>10^4</code> 次</li>
+<li>链表中节点的数目范围在范围 <code>[0, 10^4]</code> 内</li>
+<li><code>-10^5 &lt;= Node.val &lt;= 10^5</code></li>
+<li><code>pos</code> 的值为 <code>-1</code> 或者链表中的一个有效索引</li>
 </ul>
-<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><h3 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockSpanner</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">StockSpanner</span>() &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-type">int</span> price)</span> </span>&#123;<br>        <span class="hljs-type">int</span> res = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">while</span> (!s.<span class="hljs-built_in">empty</span>() &amp;&amp; price &gt;= s.<span class="hljs-built_in">top</span>().price) &#123;<br>            res += s.<span class="hljs-built_in">top</span>().window_sum;<br>            s.<span class="hljs-built_in">pop</span>();<br>        &#125;<br><br>        s.<span class="hljs-built_in">push</span>(&#123;price, res&#125;);<br><br>        <span class="hljs-keyword">return</span> res;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">PriceInfo</span> &#123;<br>        <span class="hljs-type">int</span> price;<br>        <span class="hljs-type">int</span> window_sum;<br>    &#125;;<br><br>    stack&lt;PriceInfo&gt; s;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><strong>进阶：</strong> 你是否可以使用 <code>O(1)</code> 空间解决此题？</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">NULL</span>) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* cycle_node = <span class="hljs-built_in">nodeInCycle</span>(head);<br>        <span class="hljs-keyword">if</span> (cycle_node == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        &#125;<br><br>        ListNode* curr = head;<br>        <span class="hljs-keyword">while</span> (curr != cycle_node) &#123;<br>            curr = curr-&gt;next;<br>            cycle_node = cycle_node-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> curr;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">nodeInCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* fast = head;<br>        ListNode* slow = head;<br><br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br><br>            <span class="hljs-keyword">if</span> (slow == fast) &#123;<br>                <span class="hljs-keyword">return</span> fast;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -356,7 +412,7 @@
   
     <span>></span>
     
-  <a href="/categories/algorithm/leetcode/monotonic-stack/" class="category-chain-item">monotonic_stack</a>
+  <a href="/categories/algorithm/leetcode/linked-list/" class="category-chain-item">linked_list</a>
   
   
 
@@ -379,11 +435,11 @@
       
         <a href="/tags/leetcode/">#leetcode</a>
       
+        <a href="/tags/linked-list/">#linked_list</a>
+      
         <a href="/tags/medium/">#medium</a>
       
-        <a href="/tags/stack/">#stack</a>
-      
-        <a href="/tags/monotonic-stack/">#monotonic_stack</a>
+        <a href="/tags/two-pointers/">#two_pointers</a>
       
     </div>
   
@@ -395,8 +451,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>LeetCode 901 - Online Stock Span</div>
-      <div>http://wasprime.github.io/Algorithm/LeetCode/LeetCode-901-Online-Stock-Span/</div>
+      <div>LeetCode 142 - Linked List Cycle II</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/</div>
     </div>
     <div class="license-meta">
       
@@ -408,13 +464,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>June 1, 2023</div>
+          <div>June 16, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>May 28, 2023</div>
+          <div>June 24, 2023</div>
         </div>
       
       
@@ -445,18 +501,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/DynamicProgramming/LeetCode-2110-Number-of-Smooth-Descent-Periods-of-a-Stock/" title="LeetCode 2110 - Number of Smooth Descent Periods of a Stock">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">LeetCode 2110 - Number of Smooth Descent Periods of a Stock</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Algorithm/LeetCode/LeetCode-502-IPO/" title="LeetCode 502 - IPO">
-                        <span class="hidden-mobile">LeetCode 502 - IPO</span>
+                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-25-Reverse-Nodes-in-k-Group/" title="LeetCode 25 - Reverse Nodes in k-Group">
+                        <span class="hidden-mobile">LeetCode 25 - Reverse Nodes in k-Group</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -501,6 +551,19 @@
 
   
 
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
 
 
 

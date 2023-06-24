@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>LeetCode 142 - Linked List Cycle II</title>
+    <link href="/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/"/>
+    <url>/Algorithm/LeetCode/LinkedList/LeetCode-142-Linked-List-Cycle-II/</url>
+    
+    <content type="html"><![CDATA[<div class="note note-info">            <p>Difficulty: <span class="label label-warning">medium</span></p>          </div><h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Linked-List-Cycle-II"><a href="#English-Linked-List-Cycle-II" class="headerlink" title="English (Linked List Cycle II)"></a>English (Linked List Cycle II)</h3><p>Given the <code>head</code> of a linked list, return <em>the node where the cycle begins. If there is no cycle, return <code>null</code></em>.</p><p>There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the <code>next</code> pointer. Internally, <code>pos</code> is used to denote the index of the node that tail’s <code>next</code> pointer is connected to <strong>(0-indexed)</strong>. It is <code>-1</code> if there is no cycle. <strong>Note that <code>pos</code> is not passed as a parameter</strong>.</p><p><strong>Do not modify</strong> the linked list.</p><p><strong>Example 1:</strong></p><pre><code class=" mermaid">graph LRnode1((3))node2((2))node3((0))node4((&quot;-4&quot;))node1 ---&gt; node2 ---&gt; node3 ---&gt; node4node4 ---&gt; node2</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [3,2,0,-4], pos = 1<br>Output: tail connects to node index 1<br>Explanation: There is a cycle in the linked list, where tail connects to the second node.<br></code></pre></td></tr></table></figure><p><strong>Example 2:</strong></p><pre><code class=" mermaid">graph LRnode1((1))node2((2))node1 ---&gt; node2node2 ---&gt; node1</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2], pos = 0<br>Output: tail connects to node index 0<br>Explanation: There is a cycle in the linked list, where tail connects to the first node.<br></code></pre></td></tr></table></figure><p><strong>Example 3:</strong></p><pre><code class=" mermaid">graph LRnode1((1))</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1], pos = -1<br>Output: no cycle<br>Explanation: There is no cycle in the linked list.<br></code></pre></td></tr></table></figure><p><strong>Constraints:</strong></p><ul><li>The number of the nodes in the list is in the range <code>[0, 10^4]</code>.</li><li><code>-10^5 &lt;= Node.val &lt;= 10^5</code></li><li><code>pos</code> is <code>-1</code> or a <strong>valid index</strong> in the linked-list.</li></ul><p><strong>Follow up:</strong> Can you solve it using <code>O(1)</code> (i.e. constant) memory?</p><h3 id="Chinese-环形链表-II"><a href="#Chinese-环形链表-II" class="headerlink" title="Chinese (环形链表 II)"></a>Chinese (环形链表 II)</h3><p>给定一个链表的头节点 <code>head</code> ，返回链表开始入环的第一个节点。 <em>如果链表无环，则返回 <code>null</code>。</em></p><p>如果链表中有某个节点，可以通过连续跟踪 <code>next</code> 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（<strong>索引从 0 开始</strong>）。如果 <code>pos</code> 是 <code>-1</code>，则在该链表中没有环。<strong>注意：<code>pos</code> 不作为参数进行传递</strong>，仅仅是为了标识链表的实际情况。</p><p><strong>不允许修改</strong> 链表。</p><p><strong>示例 1：</strong></p><pre><code class=" mermaid">graph LRnode1((3))node2((2))node3((0))node4((&quot;-4&quot;))node1 ---&gt; node2 ---&gt; node3 ---&gt; node4node4 ---&gt; node2</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [3,2,0,-4], pos = 1<br>输出：返回索引为 1 的链表节点<br>解释：链表中有一个环，其尾部连接到第二个节点。<br></code></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><pre><code class=" mermaid">graph LRnode1((1))node2((2))node1 ---&gt; node2node2 ---&gt; node1</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2], pos = 0<br>输出：返回索引为 0 的链表节点<br>解释：链表中有一个环，其尾部连接到第一个节点。<br></code></pre></td></tr></table></figure><p><strong>示例 3：</strong></p><pre><code class=" mermaid">graph LRnode1((1))</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1], pos = -1<br>输出：返回 null<br>解释：链表中没有环。<br></code></pre></td></tr></table></figure><p><strong>提示：</strong></p><ul><li>链表中节点的数目范围在范围 <code>[0, 10^4]</code> 内</li><li><code>-10^5 &lt;= Node.val &lt;= 10^5</code></li><li><code>pos</code> 的值为 <code>-1</code> 或者链表中的一个有效索引</li></ul><p><strong>进阶：</strong> 你是否可以使用 <code>O(1)</code> 空间解决此题？</p><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">NULL</span>) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">detectCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* cycle_node = <span class="hljs-built_in">nodeInCycle</span>(head);<br>        <span class="hljs-keyword">if</span> (cycle_node == <span class="hljs-literal">nullptr</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>        &#125;<br><br>        ListNode* curr = head;<br>        <span class="hljs-keyword">while</span> (curr != cycle_node) &#123;<br>            curr = curr-&gt;next;<br>            cycle_node = cycle_node-&gt;next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> curr;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">nodeInCycle</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* fast = head;<br>        ListNode* slow = head;<br><br>        <span class="hljs-keyword">while</span> (fast != <span class="hljs-literal">nullptr</span> &amp;&amp; fast-&gt;next != <span class="hljs-literal">nullptr</span>) &#123;<br>            slow = slow-&gt;next;<br>            fast = fast-&gt;next-&gt;next;<br><br>            <span class="hljs-keyword">if</span> (slow == fast) &#123;<br>                <span class="hljs-keyword">return</span> fast;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>leetcode</category>
+      
+      <category>linked_list</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>leetcode</tag>
+      
+      <tag>linked_list</tag>
+      
+      <tag>medium</tag>
+      
+      <tag>two_pointers</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 25 - Reverse Nodes in k-Group</title>
     <link href="/Algorithm/LeetCode/LinkedList/LeetCode-25-Reverse-Nodes-in-k-Group/"/>
     <url>/Algorithm/LeetCode/LinkedList/LeetCode-25-Reverse-Nodes-in-k-Group/</url>
@@ -504,11 +541,11 @@
       
       <tag>algorithm</tag>
       
-      <tag>stack</tag>
-      
       <tag>leetcode</tag>
       
       <tag>medium</tag>
+      
+      <tag>stack</tag>
       
       <tag>monotonic_stack</tag>
       
@@ -1532,9 +1569,9 @@
       
       <tag>cpp17</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>string_view</tag>
       
@@ -1573,9 +1610,9 @@
       
       <tag>medium</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>string</tag>
+      
+      <tag>sliding_window</tag>
       
       <tag>kmp</tag>
       
@@ -1610,9 +1647,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1647,9 +1684,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1680,9 +1717,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>design</tag>
-      
       <tag>stack</tag>
+      
+      <tag>design</tag>
       
       <tag>binary_tree</tag>
       
@@ -1715,11 +1752,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>stack</tag>
+      
       <tag>design</tag>
       
       <tag>calculator</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -1820,9 +1857,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1857,9 +1894,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2135,9 +2172,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -2386,9 +2423,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2563,9 +2600,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -2744,9 +2781,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
