@@ -16,26 +16,25 @@
   <meta name="author" content="wasPrime">
   <meta name="keywords" content="">
   
-    <meta name="description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 11: 反思 C++ 面向对象与虚函数             克制 克制使用继承。 可以有很简单的类，但不能有很复杂的类。  ABIC++ 编">
+    <meta name="description" content="Difficulty: hard             Problem DescriptionEnglish (Reverse Nodes in k-Group)Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learn muduo - Part 11 Rethinking C++ Object Orientation and Virtual Functions">
-<meta property="og:url" content="http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-11-Rethinking-C-Object-Orientation-and-Virtual-Functions/index.html">
+<meta property="og:title" content="LeetCode 25 - Reverse Nodes in k-Group">
+<meta property="og:url" content="http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-25-Reverse-Nodes-in-k-Group/index.html">
 <meta property="og:site_name" content="wasPrime&#39;s Blog">
-<meta property="og:description" content="muduo: https:&#x2F;&#x2F;github.com&#x2F;chenshuo&#x2F;muduo                          本系列是 《Linux 多线程服务端编程：使用 muduo C++ 网络库》 学习笔记。Part 11: 反思 C++ 面向对象与虚函数             克制 克制使用继承。 可以有很简单的类，但不能有很复杂的类。  ABIC++ 编">
+<meta property="og:description" content="Difficulty: hard             Problem DescriptionEnglish (Reverse Nodes in k-Group)Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-05-23T15:04:19.000Z">
-<meta property="article:modified_time" content="2023-05-25T17:25:10.665Z">
+<meta property="article:published_time" content="2023-06-15T03:19:57.000Z">
+<meta property="article:modified_time" content="2023-06-24T03:45:54.958Z">
 <meta property="article:author" content="wasPrime">
-<meta property="article:tag" content="cpp">
-<meta property="article:tag" content="vtable">
-<meta property="article:tag" content="vfunction">
-<meta property="article:tag" content="library">
-<meta property="article:tag" content="muduo">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="linked_list">
+<meta property="article:tag" content="hard">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Learn muduo - Part 11 Rethinking C++ Object Orientation and Virtual Functions - wasPrime&#39;s Blog</title>
+  <title>LeetCode 25 - Reverse Nodes in k-Group - wasPrime&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +200,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Learn muduo - Part 11 Rethinking C++ Object Orientation and Virtual Functions"></span>
+            <span id="subtitle" data-typed-text="LeetCode 25 - Reverse Nodes in k-Group"></span>
           
         </div>
 
@@ -212,8 +211,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-05-23 23:04" pubdate>
-          May 23, 2023 pm
+        <time datetime="2023-06-15 11:19" pubdate>
+          June 15, 2023 am
         </time>
       </span>
     
@@ -224,7 +223,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k words
+          3.7k words
         
       </span>
     
@@ -235,7 +234,7 @@
         
         
         
-          4 mins
+          8 mins
         
       </span>
     
@@ -286,39 +285,116 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Learn muduo - Part 11 Rethinking C++ Object Orientation and Virtual Functions</h1>
+            <h1 style="display: none">LeetCode 25 - Reverse Nodes in k-Group</h1>
             
             
               <div class="markdown-body">
                 
-                <div class="note note-success">
-            <p>muduo: <a target="_blank" rel="noopener" href="https://github.com/chenshuo/muduo">https://github.com/chenshuo/muduo</a></p>
+                <div class="note note-info">
+            <p>Difficulty: <span class="label label-danger">hard</span></p>
           </div>
 
-<div class="note note-primary">
-            <p>本系列是 <a target="_blank" rel="noopener" href="https://chenshuo.com/book/">《Linux 多线程服务端编程：使用 muduo C++ 网络库》</a> 学习笔记。</p><p><strong>Part 11: 反思 C++ 面向对象与虚函数</strong></p>
-          </div>
+<h2 id="Problem-Description"><a href="#Problem-Description" class="headerlink" title="Problem Description"></a>Problem Description</h2><h3 id="English-Reverse-Nodes-in-k-Group"><a href="#English-Reverse-Nodes-in-k-Group" class="headerlink" title="English (Reverse Nodes in k-Group)"></a>English (Reverse Nodes in k-Group)</h3><p>Given the <code>head</code> of a linked list, reverse the nodes of the list <code>k</code> at a time, and return <em>the modified list</em>.</p>
+<p><code>k</code> is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of <code>k</code> then left-out nodes, in the end, should remain as it is.</p>
+<p>You may not alter the values in the list’s nodes, only nodes themselves may be changed.</p>
+<p><strong>Example 1:</strong></p>
+<pre><code class=" mermaid">graph LR
 
-<h2 id="克制"><a href="#克制" class="headerlink" title="克制"></a>克制</h2><ul>
-<li>克制使用继承。</li>
-<li>可以有很简单的类，但不能有很复杂的类。</li>
-</ul>
-<h2 id="ABI"><a href="#ABI" class="headerlink" title="ABI"></a>ABI</h2><p>C++ 编译器 ABI（Application Binary Interface）主要内容包括以下几个方面：</p>
+node11((1))
+node12((2))
+node13((3))
+node14((4))
+node15((5))
+node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15
+
+node21((2))
+node22((1))
+node23((4))
+node24((3))
+node25((5))
+node21 ---&gt; node22 ---&gt; node23 ---&gt; node24 ---&gt; node25
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2,3,4,5], k = 2<br>Output: [2,1,4,3,5]<br></code></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node11((1))
+node12((2))
+node13((3))
+node14((4))
+node15((5))
+node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15
+
+node21((3))
+node22((2))
+node23((1))
+node24((4))
+node25((5))
+node21 ---&gt; node22 ---&gt; node23 ---&gt; node24 ---&gt; node25
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">Input: head = [1,2,3,4,5], k = 3<br>Output: [3,2,1,4,5]<br></code></pre></td></tr></table></figure>
+
+<p><strong>Constraints:</strong></p>
 <ul>
-<li>函数参数传递的方式，比如 x86-64 用寄存器来传函数的前 4 个整数参数；</li>
-<li>虚函数的调用方式，通常是 vptr&#x2F;vtbl 机制，然后用 <code>vtbl[offer]</code> 来调用；</li>
-<li>struct 和 class 的内存布局，通过偏移量来访问数据成员；</li>
-<li>name mangling；</li>
-<li>RTTI 和异常处理的实现。</li>
+<li>The number of nodes in the list is <code>n</code>.</li>
+<li><code>1 &lt;= k &lt;= n &lt;= 5000</code></li>
+<li><code>0 &lt;= Node.val &lt;= 1000</code></li>
 </ul>
-<h2 id="动态库接口的推荐做法"><a href="#动态库接口的推荐做法" class="headerlink" title="动态库接口的推荐做法"></a>动态库接口的推荐做法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// graphics.h</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Graphics</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Graphics</span>();   <span class="hljs-comment">// outline ctor</span><br>    ~<span class="hljs-built_in">Graphics</span>();  <span class="hljs-comment">// outline dtor</span><br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y, <span class="hljs-type">int</span> r)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(Point p0, <span class="hljs-type">int</span> r)</span></span>;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Impl</span>;<br>    std::unique_ptr&lt;Impl&gt; impl;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><strong>Follow-up:</strong> Can you solve the problem in O(1) extra memory space?</p>
+<h3 id="Chinese-K-个一组翻转链表"><a href="#Chinese-K-个一组翻转链表" class="headerlink" title="Chinese (K 个一组翻转链表)"></a>Chinese (K 个一组翻转链表)</h3><p>给你链表的头节点 <code>head</code> ，每 <code>k</code> 个节点一组进行翻转，请你返回修改后的链表。</p>
+<p><code>k</code> 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 <code>k</code> 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
+<p>你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。</p>
+<p><strong>示例 1：</strong></p>
+<pre><code class=" mermaid">graph LR
 
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// graphics.cc for .so/.dll</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;graphics.h&quot;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Graphics</span>::Impl &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y, <span class="hljs-type">int</span> r)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(Point p0, <span class="hljs-type">int</span> r)</span></span>;<br>&#125;;<br><br>Graphics::<span class="hljs-built_in">Graphics</span>() : impl&#123;std::<span class="hljs-built_in">make_unique</span>&lt;Impl&gt;()&#125; &#123;<br>&#125;<br>Graphics::~<span class="hljs-built_in">Graphics</span>() = <span class="hljs-keyword">default</span>;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span> </span>&#123;<br>    impl-&gt;<span class="hljs-built_in">drawLine</span>(x0, y0, x1, y1);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::drawLine</span><span class="hljs-params">(Point p0, Point p1)</span> </span>&#123;<br>    impl-&gt;<span class="hljs-built_in">drawLine</span>(p0, p1);<br>&#125;<br></code></pre></td></tr></table></figure>
+node11((1))
+node12((2))
+node13((3))
+node14((4))
+node15((5))
+node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15
 
-<h2 id="printf-居然也能按位置输出"><a href="#printf-居然也能按位置输出" class="headerlink" title="printf 居然也能按位置输出"></a><code>printf</code> 居然也能按位置输出</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, j = <span class="hljs-number">2</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;i=%2$d, j=%1$d\n&quot;</span>, j, i);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+node21((2))
+node22((1))
+node23((4))
+node24((3))
+node25((5))
+node21 ---&gt; node22 ---&gt; node23 ---&gt; node24 ---&gt; node25
+</code></pre>
 
-<p>结果是:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs log">i=1, j=2<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2,3,4,5], k = 2<br>输出：[2,1,4,3,5]<br></code></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<pre><code class=" mermaid">graph LR
+
+node11((1))
+node12((2))
+node13((3))
+node14((4))
+node15((5))
+node11 ---&gt; node12 ---&gt; node13 ---&gt; node14 ---&gt; node15
+
+node21((3))
+node22((2))
+node23((1))
+node24((4))
+node25((5))
+node21 ---&gt; node22 ---&gt; node23 ---&gt; node24 ---&gt; node25
+</code></pre>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs log">输入：head = [1,2,3,4,5], k = 3<br>输出：[3,2,1,4,5]<br></code></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li>链表中的节点数目为 <code>n</code></li>
+<li><code>1 &lt;= k &lt;= n &lt;= 5000</code></li>
+<li><code>0 &lt;= Node.val &lt;= 1000</code></li>
+</ul>
+<p><strong>进阶：</strong> 你可以设计一个只用 <code>O(1)</code> 额外内存空间的算法解决此问题吗？</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Definition for singly-linked list.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListNode</span> &#123;<br>    <span class="hljs-type">int</span> val;<br>    ListNode* next;<br>    <span class="hljs-built_in">ListNode</span>() : <span class="hljs-built_in">val</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(<span class="hljs-literal">nullptr</span>) &#123;&#125;<br>    <span class="hljs-built_in">ListNode</span>(<span class="hljs-type">int</span> x, ListNode* next) : <span class="hljs-built_in">val</span>(x), <span class="hljs-built_in">next</span>(next) &#123;&#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">ListNode* <span class="hljs-title">reverseKGroup</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        ListNode* dummy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ListNode</span>(<span class="hljs-number">0</span>, head);<br><br>        ListNode* lastInPreviousGroup = dummy;<br>        ListNode* firstInCurrentGroup = head;<br>        <span class="hljs-keyword">while</span> (firstInCurrentGroup != <span class="hljs-literal">nullptr</span>) &#123;<br>            ListNode* lastInCurrentGroup = <span class="hljs-built_in">getLastInGroup</span>(firstInCurrentGroup, k);<br>            <span class="hljs-keyword">if</span> (lastInCurrentGroup == <span class="hljs-literal">nullptr</span>) &#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br><br>            ListNode* firstInNextGroup = lastInCurrentGroup-&gt;next;<br><br>            <span class="hljs-comment">// break out the connections with the previous/next group</span><br>            lastInPreviousGroup-&gt;next = <span class="hljs-literal">nullptr</span>;<br>            lastInCurrentGroup-&gt;next = <span class="hljs-literal">nullptr</span>;<br><br>            <span class="hljs-comment">// reverse in group</span><br>            lastInCurrentGroup = firstInCurrentGroup;<br>            firstInCurrentGroup = <span class="hljs-built_in">reverseList</span>(firstInCurrentGroup);<br><br>            <span class="hljs-comment">// resume the connections with the previous/next group</span><br>            lastInPreviousGroup-&gt;next = firstInCurrentGroup;<br>            lastInCurrentGroup-&gt;next = firstInNextGroup;<br><br>            <span class="hljs-comment">// update the pilot pointers</span><br>            lastInPreviousGroup = lastInCurrentGroup;<br>            firstInCurrentGroup = firstInNextGroup;<br>        &#125;<br><br>        head = dummy-&gt;next;<br>        <span class="hljs-keyword">delete</span> dummy;<br>        <span class="hljs-keyword">return</span> head;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">moveDistance</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> distance)</span> </span>&#123;<br>        ListNode* curr = head;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; distance &amp;&amp; curr != <span class="hljs-literal">nullptr</span>; ++i) &#123;<br>            curr = curr-&gt;next;<br>        &#125;<br>        <span class="hljs-keyword">return</span> curr;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">getLastInGroup</span><span class="hljs-params">(ListNode* head, <span class="hljs-type">int</span> group_size)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">moveDistance</span>(head, group_size - <span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> ListNode* <span class="hljs-title">reverseList</span><span class="hljs-params">(ListNode* head)</span> </span>&#123;<br>        ListNode* prev = <span class="hljs-literal">nullptr</span>;<br>        ListNode* curr = head;<br>        <span class="hljs-keyword">while</span> (curr != <span class="hljs-literal">nullptr</span>) &#123;<br>            ListNode* next = curr-&gt;next;<br>            curr-&gt;next = prev;<br><br>            prev = curr;<br>            curr = next;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> prev;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -337,13 +413,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/library/" class="category-chain-item">library</a>
+  <a href="/categories/algorithm/" class="category-chain-item">algorithm</a>
   
   
     <span>></span>
     
-  <a href="/categories/library/muduo/" class="category-chain-item">muduo</a>
+  <a href="/categories/algorithm/leetcode/" class="category-chain-item">leetcode</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/algorithm/leetcode/linked-list/" class="category-chain-item">linked_list</a>
+  
+  
+
   
 
   
@@ -359,15 +442,13 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/cpp/">#cpp</a>
+        <a href="/tags/algorithm/">#algorithm</a>
       
-        <a href="/tags/vtable/">#vtable</a>
+        <a href="/tags/leetcode/">#leetcode</a>
       
-        <a href="/tags/vfunction/">#vfunction</a>
+        <a href="/tags/linked-list/">#linked_list</a>
       
-        <a href="/tags/library/">#library</a>
-      
-        <a href="/tags/muduo/">#muduo</a>
+        <a href="/tags/hard/">#hard</a>
       
     </div>
   
@@ -379,8 +460,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Learn muduo - Part 11 Rethinking C++ Object Orientation and Virtual Functions</div>
-      <div>http://wasprime.github.io/Dev/Library/muduo/Learn-muduo-Part-11-Rethinking-C-Object-Orientation-and-Virtual-Functions/</div>
+      <div>LeetCode 25 - Reverse Nodes in k-Group</div>
+      <div>http://wasprime.github.io/Algorithm/LeetCode/LinkedList/LeetCode-25-Reverse-Nodes-in-k-Group/</div>
     </div>
     <div class="license-meta">
       
@@ -392,13 +473,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>May 23, 2023</div>
+          <div>June 15, 2023</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>May 26, 2023</div>
+          <div>June 24, 2023</div>
         </div>
       
       
@@ -429,18 +510,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Dev/Library/muduo/Learn-muduo-Part-12-C-Experience-Talk/" title="Learn muduo - Part 12 C++ Experience Talk">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Learn muduo - Part 12 C++ Experience Talk</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Dev/Library/muduo/Learn-muduo-Part-10-C-Compiler-Link-Model-Essentials/" title="Learn muduo - Part 10 C++ Compiler Link Model Essentials">
-                        <span class="hidden-mobile">Learn muduo - Part 10 C++ Compiler Link Model Essentials</span>
+                      <a href="/Algorithm/LeetCode/LinkedList/LeetCode-24-Swap-Nodes-in-Pairs/" title="LeetCode 24 - Swap Nodes in Pairs">
+                        <span class="hidden-mobile">LeetCode 24 - Swap Nodes in Pairs</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -485,6 +560,19 @@
 
   
 
+
+
+  <script>
+  Fluid.utils.createScript('https://lib.baomitu.com/mermaid/8.14.0/mermaid.min.js', function() {
+    mermaid.initialize({"theme":"default"});
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('mermaid' in window) {
+        mermaid.init();
+      }
+    });
+  });
+</script>
 
 
 
