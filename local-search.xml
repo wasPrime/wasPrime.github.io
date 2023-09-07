@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>Balance All Numbers into Range</title>
+    <link href="/Algorithm/Design/Balance-All-Numbers-into-Range/"/>
+    <url>/Algorithm/Design/Balance-All-Numbers-into-Range/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Basic-Problem"><a href="#Basic-Problem" class="headerlink" title="Basic Problem"></a>Basic Problem</h2><p>If we have a number array and a desired range of values, we have chance to operate a pair of numbers every time with multiple times - we are able to give a number a plus and give another number a minus at the same time.</p><p>So, how many times do we need to balance all numbers into the range? Return <code>-1</code> if we have no way to achieve it.</p><p>For example:</p><ul><li>Case 1:<ul><li>Input:<ul><li>Values: [1, 2, 3, 4]</li><li>Expected range: [2, 3]</li></ul></li><li>Output: 1</li></ul></li><li>Case 2:<ul><li>Input:<ul><li>Values: [1, 100]</li><li>Expected range: [2, 2]</li></ul></li><li>Output: -1</li></ul></li></ul><h3 id="Solutions-of-Basic-Problem"><a href="#Solutions-of-Basic-Problem" class="headerlink" title="Solutions of Basic Problem"></a>Solutions of Basic Problem</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// Boundary: [left, right]</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">minimum_time_to_balance</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;<span class="hljs-type">int</span>&gt;&amp; values, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>        <span class="hljs-type">int</span> sum = std::<span class="hljs-built_in">accumulate</span>(values.<span class="hljs-built_in">begin</span>(), values.<span class="hljs-built_in">end</span>(), <span class="hljs-number">0</span>);<br>        <span class="hljs-type">int</span> n = values.<span class="hljs-built_in">size</span>();<br><br>        <span class="hljs-keyword">if</span> (sum &lt; left * n || sum &gt; right * n) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br><br>        <span class="hljs-type">int</span> need_to_plus = <span class="hljs-number">0</span>, need_to_minus = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> value : values) &#123;<br>            <span class="hljs-keyword">if</span> (value &lt; left) &#123;<br>                need_to_plus += left - value;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (value &gt; right) &#123;<br>                need_to_minus += value - right;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">max</span>(need_to_plus, need_to_minus);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><p>There is also another implementation:</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// Boundary: [left, right]</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">minimum_time_to_balance</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;<span class="hljs-type">int</span>&gt;&amp; values, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>        <span class="hljs-type">int</span> min_need_plus = <span class="hljs-number">0</span>, min_need_minus = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> max_can_plus = <span class="hljs-number">0</span>, max_can_minus = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> value : values) &#123;<br>            <span class="hljs-keyword">if</span> (value &lt; left) &#123;<br>                min_need_plus += left - value;<br>                max_can_plus += right - value;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (value &gt; right) &#123;<br>                min_need_minus += value - right;<br>                max_can_minus += value - left;<br>            &#125; <span class="hljs-keyword">else</span> &#123;  <span class="hljs-comment">// left &lt;= value &lt;= right</span><br>                max_can_plus += right - value;<br>                max_can_minus += value - left;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (min_need_plus &gt; max_can_minus || min_need_minus &gt; max_can_plus) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">max</span>(min_need_plus, min_need_minus);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h2 id="Advanced-Unequal-Balance-of-Specific-Rate"><a href="#Advanced-Unequal-Balance-of-Specific-Rate" class="headerlink" title="Advanced: Unequal Balance of Specific Rate"></a>Advanced: Unequal Balance of Specific Rate</h2><p>However, what if the balance between the pair of numbers is unequal? For example, when we give a number a plus, we have to give another number 2 minus. In this way, the balance of transformation is unequal.</p><p>For example:</p><ul><li>Case 1:<ul><li>Input:<ul><li>Values: [1, 2, 3, 4]</li><li>Expected range: [2, 3]</li></ul></li><li>Output: 1</li></ul></li><li>Case 2:<ul><li>Input:<ul><li>Values: [-1, 2]</li><li>Expected range: [0, 0]</li></ul></li><li>Output: 1</li></ul></li><li>Case 3:<ul><li>Input:<ul><li>Values: [-1, 1, 1]</li><li>Expected range: [0, 0]</li></ul></li><li>Output: -1</li></ul></li></ul><h3 id="Solution-for-Unequal-Balance-of-Specific-Rate"><a href="#Solution-for-Unequal-Balance-of-Specific-Rate" class="headerlink" title="Solution for Unequal Balance of Specific Rate"></a>Solution for Unequal Balance of Specific Rate</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// Boundary: [left, right]</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">minimum_time_to_balance</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;<span class="hljs-type">int</span>&gt;&amp; values, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>        <span class="hljs-type">int</span> min_need_plus_steps = <span class="hljs-number">0</span>, min_need_minus_steps = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> max_can_plus_steps = <span class="hljs-number">0</span>, max_can_minus_steps = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> value : values) &#123;<br>            <span class="hljs-keyword">if</span> (value &lt; left) &#123;<br>                <span class="hljs-type">int</span> min_need_plus_step = left - value;  <span class="hljs-comment">// Actually it&#x27;s equivalent to such statement:</span><br>                                                        <span class="hljs-comment">// int min_need_plus_step = divide_by_upper(left - value, 1);</span><br>                <span class="hljs-type">int</span> max_can_plus_step = right - value;  <span class="hljs-comment">// Actually it&#x27;s equivalent to such statement:</span><br>                                                        <span class="hljs-comment">// int max_can_plus_step = divide_by_lower(right - value, 1);</span><br>                <span class="hljs-comment">// Actually we can write a condition but it won&#x27;t gonna work here:</span><br>                <span class="hljs-comment">// if (min_need_plus_step &gt; max_can_plus_step) &#123;</span><br>                <span class="hljs-comment">//     return -1;</span><br>                <span class="hljs-comment">// &#125;</span><br>                min_need_plus_steps += min_need_plus_step;<br>                max_can_plus_steps += max_can_plus_step;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (value &gt; right) &#123;<br>                <span class="hljs-type">int</span> min_need_minus_step = <span class="hljs-built_in">divide_by_upper</span>(value - right, <span class="hljs-number">2</span>);<br>                <span class="hljs-type">int</span> max_can_minus_step = <span class="hljs-built_in">divide_by_lower</span>(value - left, <span class="hljs-number">2</span>);<br>                <span class="hljs-keyword">if</span> (min_need_minus_step &gt; max_can_minus_step) &#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>                &#125;<br>                min_need_minus_steps += min_need_minus_step;<br>                max_can_minus_steps += max_can_minus_step;<br>            &#125; <span class="hljs-keyword">else</span> &#123;  <span class="hljs-comment">// left &lt;= value &lt;= right</span><br><br>                max_can_plus_steps += right - value;  <span class="hljs-comment">// Actually it&#x27;s equivalent to such statement:</span><br>                                                      <span class="hljs-comment">// max_can_plus_steps += divide_by_lower(right - value, 1);</span><br>                max_can_minus_steps += <span class="hljs-built_in">divide_by_lower</span>(value - left, <span class="hljs-number">2</span>);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (min_need_plus_steps &gt; max_can_minus_steps || min_need_minus_steps &gt; max_can_plus_steps) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">max</span>(min_need_plus_steps, min_need_minus_steps);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">divide_by_upper</span><span class="hljs-params">(<span class="hljs-type">int</span> dividend, <span class="hljs-type">int</span> divisor)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> (dividend + (divisor - <span class="hljs-number">1</span>)) / divisor;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">divide_by_lower</span><span class="hljs-params">(<span class="hljs-type">int</span> dividend, <span class="hljs-type">int</span> divisor)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> dividend / divisor;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h2 id="More-Advanced-Unequal-Balance-of-General-Rate"><a href="#More-Advanced-Unequal-Balance-of-General-Rate" class="headerlink" title="More Advanced: Unequal Balance of General Rate"></a>More Advanced: Unequal Balance of General Rate</h2><p>What if the balance rate between the pair of numbers is more general? For example, when we give a number <code>n</code> plus (define it as <code>plus_factor</code>), we have to give another number <code>m</code> minus (define it as <code>minus_factor</code>).</p><h3 id="Solution-for-Unequal-Balance-of-General-Rate"><a href="#Solution-for-Unequal-Balance-of-General-Rate" class="headerlink" title="Solution for Unequal Balance of General Rate"></a>Solution for Unequal Balance of General Rate</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;numeric&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// Boundary: [left, right]</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">minimum_time_to_balance</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;<span class="hljs-type">int</span>&gt;&amp; values, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right, <span class="hljs-type">int</span> plus_factor, <span class="hljs-type">int</span> minus_factor)</span> </span>&#123;<br>        <span class="hljs-type">int</span> min_need_plus_steps = <span class="hljs-number">0</span>, min_need_minus_steps = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> max_can_plus_steps = <span class="hljs-number">0</span>, max_can_minus_steps = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> value : values) &#123;<br>            <span class="hljs-keyword">if</span> (value &lt; left) &#123;<br>                <span class="hljs-type">int</span> min_need_plus_step = <span class="hljs-built_in">divide_by_upper</span>(left - value, plus_factor);<br><br>                <span class="hljs-type">int</span> max_can_plus_step = <span class="hljs-built_in">divide_by_lower</span>(right - value, plus_factor);<br>                <span class="hljs-keyword">if</span> (min_need_plus_step &gt; max_can_plus_step) &#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>                &#125;<br>                min_need_plus_steps += min_need_plus_step;<br>                max_can_plus_steps += max_can_plus_step;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (value &gt; right) &#123;<br>                <span class="hljs-type">int</span> min_need_minus_step = <span class="hljs-built_in">divide_by_upper</span>(value - right, minus_factor);<br>                <span class="hljs-type">int</span> max_can_minus_step = <span class="hljs-built_in">divide_by_lower</span>(value - left, minus_factor);<br>                <span class="hljs-keyword">if</span> (min_need_minus_step &gt; max_can_minus_step) &#123;<br>                    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>                &#125;<br>                min_need_minus_steps += min_need_minus_step;<br>                max_can_minus_steps += max_can_minus_step;<br>            &#125; <span class="hljs-keyword">else</span> &#123;  <span class="hljs-comment">// left &lt;= value &lt;= right</span><br><br>                max_can_plus_steps += <span class="hljs-built_in">divide_by_lower</span>(right - value, plus_factor);<br>                max_can_minus_steps += <span class="hljs-built_in">divide_by_lower</span>(value - left, minus_factor);<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (min_need_plus_steps &gt; max_can_minus_steps || min_need_minus_steps &gt; max_can_plus_steps) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">max</span>(min_need_plus_steps, min_need_minus_steps);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">divide_by_upper</span><span class="hljs-params">(<span class="hljs-type">int</span> dividend, <span class="hljs-type">int</span> divisor)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> (dividend + (divisor - <span class="hljs-number">1</span>)) / divisor;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title">divide_by_lower</span><span class="hljs-params">(<span class="hljs-type">int</span> dividend, <span class="hljs-type">int</span> divisor)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> dividend / divisor;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>algorithm</category>
+      
+      <category>design</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>algorithm</tag>
+      
+      <tag>design</tag>
+      
+      <tag>greedy_algorithm</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LeetCode 83 - Remove Duplicates from Sorted List</title>
     <link href="/Algorithm/LeetCode/LinkedList/LeetCode-83-Remove-Duplicates-from-Sorted-List/"/>
     <url>/Algorithm/LeetCode/LinkedList/LeetCode-83-Remove-Duplicates-from-Sorted-List/</url>
@@ -65,9 +96,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
       <tag>two_pointers</tag>
       
@@ -139,9 +170,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
       <tag>two_pointers</tag>
       
@@ -211,9 +242,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -318,9 +349,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -388,9 +419,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -421,11 +452,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>hard</tag>
-      
-      <tag>greedy_algorithm</tag>
       
       <tag>dynamic_programming</tag>
       
@@ -691,15 +722,15 @@
       
       <tag>algorithm</tag>
       
-      <tag>leetcode</tag>
+      <tag>greedy_algorithm</tag>
       
-      <tag>hard</tag>
+      <tag>leetcode</tag>
       
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
       
-      <tag>greedy_algorithm</tag>
+      <tag>hard</tag>
       
     </tags>
     
@@ -732,11 +763,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>medium</tag>
-      
-      <tag>greedy_algorithm</tag>
       
       <tag>dynamic_programming</tag>
       
@@ -773,11 +804,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>medium</tag>
-      
-      <tag>greedy_algorithm</tag>
       
       <tag>dynamic_programming</tag>
       
@@ -814,11 +845,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>hard</tag>
-      
-      <tag>greedy_algorithm</tag>
       
       <tag>dynamic_programming</tag>
       
@@ -855,11 +886,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>hard</tag>
-      
-      <tag>greedy_algorithm</tag>
       
       <tag>dynamic_programming</tag>
       
@@ -896,11 +927,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>medium</tag>
-      
-      <tag>greedy_algorithm</tag>
       
       <tag>dynamic_programming</tag>
       
@@ -937,9 +968,9 @@
       
       <tag>algorithm</tag>
       
-      <tag>leetcode</tag>
-      
       <tag>greedy_algorithm</tag>
+      
+      <tag>leetcode</tag>
       
       <tag>easy</tag>
       
@@ -1005,11 +1036,11 @@
       
       <tag>cpp</tag>
       
-      <tag>library</tag>
-      
       <tag>vtable</tag>
       
       <tag>vfunction</tag>
+      
+      <tag>library</tag>
       
       <tag>muduo</tag>
       
@@ -1678,11 +1709,11 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
+      <tag>cpp17</tag>
       
       <tag>stl</tag>
       
-      <tag>cpp17</tag>
+      <tag>cpp20</tag>
       
       <tag>string_view</tag>
       
@@ -1758,9 +1789,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -1795,9 +1826,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -1830,11 +1861,11 @@
       
       <tag>design</tag>
       
+      <tag>stack</tag>
+      
       <tag>binary_tree</tag>
       
       <tag>dfs</tag>
-      
-      <tag>stack</tag>
       
     </tags>
     
@@ -1865,9 +1896,9 @@
       
       <tag>design</tag>
       
-      <tag>stack</tag>
-      
       <tag>calculator</tag>
+      
+      <tag>stack</tag>
       
     </tags>
     
@@ -1968,9 +1999,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -2005,9 +2036,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -2176,9 +2207,9 @@
       
       <tag>leetcode</tag>
       
-      <tag>sliding_window</tag>
-      
       <tag>hard</tag>
+      
+      <tag>sliding_window</tag>
       
     </tags>
     
@@ -2213,11 +2244,11 @@
       
       <tag>leetcode</tag>
       
-      <tag>medium</tag>
-      
       <tag>linked_list</tag>
       
       <tag>hashmap</tag>
+      
+      <tag>medium</tag>
       
     </tags>
     
@@ -2248,11 +2279,11 @@
       
       <tag>algorithm</tag>
       
+      <tag>greedy_algorithm</tag>
+      
       <tag>leetcode</tag>
       
       <tag>hard</tag>
-      
-      <tag>greedy_algorithm</tag>
       
     </tags>
     
@@ -2283,9 +2314,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>ranges</tag>
       
@@ -2311,9 +2342,9 @@
       
       <category>leetcode</category>
       
-      <category>linked_list</category>
-      
       <category>priority_queue</category>
+      
+      <category>linked_list</category>
       
       <category>heap</category>
       
@@ -2328,11 +2359,11 @@
       
       <tag>linked_list</tag>
       
-      <tag>hard</tag>
-      
       <tag>priority_queue</tag>
       
       <tag>heap</tag>
+      
+      <tag>hard</tag>
       
     </tags>
     
@@ -2534,9 +2565,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>coroutine</tag>
       
@@ -2711,9 +2742,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>thread</tag>
       
@@ -2750,9 +2781,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2791,9 +2822,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp11</tag>
+      
+      <tag>stl</tag>
       
       <tag>smart_pointer</tag>
       
@@ -2892,9 +2923,9 @@
       
       <tag>cpp</tag>
       
-      <tag>cpp20</tag>
-      
       <tag>stl</tag>
+      
+      <tag>cpp20</tag>
       
       <tag>concepts</tag>
       
