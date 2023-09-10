@@ -5,7 +5,7 @@ categories:
 - [algorithm, design]
 tags:
 - algorithm
-- - design
+- design
 - greedy_algorithm
 ---
 
