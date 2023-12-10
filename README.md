@@ -72,6 +72,18 @@ hexo deploy -g # hexo deploy
 
 More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
 
+### A quick command to deploy in local server
+
+An integrated command to
+
+- [Clean cache](#clean-cache)
+- [Generate static files](#generate-static-files)
+- [Run local server](#run-local-server)
+
+```bash
+npm run dev
+```
+
 ## Theme
 
 ### Docs
