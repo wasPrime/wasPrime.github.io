@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Design a data structure with O(1) time complexity for all functions</title>
+    <link href="/SystemDesign/Design-a-data-structure-with-O-1-time-complexity-for-all-functions/"/>
+    <url>/SystemDesign/Design-a-data-structure-with-O-1-time-complexity-for-all-functions/</url>
+    
+    <content type="html"><![CDATA[<h2 id="Probelm-Description"><a href="#Probelm-Description" class="headerlink" title="Probelm Description"></a>Probelm Description</h2><p>Design a data structure with <code>O(1)</code> time complexity for all functions:</p><ul><li><code>set(key, value)</code></li><li><code>get(key)</code></li><li><code>set_all(value)</code></li></ul><h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>For the general solution, the time complexity of the function <code>set_all(value)</code> should be <code>O(n)</code> unavoidablely. However, we can add a timestamp to record the time of the last global update and set a timestamp for each key. With some adjustments for <code>get(key)</code>, we can make the time complexity of the function <code>set_all(value)</code> downgrade to <code>O(1)</code>. Of course, each key takes up more space for an additional timestamp.</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;optional&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span><br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Key, <span class="hljs-keyword">typename</span> Value&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Collection</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set</span><span class="hljs-params">(Key key, Value value)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> iter = m_value_table.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (iter != m_value_table.<span class="hljs-built_in">end</span>()) &#123;<br>            iter-&gt;second.timestamp = std::chrono::system_clock::<span class="hljs-built_in">now</span>();<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            m_value_table.<span class="hljs-built_in">emplace</span>(key, ValueWrapper&#123;<br>                                           .value = value,<br>                                           .timestamp = std::chrono::system_clock::<span class="hljs-built_in">now</span>(),<br>                                       &#125;);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function">std::optional&lt;Value&gt; <span class="hljs-title">get</span><span class="hljs-params">(Key key)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> iter = m_value_table.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (iter == m_value_table.<span class="hljs-built_in">end</span>()) &#123;<br>            <span class="hljs-keyword">return</span> std::<span class="hljs-literal">nullopt</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> (m_global_updater.<span class="hljs-built_in">has_value</span>() &amp;&amp; m_global_updater-&gt;timestamp &gt; iter-&gt;second.timestamp)<br>                   ? m_global_updater-&gt;value<br>                   : iter-&gt;second.value;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">set_all</span><span class="hljs-params">(Value value)</span> </span>&#123;<br>        m_global_updater = &#123;<br>            .value = value,<br>            .timestamp = std::chrono::system_clock::<span class="hljs-built_in">now</span>(),<br>        &#125;;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">erase</span><span class="hljs-params">(Key key)</span> </span>&#123;<br>        m_value_table.<span class="hljs-built_in">erase</span>(key);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">erase_all</span><span class="hljs-params">()</span> </span>&#123;<br>        m_value_table.<span class="hljs-built_in">clear</span>();<br>        m_global_updater = std::<span class="hljs-literal">nullopt</span>;<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">ValueWrapper</span> &#123;<br>        Value value;<br>        std::chrono::time_point&lt;std::chrono::system_clock&gt; timestamp;<br>    &#125;;<br><br>    std::unordered_map&lt;Key, ValueWrapper&gt; m_value_table;<br>    std::optional&lt;ValueWrapper&gt; m_global_updater&#123;std::<span class="hljs-literal">nullopt</span>&#125;;<br>&#125;;<br></code></pre></td></tr></table></figure><h2 id="Test-Cases"><a href="#Test-Cases" class="headerlink" title="Test Cases"></a>Test Cases</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cassert&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Collection&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt; collection;<br><br>    <span class="hljs-comment">// Declare mock variables</span><br>    <span class="hljs-type">int</span> key = <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> value = <span class="hljs-number">2</span>;<br>    <span class="hljs-type">int</span> global_value = <span class="hljs-number">0xff</span>;<br><br>    <span class="hljs-comment">// Get the empty result to test `get(Key key)`</span><br>    std::optional&lt;<span class="hljs-type">int</span>&gt; empty_get_result = collection.<span class="hljs-built_in">get</span>(key);<br>    <span class="hljs-built_in">assert</span>(!empty_get_result.<span class="hljs-built_in">has_value</span>());<br><br>    <span class="hljs-comment">// Set a value and get it to test `set(Key key, Value value)` and `get(Key key)`</span><br>    collection.<span class="hljs-built_in">set</span>(key, value);<br>    std::optional&lt;<span class="hljs-type">int</span>&gt; valid_get_result = collection.<span class="hljs-built_in">get</span>(key);<br>    <span class="hljs-built_in">assert</span>(valid_get_result.<span class="hljs-built_in">has_value</span>() &amp;&amp; valid_get_result == value);<br><br>    <span class="hljs-comment">// Set a global value to test `set_all(Value value)`</span><br>    collection.<span class="hljs-built_in">set_all</span>(global_value);<br><br>    <span class="hljs-comment">// Get the global value to test `get(Key key)`</span><br>    std::optional&lt;<span class="hljs-type">int</span>&gt; gloabal_get_result = collection.<span class="hljs-built_in">get</span>(key);<br>    <span class="hljs-built_in">assert</span>(gloabal_get_result.<span class="hljs-built_in">has_value</span>() &amp;&amp; gloabal_get_result == global_value);<br><br>    <span class="hljs-comment">// Erase the value to test `erase(Key key)` and `get(Key key)`</span><br>    collection.<span class="hljs-built_in">erase</span>(key);<br>    empty_get_result = collection.<span class="hljs-built_in">get</span>(key);<br>    <span class="hljs-built_in">assert</span>(!empty_get_result.<span class="hljs-built_in">has_value</span>());<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>system_design</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>system_design</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Sequence Count</title>
     <link href="/Algorithm/Design/Sequence-Count/"/>
     <url>/Algorithm/Design/Sequence-Count/</url>
@@ -1420,9 +1445,9 @@
       
       <tag>cpp</tag>
       
-      <tag>template</tag>
-      
       <tag>cpp17</tag>
+      
+      <tag>template</tag>
       
       <tag>ctad</tag>
       
@@ -1740,11 +1765,11 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp17</tag>
       
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>string_view</tag>
       
@@ -1820,9 +1845,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -1857,9 +1882,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2030,9 +2055,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2067,9 +2092,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2345,9 +2370,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>ranges</tag>
       
@@ -2596,9 +2621,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>coroutine</tag>
       
@@ -2773,9 +2798,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>thread</tag>
       
@@ -2954,9 +2979,9 @@
       
       <tag>cpp</tag>
       
-      <tag>stl</tag>
-      
       <tag>cpp20</tag>
+      
+      <tag>stl</tag>
       
       <tag>concepts</tag>
       
